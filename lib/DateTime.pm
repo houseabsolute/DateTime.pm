@@ -748,6 +748,8 @@ my %formats =
 
 $formats{h} = $formats{b};
 
+sub _hour_12 { my $h = $_[0]->hour % 12; return $h ? $h : 12 }
+
 sub strftime
 {
     my $self = shift;
@@ -794,15 +796,6 @@ sub _format_nanosecs
     return substr( $ret, 0, $precision );
 }
 
-sub _hour_12 { my $h = $_[0]->hour % 12; return $h ? $h : 12 }
-
-# The Time::Local included with 5.00503 doesn't have timegm_nocheck,
-# but its timegm doesn't do boundary checking
-my $sub =
-    ( defined &Time::Local::timegm_nocheck ?
-      \&Time::Local::timegm_nocheck :
-      \&Time::Local::timegm
-    );
 sub epoch
 {
     my $self = shift;
@@ -814,11 +807,11 @@ sub epoch
     my @hms = $self->_utc_hms;
 
     $self->{utc_c}{epoch} =
-        eval { $sub->( ( reverse @hms ),
-                       $day,
-                       $month - 1,
-                       $year,
-                     ) };
+        eval { Time::Local::timegm_nocheck( ( reverse @hms ),
+                                            $day,
+                                            $month - 1,
+                                            $year,
+                                          ) };
 
     return $self->{utc_c}{epoch};
 }
