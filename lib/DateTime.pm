@@ -765,8 +765,8 @@ my %formats =
       'X' => sub { $_[0]->strftime( $_[0]->{language}->preferred_time_format ) },
       'y' => sub { sprintf( '%02d', substr( $_[0]->year, -2 ) ) },
       'Y' => sub { return $_[0]->year },
-      'z' => sub { $_[0]->{tz}->short_name_for_datetime( $_[0] ) },
-      'Z' => sub { DateTime::TimeZone::offset_as_string( $_[0]->offset ) },
+      'z' => sub { DateTime::TimeZone::offset_as_string( $_[0]->offset ) },
+      'Z' => sub { $_[0]->{tz}->short_name_for_datetime( $_[0] ) },
       '%' => sub { '%' },
     );
 
