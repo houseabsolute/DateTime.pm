@@ -13,7 +13,10 @@ _rd2ymd, so as to make them look more normal when used in subclasses.
 - Added Swedish language module.  Contributed by Christian Hansen.
 
 - Added language modules for Afar, Amharic, Gedeo, Oromo, Sidama,
-Somali, and Tigrinya, all courtesy of Daniel Yacob.
+Somali, and Tigrinya (Eritrean and Ethiopian), all courtesy of Daniel
+Yacob.
+
+- Various doc improvements, including a section on invalid local times.
 
 [BUG FIXES]
 
@@ -25,6 +28,11 @@ it.  Reported by Eugene van der Pijll.
 
 - Fixed a bug when comparing a datetime object to infinity (or
 negative infinity).  Fixed by Flavio Glock.
+
+- Date math has been fixed so that it affects the _local_ times.  This
+means that sometimes 1 day is not equal to 24 hours when the
+addition/subtraction crosses over a Daylight Saving Time change.  See
+the "How Date Math is Done" section of the docs for more details.
 
 [BACKWARDS INCOMPATIBILITIES]
 
