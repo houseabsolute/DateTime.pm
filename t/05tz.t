@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 24;
+use Test::More tests => 45;
 
 use DateTime;
 
@@ -112,4 +112,42 @@ use DateTime;
     $dt->set_time_zone( 'floating' );
 
     is( $dt->hour, 3, 'hour should be 3 after switching to floating TZ' );
+}
+
+{
+    my $dt = DateTime->new( year => 2050, time_zone => 'America/Chicago' );
+
+    my $sixm = DateTime::Duration->new( months => 6 );
+    foreach ( [ 2050, 7, 1, 1, 'CDT' ],
+              [ 2051, 1, 1, 0, 'CST' ],
+              [ 2051, 7, 1, 1, 'CDT' ],
+              [ 2052, 1, 1, 0, 'CST' ],
+              [ 2052, 7, 1, 1, 'CDT' ],
+              [ 2053, 1, 1, 0, 'CST' ],
+              [ 2053, 7, 1, 1, 'CDT' ],
+              [ 2054, 1, 1, 0, 'CST' ],
+              [ 2054, 7, 1, 1, 'CDT' ],
+              [ 2055, 1, 1, 0, 'CST' ],
+              [ 2055, 7, 1, 1, 'CDT' ],
+              [ 2056, 1, 1, 0, 'CST' ],
+              [ 2056, 7, 1, 1, 'CDT' ],
+              [ 2057, 1, 1, 0, 'CST' ],
+              [ 2057, 7, 1, 1, 'CDT' ],
+              [ 2058, 1, 1, 0, 'CST' ],
+              [ 2058, 7, 1, 1, 'CDT' ],
+              [ 2059, 1, 1, 0, 'CST' ],
+              [ 2059, 7, 1, 1, 'CDT' ],
+              [ 2060, 1, 1, 0, 'CST' ],
+              [ 2060, 7, 1, 1, 'CDT' ],
+            )
+    {
+        $dt->add_duration($sixm);
+
+        $_->[1] = sprintf( '%02d', $_->[1] );
+
+        my $expect = join ' ', @$_;
+
+        is( $dt->strftime( '%Y %m%e%k %Z' ), $expect,
+            "datetime is $expect" );
+    }
 }
