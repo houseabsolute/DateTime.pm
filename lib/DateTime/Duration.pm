@@ -167,7 +167,7 @@ DateTime::Duration - Duration objects for date math
 
   use DateTime::Duration;
 
-  $d = DateTime::Duration->new( year    => 3,
+  $d = DateTime::Duration->new( years   => 3,
                                 months  => 5,
                                 weeks   => 1,
                                 days    => 1,
