@@ -1,3 +1,15 @@
+0.1705  2003-10-07
+
+[ BUG FIXES ]
+
+- Subtracting one datetime from another was still broken, and my fix
+in 0.1704 broke many other subtractions.  Reported by Pierre Denis
+again.  Many thanks to Pierre for paying attention.
+
+- Subtracting datetimes where the subtraction crossed a leap second
+was also broken.
+
+
 0.1704  2003-10-07
 
 [ IMPROVEMENTS ]
