@@ -996,6 +996,9 @@ This class method can be used to construct a new DateTime object from
 an epoch time instead of components.  Just as with the C<new()>
 method, it accepts "language" and "time_zone" parameters.
 
+Because C<Time::Local> is used internally, all machines are treated as
+if they had the UNIX epoch of January 1, 1970 GMT.
+
 =item * now( ... )
 
 This class method is equivalent to calling C<from_epoch()> with the
