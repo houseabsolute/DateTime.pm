@@ -12,5 +12,11 @@ Date::Language modules that come with Graham Barr's <gbarr@pobox.com>
 TimeDate module suite.  The strftime method in this module also
 borrows heavily from Graham's implementation.
 
-Matthew Simon Cavalleto implemented the week_{year,number}
-functionality.
+
+Others who've helped out with code contributions include:
+
+Matthew Simon Cavalleto
+Flavio Glock
+Christian Hansen
+Iain Truskett
+Daniel Yacob
