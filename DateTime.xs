@@ -1,4 +1,4 @@
-/* Copyright (c) 2003 Dave Rolsky
+/* Copyright (c) 2003-2005 Dave Rolsky
    All rights reserved.
    This program is free software; you can redistribute it and/or
    modify it under the same terms as Perl itself.  See the LICENSE

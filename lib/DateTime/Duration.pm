@@ -317,20 +317,6 @@ DateTime::Duration - Duration objects for date math
   # Convert to different units
   $d->in_units('days', 'hours', 'seconds');
 
-  # Human-readable accessors, always positive
-  $d->years;
-  $d->months;
-  $d->weeks;
-  $d->days;
-  $d->hours;
-  $d->minutes;
-  $d->seconds;
-  $d->nanoseconds;
-
-  if ( $d->is_positive ) { ... }
-  if ( $d->is_zero )     { ... }
-  if ( $d->is_negative ) { ... }
-
   # The important parts for date math
   $d->delta_months
   $d->delta_days
@@ -356,6 +342,21 @@ DateTime::Duration - Duration objects for date math
   my $base_dt = DateTime->new( year => 2000 );
   my @sorted =
       sort { DateTime::Duration->compare( $a, $b, $base_dt ) } @durations;
+
+  # Human-readable accessors, always positive, but use
+  # DateTime::Format::Duration instead
+  $d->years;
+  $d->months;
+  $d->weeks;
+  $d->days;
+  $d->hours;
+  $d->minutes;
+  $d->seconds;
+  $d->nanoseconds;
+
+  if ( $d->is_positive ) { ... }
+  if ( $d->is_zero )     { ... }
+  if ( $d->is_negative ) { ... }
 
 =head1 DESCRIPTION
 
@@ -463,27 +464,6 @@ still computes in terms of all given units).
 If you need more flexibility in presenting information about
 durations, please take a look a C<DateTime::Format::Duration>.
 
-=item * years, months, weeks, days, hours, minutes, seconds, nanoseconds
-
-These methods return numbers indicating how many of the given unit the
-object represents, after having done a conversion to any larger units.
-For example, days are first converted to weeks, and then the remainder
-is returned.  These numbers are always positive.
-
-Here's what each method returns:
-
- $dur->year()    == abs( $dur->in_units('years') )
- $dur->months()  == ( abs( $dur->in_units( 'months', 'years' ) ) )[0]
- $dur->weeks()   == abs( $dur->in_units( 'weeks' ) )
- $dur->days()    == ( abs( $dur->in_units( 'days', 'weeks' ) ) )[0]
- $dur->hours()   == abs( $dur->in_units( 'hours' ) )
- $dur->minutes   == ( abs( $dur->in_units( 'minutes', 'hours' ) ) )[0]
- $dur->seconds   == abs( $dur->in_units( 'seconds' ) )
- $dur->nanoseconds() == abs( $dur->in_units( 'nanoseconds', 'seconds' ) )
-
-If this seems confusing, remember that you can always use the
-C<in_units()> method to specify exactly what you want.
-
 =item * delta_months, delta_days, delta_minutes, delta_seconds, delta_nanoseconds
 
 These methods provide the information C<DateTime.pm> needs for doing
@@ -550,11 +530,35 @@ However, if you know that both objects only contain the same units,
 and just a single I<type>, then the results of the comparison will be
 repeatable.
 
+=item * years, months, weeks, days, hours, minutes, seconds, nanoseconds
+
+These methods return numbers indicating how many of the given unit the
+object represents, after having done a conversion to any larger units.
+For example, days are first converted to weeks, and then the remainder
+is returned.  These numbers are always positive.
+
+Here's what each method returns:
+
+ $dur->year()    == abs( $dur->in_units('years') )
+ $dur->months()  == ( abs( $dur->in_units( 'months', 'years' ) ) )[0]
+ $dur->weeks()   == abs( $dur->in_units( 'weeks' ) )
+ $dur->days()    == ( abs( $dur->in_units( 'days', 'weeks' ) ) )[0]
+ $dur->hours()   == abs( $dur->in_units( 'hours' ) )
+ $dur->minutes   == ( abs( $dur->in_units( 'minutes', 'hours' ) ) )[0]
+ $dur->seconds   == abs( $dur->in_units( 'seconds' ) )
+ $dur->nanoseconds() == abs( $dur->in_units( 'nanoseconds', 'seconds' ) )
+
+If this seems confusing, remember that you can always use the
+C<in_units()> method to specify exactly what you want.
+
+Better yet, if you are trying to generate output suitable for humans,
+use the C<DateTime::Format::Duration> module.
+
 =back
 
 =head2 Overloading
 
-This class overload addition, subtraction, and mutiplication.
+This class overloads addition, subtraction, and mutiplication.
 
 Comparison is B<not> overloaded.  If you attempt to compare durations
 using C<< <=> >> or C<cmp>, then an exception will be thrown!  Use the
@@ -574,9 +578,9 @@ stole all the code from.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2003 David Rolsky.  All rights reserved.  This program
-is free software; you can redistribute it and/or modify it under the
-same terms as Perl itself.
+Copyright (c) 2003-2005 David Rolsky.  All rights reserved.  This
+program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
 
 Portions of the code in this distribution are derived from other
 works.  Please see the CREDITS file for more details.

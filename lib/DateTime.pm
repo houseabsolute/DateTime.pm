@@ -7,7 +7,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.25';
+    $VERSION = '0.26';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -2907,9 +2907,9 @@ stole all the code from.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2003 David Rolsky.  All rights reserved.  This program
-is free software; you can redistribute it and/or modify it under the
-same terms as Perl itself.
+Copyright (c) 2003-2005 David Rolsky.  All rights reserved.  This
+program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
 
 Portions of the code in this distribution are derived from other
 works.  Please see the CREDITS file for more details.
