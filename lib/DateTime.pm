@@ -1139,10 +1139,13 @@ sub _compare
         }
     }
 
-    foreach my $component ( qw( utc_rd_days utc_rd_secs rd_nanosecs ) )
+    my @dt1_components = $dt1->utc_rd_values;
+    my @dt2_components = $dt2->utc_rd_values;
+
+    foreach my $i ( 0..2 )
     {
-        return $dt1->{$component} <=> $dt2->{$component}
-            if $dt1->{$component} != $dt2->{$component};
+        return $dt1_components[$i] <=> $dt2_components[$i]
+            if $dt1_components[$i] != $dt2_components[$i]
     }
 
     return 0;
