@@ -683,6 +683,23 @@ sub greg2jd {
       ( $y / 100 * 36524 + $y / 400 ) - 306;
 }
 
+sub week {
+     my $self = shift;
+
+     my $mid_week = $self->clone;
+     $mid_week->add( day => 4 - $week_day );
+     my $week_year = $mid_week->year;
+
+     my $jan_four = greg2jd( $week_year, 1, 4 );
+     my $first_week = $jan_four - ( $jan_four % 7 );
+     my $week_number = int( ($self->{julian} - $first_week) / 7 ) + 1;
+
+     return( $week_year, $week_number, $week_day );
+}
+
+sub week_year   { ($_[0]->week)[0] }
+sub week_number { ($_[0]->week)[1] }
+
 sub year {
     my $self = shift;
     return ( $self->_as_greg )[0];
@@ -1218,17 +1235,30 @@ Returns the second.
 Second is in the range 0..60. The value of 60 is (maybe) needed for
 leap seconds. But I'm not sure if we're going to go there.
 
-=head2 julian
+=head2 week
 
-  $jd = $dt->julian;
+ ($week_year, $week_number) = $dt->week
 
-Returns a listref, containing two elements. The date as a julian day,
-and the time as the number of seconds since midnight. This should not
-be thought of as a real julian day, because it's not. The module is
-internally consistent, and that's enough.
+Returns information about the calendar week which contains this
+datetime object. The values returned by this method are also available
+separately through the week_year and week_number methods, below.
 
-This method really only is here for compatibility with previous
-versions, as the jd method is now thrown over for plain hash references.
+The first week of the year is defined as the one which contains the
+fourth of January, which is equivalent to saying that it's the first
+week to overlap the new year by at least four days.
+
+Typically the week_year will be the same as the year that the datetime
+object is in, but dates at the very begining of a calendar year often
+end up in the last week of the prior year, and similarly, the final
+few days of the year may be placed in the first week of the next year.
+
+=head2 week_year
+
+Returns the year of the week, such as 1968 or 2003.
+
+=head2 week_number
+
+Returns the week of the year as a number in the range 1..53.
 
 =head1 0-BASED VERSUS 1-BASED NUMBERS
 
