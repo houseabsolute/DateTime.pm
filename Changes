@@ -1,3 +1,11 @@
+0.1901  2004-01-07  (the "people care about ancient history?" release)
+
+[ BUG FIXES ]
+
+- The day of week was totally busted for dates before 0000-12-25.
+Reported by Flavio Glock.
+
+
 0.19  2003-12-01  (the "never look before a leap second" release)
 
 [ IMPROVEMENTS ]

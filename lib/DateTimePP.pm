@@ -74,7 +74,17 @@ sub _rd2ymd
 
     if ( $_[0] )
     {
-        my $dow = (( $rd + 6 ) % 7 ) + 1;
+        my $dow;
+
+        if ( $rd < -6 )
+        {
+            $dow = ( $rd + 6 ) % 7;
+            $dow += $dow ? 8 : 1;
+        }
+        else
+        {
+            $dow = ( ( $rd + 6 ) % 7 ) + 1;
+        }
 
         my $doy =
             $class->_end_of_last_month_day_of_year( $y, $m );
