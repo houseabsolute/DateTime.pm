@@ -368,12 +368,12 @@ sub month_0 { $_[0]->{c}{month} - 1 };
 
 sub month_name {
     my $self = shift;
-    return $self->{language}->month_name( $self->month_0 );
+    return $self->{language}->month_name($self);
 }
 
 sub month_abbr {
     my $self = shift;
-    return $self->{language}->month_abbreviation( $self->month_0 );
+    return $self->{language}->month_abbreviation($self);
 }
 
 sub day_of_month { $_[0]->{c}{day} }
@@ -394,12 +394,12 @@ sub day_of_week_0 { $_[0]->{c}{day_of_week} - 1 }
 
 sub day_name {
     my $self = shift;
-    return $self->{language}->day_name( $self->day_of_week_0 );
+    return $self->{language}->day_name($self);
 }
 
 sub day_abbr {
     my $self = shift;
-    return $self->{language}->day_abbreviation( $self->day_of_week_0 );
+    return $self->{language}->day_abbreviation($self);
 }
 
 sub day_of_year { $_[0]->{c}{day_of_year} }
