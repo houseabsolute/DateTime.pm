@@ -43,7 +43,7 @@ use overload ( 'fallback' => 1,
                '+' => '_add_overload',
              );
 
-use constant MAX_NANOSECONDS => 1000000000;  # 1E9 = almost 32 bits
+use constant MAX_NANOSECONDS => 1_000_000_000;  # 1E9 = almost 32 bits
 
 my( @MonthLengths, @LeapYearMonthLengths );
 
@@ -476,9 +476,17 @@ sub fractional_second { $_[0]->second + $_[0]->nanosecond / MAX_NANOSECONDS }
 
 sub nanosecond { $_[0]->{rd_nanosecs} }
 
-sub millisecond { $_[0]->{rd_nanosecs} / 1000000 }
+sub millisecond { _round( $_[0]->{rd_nanosecs} / 1000000 ) }
 
-sub microsecond { $_[0]->{rd_nanosecs} / 1000 }
+sub microsecond { _round( $_[0]->{rd_nanosecs} / 1000 ) }
+
+sub _round
+{
+    my $val = shift;
+    my $int = int $val;
+
+    return $val - $int >= 0.5 ? $int + 1 : $int;
+}
 
 sub hms
 {
@@ -1452,9 +1460,11 @@ Half a second is 500 milliseconds.
 
 =item * microsecond
 
-Returns the fractional part of the second as microseconds (1E-6 seconds).
+Returns the fractional part of the second as microseconds (1E-6
+seconds).  This value will be rounded to an integer.
 
-Half a second is 500_000 microseconds.
+Half a second is 500_000 microseconds.  This value will be rounded to
+an integer.
 
 =item * nanosecond
 
