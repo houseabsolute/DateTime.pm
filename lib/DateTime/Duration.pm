@@ -15,7 +15,6 @@ sub new
                            hours   => { type => SCALAR, default => 0 },
                            minutes => { type => SCALAR, default => 0 },
                            seconds => { type => SCALAR, default => 0 },
-                           sign    => { type => SCALAR, default => '+' },
                            end_of_month => { type => SCALAR, default => 'wrap' },
                          } );
 
@@ -29,7 +28,7 @@ sub new
     }
     else
     {
-        $self->{sign} = $p{sign} eq '-' ? -1 : 1;
+        $self->{sign} = 1;
     }
 
     $self->{months} = ( abs( $p{years} * 12 ) + abs( $p{months} ) ) * $self->{sign};
@@ -40,13 +39,16 @@ sub new
     return $self;
 }
 
-sub years   { int( $_[0]->{months} / 12 ) }
-sub months  { ( abs( $_[0]->{months} ) % 12 ) * $_[0]->{sign} }
-sub weeks   { int( $_[0]->{days} / 7 ) }
-sub days    { ( abs( $_[0]->{days} ) % 7 ) * $_[0]->{sign} }
-sub hours   { int( $_[0]->{seconds} / 3600 ) }
-sub minutes { int( ( $_[0]->{seconds} - ( $_[0]->hours * 3600 ) ) / 60 ) }
-sub seconds { ( abs( $_[0]->{seconds} ) % 60 ) * $_[0]->{sign} }
+sub years   { abs( int( $_[0]->{months} / 12 ) ) }
+sub months  { int( abs( $_[0]->{months} ) % 12 ) }
+sub weeks   { abs( int( $_[0]->{days} / 7 ) ) }
+sub days    { abs( $_[0]->{days} ) % 7 }
+sub hours   { abs( int( $_[0]->{seconds} / 3600 ) ) }
+sub minutes { int( ( abs( $_[0]->{seconds} ) - ( $_[0]->hours * 3600 ) ) / 60 ) }
+sub seconds { abs( $_[0]->{seconds} ) % 60 }
+
+sub is_positive { $_[0]->{sign} eq '+' ? 1 : 0 }
+sub is_negative { $_[0]->{sign} eq '-' ? 1 : 0 }
 
 sub delta_months  { $_[0]->{months} }
 sub delta_days    { $_[0]->{days} }
