@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 24;
+use Test::More tests => 28;
 
 use DateTime;
 
@@ -90,4 +90,16 @@ use DateTime;
     is( $epochtest->epoch, $expected,
         "epoch method returns correct adjusted value ($expected)");
 
+}
+
+{
+    is( DateTime->new( year => 1904 )->epoch, -2082844800,
+        "epoch should work back to at least 1904" );
+}
+
+{
+    my $dt = DateTime->from_epoch( epoch => -2082844800 );
+    is( $dt->year, 1904, 'year should be 1904' );
+    is( $dt->month,   1, 'month should be 1904' );
+    is( $dt->day,     1, 'day should be 1904' );
 }
