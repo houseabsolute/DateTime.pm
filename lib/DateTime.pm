@@ -141,7 +141,7 @@ my $BasicValidate =
                       }
                     },
       locale    => { type => SCALAR | OBJECT,
-                     default => __PACKAGE__->DefaultLocale },
+                     default => undef },
       language  => { type => SCALAR | OBJECT,
                      optional => 1 },
     };
@@ -165,6 +165,8 @@ sub new
     my $self = {};
 
     $p{locale} = delete $p{language} if exists $p{language};
+    $p{locale} = $class->DefaultLocale unless defined $p{locale};
+
     if ( ref $p{locale} )
     {
         $self->{locale} = $p{locale};
