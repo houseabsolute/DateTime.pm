@@ -1744,11 +1744,13 @@ due to DST and leap seconds, adding a day can be different than adding
 seconds.
 
 C<DateTime.pm> always adds (or subtracts) days, then months, minutes,
-and then seconds.  Then it normalizes the seconds to handle second
-values less than zero or greater than one day.
+and then seconds.  If there are any boundary overflows, these are
+normalized at each step.
 
 This means that adding one month and one day to February 28, 2003 will
 produce the date April 1, 2003, not March 29, 2003.
+
+=head3 Leap Seconds and Date Math
 
 The presence of leap seconds can cause some strange anomalies in date
 math.  For example, the following is a legal datetime:
@@ -1763,6 +1765,17 @@ If we do the following:
 
 Then the datetime is now "1972-02-01 00:00:00", because there is no
 23:59:60 on 1972-01-31.
+
+Leap seconds also force us to distinguish between minutes and seconds
+during date math.  Given the following datetime:
+
+  my $dt = DateTime->new( year => 1971, month => 12, day => 31,
+                          hour => 23, minute => 59, second => 30,
+                          time_zone => 'UTC' );
+
+we will get different results when adding 1 minute than we get if we
+add 60 seconds.  This is because in this case, the last minute of the
+day, beginning at 23:59:00, actually contains 61 seconds.
 
 =head3 Local vs. UTC and 24 hours vs. 1 day
 
