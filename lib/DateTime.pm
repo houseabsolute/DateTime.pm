@@ -10,11 +10,13 @@ use Carp;
 use Class::Data::Inheritable;
 use Date::Leapyear ();
 use DateTime::Duration;
+use Params::Validate qw( validate validate_with SCALAR BOOLEAN OBJECT );
 use Time::Local ();
 
 use base 'Class::Data::Inheritable';
 
 use Exception::Class ( 'DateTime::Exception' );
+DateTime::Exception->Trace(1);
 
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
@@ -66,173 +68,104 @@ __PACKAGE__->PrintError(0);
 
 sub new {
     my $class = shift;
-    my ( $self, %args, $sec, $min, $hour, $day, $month, $year, $tz );
+    my %args =
+        eval { validate( @_,
+                         { year   => { type => SCALAR },
+                           month  => { type => SCALAR },
+                           day    => { type => SCALAR },
+                           hour   => { type => SCALAR, default => 0 },
+                           minute => { type => SCALAR, default => 0 },
+                           second => { type => SCALAR, default => 0 },
+                           language  => { type => SCALAR, optional => 1 },
+                           time_zone => { type => OBJECT, optional => 1 }, # isa ?
+                           # will go away eventually
+                           floating  => { type => BOOLEAN, optional => 1 },
+                           offset    => { type => SCALAR, optional => 1 },
+                         }
+                       ) };
+    return $class->_error($@) if $@;
 
-    # $zflag indicates whether or not this time is natively in UTC
-    my $zflag = 0;
-
-    # First argument can be a DateTime (or subclass thereof) object
-    if ( ref $_[0] ) {
-        $args{ical} = $_[0]->ical;
-    } else {
-        %args = @_;
-    }
-
-    $self = {};
+    my $self = {};
 
     if ( $args{language} ) {
-        my $class = 'DateTime::Language::' . ucfirst $args{language};
+        my $class = 'DateTime::Language::' . ucfirst lc $args{language};
         $self->{language} = $class->new;
     } else {
         $self->{language} = $class->DefaultLanguageClass->new;
     }
 
-    # Date is specified as epoch#{{{
-    if ( defined( $args{epoch} ) ) {
+    $self->{rd_days} = greg2rd( @args{ qw( year month day ) } );
+    $self->{rd_secs} = time_as_seconds( @args{ qw( hour minute second ) } );
 
-        ( $sec, $min, $hour, $day, $month, $year ) =
-          ( gmtime( $args{epoch} ) )[ 0, 1, 2, 3, 4, 5 ];
-        $year += 1900;
-        $month++;
-
-        $zflag = 1;    # epoch times are by definition in GMT
-    }
-
-    # Date is specified as ical string#{{{
-    elsif ( defined( $args{ical} ) ) {
-
-        # Timezone, if any
-        $args{ical} =~ s/^(?:TZID=([^:]+):)?//;
-        $tz = $1;
-
-        # Split up ical string
-        ( $year, $month, $day, $hour, $min, $sec, $zflag ) =
-          $args{ical} =~ /^(?:(\d{4})(\d\d)(\d\d))
-               (?:T(\d\d)?(\d\d)?(\d\d)?)?
-                         (Z)?$/x;
-
-        # TODO: figure out what to do if we get a TZID.  I'd suggest
-        # we store it for use by modules that care about TZID
-        # names. But we don't want this module to deal with timezone
-        # names, only offsets, I think.  --srl
-
-    } # Time specified as components#{{{
-    elsif (%args) {
-
-        # Choke if missing arguments
-        foreach my $attrib(qw(day month year )) {
-            return $class->_error( "Attribute $attrib required" )
-                unless defined $args{$attrib};
-        }
-        foreach my $attrib(qw( hour min sec )) {
-            $args{$attrib} = 0 unless defined $args{$attrib};
-        }
-
-        # And then just use what was passed in
-        ( $sec, $min, $hour, $day, $month, $year ) =
-          @args{ 'second', 'minute', 'hour', 'day', 'month', 'year' };
-
-    } else {    # Just use current gmtime#{{{
-
-        # Since we are defaulting, this qualifies as UTC
-        $zflag = 1;
-
-        ( $sec, $min, $hour, $day, $month, $year ) = ( gmtime(time) )[ 0 .. 5 ];
-        $year += 1900;
-        $month++;
-    }
-
-    $self->{rd_days} = greg2rd( $year, $month, $day );
-    $self->{rd_secs} = time_as_seconds( $hour, $min, $sec );
     bless $self, $class;
 
-    if ( exists( $args{offset} ) ) {
-        # We should complain if they're trying to set a non-UTC
-        # offset on a time that's inherently UTC.  -jv
-        if ($zflag && ($args{offset} != 0)) {
-            carp "Time had conflicting offset and UTC info. Using UTC"
-              unless $ENV{HARNESS_ACTIVE};
-        } else {
-
-            # Set up the offset for this datetime.
-            $self->offset( $args{offset} || 0 );
-        }
-      } elsif ( !$zflag ) {
-
+    # a floating datetime is always in the current time zone, even if that
+    # time zone changes later
+    if ( $args{floating} ) {
         # Check if the timezone has changed since the last time we checked.
         # Apparently this happens on some systems. Patch from Mike
         # Heins. Ask him.
         my $tz  = $ENV{TZ} || '0';
         my $loc = $tz eq $LocalZone ? $LocalOffset : _calc_local_offset();
         $self->offset($loc) if defined $self;
+    } elsif ( exists( $args{offset} ) ) {
+        # We should complain if they're trying to set a non-UTC
+        # offset on a time that's inherently UTC.  -jv
+        if ($args{floating} && ($args{offset} != 0)) {
+            warn "Time had conflicting offset and UTC info. Using UTC";
+        } else {
+
+            # Set up the offset for this datetime.
+            $self->offset( $args{offset} || 0 );
+        }
     }
 
     return $self;
 }
 
-sub ical {
-    my $self = shift;
-    if ( 1 & @_ ) {     # odd number of parameters?
-        carp "Bad args: expected named parameter list";
-        shift;    # avoid warning from %args=@_ assignment
+sub from_epoch {
+    my $class = shift;
+    my %args =
+        eval { validate_with( params => \@_,
+                              spec   => { epoch => { type => SCALAR } },
+                              allow_extra => 1,
+                            ) };
+    return $class->_error($@) if $@;
+
+    my %p;
+
+    @p{ qw( second minute hour day month year ) } =
+        ( gmtime( delete $args{epoch} ) )[ 0, 1, 2, 3, 4, 5 ];
+    $p{year} += 1900;
+    $p{month}++;
+
+    unless ( exists $args{time_zone} ) {
+        #$args{time_zone} = DateTime::TimeZone->new( name => 'UTC' );
     }
-    my %args = @_;
-    my $ical;
-
-    if ( exists $args{localtime} ) {
-        carp "can't have localtime and offset together, using localtime offset"
-          if exists $args{offset};
-
-        # make output in localtime format by setting $args{offset}
-        $args{offset} = $self->offset;
-    }
-
-    if ( exists $args{offset} ) {
-
-        # make output based on an arbitrary offset
-        # No Z on the end!
-        my $rd_days = $self->{rd_days};
-        my $rd_secs = $self->{rd_secs};
-        my $adjust = _offset_to_seconds( $args{offset} );
-        $self->add( seconds => $adjust );
-        $ical =
-          sprintf( '%04d%02d%02dT%02d%02d%02d', $self->year, $self->month,
-          $self->day, $self->hour, $self->minute, $self->second, );
-        $self->{rd_days} = $rd_days;
-        $self->{rd_secs} = $rd_secs;
-      } else {
-
-        # make output in UTC by default
-        # if we were originally given this time in offset
-        # form, we'll need to adjust it for output
-        if ( $self->hour || $self->min || $self->sec ) {
-            $ical =
-              sprintf( '%04d%02d%02dT%02d%02d%02dZ', $self->year, $self->month,
-              $self->day, $self->hour, $self->minute, $self->second );
-        } else {
-            $ical =
-              sprintf( '%04d%02d%02dZ', $self->year, $self->month, $self->day );
-        }
+    unless ( exists $args{offset} ) {
+        $args{offset} = 0;
     }
 
-    return $ical;
+    # pass other args like time_zone to constructor
+    return $class->new( %args, %p );
 }
+
+sub now { shift->from_epoch( epoch => time, @_ ) }
 
 sub epoch {
     my ( $self, $epoch )  = @_;
     my $class = ref($self);
 
     if ( defined $epoch && $epoch ne '' ) {    # Passed in a new value
-
-        my $newepoch = $class->new( epoch => $epoch );
+        my $newepoch = $class->from_epoch( epoch => $epoch, offset => $self->{offset} );
         $self->{rd_days} = $newepoch->{rd_days};
         $self->{rd_secs} = $newepoch->{rd_secs};
 
     } else {    # Calculate epoch from components, if possible
 
         $epoch =
-          Time::Local::timegm( $self->sec, $self->min, $self->hour, $self->day,
-                               ( $self->month ) - 1, ( $self->year ) - 1900 );
+            Time::Local::timegm( $self->sec, $self->min, $self->hour, $self->day,
+                                 ( $self->month ) - 1, ( $self->year ) - 1900 );
     }
 
     return $epoch;
@@ -350,13 +283,14 @@ sub add {
 
 =cut
 
-%AddUnits = ( year => [2, 12],   month => [2, 1],  week => [0, 7], day=>[0, 1],
-              hour => [1, 3600], min   => [1, 60], sec  => [1, 1],
+%AddUnits = ( years   => [2, 12],
+              months  => [2, 1],
+              weeks   => [0, 7],
+              days    => [0, 1],
+              hours   => [1, 3600],
+              minutes => [1, 60],
+              seconds => [1, 1],
             );
-
-# convenient aliases
-$AddUnits{seconds} = $AddUnits{sec};
-$AddUnits{minutes} = $AddUnits{min};
 
 # redo this to just accept params like a normal freaking method!
 sub _add {
@@ -369,13 +303,13 @@ sub _add {
 
         if ($unit eq 'duration') { # add a duration string
             my %dur;
-            @dur{'day','sec','month'} = duration_value($count);
+            @dur{'days','seconds','months'} = duration_value($count);
 
-            # pretend these were passed to us as e.g. month=>1, day=>1, sec=>1.
+            # pretend these were passed to us as e.g. month=>1, day=>1, second=>1.
             # since months/years come first in the duration string, we
             # put them first.
             unshift @_, map $dur{$_} ? ($_,$dur{$_}) : (),
-                            'month', 'day', 'sec';
+                            'months', 'days', 'seconds';
             next;
         } elsif ($unit eq 'eom_mode') {
             if ($count eq 'wrap') { $eom_mode = 0 }
@@ -695,7 +629,7 @@ sub week {
      my $self = shift;
 
      my $mid_week = $self->clone;
-     $mid_week->add( day => 4 - $self->day_of_week );
+     $mid_week->add( days => 4 - $self->day_of_week );
      my $week_year = $mid_week->year;
 
      my $jan_four = greg2rd( $week_year, 1, 4 );
@@ -876,8 +810,8 @@ my %formats =
       'X' => sub { $_[0]->strftime( $_[0]->{language}->preferred_time_format ) },
       'y' => sub { sprintf( '%02d', substr( $_[0]->year, -2 ) ) },
       'Y' => sub { return $_[0]->year },
-      'z' => sub { $_[0]->{timezone}->abbreviation },
-      'Z' => sub { $_[0]->{timezone}->offset_string },
+      'z' => sub { return 'TZ abbr'; $_[0]->{timezone}->abbreviation },
+      'Z' => sub { return $_[0]->offset; $_[0]->{timezone}->offset_string },
       '%' => sub { '%' },
     );
 
@@ -947,17 +881,17 @@ sub _calc_local_offset {
 }
 
 sub _error {
-    my $self = shift;
+    my $class = shift;
     my $error = shift;
 
-    warn $error if $self->PrintError;
+    warn $error if $class->PrintError;
 
-    my $h = $self->ErrorHandler;
+    my $h = $class->ErrorHandler;
     if ( defined $h && $h ) {
         return $h->($error);
     }
 
-    die "$error\n" if $self->RaiseError;
+    die "$error\n" if $class->RaiseError;
 
     return;
 }
@@ -1165,13 +1099,13 @@ the ical() method. Either way will work.
 
 =head2 add
 
-  $dt->add( year   => 3,
-            month  => 2,
-            week   => 1,
-            day    => 12,
-            hour   => 1,
-            minute => 34,
-            second => 59,
+  $dt->add( years   => 3,
+            months  => 2,
+            weeks   => 1,
+            days    => 12,
+            hours   => 1,
+            minutes => 34,
+            seconds => 59,
           );
 
   # add 1 wk, 1 hr, 1 min, and 1 sec
