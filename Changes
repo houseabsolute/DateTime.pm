@@ -6,6 +6,8 @@
 However, this is only used on platforms where we can find a usable
 finite() or isfinite() function/macro, so it isn't used on Win32.
 
+- Other miscellaneous performance improvements.
+
 
 0.1503  2003-07-31
 
