@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 532;
+use Test::More tests => 533;
 
 use DateTime;
 
@@ -298,4 +298,6 @@ $t = DateTime->new( year => 1997, month => 1, day => 1,
 
 $t->add( nanoseconds => 500000000 );
 is( $t->second, 0, 'fractional second rollover' );
+$t->add( nanoseconds => 123000000 );
+is( $t->fractional_second, 0.123, 'as fractional_second' );
 

@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 99;
+use Test::More tests => 103;
 
 use DateTime;
 
@@ -65,7 +65,7 @@ while (<DATA>)
 # %Oy	XCIX
 
 __DATA__
-year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42
+year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42, nanosecond => 123456789.123456
 %y	99
 %Y	1999
 %%	%
@@ -85,6 +85,10 @@ year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42
 %l	 1
 %m	09
 %M	02
+%N	123456789
+%3N	123
+%6N	123456
+%10N	1234567891
 %p	PM
 %r	01:02:42 PM
 %R	13:02

@@ -42,6 +42,8 @@ use overload ( 'fallback' => 1,
                '+' => '_add_overload',
              );
 
+use constant MAX_NANOSECONDS => 1000000000;  # 1E9 = almost 32 bits
+
 my( @MonthLengths, @LeapYearMonthLengths );
 
 BEGIN
@@ -390,7 +392,13 @@ sub minute { $_[0]->{local_c}{minute} }
 sub second { $_[0]->{local_c}{second} }
 *sec = \&second;
 
+sub fractional_second { $_[0]->second + $_[0]->nanosecond / MAX_NANOSECONDS }
+
 sub nanosecond { $_[0]->{rd_nanosecs} }
+
+sub millisecond { $_[0]->{rd_nanosecs} / 1000000 }
+
+sub microsecond { $_[0]->{rd_nanosecs} / 1000 }
 
 sub hms
 {
@@ -478,8 +486,6 @@ sub utc_rd_values { @{ $_[0] }{ 'utc_rd_days', 'utc_rd_secs' } }
 sub utc_rd_as_seconds   { ( $_[0]->{utc_rd_days} * 86400 )   + $_[0]->{utc_rd_secs} }
 sub local_rd_as_seconds { ( $_[0]->{local_rd_days} * 86400 ) + $_[0]->{local_rd_secs} }
 
-use constant MAX_NANOSECONDS => 1000000000;  # 1E9 = almost 32 bits
-
 # RD 1 is JD 1,721,424.5 - a simple offset
 sub jd
 {
@@ -493,6 +499,17 @@ sub jd
 }
 
 sub mjd { $_[0]->jd - 2_400_000.5 }
+
+sub _format_nanosecs {
+    my $self = shift;
+    my $precision = shift;
+    my $ret = sprintf( "%09d", $self->{rd_nanosecs} );
+    return $ret unless $precision;   # default = 9 digits
+    # rd_nanosecs might contain a fractional separator
+    my ($int, $frac) = split( /[.,]/, $self->{rd_nanosecs} );
+    $ret .= $frac if $frac;
+    return substr( $ret, 0, $precision );
+}
 
 my %formats =
     ( 'a' => sub { $_[0]->day_abbr },
@@ -515,6 +532,7 @@ my %formats =
       'm' => sub { sprintf( '%02d', $_[0]->month ) },
       'M' => sub { sprintf( '%02d', $_[0]->minute ) },
       'n' => sub { "\n" }, # should this be OS-sensitive?
+      'N' => \&_format_nanosecs,
       'p' => sub { $_[0]->{language}->am_pm( $_[0] ) },
       'P' => sub { lc $_[0]->{language}->am_pm( $_[0] ) },
       'r' => sub { $_[0]->strftime( '%I:%M:%S %p' ) },
@@ -562,6 +580,13 @@ sub strftime
 	        %([%a-zA-Z])
 	       /
                 $formats{$1} ? $formats{$1}->($self) : $1
+               /sgex;
+
+        #  %3N 
+        $f =~ s/
+                %(\d+)N
+               /
+                $formats{N}->($self, $1)
                /sgex;
 
         return $f unless wantarray;
@@ -1271,12 +1296,30 @@ Returns the minute of the hour, from 0..59.
 
 =item * second, sec
 
-Returns the second., from 0..61.  The values 60 and 61 are used for
-leap seconds.
+Returns the second, from 0..61.  
+The values 60 and 61 are used for leap seconds.
+
+=item * fractional_second
+
+Returns the second, as a real number from 0.0 until 61.999999999
+
+The values 60 and 61 are used for leap seconds.
+
+=item * millisecond
+
+Returns the fractional part of the second, as milliseconds (1E-3 seconds).
+
+Half a second is 500 milliseconds.
+
+=item * microsecond
+
+Returns the fractional part of the second, as microseconds (1E-6 seconds).
+
+Half a second is 500_000 microseconds.
 
 =item * nanosecond
 
-Returns the fractional second, as nanoseconds (1E-9 seconds).
+Returns the fractional part of the second, as nanoseconds (1E-9 seconds).
 
 Half a second is 500_000_000 nanoseconds.
 
@@ -1688,6 +1731,14 @@ The minute as a decimal number (range 00 to 59).
 =item * %n
 
 A newline character.
+
+=item * %N
+
+The fractional seconds digits. Default is 9 digits (nanoseconds).
+
+  %3N   milliseconds (3 digits)
+  %6N   microseconds (6 digits)
+  %9N   nanoseconds  (9 digits)
 
 =item * %p
 
