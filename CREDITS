@@ -15,11 +15,14 @@ borrows heavily from Graham's implementation.
 The week number and week year calculations are taken from Steffen
 Beyer's Date::Calc module.
 
+The code for handling nanoseconds and the code for leap seconds were
+both largely written by Flavio Soibelmann Glock, along 
+
 
 Others who've helped out with code contributions include:
 
 Matthew Simon Cavalleto
-Flavio Soibelmann Glock
 Christian Hansen
 Iain Truskett
+Eugene van der Pijll
 Daniel Yacob
