@@ -1,11 +1,12 @@
 use strict;
 
-use Test::More tests => 12;
+use Test::More tests => 17;
 
 use DateTime;
 
 my $t4 = new DateTime( year => 1870, month => 10, day => 21,
                        hour => 12, minute => 10, second => 45,
+                       nanosecond => 123456,
                        time_zone => 'UTC' );
 is( $t4->year, '1870', "Year accessor, outside of the epoch" );
 is( $t4->month, '10',  "Month accessor, outside the epoch" );
@@ -13,6 +14,7 @@ is( $t4->day, '21',    "Day accessor, outside the epoch" );
 is( $t4->hour, '12',   "Hour accessor, outside the epoch" );
 is( $t4->minute, '10', "Minute accessor, outside the epoch" );
 is( $t4->second, '45', "Second accessor, outside the epoch" );
+is( $t4->nanosecond, '123456', "nanosecond accessor, outside the epoch" );
 
 my $t5 = DateTime->from_object( object => $t4 );
 is( $t5->year, '1870', "Year should be identical" );
@@ -21,3 +23,13 @@ is( $t5->day, '21',    "Day should be identical" );
 is( $t5->hour, '12',   "Hour should be identical" );
 is( $t5->minute, '10', "Minute should be identical" );
 is( $t5->second, '45', "Second should be identical" );
+is( $t5->nanosecond, '123456', "nanosecond should be identical" );
+
+$t4 = new DateTime(    year => 1870, month => 10, day => 21,
+                       hour => 12, minute => 10, 
+                       fractional_second => 45.000123456,
+                       time_zone => 'UTC' );
+is( $t4->minute, '10', "Minute accessor, outside the epoch" );
+is( $t4->second, '45', "Second accessor, outside the epoch" );
+is( int( $t4->nanosecond + 0.5 ), '123456', "nanosecond accessor, outside the epoch" );
+ 

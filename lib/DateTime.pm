@@ -88,7 +88,10 @@ sub new
                            hour   => { type => SCALAR, default => 0 },
                            minute => { type => SCALAR, default => 0 },
                            second => { type => SCALAR, default => 0 },
-                           nanosecond => { type => SCALAR, default => 0 },
+                           nanosecond => { 
+                                          type => SCALAR, default => 0 },
+                           fractional_second => { 
+                                          type => SCALAR, default => undef },
                            language  => { type => SCALAR | OBJECT,
                                           default => $class->DefaultLanguage },
                            time_zone => { type => SCALAR | OBJECT,
@@ -120,6 +123,13 @@ sub new
         $class->_time_as_seconds( @args{ qw( hour minute second ) } );
 
     $self->{rd_nanosecs} = $args{nanosecond};
+
+    if ( defined $args{fractional_second} ) {
+        my $int = int( $args{fractional_second} );
+        $self->{local_rd_secs} += $int;
+        $self->{rd_nanosecs} += ( $args{fractional_second} - $int ) * MAX_NANOSECONDS;
+    }
+
     _normalize_nanoseconds( $self->{local_rd_secs}, $self->{rd_nanosecs} );
 
     bless $self, $class;
@@ -483,8 +493,17 @@ sub language { $_[0]->{language} }
 
 sub utc_rd_values { @{ $_[0] }{ 'utc_rd_days', 'utc_rd_secs' } }
 
-sub utc_rd_as_seconds   { ( $_[0]->{utc_rd_days} * 86400 )   + $_[0]->{utc_rd_secs} }
-sub local_rd_as_seconds { ( $_[0]->{local_rd_days} * 86400 ) + $_[0]->{local_rd_secs} }
+sub utc_rd_as_seconds   { 
+    ( $_[0]->{utc_rd_days} * 86400 ) + 
+    $_[0]->{utc_rd_secs} +
+    ( $_[0]->{rd_nanosecs} / MAX_NANOSECONDS )
+}
+
+sub local_rd_as_seconds { 
+    ( $_[0]->{local_rd_days} * 86400 ) + 
+    $_[0]->{local_rd_secs} +
+    ( $_[0]->{rd_nanosecs} / MAX_NANOSECONDS )
+}
 
 # RD 1 is JD 1,721,424.5 - a simple offset
 sub jd
@@ -495,7 +514,7 @@ sub jd
 
     return $jd + 
         ( $self->{utc_rd_secs} / 86400 ) +
-        ( $self->{rd_nanosecs} / MAX_NANOSECONDS );
+        ( $self->{rd_nanosecs} / 86400 / MAX_NANOSECONDS );
 }
 
 sub mjd { $_[0]->jd - 2_400_000.5 }
@@ -1064,7 +1083,8 @@ All constructors can die when invalid parameters are given.
 
 This class method accepts parameters for each date and time component:
 "year", "month", "day", "hour", "minute", "second", "nanosecond".  
-Additionally, it accepts "language" and "time_zone" parameters.
+Additionally, it accepts "fractional_second", 
+"language" and "time_zone" parameters.
 
   my $dt = DateTime->new( day => 25,
                           month => 10,
