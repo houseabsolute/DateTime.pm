@@ -1046,8 +1046,8 @@ sub add_duration
 
     if ( $deltas{days} || $deltas{months} )
     {
-        # Again, we fudge the year so that the calculations being done
-        # have something to work with.
+        # We fudge the year so that the calculations being done have
+        # something to work with.
         $self->{utc_year} += int( $deltas{months} / 12 ) + 1;
 
         $self->_calc_utc_rd;
