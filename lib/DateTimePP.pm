@@ -2,6 +2,8 @@ package DateTime;
 
 use strict;
 
+require DateTimePPExtra;
+
 my @MonthLengths =
     ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
 
@@ -142,10 +144,12 @@ sub _seconds_as_components
     my $secs = shift;
     my $utc_secs = shift;
 
-    my $hour = int( $secs / 3600 );
+    use integer;
+
+    my $hour = $secs / 3600;
     $secs -= $hour * 3600;
 
-    my $minute = int( $secs / 60 );
+    my $minute = $secs / 60;
 
     my $second = $secs - ( $minute * 60 );
 
@@ -164,24 +168,6 @@ sub _seconds_as_components
     }
 
     return ( $hour, $minute, $second );
-}
-
-sub _normalize_seconds
-{
-    return if grep { $_ == INFINITY() || $_ == NEG_INFINITY() } @_[1,2];
-
-    my $adj;
-
-    if ($_[2] < 0)
-    {
-        $adj = int( ($_[2] - 86399) / 86400 );
-    }
-    else
-    {
-        $adj = int( $_[2] / 86400 );
-    }
-
-    ($_[1] += $adj), ($_[2] -= $adj*86400);
 }
 
 sub _end_of_last_month_day_of_year

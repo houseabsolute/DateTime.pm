@@ -208,7 +208,7 @@ _seconds_as_components(self, secs, utc_secs = 0)
 
 #ifdef isfinite
 void
-_normalize_seconds(self, days, secs)
+_normalize_tai_seconds(self, days, secs)
      SV* self;
      SV* days;
      SV* secs;
@@ -220,7 +220,7 @@ _normalize_seconds(self, days, secs)
           IV adj;
 
           if (s < 0) {
-            adj = (s - 86399) / SECONDS_PER_DAY;
+            adj = (s - (SECONDS_PER_DAY - 1)) / SECONDS_PER_DAY;
           } else {
             adj = s / SECONDS_PER_DAY;
           }

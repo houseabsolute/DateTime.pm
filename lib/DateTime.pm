@@ -29,7 +29,7 @@ BEGIN
     if ($loaded)
     {
         require DateTimePPExtra
-            unless defined &DateTime::_normalize_seconds;
+            unless defined &DateTime::_normalize_tai_seconds;
     }
     else
     {
@@ -219,9 +219,16 @@ sub _calc_utc_rd
             $self->{local_rd_secs} - $self->_offset_from_local_time;
     }
 
+    $self->_normalize_seconds;
+}
+
+sub _normalize_seconds
+{
+    my $self = shift;
+
     if ( $self->{tz}->is_floating )
     {
-        $self->_normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+        $self->_normalize_tai_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
     }
     else
     {
@@ -234,18 +241,20 @@ sub _normalize_leap_seconds
     # args: 0 => days, 1 => seconds
     my $delta_days;
 
+    use integer;
+
     # rough adjust - can adjust many days
     if ( $_[2] < 0 )
     {
-        $delta_days = int( ($_[2] - 86399) / 86400 );
+        $delta_days = ($_[2] - 86399) / 86400;
     }
     else
     {
-        $delta_days = int( $_[2] / 86400 );
+        $delta_days = $_[2] / 86400;
     }
 
     my $new_day = $_[1] + $delta_days;
-    my $delta_seconds = 86400 * ( $new_day - $_[1] ) +
+    my $delta_seconds = ( 86400 * $delta_days ) +
                         DateTime::LeapSecond::leap_seconds( $new_day ) -
                         DateTime::LeapSecond::leap_seconds( $_[1] );
 
@@ -285,7 +294,8 @@ sub _calc_local_rd
         $self->{local_rd_days} = $self->{utc_rd_days};
         $self->{local_rd_secs} = $self->{utc_rd_secs} + $self->offset;
 
-        $self->_normalize_seconds( $self->{local_rd_days}, $self->{local_rd_secs} );
+        # intentionally ignore leap seconds here
+        $self->_normalize_tai_seconds( $self->{local_rd_days}, $self->{local_rd_secs} );
     }
 
     $self->_calc_local_components;
@@ -500,7 +510,7 @@ sub day_of_month { $_[0]->{local_c}{day} }
 *day  = \&day_of_month;
 *mday = \&day_of_month;
 
-sub weekday_of_month { int( ( $_[0]->day - 1 ) / 7 ) + 1 }
+sub weekday_of_month { use integer; ( ( $_[0]->day - 1 ) / 7 ) + 1 }
 
 sub quarter {$_[0]->{local_c}{quarter} };
 
@@ -1046,7 +1056,8 @@ sub add_duration
     {
         $self->{utc_rd_secs} += $deltas{minutes} * 60;
 
-        $self->_normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+        # This intentionally ignores leap seconds
+        $self->_normalize_tai_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
     }
 
     # We add seconds to the UTC time because if someone adds 24 hours,
@@ -1064,15 +1075,7 @@ sub add_duration
 
         # must always normalize seconds, because a nanosecond change
         # might cause a day change
-
-        if ( $self->time_zone->is_floating )
-        {
-            $self->_normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
-        }
-        else
-        {
-            $self->_normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
-        }
+        $self->_normalize_seconds;
     }
 
     if ( $deltas{minutes} || $deltas{seconds} || $deltas{nanoseconds})
@@ -1145,16 +1148,18 @@ sub _compare
 
 sub _normalize_nanoseconds
 {
+    use integer;
+
     # seconds, nanoseconds
     if ( $_[2] < 0 )
     {
-        my $overflow = 1 + int( $_[2] / MAX_NANOSECONDS );
+        my $overflow = 1 + $_[2] / MAX_NANOSECONDS;
         $_[2] += $overflow * MAX_NANOSECONDS;
         $_[1] -= $overflow;
     }
     elsif ( $_[2] >= MAX_NANOSECONDS )
     {
-        my $overflow = int( $_[2] / MAX_NANOSECONDS );
+        my $overflow = $_[2] / MAX_NANOSECONDS;
         $_[2] -= $overflow * MAX_NANOSECONDS;
         $_[1] += $overflow;
     }

@@ -41,8 +41,8 @@ in the current century.  Ugh.
 
 - Fixed compilation on HPUX.  Patch from Dan Sully.
 
-- The last_day_of_month() method did not accept nanosecond or
-fractional_second parameters.
+- The last_day_of_month() method did not accept a nanosecond
+parameter.
 
 - A DT::Duration object created with just nanoseconds was always
 positive, regardless of the value given for nanoseconds.
