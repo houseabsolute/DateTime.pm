@@ -2296,6 +2296,19 @@ normalized at each step.
 This means that adding one month and one day to February 28, 2003 will
 produce the date April 1, 2003, not March 29, 2003.
 
+  my $dt = DateTime->new( year => 2003, month => 2, day => 28 );
+
+  $dt->add( months => 1, days => 1 );
+
+  # 2003-04-01 - the result
+
+On the other hand, if we add months first, and then separately add
+days, we end up with March 29, 2003:
+
+  $dt->add( months => 1 )->add( days => 1 );
+
+  # 2003-03-29
+
 =head3 Leap Seconds and Date Math
 
 The presence of leap seconds can cause some strange anomalies in date
@@ -2322,6 +2335,16 @@ during date math.  Given the following datetime:
 we will get different results when adding 1 minute than we get if we
 add 60 seconds.  This is because in this case, the last minute of the
 day, beginning at 23:59:00, actually contains 61 seconds.
+
+Here are the results we get:
+
+  # 1971-12-31 23:59:30 - our starting datetime
+
+  $dt->clone->add( minutes => 1 );
+  # 1972-01-01 00:00:30 - one minute later
+
+  $dt->clone->add( seconds => 60 );
+  # 1972-01-01 00:00:29 - 60 seconds later
 
 =head3 Local vs. UTC and 24 hours vs. 1 day
 
