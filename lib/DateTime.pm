@@ -891,7 +891,7 @@ my %formats =
       'U' => sub { my $dow = $_[0]->day_of_week;
                    $dow = 0 if $dow == 7; # convert to 0-6, Sun-Sat
                    my $doy = $_[0]->day_of_year - 1;
-                   return int( ( $doy - $dow + 13 ) / 7 - 1 )
+                   return sprintf( '%02d', int( ( $doy - $dow + 13 ) / 7 - 1 ) )
                  },
       'V' => sub { sprintf( '%02d', $_[0]->week_number ) },
       'w' => sub { my $dow = $_[0]->day_of_week;
@@ -899,7 +899,7 @@ my %formats =
                  },
       'W' => sub { my $dow = $_[0]->day_of_week;
                    my $doy = $_[0]->day_of_year - 1;
-                   return int( ( $doy - $dow + 13 ) / 7 - 1 )
+                   return sprintf( '%02d', int( ( $doy - $dow + 13 ) / 7 - 1 ) )
                  },
       'x' => sub { $_[0]->strftime( $_[0]->{locale}->default_date_format ) },
       'X' => sub { $_[0]->strftime( $_[0]->{locale}->default_time_format ) },
