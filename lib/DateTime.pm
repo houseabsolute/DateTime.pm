@@ -1178,6 +1178,11 @@ the difference between the two objects.
 Compare two DateTime objects. Semantics are compatible with sort;
 returns -1 if $a < $b, 0 if $a == $b, 1 if $a > $b.
 
+Of course, since DateTime objects overload comparison operators, you
+can just do this anyway:
+
+  @dates = sort @dates;
+
 =back
 
 =head2 How Date Math is Done
@@ -1416,6 +1421,11 @@ A literal `%' character.
 
 =back
 
+=head1 SUPPORT
+
+Support for this module is provided via the datetime@perl.org email
+list.  See http://lists.perl.org/ for more details.
+
 =head1 AUTHOR
 
 Dave Rolsky <autarch@urth.org>
@@ -1423,12 +1433,19 @@ Dave Rolsky <autarch@urth.org>
 However, please see the CREDITS file for more details on who I really
 stole all the code from.
 
+=head1 COPYRIGHT
+
+Copyright (c) 2003 David Rolsky.  All rights reserved.  This program
+is free software; you can redistribute it and/or modify it under the
+same terms as Perl itself.
+
+The full text of the license can be found in the LICENSE file included
+with this module.
+
 =head1 SEE ALSO
 
 datetime@perl.org mailing list
 
-http://perl-date-time.sf.net/
-
-http://dates.rcbowen.com/
+http://datetime.perl.org/
 
 =cut
