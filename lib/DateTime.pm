@@ -154,7 +154,8 @@ sub _calc_local_components {
     @{ $self->{local_c} }{ qw( hour minute second ) } =
         $self->_seconds_as_components( $self->{local_rd_secs} );
 
-    $self->{local_c}{day_of_week} = ( ( $self->{local_rd_days} + 6) % 7 ) + 1;
+    $self->{local_c}{day_of_week} =
+        ( ( $self->{local_rd_days} + 6 ) % 7 ) + 1;
 
     {
         my $d =
@@ -630,6 +631,8 @@ sub _subtract_overload {
 
 sub add_duration {
     my ( $self, $dur ) = @_;
+
+    delete $self->{utc_c};
 
     my %deltas = $dur->deltas;
 
