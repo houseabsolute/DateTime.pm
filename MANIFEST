@@ -50,4 +50,5 @@ t/14language.t
 t/15jd.t
 t/16truncate.t
 t/17set_return.t
+t/18today.t
 t/testlib.pl

@@ -27,9 +27,6 @@ version that works best is in 5.8.0, and not otherwise available.
 - by default, reject out of bounds datetime values (minute 75) but
 offer a "normalize" parameter that will wrap these.
 
-- make languages available via ISO codes as well as English name.
-Eric Cholet.
-
 
 NOTE TO FUTURE DEVELOPERS:
 
