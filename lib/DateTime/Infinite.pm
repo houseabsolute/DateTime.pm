@@ -10,9 +10,11 @@ use base qw(DateTime);
 foreach my $m ( qw( set set_time_zone truncate ) )
 {
     no strict 'refs';
-    *{"DateTime::$m"} = sub { die "Infinite datetime objects are not mutable" };
+    *{"DateTime::Infinite::$m"} =
+        sub { die "Infinite datetime objects are not mutable" };
 }
 
+sub is_finite { 0 }
 sub is_infinite { 1 }
 
 sub _rd2ymd
