@@ -5,7 +5,7 @@ use Test::More;
 use DateTime;
 use DateTime::Language;
 
-my @langs = DateTime::Language::available();
+my @langs = DateTime::Language->subclasses();
 
 plan tests => scalar @langs;
 
