@@ -19,6 +19,10 @@ up.  Patch by Daisuke Maki.
 - Require Test::More 0.34+, since I use a function introduced in that
 version in the tests.  Suggested by Jean Forget.
 
+- Fix a bug in strftime() which could cause weirdness with
+pathological specifiers like "%%{day_name}%n".  Reported by Jean
+Forget.
+
 
 0.22    2004-07-23
 

@@ -11,7 +11,7 @@ BEGIN
 
 use strict;
 
-use Test::More tests => 132;
+use Test::More tests => 134;
 
 use DateTime;
 
@@ -106,6 +106,18 @@ while (<DATA>)
 	'01', '%V is 01' );
 }
 
+{
+    my $dt = DateTime->new( year => 2004, month => 8, day => 16,
+                            hour => 15, minute => 30, nanosecond => 123456789,
+                            locale => 'en',
+                          );
+
+    # Should print '%{day_name}', prints '30onday'!
+    is( $dt->strftime('%%{day_name}%n'), "%{day_name}\n" );
+
+    # Should print '%6N', prints '123456'
+    is( $dt->strftime('%%6N%n'), "%6N\n" );
+}
 
 # add these if we do roman-numeral stuff
 # %Od	VII

@@ -820,23 +820,22 @@ sub strftime
     foreach my $f (@formats)
     {
         $f =~ s/
-                %{(\w+)}
+                (?:
+                  %{(\w+)}         # method name like %{day_name}
+                  |
+                  %([%a-zA-Z])     # single character specifier like %d
+                  |
+                  %(\d+)N          # special case for %N
+                )
                /
-                $self->can($1) ? $self->$1() : "\%{$1}"
-               /sgex;
-
-        # regex from Date::Format - thanks Graham!
-       $f =~ s/
-                %([%a-zA-Z])
-               /
-                $formats{$1} ? $formats{$1}->($self) : "\%$1"
-               /sgex;
-
-        # %3N
-        $f =~ s/
-                %(\d+)N
-               /
-                $formats{N}->($self, $1)
+                ( $1
+                  ? ( $self->can($1) ? $self->$1() : "\%{$1}" )
+                  : $2
+                  ? ( $formats{$2} ? $formats{$2}->($self) : "\%$2" )
+                  : $3
+                  ? $formats{N}->($self, $3)
+                  : ''  # this won't happen
+                )
                /sgex;
 
         return $f unless wantarray;
