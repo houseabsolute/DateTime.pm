@@ -1,3 +1,15 @@
+0.23
+
+- Added a number of convenience "set" methods: set_year, set_month,
+set_day, set_hour, set_minute, set_second, set_nanosecond, and
+set_locale.  Suggested by Michael Schwern.
+
+- Added christian_era and year_with_christian_era methods.
+
+- Clarified that from_epoch(), today(), and now() all return objects
+in the UTC time zone.  Suggested by Sagar Shah and others.
+
+
 0.22    2004-07-23
 
 [ *** BACKWARDS INCOMPATIBILITIES *** ]

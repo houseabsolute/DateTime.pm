@@ -7,7 +7,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.22';
+    $VERSION = '0.23';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -490,8 +490,10 @@ sub ce_year { $_[0]->{local_c}{year} <= 0 ?
               $_[0]->{local_c}{year} }
 
 sub era { $_[0]->ce_year > 0 ? 'CE' : 'BCE' }
+sub christian_era { $_[0]->ce_year > 0 ? 'AD' : 'BC' }
 
 sub year_with_era { (abs $_[0]->ce_year) . $_[0]->era }
+sub year_with_christian_era { (abs $_[0]->ce_year) . $_[0]->christian_era }
 
 sub month   { $_[0]->{local_c}{month} }
 *mon = \&month;
@@ -1346,6 +1348,16 @@ sub set
     return $self;
 }
 
+sub set_year   { $_[0]->set( year => $_[1] ) }
+sub set_month  { $_[0]->set( month => $_[1] ) }
+sub set_day    { $_[0]->set( day => $_[1] ) }
+sub set_hour   { $_[0]->set( hour => $_[1] ) }
+sub set_minute { $_[0]->set( minute => $_[1] ) }
+sub set_second { $_[0]->set( second => $_[1] ) }
+sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
+
+sub set_locale { $_[0]->set( locale => $_[1] ) }
+
 sub truncate
 {
     my $self = shift;
@@ -1617,11 +1629,12 @@ character.
 
 =head2 Floating DateTimes
 
-The default time zone for all DateTime objects is the "floating" time
-zone.  This concept comes from the iCal standard.  A floating datetime
-is one which is not anchored to any particular time zone.  In
-addition, floating datetimes do not include leap seconds, since we
-cannot use them without knowing the datetime's time zone.
+The default time zone for new DateTime objects, except where stated
+otherwise, is the "floating" time zone.  This concept comes from the
+iCal standard.  A floating datetime is one which is not anchored to
+any particular time zone.  In addition, floating datetimes do not
+include leap seconds, since we cannot apply them without knowing the
+datetime's time zone.
 
 The results of date math and comparison between a floating datetime
 and one with a real time zone are not really valid, because one
@@ -1695,15 +1708,16 @@ when they match actual leap seconds.
 Invalid parameter types (like an array reference) will cause the
 constructor to die.
 
-DateTime does not check if second values greater than 59 are valid
-based on current leap seconds, and invalid values simply cause an
-overflow.
+The value for seconds may be from 0 to 61, to account for leap
+seconds.  If you give a value greater than 59, DateTime does not check
+to see that it really matches a valid leap second.  Extra seconds
+simply overflow into the minutes portion of the time.
 
 All of the parameters are optional except for "year".  The "month" and
-"day" parameters both default to 1, while the "hour", "minute", and
+"day" parameters both default to 1, while the "hour", "minute",
 "second", and "nanosecond" parameters all default to 0.
 
-The locale parameter should be a string matching one of the valid
+The "locale" parameter should be a string matching one of the valid
 locales, or a C<DateTime::Locale> object.  See the
 L<DateTime::Locale|DateTime::Locale> documentation for details.
 
@@ -1720,15 +1734,15 @@ The default time zone is "floating".
 
 Because of Daylight Saving Time, it is possible to specify a local
 time that is ambiguous.  For example, in the US in 2003, the
-transition from to saving to standard time occurs on October 26, at
-02:00:00 local time.  The local clock changes from 01:59:59 (saving
+transition from to saving to standard time occurred on October 26, at
+02:00:00 local time.  The local clock changed from 01:59:59 (saving
 time) to 01:00:00 (standard time).  This means that the hour from
 01:00:00 through 01:59:59 actually occurs twice, though the UTC time
 continues to move forward.
 
 If you specify an ambiguous time, then the latest UTC time is always
-used, in effect always choosing saving time.  In this case, you can
-simply subtract an hour to the object in order to move to standard time,
+used, in effect always choosing standard time.  In this case, you can
+simply subtract an hour to the object in order to move to saving time,
 for example:
 
   # This object represent 01:30:00 standard time
@@ -1750,7 +1764,7 @@ for example:
 
 Alternately, you could create the object with the UTC time zone, and
 then call the C<set_time_zone()> method to change the time zone.  This
-would allow you to unambiguously specify the datetime.
+is a good way to ensure that the time is not ambiguous.
 
 =head4 Invalid Local Times
 
@@ -1778,11 +1792,15 @@ with C<Time::HiRes>.  If the floating portion extends past 9 decimal
 places, it will be truncated to nine, so that 1.1234567891 will become
 1 second and 123,456,789 nanoseconds.
 
+By default, the returned object will be in the UTC time zone.
+
 =item * now( ... )
 
 This class method is equivalent to calling C<from_epoch()> with the
 value returned from Perl's C<time()> function.  Just as with the
 C<new()> method, it accepts "time_zone" and "locale" parameters.
+
+By default, the returned object will be in the UTC time zone.
 
 =item * today( ... )
 
@@ -1802,6 +1820,8 @@ If the object passed to this method has a C<time_zone()> method, that
 is used to set the time zone of the newly created C<DateTime.pm>
 object.  Otherwise UTC is used.
 
+By default, the returned object will be in the UTC time zone.
+
 =item * last_day_of_month( ... )
 
 This constructor takes the same arguments as can be given to the
@@ -1818,7 +1838,8 @@ leap years.
 
 =item * clone
 
-This object method returns a replica of the given object.
+This object method returns a new object that is replica of the object
+upon which the method is called.
 
 =back
 
@@ -1842,11 +1863,19 @@ before year 1 in this system is year -1, aka "1 BCE".
 
 Returns a string, either "BCE" or "CE", according to the year.
 
+=item * christian_era
+
+Returns a string, either "BC" or "AD", according to the year.
+
 =item * year_with_era
 
 Returns a string containing the year immediately followed by its era.
 The year is the absolute value of C<ce_year()>, so that year 1 is
 "1CE" and year 0 is "1BCE".
+
+=item * year_with_christian_era
+
+Like C<year_with_era()>, but uses the Christian era.
 
 =item * month
 
@@ -2024,8 +2053,8 @@ This returns the C<DateTime::TimeZone> object for the datetime object.
 
 =item * offset
 
-This returns the offset, in seconds, of the datetime object according
-to the time zone.
+This returns the offset from UTC, in seconds, of the datetime object
+according to the time zone.
 
 =item * is_dst
 
@@ -2035,7 +2064,7 @@ currently in Daylight Saving Time or not.
 =item * time_zone_long_name
 
 This is a shortcut for C<< $dt->time_zone->name >>.  It's provided so
-that one can use "%{time_zone_long_name}" inside as a strftime format
+that one can use "%{time_zone_long_name}" as a strftime format
 specifier.
 
 =item * time_zone_short_name
@@ -2146,6 +2175,11 @@ the C<set_time_zone()> method.
 This method performs parameters validation just as is done in the
 C<new()> method.
 
+=item * set_year(), set_month(), set_day(), set_hour(), set_minute(), set_second(), set_nanosecond(), set_locale()
+
+These are shortcuts to calling C<set()> with a single key.  They all
+take a single parameter.
+
 =item * truncate( to => ... )
 
 This method allows you to reset some of the local time components in
@@ -2227,8 +2261,8 @@ the object from which C<$datetime> is subtracted.  For example:
  = 1 month
 
 Note that this duration is not an absolute measure of the amount of
-time between the two datetimes, because the length of a month varies
-by month, as well as the presence of leap seconds.
+time between the two datetimes, because the length of a month varies,,
+as well as due to the presence of leap seconds.
 
 The returned duration may have deltas for months, days, minutes,
 seconds, and nanoseconds.
@@ -2236,11 +2270,10 @@ seconds, and nanoseconds.
 =item * subtract_datetime_absolute( $datetime )
 
 This method returns a new C<DateTime::Duration> object representing
-the difference between the two dates.  The duration object will only
-have deltas for seconds and nanoseconds.  This is the only way to
-accurately measure the absolute amount of time between two datetimes,
-since units larger than a second do not represent a fixed number of
-seconds.
+the difference between the two dates in seconds and nanoseconds.  This
+is the only way to accurately measure the absolute amount of time
+between two datetimes, since units larger than a second do not
+represent a fixed number of seconds.
 
 =item * delta_md( $datetime )
 
@@ -2258,7 +2291,7 @@ minutes and seconds.
 
 The C<delta_md> and C<delta_days> methods truncate the duration so
 that any fractional portion of a day is ignored.  The C<delta_ms>
-method converts any day and months differences to minutes.
+method converts any day and month differences to minutes.
 
 Unlike the subtraction methods, B<these methods always return a
 positive (or zero) duration>.
@@ -2320,16 +2353,16 @@ It's important to have some understanding of how date math is
 implemented in order to effectively use this module and
 C<DateTime::Duration>.
 
-The parts of a duration can be broken down into four parts.  These are
-months, days, minutes, and seconds.  Adding one month to a date is
-different than adding 4 weeks or 28, 29, 30, or 31 days.  Similarly,
-due to DST and leap seconds, adding a day can be different than adding
-86,400 seconds, and adding a minute is not exactly the same as 60
-seconds.
+The parts of a duration can be broken down into five parts.  These are
+months, days, minutes, seconds, and nanoseconds.  Adding one month to
+a date is different than adding 4 weeks or 28, 29, 30, or 31 days.
+Similarly, due to DST and leap seconds, adding a day can be different
+than adding 86,400 seconds, and adding a minute is not exactly the
+same as 60 seconds.
 
 C<DateTime.pm> always adds (or subtracts) days, then months, minutes,
-and then seconds.  If there are any boundary overflows, these are
-normalized at each step.
+and then seconds and nanoseconds.  If there are any boundary
+overflows, these are normalized at each step.
 
 This means that adding one month and one day to February 28, 2003 will
 produce the date April 1, 2003, not March 29, 2003.
@@ -2384,12 +2417,15 @@ Here are the results we get:
   $dt->clone->add( seconds => 60 );
   # 1972-01-01 00:00:29 - 60 seconds later
 
+  $dt->clone->add( seconds => 61 );
+  # 1972-01-01 00:00:30 - 61 seconds later
+
 =head3 Local vs. UTC and 24 hours vs. 1 day
 
 When doing date math, you are changing the I<local> datetime.  This is
 generally the same as changing the UTC datetime, except when a change
 crosses a daylight saving boundary.  The net effect of this is that a
-single day may have more or less than 24.
+single day may have more or less than 24 hours.
 
 Specifically, if you do this:
 
@@ -2433,13 +2469,13 @@ always be desirable, so caveat user!
 Because date math is done on each unit separately, the results of date
 math may not always be what you expect.
 
-Internally, a duration is made up internally of several different
-units, months, days, minutes, seconds, and nanoseconds.
+As we mentioned earlier, internally a duration is made up internally
+of five different units: months, days, minutes, seconds, and
+nanoseconds.
 
-Of those, the only ones that convert or normalize to other units are
-seconds <=> nanoseconds.  For all the others, there is no fixed
-conversion between the two units, because of things like leap seconds,
-DST changes, etc.
+Given any pair of units, we cannot convert between them, except for
+seconds and nanoseconds, because there is no fixed conversion between
+the two units, because of things like leap seconds, DST changes, etc.
 
 Here's an example, based on a question from Mark Fowler to the
 datetime@perl.org list.
@@ -2453,6 +2489,10 @@ have to add it to a datetime to find out, so you could do:
  my $seconds_dur = $later->subtract_datetime_absolute($now);
 
 This returns a duration which only contains seconds and nanoseconds.
+
+If we were add the duration to a different datetime object we might
+get a different number of seconds.
+
 There are other subtract/delta methods in DateTime.pm to generate
 different types of durations.  These methods are
 C<subtract_datetime()>, C<subtract_datetime_absolute()>,
@@ -2517,7 +2557,7 @@ The day of the month as a decimal number (range 01 to 31).
 =item * %D
 
 Equivalent to %m/%d/%y.  This is not a good standard format if you
-have want both Americans and Europeans to understand the date!
+want both United States and European people to understand the date!
 
 =item * %e
 
