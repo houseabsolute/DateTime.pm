@@ -26,7 +26,8 @@ foreach my $set ( [ 'aa', 'aar'                 => 'Afar' ],
                   [ 'sid'                       => 'Sidama' ],
                   [ 'so', 'som'                 => 'Somali' ],
                   [ 'sv', 'sve', 'swe'          => 'Swedish' ],
-                  [ 'ti', 'tig'                 => 'Tigrinya' ],
+                  [ 'ti-et', 'tig-et'           => 'TigrinyaEthiopian' ],
+                  [ 'ti-er', 'tig-er'           => 'TigrinyaEritrean' ],
              )
 {
     my $module = pop @$set;
