@@ -368,7 +368,7 @@ sub from_epoch
     my $class = shift;
     my %p = validate( @_,
                       { epoch => { type => SCALAR },
-                        local      => { type => SCALAR | OBJECT, optional => 1 },
+                        locale     => { type => SCALAR | OBJECT, optional => 1 },
                         language   => { type => SCALAR | OBJECT, optional => 1 },
                         time_zone  => { type => SCALAR | OBJECT, optional => 1 },
                       }
