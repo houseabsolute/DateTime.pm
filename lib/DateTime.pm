@@ -639,26 +639,27 @@ sub add_duration {
     $self->_calc_local_rd;
 }
 
+use constant INFINITY     =>       100 ** 100 ** 100 ;
+use constant NEG_INFINITY => -1 * (100 ** 100 ** 100);
+
 sub compare {
     my ( $class, $dt1, $dt2 ) = ref $_[0] ? ( undef, @_ ) : @_;
 
     return undef unless defined $dt2;
 
-    # One or more days different
-    if ( $dt1->{utc_rd_days} < $dt2->{utc_rd_days} ) {
-        return -1;
-    } elsif ( $dt1->{utc_rd_days} > $dt2->{utc_rd_days} ) {
-        return 1;
+    return -1 if ! ref $dt2 && $dt2 == INFINITY;
+    return  1 if ! ref $dt2 && $dt2 == NEG_INFINITY;
 
-    # They are the same day
-    } elsif ( $dt1->{utc_rd_secs} < $dt2->{utc_rd_secs} ) {
-        return -1;
-    } elsif ( $dt1->{utc_rd_secs} > $dt2->{utc_rd_secs} ) {
-        return 1;
-    }
+    die "Cannot compare a datetime to a regular scalar"
+        unless ( UNIVERSAL::can( $dt1, 'utc_rd_values' ) &&
+                 UNIVERSAL::can( $dt2, 'utc_rd_values' ) );
 
-    # must be equal
-    return 0;
+    my ($days1, $secs1) = $dt1->utc_rd_values;
+    my ($days2, $secs2) = $dt2->utc_rd_values;
+
+    return $days1 <=> $days2 if $days1 != $days2;
+
+    return $secs1 <=> $secs2;
 }
 
 sub set {
