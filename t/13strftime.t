@@ -41,7 +41,6 @@ while (<DATA>)
 
     my ($fmt, $res) = split /\t/, $_;
 
-    my $broken = 'marted' . chr(195);
     if ( $fmt eq '%A' && $locale eq 'it' && $] >= 5.006 && $] <= 5.008 )
     {
         ok( 1, "Perl 5.6.0 & 5.6.1 cannot handle Unicode characters in the DATA filehandle properly" );
