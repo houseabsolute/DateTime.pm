@@ -1,3 +1,11 @@
+0.1503  2003-07-31
+
+[ BUG FIXES ]
+
+- Adding a duration with delta months to an infinite DateTime was
+quite broken.  Reported by Eugene van der Pijll.
+
+
 0.1502  2003-07-31
 
 [ BUG FIXES ]
