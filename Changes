@@ -1,3 +1,17 @@
+0.24    2004-12-10 (the "have I mentioned I hate leap seconds" release)
+
+[ BUG FIXES ]
+
+- Fixed even more bugs related to leap seconds and time zones.
+Reported by Eugene van der Pijll.
+
+[ KNOWN BUGS ]
+
+- Offsets with a seconds portion (like "+00:00:30") act strangely near
+leap seconds.  Reported by Eugene van der Pijll.  This will be fixed
+in a future release.
+
+
 0.23    2004-12-09 (the "oh how I hate leap seconds" release)
 
 [ ENHANCEMENTS ]

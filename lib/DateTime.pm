@@ -240,8 +240,10 @@ sub _handle_offset_modifier
 
     return if $self->{tz}->is_floating;
 
+    $self->{offset_modifier} = 0;
+
     my $second = shift;
-    my $utc_rd_days = @_ ? shift : $self->{utc_rd_days};
+    my $utc_rd_days = $self->{utc_rd_days};
 
     my $offset = $self->_offset_for_local_datetime;
 
@@ -256,11 +258,14 @@ sub _handle_offset_modifier
 
             $self->{local_rd_secs} += $self->{offset_modifier};
         }
-        elsif ( ( $self->{local_rd_secs} == $offset
-                  && $offset > 0 )
-                ||
-                ( $offset == 0
-                  && $self->{local_rd_secs} > 86399 ) )
+        elsif ( $second == 60
+                &&
+                ( ( $self->{local_rd_secs} == $offset
+                    && $offset > 0 )
+                  ||
+                  ( $offset == 0
+                    && $self->{local_rd_secs} > 86399 ) )
+              )
         {
             my $mod = $self->_day_length( $utc_rd_days - 1 ) - SECONDS_PER_DAY;
 
@@ -282,7 +287,7 @@ sub _handle_offset_modifier
 
             $self->{local_rd_secs} += $self->{offset_modifier};
         }
-        elsif ( $self->{local_rd_secs} == SECONDS_PER_DAY + $offset )
+        elsif ( $second == 60 && $self->{local_rd_secs} == SECONDS_PER_DAY + $offset )
         {
             my $mod = $self->_day_length( $utc_rd_days - 1 ) - SECONDS_PER_DAY;
 
@@ -355,13 +360,13 @@ sub _calc_local_rd
     {
         my $offset = $self->offset;
 
-        $offset += $self->{offset_modifier};
-
         $self->{local_rd_days} = $self->{utc_rd_days};
         $self->{local_rd_secs} = $self->{utc_rd_secs} + $offset;
 
         # intentionally ignore leap seconds here
         $self->_normalize_tai_seconds( $self->{local_rd_days}, $self->{local_rd_secs} );
+
+        $self->{local_rd_secs} += $self->{offset_modifier};
     }
 
     $self->_calc_local_components;
