@@ -10,11 +10,12 @@ TODO
 lib/DateTime.pm
 lib/DateTimePP.pm
 lib/DateTime/Duration.pm
+lib/DateTime/Infinite.pm
 lib/DateTime/Language.pm
 lib/DateTime/Language/Afar.pm
 lib/DateTime/Language/Amharic.pm
 lib/DateTime/Language/Austrian.pm
-lib/DateTime/Language/Brazilian.pm
+lib/DateTime/Language/Portugese.pm
 lib/DateTime/Language/Czech.pm
 lib/DateTime/Language/Danish.pm
 lib/DateTime/Language/Dutch.pm
