@@ -1,0 +1,8 @@
+MANIFEST
+LICENSE
+README
+Todo
+Changes
+lib/DateTime.pm
+t/001_load.t
+Makefile.PL

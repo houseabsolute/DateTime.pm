@@ -1,0 +1,35 @@
+TODO list for Perl module DateTime
+
+- use test plan for all tests.
+
+- strftime - localizable!
+
+- last day of month
+
+- week number of year
+
+- memo-ization for all the little component methods, with cache
+flushed on changes (add, etc.)
+
+- add gmtime and localtime methods, perhaps?
+
+- write INTERNALS document? (I say not needed, just comment the module appropriately - dave)
+
+- reasonable stringification.  numification?
+
+- add list of all component-returning methods to SYNOPSIS, specify
+which method are 0-based or 1-based.
+
+- more tests for setting offset via offset() method
+
+- sub-second resolution - at least microseconds (cooperate with
+Time::HiRes), but is micro small enough?
+
+- no ordinal suffixes for Czech language.  contact Honza Padziadora?
+
+- wrapping mode bits in _add need to become class/object attribute
+
+- print_error, raise_error, & error_handler options ala DBI.  Default
+to Exception::Class throwing.
+
+- make mjd method to return real mjd days/seconds and sub-seconds.

@@ -1,0 +1,12 @@
+Revision history for Perl module DateTime
+
+0.01
+
+Date::ICal + Time::Piece methods +
+
+- new() takes second & minute instead of sec & min (consistent with
+DateTime::Duration)
+
+- days_this_year function => day_of_year method
+
+...
