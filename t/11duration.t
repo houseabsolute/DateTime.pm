@@ -82,13 +82,13 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
                                  weeks => 1, days => 1,
                                  hours => 1, minutes => 2, seconds => 3, )->inverse;
 
-    is( $inverse->years, -1, 'inverse years should be negative' );
-    is( $inverse->months, -1, 'inverse months should be negative' );
-    is( $inverse->weeks, -1, 'inverse weeks should be negative' );
-    is( $inverse->days, -1, 'inverse days should be negative' );
-    is( $inverse->hours, -1, 'inverse hours should be negative' );
-    is( $inverse->minutes, -2, 'inverse minutes should be negative' );
-    is( $inverse->seconds, -3, 'inverse minutes should be negative' );
+    is( $inverse->years, 1, 'inverse years should be positive' );
+    is( $inverse->months, 1, 'inverse months should be positive' );
+    is( $inverse->weeks, 1, 'inverse weeks should be positive' );
+    is( $inverse->days, 1, 'inverse days should be positive' );
+    is( $inverse->hours, 1, 'inverse hours should be positive' );
+    is( $inverse->minutes, 2, 'inverse minutes should be positive' );
+    is( $inverse->seconds, 3, 'inverse minutes should be positive' );
 
     is( $inverse->delta_months, -13, 'inverse delta months should be negative' );
     is( $inverse->delta_days, -8, 'inverse delta months should be negative' );
