@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 31;
+use Test::More tests => 32;
 
 use DateTime;
 
@@ -120,4 +120,9 @@ SKIP:
 
     is( $dt->epoch, 0, 'epoch should be 0' );
     is( $dt->hires_epoch, 0.5, 'hires_epoch should be 0.5' );
+}
+
+{
+    my $dt = DateTime->from_epoch( epoch => 0.1234567891 );
+    is( $dt->nanosecond, 123_456_789, 'nanosecond should be an integer ' );
 }

@@ -346,7 +346,7 @@ sub from_epoch
 
     # Because epoch may come from Time::HiRes
     my $fraction = $p{epoch} - int( $p{epoch} );
-    $args{nanosecond} = $fraction * MAX_NANOSECONDS
+    $args{nanosecond} = int( $fraction * MAX_NANOSECONDS )
         if $fraction;
 
     # Note, for very large negative values this may give a blatantly
@@ -1638,7 +1638,9 @@ method, it accepts "time_zone" and "locale" parameters.
 
 If the epoch value is not an integer, the part after the decimal will
 be converted to nanoseconds.  This is done in order to be compatible
-with C<Time::HiRes>.
+with C<Time::HiRes>.  If the floating portion extends past 9 decimal
+places, it will be truncated to nine, so that 1.1234567891 will become
+1 second and 123,456,789 nanoseconds.
 
 =item * now( ... )
 
