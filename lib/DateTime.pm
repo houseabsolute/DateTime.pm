@@ -10,6 +10,7 @@ use Carp;
 use Class::Data::Inheritable;
 use Date::Leapyear ();
 use DateTime::Duration;
+use DateTime::TimeZone::UTC;
 use Params::Validate qw( validate validate_with SCALAR BOOLEAN OBJECT );
 use Time::Local ();
 
@@ -498,6 +499,16 @@ sub clone {
     my $new = \%hash;
     bless $new, $class;
     return $new;
+}
+
+sub utc_datetime {
+    my $self = shift;
+
+    my $dt = $self->clone;
+
+    $dt->{time_zone} = DateTime::TimeZone::UTC->new;
+
+    return $dt;
 }
 
 sub compare {
