@@ -742,7 +742,7 @@ __END__
 
 =head1 NAME
 
-DateTime - Reference implement for Perl DateTime objects
+DateTime - Reference implementation for Perl DateTime objects
 
 =head1 SYNOPSIS
 
