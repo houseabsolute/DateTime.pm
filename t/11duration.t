@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 92;
+use Test::More tests => 109;
 
 use DateTime;
 use DateTime::Duration;
@@ -18,6 +18,7 @@ require 'testlib.pl';
                   hours   => 6,
                   minutes => 7,
                   seconds => 8,
+                  nanoseconds => 9,
                 );
 
     my $dur = DateTime::Duration->new(%pairs);
@@ -31,6 +32,36 @@ require 'testlib.pl';
     is( $dur->delta_days, 25, "delta_days" );
     is( $dur->delta_minutes, 367, "delta_minutes" );
     is( $dur->delta_seconds, 8, "delta_seconds" );
+    is( $dur->delta_nanoseconds, 9, "delta_nanoseconds" );
+
+    is( $dur->in_units( 'months' ), 14, "in_units months" );
+    is( $dur->in_units( 'days' ), 25, "in_units days" );
+    is( $dur->in_units( 'minutes' ), 367, "in_units minutes" );
+    is( $dur->in_units( 'seconds' ), 8, "in_units seconds" );
+    is( $dur->in_units( 'nanoseconds', 'seconds' ), 9,
+        "in_units nanoseconds, seconds" );
+
+    is( $dur->in_units( 'years' ), 1, "in_units years" );
+    is( $dur->in_units( 'months', 'years' ), 2, "in_units months, years" );
+    is( $dur->in_units( 'weeks' ), 3, "in_units weeks" );
+    is( $dur->in_units( 'days', 'weeks' ), 4, "in_units days, weeks" );
+    is( $dur->in_units( 'hours' ), 6, "in_units hours" );
+    is( $dur->in_units( 'minutes', 'hours' ), 7, "in_units minutes, hours" );
+    is( $dur->in_units( 'nanoseconds' ), 8_000_000_009, "in_units nanoseconds" );
+
+    my ( $years, $months, $weeks, $days, $hours,
+         $minutes, $seconds, $nanoseconds) =
+             $dur->in_units( qw( years months weeks days hours
+                                 minutes seconds nanoseconds ) );
+
+    is( $years,       1, "in_units years, list context" );
+    is( $months,      2, "in_units months, list context" );
+    is( $weeks,       3, "in_units weeks, list context" );
+    is( $days,        4, "in_units days, list context" );
+    is( $hours,       6, "in_units hours, list context" );
+    is( $minutes,     7, "in_units minutes, list context" );
+    is( $seconds,     8, "in_units seconds, list context" );
+    is( $nanoseconds, 9, "in_units nanoseconds, list context" );
 
     ok( $dur->is_positive, "should be positive" );
     ok( ! $dur->is_zero, "should not be zero" );
@@ -192,20 +223,6 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
 }
 
 {
-    foreach my $p ( { hours => -3, minutes =>  57, seconds =>  2 },
-                    { hours =>  3, minutes => -57, seconds =>  2 },
-                    { hours => -3, minutes => -57, seconds =>  2 },
-                    { hours =>  3, minutes =>  57, seconds => -2 },
-                  )
-    {
-        my $dur = DateTime::Duration->new(%$p);
-
-        is( $dur->delta_minutes, -237, 'delta_minutes should be -237' );
-        is( $dur->delta_seconds, -2, 'delta_seconds should be -2' );
-    }
-}
-
-{
     my $min_1  = DateTime::Duration->new( minutes => 1 );
     my $hour_1 = DateTime::Duration->new( hours => 1 );
 
@@ -231,7 +248,8 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
     my $dur2 = DateTime::Duration->new( minutes => 20 );
 
     eval { my $x = 1 if $dur1 <=> $dur2 };
-    like( $@, qr/does not overload comparison/ );
+    like( $@, qr/does not overload comparison/,
+          'check error for duration comparison overload' );
 
     is( DateTime::Duration->compare( $dur1, $dur2 ), -1,
         '20 minutes is greater than 10 minutes' );
@@ -273,4 +291,14 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
 
     is( $dur3->delta_seconds, 0, 'normalize nanoseconds if seconds would be <0' );
     is( $dur3->delta_nanoseconds, -4_000, 'normalize nanoseconds if seconds would be <0' );
+}
+
+{
+    my $dur = DateTime::Duration->new( minutes => 30,
+                                       seconds => -1,
+                                     );
+
+    ok( ! $dur->is_positive, 'is not positive' );
+    ok( ! $dur->is_zero,     'is not zero' );
+    ok( ! $dur->is_negative, 'is not negative' );
 }

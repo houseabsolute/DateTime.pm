@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 534;
+use Test::More tests => 537;
 
 use DateTime;
 
@@ -312,3 +312,11 @@ is( fake_ical($new), '19981201Z', 'test + overloading' );
     is( $dt->ymd, '2003-04-01', 'order of units in date math' );
 }
 
+{
+    my $dt = DateTime->new( year => 2003, hour => 12, minute => 1);
+    $dt->add( minutes => 30, seconds => -1 );
+
+    is( $dt->hour,   12, 'hour is 12' );
+    is( $dt->minute, 30, 'minute is 30' );
+    is( $dt->second, 59, 'second is 59' );
+}

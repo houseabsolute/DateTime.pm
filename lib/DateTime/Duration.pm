@@ -14,6 +14,8 @@ use overload ( fallback => 1,
 
 use constant MAX_NANOSECONDS => 1_000_000_000;  # 1E9 = almost 32 bits
 
+my @all_units = qw( months days minutes seconds nanoseconds );
+
 sub new
 {
     my $class = shift;
@@ -32,40 +34,17 @@ sub new
 
     my $self = bless {}, $class;
 
-    # if any component is negative we treat the whole duration as
-    # negative
-    if ( grep { $p{$_} < 0 } qw( years months weeks days hours minutes seconds nanoseconds ) )
-    {
-        $self->{sign} = -1;
-    }
-    else
-    {
-        $self->{sign} = 1;
-    }
+    $self->{months} = ( $p{years} * 12 ) + $p{months};
 
-    $self->{end_of_month} =
-	( defined $p{end_of_month}
-	  ? $p{end_of_month}
-	  : $self->is_negative
-	  ? 'preserve'
-	  : 'wrap'
-	);
+    $self->{days} = ( $p{weeks} * 7 ) + $p{days};
 
-    $self->{months} =
-        ( abs( $p{years} * 12 ) + abs( $p{months} ) ) * $self->{sign};
+    $self->{minutes} = ( $p{hours} * 60 ) + $p{minutes};
 
-    # in Perl 5.6.1/Linux, $_=0; $_*-1 gives -0 !!! adding 0 fixes the result...
-
-    $self->{days} = 0 +
-        ( abs( $p{weeks} * 7 ) + abs( $p{days} ) ) * $self->{sign};
-
-    $self->{minutes} = ( abs( $p{hours} * 60 ) + abs( $p{minutes} )  ) * $self->{sign};
-
-    $self->{seconds} = 0 + abs( $p{seconds} ) * $self->{sign};
+    $self->{seconds} = $p{seconds};
 
     if ( $p{nanoseconds} )
     {
-        $self->{nanoseconds} = abs( $p{nanoseconds} ) * $self->{sign};
+        $self->{nanoseconds} = $p{nanoseconds};
         $self->_normalize_nanoseconds;
     }
     else
@@ -74,18 +53,13 @@ sub new
         $self->{nanoseconds} = 0;
     }
 
-    if ( $self->{sign} == -1 )
-    {
-	foreach ( qw( months days minutes seconds nanoseconds ) )
-	{
-	    $self->{$_} = 0 unless $self->{$_};
-	}
-    }
-
-    unless ( grep { $self->{$_} } qw( months days minutes seconds nanoseconds ) )
-    {
-        $self->{sign} = 0;
-    }
+    $self->{end_of_month} =
+        ( defined $p{end_of_month}
+          ? $p{end_of_month}
+          : $self->{months} < 0
+          ? 'preserve'
+          : 'wrap'
+        );
 
     return $self;
 }
@@ -113,18 +87,23 @@ sub _normalize_nanoseconds
 
 sub clone { bless { %{ $_[0] } }, ref $_[0] }
 
-sub years   { abs( int( $_[0]->{months} / 12 ) ) }
-sub months  { abs( $_[0]->{months} ) % 12 }
-sub weeks   { abs( int( $_[0]->{days} / 7 ) ) }
-sub days    { abs( $_[0]->{days} ) % 7 }
-sub hours   { abs( int( $_[0]->{minutes} / 60 ) ) }
-sub minutes { abs( $_[0]->{minutes} ) - ( $_[0]->hours * 60 ) }
-sub seconds { abs( $_[0]->{seconds} ) }
-sub nanoseconds { abs( $_[0]->{nanoseconds} ) }
+sub years   { abs( $_[0]->in_units( 'years' ) ) }
+sub months  { abs( $_[0]->in_units( 'months', 'years' ) ) }
+sub weeks   { abs( $_[0]->in_units( 'weeks' ) ) }
+sub days    { abs( $_[0]->in_units( 'days', 'weeks' ) ) }
+sub hours   { abs( $_[0]->in_units( 'hours' ) ) }
+sub minutes { abs( $_[0]->in_units( 'minutes', 'hours' ) ) }
+sub seconds { abs( $_[0]->in_units( 'seconds' ) ) }
+sub nanoseconds { abs( $_[0]->in_units( 'nanoseconds', 'seconds' ) ) }
 
-sub is_positive { $_[0]->{sign} ==  1 ? 1 : 0 }
-sub is_zero     { $_[0]->{sign} ==  0 ? 1 : 0 }
-sub is_negative { $_[0]->{sign} == -1 ? 1 : 0 }
+sub is_positive {   $_[0]->_has_positive && ! $_[0]->_has_negative }
+sub is_negative { ! $_[0]->_has_positive &&   $_[0]->_has_negative }
+
+sub _has_positive { ( grep { $_ > 0 } @{ $_[0] }{@all_units} ) ? 1 : 0}
+sub _has_negative { ( grep { $_ < 0 } @{ $_[0] }{@all_units} ) ? 1 : 0 }
+
+sub is_zero       { return 0 if grep { $_ != 0 } @{ $_[0] }{@all_units};
+                    return 1 }
 
 sub delta_months  { $_[0]->{months} }
 sub delta_days    { $_[0]->{days} }
@@ -134,7 +113,65 @@ sub delta_nanoseconds { $_[0]->{nanoseconds} }
 
 sub deltas
 {
-    map { $_ => $_[0]->{$_} } qw( months days minutes seconds nanoseconds );
+    map { $_ => $_[0]->{$_} } @all_units;
+}
+
+sub in_units
+{
+    my $self  = shift;
+    my @units = @_;
+
+    my %units = map { $_ => 1 } @units;
+
+    my %ret;
+
+    my ( $months, $days, $minutes, $seconds ) =
+        @{ $self }{qw( months days minutes seconds )};
+
+    if ( $units{years} )
+    {
+        $ret{years} = int( $months / 12 );
+        $months -= $ret{years} * 12;
+    }
+
+    if ( $units{months} )
+    {
+        $ret{months} = $months;
+    }
+
+    if ( $units{weeks} )
+    {
+        $ret{weeks} = int( $days / 7 );
+        $days -= $ret{weeks} * 7;
+    }
+
+    if ( $units{days} )
+    {
+        $ret{days} = $days;
+    }
+
+    if ( $units{hours} )
+    {
+        $ret{hours} = int( $minutes / 60 );
+        $minutes -= $ret{hours} * 60;
+    }
+    if ( $units{minutes} )
+    {
+        $ret{minutes} = $minutes
+    }
+
+    if ( $units{seconds} )
+    {
+        $ret{seconds} = $seconds;
+        $seconds = 0;
+    }
+
+    if ( $units{nanoseconds} )
+    {
+        $ret{nanoseconds} = $seconds * MAX_NANOSECONDS + $self->{nanoseconds};
+    }
+
+    wantarray ? @ret{@units} : $ret{ $units[0] };
 }
 
 sub is_wrap_mode     { $_[0]->{end_of_month} eq 'wrap'   ? 1 : 0 }
@@ -146,11 +183,11 @@ sub inverse
     my $self = shift;
 
     my %new;
-    foreach ( qw( months days minutes seconds nanoseconds ) )
+    foreach my $u (@all_units)
     {
-        $new{$_} = $self->{$_};
-	# avoid -0 bug
-	$new{$_} *= -1 if $new{$_};
+        $new{$u} = $self->{$u};
+        # avoid -0 bug
+        $new{$u} *= -1 if $new{$u};
     }
 
     return (ref $self)->new(%new);
@@ -160,9 +197,9 @@ sub add_duration
 {
     my ( $self, $dur ) = @_;
 
-    foreach ( qw( months days minutes seconds nanoseconds ) )
+    foreach my $u (@all_units)
     {
-        $self->{$_} += $dur->{$_};
+        $self->{$u} += $dur->{$u};
     }
 
     $self->_normalize_nanoseconds if $self->{nanoseconds};
@@ -191,9 +228,9 @@ sub multiply
     my $self = shift;
     my $multiplier = shift;
 
-    foreach ( qw( months days minutes seconds nanoseconds ) )
+    foreach my $u (@all_units)
     {
-        $self->{$_} *= $multiplier;
+        $self->{$u} *= $multiplier;
     }
 
     $self->_normalize_nanoseconds if $self->{nanoseconds};
@@ -275,6 +312,9 @@ DateTime::Duration - Duration objects for date math
                                 seconds => 45, 
                                 nanoseconds => 12000 );
 
+  # Convert to different units
+  $d->in_units('days', 'hours', 'seconds');
+
   # Human-readable accessors, always positive
   $d->years;
   $d->months;
@@ -319,7 +359,11 @@ This is a simple class for representing duration objects.  These
 objects are used whenever you do date math with DateTime.pm.
 
 See the L<How Date Math is Done|DateTime/"How Date Math is Done">
-section of the DateTime.pm documentation for more details.
+section of the DateTime.pm documentation for more details.  The short
+course:  One cannot in general convert between seconds, minutes, days,
+and months, so this class will never do so.  Instead, create the
+duration with the desired units to begin with, for example by calling
+the appropriate subtraction method of L<DateTime>.
 
 =head1 METHODS
 
@@ -368,24 +412,42 @@ most people "intuitively" expect datetime math to work.
 Returns a new object with the same properties as the object on which
 this method was called.
 
+=item * in_units( ... )
+
+Returns the length of the duration in the units (any of those that can
+be passed to L<new>) given as arguments.  All lengths are integral,
+but may be negative.  Smaller units are computed from what remains
+after taking away the larger units given, so for example:
+
+  my $dur = DateTime::Duration->new( years => 1, months => 15 );
+
+  $dur->in_units( 'years' );            # 2
+  $dur->in_units( 'months' );           # 27
+  $dur->in_units( 'years', 'months' );  # (2, 3)
+
+Note that the numbers returned by this method may not match the values
+given to the constructor.
+
+In list context, in_units returns the lengths in the order of the units
+given.  In scalar context, it returns the length in the first unit (but
+still computes in terms of all given units).
+
+If you need more flexibility in presenting information about
+durations, please take a look a C<DateTime::Format::Duration>.
+
 =item * years, months, weeks, days, hours, minutes, seconds, nanoseconds
 
 These methods return numbers indicating how many of the given unit the
-object representations.  These numbers are always positive.
-
-Note that the numbers returned by this method may not match the values
-given to the constructor.  For example:
-
-  my $dur = DateTime::Duration->new( years => 0, months => 15 );
-
-  print $dur->years;  # prints 1
-  print $dur->months; # prints 3
+object represents, after having taken away larger units.  These
+numbers are always positive.  So days is equivalent to C<abs(
+in_units( 'days', 'weeks' ) )>.
 
 =item * delta_months, delta_days, delta_minutes, delta_seconds, delta_nanoseconds
 
 These methods provide the same information as those above, but in a
 way suitable for doing date math.  The numbers returned may be
-positive or negative.
+positive or negative.  So delta_days is equivalent to
+C<in_units('days')>.
 
 =item * deltas
 
@@ -396,6 +458,9 @@ object.
 =item * is_positive, is_zero, is_negative
 
 Indicates whether or not the duration is positive, zero, or negative.
+
+If the duration contains both positive and negative units, then it
+will return false for B<all> of these methods.
 
 =item * is_wrap_mode, is_limit_mode, is_preserve_mode
 

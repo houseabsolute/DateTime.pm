@@ -1,3 +1,25 @@
+0.21
+
+[ *** BACKWARDS INCOMPATIBILITIES *** ]
+
+- When given mixed positive & negative arguments, DateTime::Duration
+no longer forces all arguments to be negative.
+
+- For mixed durations, the is_positive, is_zero, and is_negative
+methods all return false.
+
+[ ENHANCEMENTS ]
+
+- Add a new in_units method to DateTime::Duration.  Patch by Andrew
+Pimlott.
+
+[ BUG FIXES ]
+
+- DateTime::Duration's is_positive, is_zero, and is_negative methods
+could incorrectly return true if a duration contained mixed positive
+and negative units.
+
+
 0.20  2004-02-12
 
 [ IMPROVEMENTS ]
