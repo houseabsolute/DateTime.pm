@@ -12,6 +12,8 @@ tries to guess the century, and it doesn't do this by simply adding
 1900.  Numbers less than 53 (for the year 2003) are treated as being
 in the current century.  Ugh.
 
+- Fixed compilation on HPUX.  Patch from Dan Sully.
+
 
 0.12     2003-05-05
 
