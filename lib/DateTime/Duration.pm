@@ -430,6 +430,28 @@ after taking away the larger units given, so for example:
   $dur->in_units( 'years' );            # 2
   $dur->in_units( 'months' );           # 27
   $dur->in_units( 'years', 'months' );  # (2, 3)
+  $dur->in_units( 'weeks', 'days' );    # (0, 0) !
+
+
+The last example demonstrates that there will not be any conversion
+between units which don't have a fixed conversion rate.  The only
+conversions possible are:
+
+=over 8
+
+=item * year <=> months
+
+=item * weeks <=> days
+
+=item * hours <=> minutes
+
+=item * seconds <=> nanoseconds
+
+=back
+
+For the explanation of why this happens, please see the L<How Date
+Math is Done|DateTime/"How Date Math is Done"> section of the
+DateTime.pm documentation
 
 Note that the numbers returned by this method may not match the values
 given to the constructor.
