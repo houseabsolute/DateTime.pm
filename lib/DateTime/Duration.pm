@@ -64,25 +64,16 @@ sub new
     return $self;
 }
 
+# make the signs of seconds, nanos the same; 0 < abs(nanos) < MAX_NANOS
+# NB this requires nanoseconds != 0 (callers check this already)
 sub _normalize_nanoseconds
 {
     my $self = shift;
 
-    if ( $self->{nanoseconds} < 0 )
-    {
-        my $overflow = int( $self->{nanoseconds} / MAX_NANOSECONDS );
-        # try to make nanoseconds positive if seconds are positive,
-        # unless that would make seconds go below 0
-        $overflow++ if $overflow < $self->{seconds};
-        $self->{nanoseconds} += $overflow * MAX_NANOSECONDS;
-        $self->{seconds} -= $overflow;
-    }
-    elsif ( $self->{nanoseconds} >= MAX_NANOSECONDS )
-    {
-        my $overflow = int( $self->{nanoseconds} / MAX_NANOSECONDS );
-        $self->{nanoseconds} -= $overflow * MAX_NANOSECONDS;
-        $self->{seconds} += $overflow;
-    }
+    my $seconds = $self->{seconds} + $self->{nanoseconds} / MAX_NANOSECONDS;
+    $self->{seconds} = int( $seconds );
+    $self->{nanoseconds} = $self->{nanoseconds} % MAX_NANOSECONDS;
+    $self->{nanoseconds} -= MAX_NANOSECONDS if $seconds < 0;
 }
 
 sub clone { bless { %{ $_[0] } }, ref $_[0] }

@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 109;
+use Test::More tests => 111;
 
 use DateTime;
 use DateTime::Duration;
@@ -283,14 +283,21 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
 
     my $dur2 = $dur1->clone->subtract( nanoseconds => 5_000 );
 
-    is( $dur2->delta_seconds, 0, 'normalize nanoseconds if seconds stays >=0' );
-    is( $dur2->delta_nanoseconds, 999_996_000, 'normalize nanoseconds if seconds stays >=0' );
+    is( $dur2->delta_seconds, 0, 'normalize nanoseconds to positive' );
+    is( $dur2->delta_nanoseconds, 999_996_000, 'normalize nanoseconds to positive' );
 
     my $dur3 =
         $dur1->clone->subtract( nanoseconds => 6_000 )->subtract( nanoseconds => 999_999_000 );
 
-    is( $dur3->delta_seconds, 0, 'normalize nanoseconds if seconds would be <0' );
-    is( $dur3->delta_nanoseconds, -4_000, 'normalize nanoseconds if seconds would be <0' );
+    is( $dur3->delta_seconds, 0, 'normalize nanoseconds to negative' );
+    is( $dur3->delta_nanoseconds, -4_000, 'normalize nanoseconds to negative' );
+
+    my $dur4 = DateTime::Duration->new( seconds => -1,
+                                        nanoseconds => -2_500_000_000
+                                      );
+
+    is( $dur4->delta_seconds, -3, 'normalize many negative nanoseconds' );
+    is( $dur4->delta_nanoseconds, -500_000_000, 'normalize many negative nanoseconds' );
 }
 
 {
