@@ -24,6 +24,7 @@ DateTime::Exception->Trace(1);
 # early.
 use overload ( 'fallback' => 1,
                '<=>' => 'compare',
+               'cmp' => 'compare',
                '-' => '_subtract_overload',
                '+' => '_add_overload',
                '""' => '_stringify',
@@ -613,7 +614,7 @@ sub _add_overload {
 
     # how to handle non duration objects?
 
-    my $new = $date1->as_utc;
+    my $new = $date1->clone;
 
     $new->add_duration($dur);
 
@@ -628,7 +629,7 @@ sub _subtract_overload {
     }
 
     if ( UNIVERSAL::isa( $date2, 'DateTime::Duration' ) ) {
-        my $new = $date1->as_utc;
+        my $new = $date1->clone;
         $new->add_duration( $date2->inverse );
         return $new;
     } else {
