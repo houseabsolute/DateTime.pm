@@ -147,7 +147,7 @@ sub new
 }
 
 
-sub _normalize_leapseconds
+sub _normalize_leap_seconds
 {
     # args: 0 => days, 1 => seconds
     my $delta_days; 
@@ -238,8 +238,21 @@ sub _calc_local_components
                                day_of_year quarter day_of_quarter) } =
         $self->_rd2ymd( $self->{local_rd_days}, 1 );
 
-    @{ $self->{local_c} }{ qw( hour minute second ) } =
-        $self->_seconds_as_components( $self->{local_rd_secs} );
+    if ( $self->time_zone->is_floating ) 
+    {
+        @{ $self->{local_c} }{ qw( hour minute second ) } =
+            $self->_seconds_as_components( $self->{local_rd_secs} );
+    }
+    else 
+    {
+        # TODO - this only works for timezone == UTC !!!
+        @{ $self->{local_c} }{ qw( hour minute second ) } =
+            $self->_seconds_as_components( $self->{local_rd_secs} );
+        if ( $self->{local_rd_secs} >= 86400 ) 
+        {
+            $self->{local_c}{second} += $self->{local_rd_secs} - 86400 + 60;
+        }
+    }
 }
 
 sub _calc_utc_components
@@ -862,7 +875,7 @@ sub add_duration
             }
             else
             {
-                _normalize_leapseconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+                _normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
             }
         }
 
