@@ -13,6 +13,7 @@ leaptab.txt
 lib/DateTime.pm
 lib/DateTime/Duration.pm
 lib/DateTime/Infinite.pm
+lib/DateTime/LeapSecond.pm
 lib/DateTimePP.pm
 lib/DateTimePPExtra.pm
 ppport.h
