@@ -794,14 +794,14 @@ sub strftime
         $f =~ s/
                 %{(\w+)}
                /
-                $self->$1() if $self->can($1);
+                $self->can($1) ? $self->$1() : "\%{$1}"
                /sgex;
 
         # regex from Date::Format - thanks Graham!
        $f =~ s/
                 %([%a-zA-Z])
                /
-                $formats{$1} ? $formats{$1}->($self) : '%' . $1
+                $formats{$1} ? $formats{$1}->($self) : "\%$1"
                /sgex;
 
         # %3N
