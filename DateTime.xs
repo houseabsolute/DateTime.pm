@@ -200,6 +200,7 @@ _seconds_as_components(self, secs, utc_secs = 0)
         PUSHs(sv_2mortal(newSViv(m)));
         PUSHs(sv_2mortal(newSViv(s)));
 
+#if !defined(WIN32)
 void
 _normalize_seconds(self, days, secs)
      SV* self;
@@ -224,6 +225,8 @@ _normalize_seconds(self, days, secs)
           sv_setiv(days, (IV) d);
           sv_setiv(secs, (IV) s);
         }
+
+#endif /* WIN32 */
 
 void
 _time_as_seconds(self, h, m, s)
