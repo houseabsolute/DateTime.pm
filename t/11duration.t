@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 88;
+use Test::More tests => 92;
 
 use DateTime;
 use DateTime::Duration;
@@ -140,34 +140,34 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
 {
     my $dur1 =
         DateTime::Duration->new
-            ( months => 6, days => 10, seconds => 3, nanoseconds => 1200300400 );
+            ( months => 6, days => 10, seconds => 3, nanoseconds => 1_200_300_400 );
 
-    my $dur2 = DateTime::Duration->new( seconds => 1, nanoseconds => 500000000 );
+    my $dur2 = DateTime::Duration->new( seconds => 1, nanoseconds => 500_000_000 );
 
     is( $dur1->delta_seconds, 4, 'test nanoseconds overflow' );
-    is( $dur1->delta_nanoseconds, 200300400, 'test nanoseconds remainder' );
+    is( $dur1->delta_nanoseconds, 200_300_400, 'test nanoseconds remainder' );
 
     my $new1 = $dur1 - $dur2;
 
-    is( $new1->delta_seconds, 3, 'seconds is positive' );
-    is( $new1->delta_nanoseconds, -299699600, 'nanoseconds remainder is negative' );
+    is( $new1->delta_seconds, 2, 'seconds is positive' );
+    is( $new1->delta_nanoseconds, 700_300_400, 'nanoseconds remainder is negative' );
 
-    $new1->add( nanoseconds => 500000000 );
+    $new1->add( nanoseconds => 500_000_000 );
     is( $new1->delta_seconds, 3, 'seconds are unaffected' );
-    is( $new1->delta_nanoseconds, 200300400, 'nanoseconds are back' );
+    is( $new1->delta_nanoseconds, 200_300_400, 'nanoseconds are back' );
 
     my $new2 = $dur1 - $dur2;
-    $new2->add( nanoseconds => 1500000000 );
+    $new2->add( nanoseconds => 1_500_000_000 );
     is( $new2->delta_seconds, 4, 'seconds go up' );
-    is( $new2->delta_nanoseconds, 200300400, 'nanoseconds are normalized' );
+    is( $new2->delta_nanoseconds, 200_300_400, 'nanoseconds are normalized' );
 
-    $new2->subtract( nanoseconds => 100000000 );
-    is( $new2->delta_nanoseconds, 100300400, 'sub nanoseconds works' );
+    $new2->subtract( nanoseconds => 100_000_000 );
+    is( $new2->delta_nanoseconds, 100_300_400, 'sub nanoseconds works' );
 
     my $new3 = $dur2 * 3;
 
     is( $new3->delta_seconds, 4, 'seconds normalized after multiplication');
-    is( $new3->delta_nanoseconds, 500000000,
+    is( $new3->delta_nanoseconds, 500_000_000,
         'nanoseconds normalized after multiplication' );
 }
 
@@ -256,4 +256,21 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
     $base = DateTime->new( year => 2005, month => 2 );
     is( DateTime::Duration->compare( $dur1, $dur2, $base ), 1,
         '29 days is greater than 1 month with base of 2005-02-01' );
+}
+
+{
+    my $dur1 = DateTime::Duration->new( nanoseconds => 1_000,
+                                        seconds     => 1,
+                                      );
+
+    my $dur2 = $dur1->clone->subtract( nanoseconds => 5_000 );
+
+    is( $dur2->delta_seconds, 0, 'normalize nanoseconds if seconds stays >=0' );
+    is( $dur2->delta_nanoseconds, 999_996_000, 'normalize nanoseconds if seconds stays >=0' );
+
+    my $dur3 =
+        $dur1->clone->subtract( nanoseconds => 6_000 )->subtract( nanoseconds => 999_999_000 );
+
+    is( $dur3->delta_seconds, 0, 'normalize nanoseconds if seconds would be <0' );
+    is( $dur3->delta_nanoseconds, -4_000, 'normalize nanoseconds if seconds would be <0' );
 }
