@@ -1195,6 +1195,9 @@ birth of Jesus Christ.
 The calendar represented does have a year 0, and in that way differs
 from how dates are often written using "BCE/CE" or "BC/AD".
 
+For infinite datetimes, please see the
+L<DateTime::Infinite|DateTime::Infinite> module.
+
 =head1 USAGE
 
 =head2 0-based Versus 1-based Numbers
@@ -1563,12 +1566,6 @@ zone, such as "PST" or "GMT".  These names are B<not> definitive, and
 should not be used in any application intended for general use by
 users around the world.
 
-=item * local_rd_as_seconds
-
-Returns the current local Rata Die days and seconds purely as seconds.
-This number ignores any fractional seconds stored in the object,
-as well as leap seconds.
-
 =item * strftime( $format, ... )
 
 This method implements functionality similar to the C<strftime()>
@@ -1597,6 +1594,12 @@ have such a limited range on 32-bit machines.  Additionally, the fact
 that different operating systems have different epoch beginnings is
 another source of possible bugs.
 
+=item * is_finite, is_infinite
+
+These methods allow you to distinguish normal datetime objects from
+infinite ones.  Infinite datetime objects are documented in
+L<DateTime::Infinite|DateTime::Infinite>.
+
 =item * utc_rd_values
 
 Returns the current UTC Rata Die days and seconds as a two element
@@ -1606,7 +1609,12 @@ objects based on the values provided by this object.
 =item * utc_rd_as_seconds
 
 Returns the current UTC Rata Die days and seconds purely as seconds.
-This is useful when you need a single number to represent a date.
+This number ignores any fractional seconds stored in the object,
+as well as leap seconds.
+
+=item * local_rd_as_seconds
+
+Returns the current local Rata Die days and seconds purely as seconds.
 This number ignores any fractional seconds stored in the object,
 as well as leap seconds.
 
