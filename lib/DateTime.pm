@@ -4,7 +4,7 @@ use strict;
 
 use vars qw($VERSION);
 
-$VERSION = '0.06';
+$VERSION = '0.07';
 
 use DynaLoader;
 
@@ -13,6 +13,7 @@ use DynaLoader;
 bootstrap DateTime $DateTime::VERSION;
 
 use DateTime::Duration;
+use DateTime::Language;
 use DateTime::TimeZone;
 use Params::Validate qw( validate SCALAR BOOLEAN OBJECT );
 use Time::Local ();
@@ -39,10 +40,7 @@ my( @MonthLengths, @LeapYearMonthLengths );
         if (@_) {
             my $lang = shift;
 
-            my $lang_class = 'DateTime::Language::' . ucfirst lc $lang;
-
-            eval "use $lang_class";
-            die $@ if $@;
+            DateTime::Language->load($lang);
 
             $DefaultLanguage = $lang;
         }
@@ -76,10 +74,7 @@ sub new {
     }
     else
     {
-        my $lang_class = 'DateTime::Language::' . ucfirst lc $args{language};
-        eval "use $lang_class";
-        die $@ if $@;
-        $self->{language} = $lang_class->new;
+        $self->{language} = DateTime::Language->new( language => $args{language} );
     }
 
     $self->{tz} =
@@ -808,8 +803,6 @@ from how dates are often written using "BCE/CE" or "BC/AD".
 Some methods are localizable by setting a language for a DateTime
 object.  There is also a C<DefaultLanguage()> class method which may
 be used to set the default language for all DateTime objects created.
-
-Languages are defined by creating a DateTime::Language subclass.
 
 If there is neither a class default or language constructor parameter,
 then the "default default" language is English.
