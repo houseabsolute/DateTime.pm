@@ -5,6 +5,8 @@
 - The _greg2rd and _rd2greg methods have been renamed _ymd2rd and
 _rd2ymd, so as to make them look more normal when used in subclasses.
 
+- Added a truncate() method.  Suggested by Flavio Glock.
+
 [BUG FIXES]
 
 - The last_day_of_month() method had the DateTime class hard-coded in
