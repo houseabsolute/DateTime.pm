@@ -99,8 +99,10 @@ sub new {
           DateTime::TimeZone->new( name => $args{time_zone} )
         );
 
-    $self->{local_rd_days} = $class->greg2rd( @args{ qw( year month day ) } );
-    $self->{local_rd_secs} = time_as_seconds( @args{ qw( hour minute second ) } );
+    $self->{local_rd_days} =
+        $class->greg2rd( @args{ qw( year month day ) } );
+    $self->{local_rd_secs} =
+        $class->time_as_seconds( @args{ qw( hour minute second ) } );
 
     bless $self, $class;
 
@@ -239,17 +241,8 @@ sub _normalize_seconds {
     ($_[0] += $adj), ($_[1] -= $adj*86400);
 }
 
-=begin internal
-
-    time_as_seconds( $args{hour}, $args{min}, $args{sec} );
-
-Returns the time of day as the number of seconds in the day.
-
-=end internal
-
-=cut
-
 sub time_as_seconds {
+    shift;
     my ( $hour, $min, $sec ) = @_;
 
     $hour ||= 0;
