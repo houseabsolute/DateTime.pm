@@ -17,6 +17,6 @@ use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AM
 @DayAbbreviations = map { substr($_,0,3) } @DayNames;
 
 require DateTime::Language::English;
-@AMPM = @{DateTime::Language::English::AMPM};
+@AMPM = @DateTime::Language::English::AMPM;
 
 1;
