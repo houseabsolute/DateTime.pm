@@ -77,7 +77,7 @@ sub new {
                            hour   => { type => SCALAR, default => 0 },
                            minute => { type => SCALAR, default => 0 },
                            second => { type => SCALAR, default => 0 },
-                           language  => { type => SCALAR,
+                           language  => { type => SCALAR | OBJECT,
                                           default => $class->DefaultLanguage },
                            time_zone => { type => SCALAR | OBJECT,
                                           default => 'local' },
@@ -87,10 +87,17 @@ sub new {
 
     my $self = {};
 
-    my $lang_class = 'DateTime::Language::' . ucfirst lc $args{language};
-    eval "require $class";
-    die $@ if $@;
-    $self->{language} = $lang_class->new;
+    if ( ref $args{language} )
+    {
+        $self->{language} = $args{language};
+    }
+    else
+    {
+        my $lang_class = 'DateTime::Language::' . ucfirst lc $args{language};
+        eval "require $class";
+        die $@ if $@;
+        $self->{language} = $lang_class->new;
+    }
 
     $args{time_zone} = 'local' unless exists $args{time_zone};
 
@@ -496,6 +503,8 @@ sub time_zone { $_[0]->{tz} }
 
 sub offset { $_[0]->{tz}->offset_for_datetime( $_[0] ) }
 
+sub language { $_[0]->{language} }
+
 my %formats =
     ( 'a' => sub { $_[0]->day_abbr },
       'A' => sub { $_[0]->day_name },
@@ -705,15 +714,40 @@ sub compare {
 
 sub set {
     my $self = shift;
+    my %p = validate( @_,
+                      { year   => { type => SCALAR, optional => 1 },
+                        month  => { type => SCALAR, optional => 1 },
+                        day    => { type => SCALAR, optional => 1 },
+                        hour   => { type => SCALAR, optional => 1 },
+                        minute => { type => SCALAR, optional => 1 },
+                        second => { type => SCALAR, optional => 1 },
+                        language  => { type => SCALAR, optional => 1 },
+                      } );
 
-    my %p =
+    my %old_p =
         ( map { $_ => $self->$_() }
-          qw( year month day hour minute second time_zone )
+          qw( year month day hour minute second language time_zone )
         );
 
-    my $new_dt = (ref $self)->new( %p, @_ );
+    my $new_dt = (ref $self)->new( %old_p, %p );
 
     %$self = %$new_dt;
+}
+
+sub set_time_zone {
+    my ( $self, $tz ) = @_;
+
+    my $old_offset = $self->offset;
+
+    my $tz = ref $tz ? $tz : DateTime::TimeZone->new( name => $tz );
+
+    $self->{tz} = $tz;
+
+    $self->{local_rd_secs} = $self->{local_rd_secs} + ( $self->offset - $old_offset );
+
+    _normalize_seconds( $self->{local_rd_days}, $self->{local_rd_secs} );
+
+    $self->_calc_components;
 }
 
 # like "scalar localtime()" in Perl
@@ -1107,7 +1141,42 @@ Other methods provided by C<DateTime.pm> are:
 
 =over 4
 
-=item * add_duration($duration_object)
+=item * set( .. )
+
+This method can be used to change the local components of a date time,
+or its language.  This method accepts any parameter allowed by the
+C<new()> method except for "time_zone".  Time zones may be set using
+the C<set_time_zone()> method.
+
+=item * set_time_zone( $tz )
+
+This method accepts either a time zone object or a string that can be
+passed as the "name" parameter to C<< DateTime::TimeZone->new() >>.
+If the new time zone's offset is different from the old time zone,
+then the I<local> time is adjusted accordingly.
+
+For example:
+
+  my $dt = DateTime::TimeZone->new( year => 2000, month => 5, day => 10,
+                                    hour => 15, minute => 15,
+                                    time_zone => '-0600', );
+
+  print $dt->hour; # prints 15
+
+  $dt->set_time_zone( '-0400' );
+
+  print $dt->hour; # prints 17
+
+Fans of Tsai Ming-Liang's films will be happy to know that this does
+work:
+
+  my $dt = DateTime::TimeZone->new( ..., time_zone => 'Asia/Taipei' );
+
+  $dt->set_time_zone( 'Europe/Paris' );
+
+Yes, now we can know "ni3 na1 bian1 ji3dian2?"
+
+=item * add_duration( $duration_object )
 
 This method adds a C<DateTime::Duration> to the current datetime.  See
 the L<DateTime::TimeZone|DateTime::TimeZone> docs for more detais.
@@ -1118,7 +1187,7 @@ This method is syntactic sugar around the C<add_duration()> method.  It
 simply creates a new C<DateTime::Duration> object using the parameters
 given, and then calls the C<add_duration()> method.
 
-=item * subtract_duration($duration_object)
+=item * subtract_duration( $duration_object )
 
 When given a C<DateTime::Duration> object, this method simply calls
 C<invert()> on that object and passes that new duration to the
@@ -1129,7 +1198,7 @@ C<add_duration> method.
 Like C<add()>, this is syntactic sugar for the C<subtract_duration()>
 method.
 
-=item * subtract_datetime($datetime)
+=item * subtract_datetime( $datetime )
 
 This method returns a new C<DateTime::Duration> object representing
 the difference between the two objects.
