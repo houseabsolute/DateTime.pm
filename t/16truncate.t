@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 37;
+use Test::More tests => 40;
 
 use DateTime;
 
@@ -109,5 +109,14 @@ my %vals =
 	my $trunc = $dt->clone->add( days => 7 )->truncate( to => 'week' );
 
 	is( $trunc->day, 24, 'truncate to week should always truncate to monday of week' );
+    }
+
+    {
+        my $dt =
+            DateTime->new( year => 2003, month => 10, day => 2 )->truncate( to => 'week' );
+
+        is( $dt->year, 2003, 'truncation to week across month boundary' );
+        is( $dt->month, 9, 'truncation to week across month boundary' );
+        is( $dt->day, 29, 'truncation to week across month boundary' );
     }
 }
