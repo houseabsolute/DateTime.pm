@@ -5,6 +5,12 @@
 - DateTime::Duration now returns the object from mutator methods, in
 order to make method chaining possible.  Suggested by Ben Bennett.
 
+[ BUG FIXES ]
+
+- DateTime::Duration was not consistent in how it handled mixed
+positive and negative constructor parameters.  Reported by Ben
+Bennett.
+
 
 0.13     2003-05-05
 
