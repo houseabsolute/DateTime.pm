@@ -1162,8 +1162,8 @@ produce the date April 1, 2003, not March 29, 2003.
 =head2 Overloading
 
 This module explicitly overloads the addition (+), subtraction (-),
-and stringification operators.  This means that the following all do
-sensible things:
+string and numbercomparison, and stringification operators.  This
+means that the following all do sensible things:
 
   my $new_dt = $dt + $duration_obj;
 
