@@ -28,13 +28,13 @@ use DateTime;
                             hour => 1, minute => 59, second => 59,
                             time_zone => 'America/Chicago',
                           );
-    is( $dt->offset, -18000, 'offset should be -18000' );
-    is( $dt->is_dst, 1, 'is dst' );
-
-    $dt->add( seconds => 1 );
-
     is( $dt->offset, -21600, 'offset should be -21600' );
-    is( $dt->is_dst, 0, 'is not dst' );
+    is( $dt->is_dst, 0, 'is dst' );
+
+    $dt->subtract( hours => 1 );
+
+    is( $dt->offset, -18000, 'offset should be -18000' );
+    is( $dt->is_dst, 1, 'is not dst' );
     is( $dt->hour, 1, "crossing DST bounday changes local hour -1" );
 }
 

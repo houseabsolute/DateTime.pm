@@ -1267,12 +1267,12 @@ time) to 01:00:00 (standard time).  This means that the hour from
 01:00:00 through 01:59:59 actually occurs twice, though the UTC time
 continues to move forward.
 
-If you specify an ambiguous time, then the earliest UTC time is always
+If you specify an ambiguous time, then the latest UTC time is always
 used, in effect always choosing saving time.  In this case, you can
-simply add an hour to the object in order to move to standard time,
+simply subtract an hour to the object in order to move to standard time,
 for example:
 
-  # This object represent 01:30:00 saving time
+  # This object represent 01:30:00 standard time
   my $dt = DateTime->new( year   => 2003,
                           month  => 10,
                           day    => 26,
@@ -1284,8 +1284,8 @@ for example:
 
   print $dt->hms;  # prints 01:30:00
 
-  # Now the object represent 01:30:00 standard time
-  $dt->add( hours => 1 );
+  # Now the object represent 01:30:00 saving time
+  $dt->subtract( hours => 1 );
 
   print $dt->hms;  # still prints 01:30:00
 
