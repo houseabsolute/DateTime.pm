@@ -1,4 +1,20 @@
-0.07
+0.08
+
+[IMPROVEMENTS]
+
+- The _greg2rd and _rd2greg methods have been renamed _ymd2rd and
+_rd2ymd, so as to make them look more normal when used in subclasses.
+
+[BUG FIXES]
+
+- Fix jd() method for datetimes before year -4712 and after year 3267.
+Reported by Eugene van der Pijll.
+
+- The last_day_of_month() method had the DateTime class hard-coded in
+it.  Reported by Eugene van der Pijll.
+
+
+0.07     2003-02-26
 
 [IMPROVEMENTS]
 
