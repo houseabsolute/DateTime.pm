@@ -81,7 +81,7 @@ sub write_makefile
                    clean        => { FILES => $zz },
                    CONFIGURE    => \&init,
 
-                   PREREQ_PM    => { 'DateTime::Locale' => 0.09,
+                   PREREQ_PM    => { 'DateTime::Locale' => 0.21,
                                      'DateTime::TimeZone' => 0.26,
                                      'Params::Validate' => 0.76,
                                      'Pod::Man'    => 1.14,

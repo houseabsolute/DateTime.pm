@@ -1,3 +1,11 @@
+0.28
+
+- The era names for the era() method are now retrieved from the
+DateTime.pm object's associated locale.  The old era() method, which
+was hard-coded to use BCE and CE, is renamed secular_era().  The
+christian_era() method remains the same.
+
+
 0.27    2005-01-31
 
 [ ENHANCEMENTS ]

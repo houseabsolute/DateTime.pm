@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 126;
+use Test::More tests => 130;
 
 use DateTime;
 
@@ -128,19 +128,23 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
     is( $dt0->year, 1, "year 1 is year 1" );
     is( $dt0->ce_year, 1, "ce_year 1 is year 1" );
-    is( $dt0->era, 'CE', 'era is CE' );
-    is( $dt0->year_with_era, '1CE', 'year_with_era is 1CE' );
+    is( $dt0->era, 'AD', 'era is AD' );
+    is( $dt0->year_with_era, '1AD', 'year_with_era is 1AD' );
     is( $dt0->christian_era, 'AD', 'christian_era is AD' );
     is( $dt0->year_with_christian_era, '1AD', 'year_with_christian_era is 1AD' );
+    is( $dt0->secular_era, 'CE', 'secular_era is CE' );
+    is( $dt0->year_with_secular_era, '1CE', 'year_with_secular_era is 1CE' );
 
     $dt0->subtract( years => 1 );
 
     is( $dt0->year, 0, "year 1 minus 1 is year 0" );
     is( $dt0->ce_year, -1, "ce_year 1 minus 1 is year -1" );
-    is( $dt0->era, 'BCE', 'era is BCE' );
-    is( $dt0->year_with_era, '1BCE', 'year_with_era is 1BCE' );
+    is( $dt0->era, 'BC', 'era is BC' );
+    is( $dt0->year_with_era, '1BC', 'year_with_era is 1BC' );
     is( $dt0->christian_era, 'BC', 'christian_era is BC' );
     is( $dt0->year_with_christian_era, '1BC', 'year_with_christian_era is 1BC' );
+    is( $dt0->secular_era, 'BCE', 'secular_era is BCE' );
+    is( $dt0->year_with_secular_era, '1BCE', 'year_with_secular_era is 1BCE' );
 }
 
 {

@@ -7,7 +7,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.27';
+    $VERSION = '0.28';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -596,11 +596,13 @@ sub ce_year { $_[0]->{local_c}{year} <= 0 ?
               $_[0]->{local_c}{year} - 1 :
               $_[0]->{local_c}{year} }
 
-sub era { $_[0]->ce_year > 0 ? 'CE' : 'BCE' }
+sub era { $_[0]->{locale}->era( $_[0] ) }
 sub christian_era { $_[0]->ce_year > 0 ? 'AD' : 'BC' }
+sub secular_era   { $_[0]->ce_year > 0 ? 'CE' : 'BCE' }
 
 sub year_with_era { (abs $_[0]->ce_year) . $_[0]->era }
 sub year_with_christian_era { (abs $_[0]->ce_year) . $_[0]->christian_era }
+sub year_with_secular_era   { (abs $_[0]->ce_year) . $_[0]->secular_era }
 
 sub month   { $_[0]->{local_c}{month} }
 *mon = \&month;
@@ -1997,21 +1999,31 @@ before year 1 in this system is year -1, aka "1 BCE".
 
 =item * era
 
-Returns a string, either "BCE" or "CE", according to the year.
+Returns a string provided by the locale, based on the year.
 
 =item * christian_era
 
 Returns a string, either "BC" or "AD", according to the year.
 
+=item * secular_era
+
+Returns a string, either "BCE" or "CE", according to the year.
+
 =item * year_with_era
 
 Returns a string containing the year immediately followed by its era.
 The year is the absolute value of C<ce_year()>, so that year 1 is
-"1CE" and year 0 is "1BCE".
+"1BC" and year 0 is "1AD".
 
 =item * year_with_christian_era
 
-Like C<year_with_era()>, but uses the Christian era.
+Like C<year_with_era()>, but uses the christian_era() to get the era
+name.
+
+=item * year_with_secular_era
+
+Like C<year_with_era()>, but uses the secular_era() method to get the
+era name.
 
 =item * month
 
