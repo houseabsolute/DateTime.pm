@@ -259,7 +259,6 @@ DateTime::Duration - Duration objects for date math
   $d->minutes;
   $d->seconds;
   $d->nanoseconds;
-  $d->sign;
 
   if ( $d->is_positive ) { ... }
   if ( $d->is_zero )     { ... }
