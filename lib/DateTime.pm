@@ -198,6 +198,20 @@ sub new
     $self->_calc_utc_rd;
     $self->_calc_local_rd;
 
+    if ( $p{second} > 59 )
+    {
+        if ( $self->{tz}->is_floating ||
+             # If true, this means that the actual calculated leap
+             # second does not occur in the second given to new()
+             ( $self->{utc_rd_secs} - 86399
+               <
+               $p{second} - 59 )
+           )
+        {
+            die "Invalid second value ($p{second})\n";
+        }
+    }
+
     return $self;
 }
 
@@ -1479,7 +1493,8 @@ month
 
 =item * second
 
-0-61 (to allow for leap seconds)
+0-61 (to allow for leap seconds).  Values of 60 or 61 are only allowed
+when they match actual leap seconds.
 
 =item * nanosecond
 
