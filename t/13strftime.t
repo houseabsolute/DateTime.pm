@@ -11,7 +11,7 @@ BEGIN
 
 use strict;
 
-use Test::More tests => 126;
+use Test::More tests => 130;
 
 use DateTime;
 
@@ -101,6 +101,11 @@ while (<DATA>)
     is( $dt->strftime('%l %M %p'), '12 00 AM', 'formatting of hours as 1-12' );
 }
 
+{
+    is( DateTime->new( year => 2003, month => 1, day => 1 )->strftime('%V'),
+	'01', '%V is 01' );
+}
+
 
 # add these if we do roman-numeral stuff
 # %Od	VII
@@ -148,6 +153,7 @@ year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42, nanos
 %S	42
 %T	13:02:42
 %U	36
+%V	36
 %w	2
 %W	36
 %y	99
@@ -186,6 +192,7 @@ de
 %S	42
 %T	13:02:42
 %U	36
+%V	36
 %w	2
 %W	36
 %y	99
@@ -221,6 +228,7 @@ it
 %S	42
 %T	13:02:42
 %U	36
+%V	36
 %w	2
 %W	36
 %y	99
