@@ -65,7 +65,7 @@ write_makefile();
 
 sub write_makefile
 {
-    my $zz = File::Spec->catfile( 't', 'zz_*.t' );
+    my $zz = join ' ', glob File::Spec->catfile( 't', 'zz_*.t' );
     WriteMakefile( NAME         => 'DateTime',
                    VERSION_FROM => 'lib/DateTime.pm',
                    AUTHOR       => 'Dave Rolsky <autarch@urth.org>',
