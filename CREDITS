@@ -16,7 +16,8 @@ The week number and week year calculations are taken from Steffen
 Beyer's Date::Calc module.
 
 The code for handling nanoseconds and the code for leap seconds were
-both largely written by Flavio Soibelmann Glock, along 
+both largely written by Flavio Soibelmann Glock, who also has
+contributed various other features and fixes.
 
 
 Others who've helped out with code contributions include:
