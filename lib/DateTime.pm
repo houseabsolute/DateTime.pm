@@ -1173,34 +1173,55 @@ birth of Jesus Christ.
 The calendar represented does have a year 0, and in that way differs
 from how dates are often written using "BCE/CE" or "BC/AD".
 
-=head1 LANGUAGES
+=head1 USAGE
 
-Some methods are localizable by setting a language when constructing a
-DateTime object.  There is also a C<DefaultLanguage()> class method
-which may be used to set the default language for all DateTime objects
-created.
+=head2 0-based Versus 1-based Numbers
 
-If there is neither a class default or language constructor parameter,
-then the "default default" language is English.
+The DateTime.pm module follows a simple consistent logic for
+determining whether or not a given number is 0-based or 1-based.
 
-Additional language subclasses are welcome.  See the Perl DateTime
-project page at http://perl-date-time.sf.net/ for more details.
+Month, day of month, day of week, and day of year are 1-based.  Any
+method that is 1-based also has an equivalent 0-based method ending in
+"_0".  So for example, this class provides both C<day_of_week()> and
+C<day_of_week_0()> methods.
 
-Some languages may return names as Unicode.  When using Perl 5.6.0 or
-greater, this will be a native Perl Unicode string.  When using older
-Perls, this will be a sequence of bytes representing the Unicode
-character.
+The C<day_of_week_0()> method still treats Monday as the first day of
+the week.
 
-=head1 ERROR HANDLING
+All I<time>-related numbers such as hour, minute, and second are
+0-based.
+
+Years are neither, as they can be both positive or negative, unlike
+any other datetime component.  There I<is> a year 0.
+
+There is no C<quarter_0()> method.
+
+=head2 Error Handling
 
 Some errors may cause this module to die with an error string.  This
 can only happen when calling constructor methods or methods that
 change the object, such as C<set()>.  Methods that retrieve
 information about the object, such as C<strftime()>, will never die.
 
-=head1 METHODS
+=head2 Languages
 
-=head2 Constructors
+Some methods are localizable.  This is done by setting the language
+when constructing a DateTime object.  There is also a
+C<DefaultLanguage()> class method which may be used to set the default
+language for all DateTime objects created.  If this is not set, then
+"English" is used.
+
+Additional language subclasses are welcome.  See the Perl DateTime
+project page at http://perl-date-time.sf.net/ for more details.
+
+Some languages may return data as Unicode.  When using Perl 5.6.0 or
+greater, this will be a native Perl Unicode string.  When using older
+Perls, this will be a sequence of bytes representing the Unicode
+character.
+
+=head2 Methods
+
+=head3 Constructors
 
 All constructors can die when invalid parameters are given.
 
@@ -1223,6 +1244,9 @@ Additionally, it accepts "fractional_second", "language" and
                           time_zone  => 'America/Chicago',
                         );
 
+If a "fractional_second" parameter is given, then the "nanosecond"
+parameter will be ignored.
+
 The behavior of this module when given parameters outside proper
 boundaries (like a minute parameter of 72) is not defined, though
 future versions may die.
@@ -1232,7 +1256,7 @@ constructor to die.
 
 All of the parameters are optional except for "year".  The "month" and
 "day" parameters both default to 1, while the "hour", "minute", and
-"second" parameters all default to 0.
+"second", and "nanosecond" parameters all default to 0.
 
 The language parameter should be a string matching one of the valid
 languages.  See the L<DateTime::Language|DateTime::Language>
@@ -1247,7 +1271,7 @@ C<DateTime::TimeZone> documentation for more details.
 
 The default time zone is "floating".
 
-=head3 Ambiguous Local Times
+=head4 Ambiguous Local Times
 
 Because of Daylight Saving Time, it is possible to specify a local
 time that is ambiguous.  For example, in the US in 2003, the
@@ -1283,11 +1307,11 @@ Alternately, you could create the object with the UTC time zone, and
 then call the C<set_time_zone()> method to change the time zone.  This
 would allow you to unambiguously specify the datetime.
 
-=head3 Invalid Local Times
+=head4 Invalid Local Times
 
 Another problem introduced by Daylight Saving Time is that certain
 local times just do not exist.  For example, in the US in 2003, the
-transition from standard to saving time occurs on April 6, at the
+transition from standard to saving time occurred on April 6, at the
 change to 2:00:00 local time.  The local clock changes from 01:59:59
 (standard time) to 03:00:00 (saving time).  This means that there is
 no 02:00:00 through 02:59:59 on April 6!
@@ -1327,7 +1351,7 @@ object.  Otherwise UTC is used.
 =item * last_day_of_month( ... )
 
 This constructor takes the same arguments as can be given to the
-C<now()> method, except for "day".  Additionally, both "year" and
+C<new()> method, except for "day".  Additionally, both "year" and
 "month" are required.
 
 =item * clone
@@ -1336,33 +1360,23 @@ This object method returns a replica of the given object.
 
 =back
 
-=head1 USAGE
+=head3 Class Methods
 
-=head2 0-based Versus 1-based Numbers
+Currently there is just one class method.
 
-The DateTime.pm module follows a simple consistent logic for
-determining whether or not a given number is 0-based or 1-based.
+=over 4
 
-Month, day of month, day of week, and day of year are 1-based.  Any
-method that is 1-based also has an equivalent 0-based method ending in
-"_0".  So for example, this class provides both C<day_of_week()> and
-C<day_of_week_0()> methods.
+=item * DefaultLanguage( $language )
 
-The C<day_of_week_0()> method still treats Monday as the first day of
-the week.
+This can be used to specify the default language to be used when
+creating DateTime objects.  If unset, then "English" is used.
 
-All I<time>-related numbers such as hour, minute, and second are
-0-based.
+=back
 
-Years are neither, as they can be both positive or negative, unlike
-any other datetime component.  There I<is> a year 0.
+=head3 "Get" Methods
 
-There is no C<quarter_0()> method.
-
-=head2 Methods
-
-This module has quite a number of methods for retrieving information
-about an object.
+This class has many methods for retrieving information about an
+object.
 
 =over 4
 
@@ -1418,7 +1432,7 @@ Returns the day of the quarter.
 
 =item * quarter
 
-Returns the quarter of the year.
+Returns the quarter of the year, from 1..4.
 
 =item * ymd( $optional_separator ), date
 
@@ -1563,7 +1577,7 @@ as well as leap seconds.
 
 This method implements functionality similar to the C<strftime()>
 method in C.  However, if given multiple format strings, then it will
-return multiple elements, one for each format string.
+return multiple scalars, one for each format string.
 
 See the L<strftime Specifiers|/strftime Specifiers> section for a list
 of all possible format specifiers.
@@ -1585,9 +1599,11 @@ method may simply return undef in some cases.
 Using your system's epoch time may be error-prone, since epoch times
 have such a limited range on 32-bit machines.  Additionally, the fact
 that different operating systems have different epoch beginnings is
-another source of bugs.
+another source of possible bugs.
 
 =back
+
+=head3 "Set" Methods
 
 The remaining methods provided by C<DateTime.pm>, except where otherwise
 specified, return the object itself, thus making method chaining
@@ -1614,9 +1630,9 @@ the C<set_time_zone()> method.
 This method allows you to reset some of the local time components in
 the object to their "zero" values.  The "to" parameter is used to
 specify which values to truncate, and it may be one of "year",
-"month", "day", "hour", "minute", or "second".  For example, if "month" is
-specified, then the local day becomes 1, and the hour, minute, and
-second all become 0.
+"month", "day", "hour", "minute", or "second".  For example, if
+"month" is specified, then the local day becomes 1, and the hour,
+minute, and second all become 0.
 
 =item * set_time_zone( $tz )
 
@@ -1721,15 +1737,16 @@ It's important to have some understanding of how date math is
 implemented in order to effectively use this module and
 C<DateTime::Duration>.
 
-The parts of a duration can be broken into three parts.  These are
-months, days, and seconds.  Adding one month to a date is different
-than adding 4 weeks or 28, 29, 30, or 31 days.  Similarly, due to DST
-and leap seconds, adding a day can be different than adding 86,400
+The parts of a duration can be broken down into four parts.  These are
+months, days, minutes, and seconds.  Adding one month to a date is
+different than adding 4 weeks or 28, 29, 30, or 31 days.  Similarly,
+due to DST and leap seconds, adding a day can be different than adding
+86,400 seconds, and adding a minute is not exactly the same as 60
 seconds.
 
-C<DateTime.pm> always adds (or subtracts) days, then months, and then
-seconds.  Then it normalizes the seconds to handle second values less
-than zero or greater than one day.
+C<DateTime.pm> always adds (or subtracts) days, then months, minutes,
+and then seconds.  Then it normalizes the seconds to handle second
+values less than zero or greater than one day.
 
 This means that adding one month and one day to February 28, 2003 will
 produce the date April 1, 2003, not March 29, 2003.
@@ -1777,13 +1794,13 @@ However, this works:
 and produces a datetime with the local time of "03:00".
 
 Another way of thinking of this is that when doing date math, each of
-the seconds, days, and months components is added separately to the
-local time.
+the seconds, minutes, days, and months components is added separately
+to the local time.
 
 So when we add 1 day to "2003-02-22 12:00:00" we are incrementing day
 component, 22, by one in order to produce 23.  If we add 24 hours,
-however, we're adding "24 * 60 * 60" seconds to the time component,
-and then normalizing the result (because there is no "36:00:00").
+however, we're adding "24 * 60" minutes to the time component, and
+then normalizing the result (because there is no "36:00:00").
 
 If all this makes your head hurt, there is a simple alternative.  Just
 convert your datetime object to the "UTC" time zone before doing date
