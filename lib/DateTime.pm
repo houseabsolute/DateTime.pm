@@ -166,8 +166,10 @@ sub _calc_components {
     $self->{c}{day_of_week} = ( ( $self->{local_rd_days} + 6) % 7 ) + 1;
 
     {
-        my @m = end_of_month_day_of_year( $self->{c}{year} );
-        $self->{c}{day_of_year} = $m[ $self->{c}{month} - 1 ] + $self->{c}{day};
+        my $d = $self->_end_of_month_day_of_year( $self->{c}{year},
+                                                  $self->{c}{month},
+                                                );
+        $self->{c}{day_of_year} = $d + $self->{c}{day};
     }
 }
 
@@ -344,8 +346,15 @@ BEGIN {
     }
 }
 
-sub end_of_month_day_of_year {
-    return Date::Leapyear::isleap(shift) ? @EndofMonthDayOfLeapYear : @EndofMonthDayOfYear;
+sub _end_of_month_day_of_year {
+    shift;
+    my ($y, $m) = @_;
+    $m--;
+    return
+        ( Date::Leapyear::isleap($y) ?
+          $EndofMonthDayOfLeapYear[$m] :
+          $EndofMonthDayOfYear[$m]
+        );
 }
 
 sub year    { $_[0]->{c}{year} <= 0 ? $_[0]->{c}{year} - 1 : $_[0]->{c}{year} }
@@ -932,10 +941,10 @@ determining whether or not a given number is 0-based or 1-based.
 
 All I<date>-related numbers such as year, month, day of
 month/week/year, are 1-based.  Any method that is one based also has
-an equivalent 0-based method ending in "_0".  So there are both
-C<day_of_week()> and C<day_of_week_0()> methods.
+an equivalent 0-based method ending in "_0".  So for example, this
+class provides both C<day_of_week()> and C<day_of_week_0()> methods.
 
-The C<year_0> method treats the year 1 ACE as year 0.
+The C<year_0> method treats the year 1 CE as year 0.
 
 The C<day_of_week_0> method still treats Monday as the first day of
 the week.
@@ -972,16 +981,6 @@ L<LANGUAGES|/LANGUAGES> section for more details.
 =item * day_of_month, day, mday
 
 Returns the day of the month, from 1..31.
-
-=item * month_name
-
-Returns the name of the current month.  See the
-L<LANGUAGES|/LANGUAGES> section for more details.
-
-=item * month_abbr
-
-Returns the abbreviated name of the current month.  See the
-L<LANGUAGES|/LANGUAGES> section for more details.
 
 =item * day_of_week, wday, dow
 
@@ -1079,6 +1078,22 @@ This returns the C<DateTime::TimeZone> object for the datetime object.
 This returns the offset, in seconds, of the datetime object according
 to the time zone.
 
+=item * time_zone_short_name
+
+This method returns the time zone abbreviation for the current time
+zone, such as "PST" or "GMT".  These names are B<not> definitive, and
+should not be used in any application intended for general use by
+users around the world.
+
+=item * utc_rd_as_seconds
+
+Returns the current UTC Rata Die days and seconds purely as seconds.
+This is useful when you need a single number to represent a date.
+
+=item * local_rd_as_seconds
+
+Returns the current local Rata Die days and seconds purely as seconds.
+
 =item * strftime( $format, ... )
 
 This method implements functionality similar to the C<strftime()>
@@ -1167,7 +1182,7 @@ method.
 =item * subtract_datetime( $datetime )
 
 This method returns a new C<DateTime::Duration> object representing
-the difference between the two objects.
+the difference between the two dates.
 
 =item * compare
 
@@ -1220,7 +1235,7 @@ means that the following all do sensible things:
 
 Additionally, the fallback parameter is set to true, so other
 derivable operators (+=, -=, etc.) will work properly.  Do not expect
-increment (++) or decrement (--) to do anything useful, however.
+increment (++) or decrement (--) to do anything useful.
 
 The stringification is equivalent to that produced by C<scalar
 localtime()>.
@@ -1438,6 +1453,9 @@ stole all the code from.
 Copyright (c) 2003 David Rolsky.  All rights reserved.  This program
 is free software; you can redistribute it and/or modify it under the
 same terms as Perl itself.
+
+Portions of the code in this distribution are derived from other
+works.  Please see the CREDITS file for more details.
 
 The full text of the license can be found in the LICENSE file included
 with this module.
