@@ -38,7 +38,7 @@ my( @MonthLengths, @LeapYearMonthLengths,
         if (@_) {
             my $lang = shift;
 
-            my $lang_class = "DateTime::Language::$lang";
+            my $lang_class = 'DateTime::Language::' . ucfirst lc $lang;
 
             eval "use $lang_class";
             die $@ if $@;
@@ -76,7 +76,7 @@ sub new {
     else
     {
         my $lang_class = 'DateTime::Language::' . ucfirst lc $args{language};
-        eval "require $class";
+        eval "use $lang_class";
         die $@ if $@;
         $self->{language} = $lang_class->new;
     }
