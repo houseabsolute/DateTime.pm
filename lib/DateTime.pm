@@ -969,7 +969,7 @@ sub _compare
 
     return $days1 <=> $days2 if $days1 != $days2;
 
-    return $secs1 <=> $secs2;
+    return $secs1 <=> $secs2 if $secs1 != $secs2;
 
     return $dt1->nanosecond <=> $dt2->nanosecond;
 }
