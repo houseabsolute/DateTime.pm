@@ -35,10 +35,6 @@ in the current century.  Ugh.
 
 - Fixed compilation on HPUX.  Patch from Dan Sully.
 
-- Fixed problem with use of finite() function on Windows.  Some tests
-still fail because apparently Windows thinks that (infinity -
-infinity) = 0 instead of NaN.
-
 - The last_day_of_month() method did not accept nanosecond or
 fractional_second parameters.
 
@@ -70,7 +66,7 @@ values don't work on Win32.
 
 [ BACKWARDS INCOMPATIBILITIES ]
 
-- DateTime::Infinite objects no longer die is "set" methods are
+- DateTime::Infinite objects no longer die if "set" methods are
 called.  Instead, these methods are now no-op methods that simply
 return the original object.  This makes these objects more usable when
 mixed with regular datetime objects.
@@ -78,6 +74,9 @@ mixed with regular datetime objects.
 - Removed the fractional_second constructor parameter.  It was
 incorrectly documented anyway.  The fractional_second _accessor_ is
 still there.
+
+- DateTime::Duration objects of zero length no longer return true for
+is_positive.
 
 
 0.12     2003-05-05
