@@ -6,16 +6,12 @@ use vars qw($VERSION);
 
 $VERSION = '0.01';
 
-use Carp;
-use Class::Data::Inheritable;
 use Date::Leapyear ();
 use DateTime::Duration;
 use DateTime::TimeZone;
 use DateTime::TimeZone::UTC;
 use Params::Validate qw( validate SCALAR BOOLEAN OBJECT );
 use Time::Local ();
-
-use base 'Class::Data::Inheritable';
 
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
