@@ -371,18 +371,47 @@ sub week
 
     unless ( defined $self->{local_c}{week_year} )
     {
-        my $mid_week = $self->clone;
-        # Thursday if Sunday is the first day of the week
-        $mid_week->add( days => 4 - ( ( $self->{local_rd_days} % 7 ) + 1 ) );
-        $self->{local_c}{week_year} = $mid_week->year;
+        # This algorithm was taken from Date::Calc's DateCalc.c file
+        my $jan_one_dow_m1 =
+            ( ( $self->_ymd2rd( $self->year, 1, 1 ) + 6 ) % 7 );
 
-        my $jan_four = $self->_ymd2rd( $self->{local_c}{week_year}, 1, 4 );
-        my $first_week = $jan_four - ( $jan_four % 7 );
         $self->{local_c}{week_number} =
-            int( ( $self->{local_rd_days} - $first_week ) / 7 ) + 1;
+            int( ( ( $self->day_of_year - 1 ) + $jan_one_dow_m1 ) / 7 );
+        $self->{local_c}{week_number}++ if $jan_one_dow_m1 < 4;
+
+        if ( $self->{local_c}{week_number} == 0 )
+        {
+            $self->{local_c}{week_year} = $self->year - 1;
+            $self->{local_c}{week_number} =
+                $self->_weeks_in_year( $self->{local_c}{week_year} );
+        }
+        elsif ( $self->{local_c}{week_number} == 53 &&
+                $self->_weeks_in_year( $self->year ) == 52 )
+        {
+            $self->{local_c}{week_number} = 1;
+            $self->{local_c}{week_year} = $self->year + 1;
+        }
+        else
+        {
+            $self->{local_c}{week_year} = $self->year;
+        }
     }
 
     return @{ $self->{local_c} }{ 'week_year', 'week_number' }
+}
+
+# Also from DateCalc.c
+sub _weeks_in_year
+{
+    my $self = shift;
+    my $year = shift;
+
+    my $jan_one_dow =
+        ( ( $self->_ymd2rd( $year, 1, 1 ) + 6 ) % 7 ) + 1;
+    my $dec_31_dow =
+        ( ( $self->_ymd2rd( $year, 12, 31 ) + 6 ) % 7 ) + 1;
+
+    return $jan_one_dow == 4 || $dec_31_dow == 4 ? 53 : 52;
 }
 
 sub week_year   { ($_[0]->week)[0] }
