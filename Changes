@@ -1,4 +1,4 @@
-0.xx
+0.19  2003-12-01  (the "never look before a leap second" release)
 
 [ IMPROVEMENTS ]
 
@@ -18,6 +18,20 @@ overloading.
 - Added a leap_seconds method.
 
 - Added a section to the docs about floating datetimes.
+
+- DateTime::LeapSecond no longer contains code copied from
+DateTime.pm, instead it just uses DateTime.pm directly.  Patch by
+Joshua Hoblitt.
+
+[ BACKWARDS INCOMPATIBILITIES ]
+
+- DateTime::LeapSecond's leap_seconds() function now returns the
+number of leap seconds that have occurred, as opposed to the
+difference between TAI and UTC for a given Rata Die day, which is what
+it was returning previously.  This means that the values it returns
+are 9 second less than the previous version.  This does not affect
+DateTime.pm because it never looke at the actual value, just the
+difference between two leap second values, which remains the same.
 
 
 0.18  2003-10-26  (the "delta, delta, delta, can I help ya, help ya, help ya?" release)
