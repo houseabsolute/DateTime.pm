@@ -12,14 +12,14 @@ Date::Language modules that come with Graham Barr's <gbarr@pobox.com>
 TimeDate module suite.  The strftime method in this module also
 borrows heavily from Graham's implementation.
 
-The week number and week year calculations are taken from Steffan
+The week number and week year calculations are taken from Steffen
 Beyer's Date::Calc module.
 
 
 Others who've helped out with code contributions include:
 
 Matthew Simon Cavalleto
-Flavio Glock
+Flavio Soibelmann Glock
 Christian Hansen
 Iain Truskett
 Daniel Yacob
