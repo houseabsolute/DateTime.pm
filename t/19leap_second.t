@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 28;
+use Test::More tests => 32;
 
 use DateTime;
 
@@ -126,4 +126,21 @@ use DateTime;
 
     is( $t->datetime, '1972-01-01T00:00:00',
         'add and subtract 1 day starting on leap second' );
+}
+
+{
+    my $t = DateTime->new( year => 1971, month => 12, day => 31,
+                           hour => 23, minute => 59, second => 59,
+                           time_zone => 'UTC',
+                         );
+
+    is( $t->epoch, 63071999, 'epoch just before first leap second is 63071999' );
+
+    $t->add( seconds => 1 );
+
+    is( $t->epoch, 63072000, 'epoch of first leap second is 63072000' );
+
+    $t->add( seconds => 1 );
+
+    is( $t->epoch, 63072000, 'epoch of first second after first leap second is 63072000' );
 }
