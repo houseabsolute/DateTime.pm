@@ -6,7 +6,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.1703';
+    $VERSION = '0.1704';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -912,10 +912,15 @@ sub subtract_datetime
     my ( $months, $days, $minutes, $seconds, $nanoseconds ) =
         $self->_adjust_for_positive_difference
             ( $bigger->year * 12 + $bigger->month, $smaller->year * 12 + $smaller->month,
-              $bigger->day, $smaller->day,
+
+              ($bigger->utc_rd_values)[0], ($smaller->utc_rd_values)[0],
+
               $bigger->hour * 60 + $bigger->minute, $smaller->hour * 60 + $smaller->minute,
+
 	      $bigger->second, $smaller->second,
+
 	      $bigger->nanosecond, $smaller->nanosecond,
+
 	      $minute_length,
 	      $self->_month_length( $bigger->year, $bigger->month ),
             );
