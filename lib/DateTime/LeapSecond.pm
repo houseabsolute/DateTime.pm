@@ -57,7 +57,7 @@ sub _init {
     $tmp .= "}\n";
 
     # NOTE: uncomment the line below to see the code:
-    warn $tmp;
+    #warn $tmp;
 
     eval $tmp;
 
@@ -159,14 +159,14 @@ DateTime::LeapSecond - leap seconds table and utilities
   use DateTime::LeapSecond;
 
   print "Leap seconds between years 1990 and 2000 are ";
-  print Date::Leapsecond::leap_seconds( $utc_rd_2000 ) - 
-        Date::Leapsecond::leap_seconds( $utc_rd_1990 ); 
+  print Date::Leapsecond::leap_seconds( $utc_rd_2000 ) -
+        Date::Leapsecond::leap_seconds( $utc_rd_1990 );
 
 =head1 DESCRIPTION
 
 This module is used to calculate leap seconds for a given Rata Die
-day.  It is mostly intended for use by the DateTime.pm, rather than
-for external users.
+day.  It is used when DateTime.pm cannot compile the XS version of
+this code.
 
 This library is known to be accurate for dates until december 2003.
 
