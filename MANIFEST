@@ -1,5 +1,6 @@
 CREDITS
 Changes
+DateTime.xs
 LICENSE
 MANIFEST			This list of files
 MANIFEST.SKIP
@@ -19,6 +20,7 @@ lib/DateTime/Language/French.pm
 lib/DateTime/Language/German.pm
 lib/DateTime/Language/Italian.pm
 lib/DateTime/Language/Norwegian.pm
+ppport.h
 t/00load.t
 t/01sanity.t
 t/02last_day.t
@@ -34,4 +36,5 @@ t/11duration.t
 t/12week.t
 t/13strftime.t
 t/14language.t
+t/15jd.t
 t/testlib.pl
