@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 50;
+use Test::More tests => 53;
 
 use DateTime;
 
@@ -193,4 +193,24 @@ use DateTime;
     is( $t->hour, 0, '+1 minute & 1 second, hour == 0' );
     is( $t->minute, 0, '+1 minute & 1 second, minute == 0' );
     is( $t->second, 31, '+1 minute & 1 second, second == 31' );
+}
+
+{
+    eval { DateTime->new( year => 1971, month => 12, day => 31,
+                          hour => 23, minute => 59, second => 61,
+                          time_zone => 'UTC',
+                        ) };
+    ok( $@, "Cannot give second of 61 except when it matches a leap second" );
+
+    eval { DateTime->new( year => 1971, month => 12, day => 31,
+                          hour => 23, minute => 58, second => 60,
+                          time_zone => 'UTC',
+                        ) };
+    ok( $@, "Cannot give second of 60 except when it matches a leap second" );
+
+    eval { DateTime->new( year => 1971, month => 12, day => 31,
+                          hour => 23, minute => 59, second => 60,
+                          time_zone => 'floating',
+                        ) };
+    ok( $@, "Cannot give second of 60 with floating time zone" );
 }
