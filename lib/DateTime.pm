@@ -1358,8 +1358,8 @@ All of the parameters are optional except for "year".  The "month" and
 "second", and "nanosecond" parameters all default to 0.
 
 The language parameter should be a string matching one of the valid
-languages.  See the L<DateTime::Language|DateTime::Language>
-documentation for details.
+languages, or a C<DateTime::Language> object.  See the
+L<DateTime::Language|DateTime::Language> documentation for details.
 
 The time_zone parameter can be either a scalar or a
 C<DateTime::TimeZone> object.  A string will simply be passed to the
