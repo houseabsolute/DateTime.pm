@@ -801,7 +801,7 @@ sub strftime
        $f =~ s/
                 %([%a-zA-Z])
                /
-                $formats{$1} ? $formats{$1}->($self) : $1
+                $formats{$1} ? $formats{$1}->($self) : '%' . $1
                /sgex;
 
         # %3N
@@ -1499,9 +1499,10 @@ There is no C<quarter_0()> method.
 =head2 Error Handling
 
 Some errors may cause this module to die with an error string.  This
-can only happen when calling constructor methods or methods that
-change the object, such as C<set()>.  Methods that retrieve
-information about the object, such as C<strftime()>, will never die.
+can only happen when calling constructor methods, methods that change
+the object, such as C<set()>, or methods that take parameters.
+Methods that retrieve information about the object, such as C<year()>
+or C<epoch()>, will never die.
 
 =head2 Locales
 
@@ -1932,6 +1933,9 @@ return multiple scalars, one for each format string.
 
 See the L<strftime Specifiers|/strftime Specifiers> section for a list
 of all possible format specifiers.
+
+If you give a format specifier that doesn't exist, then it is simply
+treated as text.
 
 =item * epoch
 
