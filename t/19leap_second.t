@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 48;
+use Test::More tests => 50;
 
 use DateTime;
 
@@ -38,8 +38,11 @@ use DateTime;
                             hour => 0, minute => 0, second => 20,
                             time_zone => 'UTC',
                           );
-    my $dt = $t2 - $t1;
-    is( $dt->seconds, 121, "sec duration");
+    my $dur = $t2 - $t1;
+    is( $dur->delta_seconds, 121, "delta_seconds is 121");
+
+    $dur = $t1 - $t2;
+    is( $dur->delta_seconds, -121, "delta_seconds is -121");
 }
 
 {
@@ -66,8 +69,11 @@ use DateTime;
                             hour => 0, minute => 0, second => 20,
                             time_zone => 'floating',
                           );
-    my $dt = $t2 - $t1;
-    is( $dt->seconds, 120, "sec duration");
+    my $dur = $t2 - $t1;
+    is( $dur->delta_seconds, 120, "delta_seconds is 120");
+
+    $dur = $t1 - $t2;
+    is( $dur->delta_seconds, -120, "delta_seconds is -120");
 }
 
 {
