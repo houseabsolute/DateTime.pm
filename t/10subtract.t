@@ -21,13 +21,13 @@ my $date2 = DateTime->new( year => 2001, month => 6, day => 12,
 my $diff = $date2 - $date1;
 
 is( $diff->delta_days, 33, 'delta_days should be 33' );
-is( $diff->delta_seconds, 3861, 'delta_seconds should be 3861' );
+is( $diff->delta_seconds, 3860, 'delta_seconds should be 3860' );
 is( $diff->weeks,   4,  'Weeks' );
 is( $diff->days,    5,  'Days' );
 is( $diff->hours,   0,  'Hours' );
 is( $diff->minutes, 0,  'Min' );
-is( $diff->seconds, 3861, 'Sec' );
-is( $diff->nanoseconds, 5, 'ns' );
+is( $diff->seconds, 3860, 'Sec' );
+is( $diff->nanoseconds, 999_999_995, 'ns' );
 
 my $d = DateTime->new( year => 2001, month => 10, day => 19,
                        hour => 5, minute => 1, second => 1,
