@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 55;
+use Test::More tests => 58;
 
 use DateTime;
 
@@ -232,4 +232,13 @@ is( fake_ical($X), '20011011T040000Z', 'Subtract and get the right thing' );
     is( $dur->delta_nanoseconds, 0, 'nanoseconds is 0' );
     ok( ! $dur->is_positive, 'not positive' );
     ok( ! $dur->is_negative, 'not negative' );
+}
+
+{
+    my $dt1 = DateTime->new( year => 2003, month => 12, day => 31 );
+    my $dt2 = $dt1->clone->subtract( months => 1, end_of_month => 'preserve' );
+
+    is( $dt2->year, 2003, '2003-12-31 - 1 month = 2003-11-30' );
+    is( $dt2->month, 11, '2003-12-31 - 1 month = 2003-11-30' );
+    is( $dt2->day, 30, '2003-12-31 - 1 month = 2003-11-30' );
 }
