@@ -1,3 +1,5 @@
+#!/usr/bin/perl -w
+
 use strict;
 
 use Test::More tests => 50;
@@ -147,11 +149,11 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
     is( $new1->delta_seconds, 3, 'seconds are unaffected' );
     is( $new1->delta_nanoseconds, 200300400, 'nanoseconds are back' );
 
-    my $new1 = $dur1 - $dur2;
-    $new1->add( nanoseconds => 1500000000 );
-    is( $new1->delta_seconds, 4, 'seconds go up' );
-    is( $new1->delta_nanoseconds, 200300400, 'nanoseconds are normalized' );
+    my $new2 = $dur1 - $dur2;
+    $new2->add( nanoseconds => 1500000000 );
+    is( $new2->delta_seconds, 4, 'seconds go up' );
+    is( $new2->delta_nanoseconds, 200300400, 'nanoseconds are normalized' );
 
-    $new1->subtract( nanoseconds => 100000000 );
-    is( $new1->delta_nanoseconds, 100300400, 'sub nanoseconds works' );
+    $new2->subtract( nanoseconds => 100000000 );
+    is( $new2->delta_nanoseconds, 100300400, 'sub nanoseconds works' );
 }
