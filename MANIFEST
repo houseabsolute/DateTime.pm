@@ -20,6 +20,7 @@ lib/DateTime/Language/French.pm
 lib/DateTime/Language/German.pm
 lib/DateTime/Language/Italian.pm
 lib/DateTime/Language/Norwegian.pm
+lib/DateTime/Language/Spanish.pm
 ppport.h
 t/00load.t
 t/01sanity.t
