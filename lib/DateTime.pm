@@ -17,9 +17,6 @@ use Time::Local ();
 
 use base 'Class::Data::Inheritable';
 
-use Exception::Class ( 'DateTime::Exception' );
-DateTime::Exception->Trace(1);
-
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
 use overload ( 'fallback' => 1,
@@ -32,7 +29,7 @@ use overload ( 'fallback' => 1,
 
 my( @MonthLengths, @LeapYearMonthLengths,
     @EndofMonthDayOfYear, @EndofMonthDayOfLeapYear,
-    %AddUnits );
+  );
 
 {
     # I'd rather use Class::Data::Inheritable for this, but there's no
@@ -58,19 +55,9 @@ my( @MonthLengths, @LeapYearMonthLengths,
 }
 __PACKAGE__->DefaultLanguage('English');
 
-__PACKAGE__->mk_classdata('ErrorHandler');
-__PACKAGE__->ErrorHandler( sub { DateTime::Exception->throw( $_[0] ) } );
-
-__PACKAGE__->mk_classdata('RaiseError');
-__PACKAGE__->RaiseError(0);
-
-__PACKAGE__->mk_classdata('PrintError');
-__PACKAGE__->PrintError(0);
-
 sub new {
     my $class = shift;
-    my %args =
-        eval { validate( @_,
+    my %args = validate( @_,
                          { year   => { type => SCALAR },
                            month  => { type => SCALAR, default => 1 },
                            day    => { type => SCALAR, default => 1 },
@@ -82,8 +69,7 @@ sub new {
                            time_zone => { type => SCALAR | OBJECT,
                                           default => 'local' },
                          }
-                       ) };
-    return $class->_error($@) if $@;
+                       );
 
     my $self = {};
 
@@ -187,16 +173,14 @@ sub _calc_components {
 
 sub from_epoch {
     my $class = shift;
-    my %args =
-        eval { validate( @_,
+    my %args = validate( @_,
                          { epoch => { type => SCALAR },
-                           language  => { type => SCALAR, optional => 1 },
+                           language  => { type => SCALAR | OBJECT, optional => 1 },
                            time_zone => { type => SCALAR | OBJECT, optional => 1 },
-                         } ) };
-    return $class->_error($@) if $@;
+                         }
+                       );
 
     my %p;
-
     # Note, for very large negative values this may give a blatantly
     # wrong answer.
     @p{ qw( second minute hour day month year ) } =
@@ -211,17 +195,28 @@ sub from_epoch {
 # use scalar time in case someone's loaded Time::Piece
 sub now { shift->from_epoch( epoch => (scalar time), @_ ) }
 
-sub clone { bless { %{ $_[0] } }, ref $_[0] }
+sub last_day_of_month {
+    my $class = shift;
+    my %p = validate( @_,
+                      { year   => { type => SCALAR },
+                        month  => { type => SCALAR },
+                        hour   => { type => SCALAR, optional => 1 },
+                        minute => { type => SCALAR, optional => 1 },
+                        second => { type => SCALAR, optional => 1 },
+                        language  => { type => SCALAR | OBJECT, optional => 1 },
+                        time_zone => { type => SCALAR | OBJECT, optional => 1 },
+                      }
+                    );
 
-sub as_utc {
-    my $self = shift;
+    my $day = ( Date::Leapyear::isleap( $p{year} ) ?
+                $LeapYearMonthLengths[ $p{month} - 1 ] :
+                $MonthLengths[ $p{month} - 1 ]
+              );
 
-    my $dt = $self->clone;
-
-    $dt->{tz} = DateTime::TimeZone->new( name => 'UTC' );
-
-    return $dt;
+    return $class->new( %p, day => $day );
 }
+
+sub clone { bless { %{ $_[0] } }, ref $_[0] }
 
 =begin internal
 
@@ -327,14 +322,6 @@ sub greg2rd {
       ( $y / 100 * 36524 + $y / 400 ) - 306;
 }
 
-=begin internal
-
-Calculates the day of the year at the end of a month.
-
-=end internal
-
-=cut
-
 BEGIN {
 
     @MonthLengths =
@@ -359,19 +346,6 @@ BEGIN {
 
 sub end_of_month_day_of_year {
     return Date::Leapyear::isleap(shift) ? @EndofMonthDayOfLeapYear : @EndofMonthDayOfYear;
-}
-
-sub last_day_of_month {
-    shift;
-    my %p = validate( @_, { year  => { type => SCALAR },
-                            month => { type => SCALAR },
-                          } );
-
-    return
-        ( Date::Leapyear::isleap( $p{year} ) ?
-          $MonthLengths[ $p{month} - 1 ] :
-          $LeapYearMonthLengths[ $p{month} - 1 ]
-        );
 }
 
 sub year    { $_[0]->{c}{year} <= 0 ? $_[0]->{c}{year} - 1 : $_[0]->{c}{year} }
@@ -579,7 +553,7 @@ sub strftime {
     {
         # regex from Date::Format - thanks Graham!
         $f =~ s/
-	        %([OE]?[%a-zA-Z])
+	        %([%a-zA-Z])
 	       /
                 $formats{$1} ? $formats{$1}->($self) : $1
                /sgex;
@@ -755,22 +729,6 @@ sub set_time_zone {
 # like "scalar localtime()" in Perl
 sub _stringify { $_[0]->strftime( '%a, %d %b %Y %H:%M:%S %Z' ) }
 
-sub _error {
-    my $class = shift;
-    my $error = shift;
-
-    warn $error if $class->PrintError;
-
-    my $h = $class->ErrorHandler;
-    if ( defined $h && $h ) {
-        return $h->($error);
-    }
-
-    die "$error\n" if $class->RaiseError;
-
-    return;
-}
-
 
 1;
 
@@ -890,9 +848,18 @@ then the "default default" language is English.
 Additional language subclasses are welcome.  See the Perl DateTime
 Suite project page at http://perl-date-time.sf.net/ for more details.
 
+=head1 ERROR HANDLING
+
+Some errors may cause this module to die with an error string.  This
+can only happen when calling constructor methods or methods that
+change the object, such as C<set()>.  Methods that retrieve
+information about the object, such as C<strftime()>, will never die.
+
 =head1 METHODS
 
 =head2 Constructors
+
+All constructors can die when invalid parameters are given.
 
 =over 4
 
@@ -933,29 +900,26 @@ offset string ("+0630"), an offset in seconds (-21600), or the words
 "floating" or "local".  See the C<DateTime::TimeZone> documentation
 for more details.
 
-=head2 from_epoch( epoch => $epoch, ... )
+=item * from_epoch( epoch => $epoch, ... )
 
 This class method can be used to construct a new DateTime object from
 an epoch time instead of components.  Just as with the C<new()>
 method, it accepts "language" and "time_zone" parameters.
 
-=head2 new( ... )
+=item * now( ... )
 
 This class method is equivalent to calling C<from_epoch()> with the
 value returned from Perl's C<time()> function.
 
+=item * last_day_of_month( ... )
+
+This constructor takes the same arguments as can be given to the
+C<now()> method, except for "day".  Additionally, both "year" and
+"month" are required.
+
 =item * clone
 
 This object method returns a replica of the given object.
-
-=item * as_utc
-
-This object method returns a replica of the given object, except with
-the time zone set to UTC time.  No date math is done so all component
-values remain exactly the same.
-
-This method is provided primarily for the convenience of the
-C<DateTime::TimeZone> class.
 
 =back
 
