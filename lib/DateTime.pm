@@ -38,7 +38,7 @@ BEGIN
 }
 
 use DateTime::Duration;
-use DateTime::Language;
+use DateTime::Locale;
 use DateTime::TimeZone;
 use DateTime::LeapSecond;
 use Params::Validate qw( validate SCALAR BOOLEAN HASHREF OBJECT );
@@ -81,8 +81,8 @@ BEGIN
     # I'd rather use Class::Data::Inheritable for this, but there's no
     # way to add the module-loading behavior to an accessor it
     # creates, despite what its docs say!
-    my $DefaultLanguage;
-    sub DefaultLanguage
+    my $DefaultLocale;
+    sub DefaultLocale
     {
         my $class = shift;
 
@@ -90,15 +90,17 @@ BEGIN
         {
             my $lang = shift;
 
-            DateTime::Language->load($lang);
+            DateTime::Locale->load($lang);
 
-            $DefaultLanguage = $lang;
+            $DefaultLocale = $lang;
         }
 
-        return $DefaultLanguage;
+        return $DefaultLocale;
     }
+    # backwards compat
+    *DefaultLanguage = \&DefaultLocale;
 }
-__PACKAGE__->DefaultLanguage('English');
+__PACKAGE__->DefaultLocale('en_US');
 
 my $BasicValidate =
     { year   => { type => SCALAR },
@@ -138,8 +140,10 @@ my $BasicValidate =
                         sub { $_[0] >= 0 },
                       }
                     },
+      locale    => { type => SCALAR | OBJECT,
+                     default => __PACKAGE__->DefaultLocale },
       language  => { type => SCALAR | OBJECT,
-                     default => __PACKAGE__->DefaultLanguage },
+                     optional => 1 },
     };
 
 my $NewValidate =
@@ -160,13 +164,14 @@ sub new
 
     my $self = {};
 
-    if ( ref $p{language} )
+    $p{locale} = delete $p{language} if exists $p{language};
+    if ( ref $p{locale} )
     {
-        $self->{language} = $p{language};
+        $self->{locale} = $p{locale};
     }
     else
     {
-        $self->{language} = DateTime::Language->new( language => $p{language} );
+        $self->{locale} = DateTime::Locale->load( $p{locale} );
     }
 
     $self->{tz} =
@@ -363,6 +368,7 @@ sub from_epoch
     my $class = shift;
     my %p = validate( @_,
                       { epoch => { type => SCALAR },
+                        local      => { type => SCALAR | OBJECT, optional => 1 },
                         language   => { type => SCALAR | OBJECT, optional => 1 },
                         time_zone  => { type => SCALAR | OBJECT, optional => 1 },
                       }
@@ -401,6 +407,7 @@ sub from_object
                       { object => { type => OBJECT,
                                     can => 'utc_rd_values',
                                   },
+                        local      => { type => SCALAR | OBJECT, optional => 1 },
                         language   => { type => SCALAR | OBJECT, optional => 1 },
                       },
                     );
@@ -516,9 +523,9 @@ sub month   { $_[0]->{local_c}{month} }
 sub month_0 { $_[0]->{local_c}{month} - 1 };
 *mon_0 = \&month_0;
 
-sub month_name { $_[0]->{language}->month_name( $_[0] ) }
+sub month_name { $_[0]->{locale}->month_name( $_[0] ) }
 
-sub month_abbr { $_[0]->{language}->month_abbreviation( $_[0] ) }
+sub month_abbr { $_[0]->{locale}->month_abbreviation( $_[0] ) }
 
 sub day_of_month { $_[0]->{local_c}{day} }
 *day  = \&day_of_month;
@@ -540,9 +547,9 @@ sub day_of_week_0 { $_[0]->{local_c}{day_of_week} - 1 }
 *wday_0 = \&day_of_week_0;
 *dow_0  = \&day_of_week_0;
 
-sub day_name { $_[0]->{language}->day_name( $_[0] ) }
+sub day_name { $_[0]->{locale}->day_name( $_[0] ) }
 
-sub day_abbr { $_[0]->{language}->day_abbreviation( $_[0] ) }
+sub day_abbr { $_[0]->{locale}->day_abbreviation( $_[0] ) }
 
 sub day_of_quarter { $_[0]->{local_c}{day_of_quarter} }
 *doq = \&day_of_quarter;
@@ -716,7 +723,8 @@ sub is_dst { $_[0]->{tz}->is_dst_for_datetime( $_[0] ) }
 sub time_zone_long_name  { $_[0]->{tz}->name }
 sub time_zone_short_name { $_[0]->{tz}->short_name_for_datetime( $_[0] ) }
 
-sub language { $_[0]->{language} }
+sub locale { $_[0]->{locale} }
+*language = \&locale;
 
 sub utc_rd_values { @{ $_[0] }{ 'utc_rd_days', 'utc_rd_secs' } }
 
@@ -748,7 +756,7 @@ my %formats =
       'A' => sub { $_[0]->day_name },
       'b' => sub { $_[0]->month_abbr },
       'B' => sub { $_[0]->month_name },
-#      'c' => sub { $_[0]->strftime( $_[0]->{language}->preferred_datetime_format ) },
+      'c' => sub { $_[0]->strftime( $_[0]->{locale}->default_datetime_format ) },
       'C' => sub { int( $_[0]->year / 100 ) },
       'd' => sub { sprintf( '%02d', $_[0]->day_of_month ) },
       'D' => sub { $_[0]->strftime( '%m/%d/%y' ) },
@@ -765,8 +773,8 @@ my %formats =
       'M' => sub { sprintf( '%02d', $_[0]->minute ) },
       'n' => sub { "\n" }, # should this be OS-sensitive?
       'N' => \&_format_nanosecs,
-      'p' => sub { $_[0]->{language}->am_pm( $_[0] ) },
-      'P' => sub { lc $_[0]->{language}->am_pm( $_[0] ) },
+      'p' => sub { $_[0]->{locale}->am_pm( $_[0] ) },
+      'P' => sub { lc $_[0]->{locale}->am_pm( $_[0] ) },
       'r' => sub { $_[0]->strftime( '%I:%M:%S %p' ) },
       'R' => sub { $_[0]->strftime( '%H:%M' ) },
       's' => sub { $_[0]->epoch },
@@ -787,8 +795,8 @@ my %formats =
                    my $doy = $_[0]->day_of_year - 1;
                    return int( ( $doy - $dow + 13 ) / 7 - 1 )
                  },
-#      'x' => sub { $_[0]->strftime( $_[0]->{language}->preferred_date_format ) },
-#      'X' => sub { $_[0]->strftime( $_[0]->{language}->preferred_time_format ) },
+      'x' => sub { $_[0]->strftime( $_[0]->{locale}->default_date_format ) },
+      'X' => sub { $_[0]->strftime( $_[0]->{locale}->default_time_format ) },
       'y' => sub { sprintf( '%02d', substr( $_[0]->year, -2 ) ) },
       'Y' => sub { return $_[0]->year },
       'z' => sub { DateTime::TimeZone::offset_as_string( $_[0]->offset ) },
@@ -1194,7 +1202,7 @@ sub set
 
     my %old_p =
         ( map { $_ => $self->$_() }
-          qw( year month day hour minute second nanosecond language time_zone )
+          qw( year month day hour minute second nanosecond locale time_zone )
         );
 
     my $new_dt = (ref $self)->new( %old_p, %p );
@@ -1213,7 +1221,7 @@ sub truncate
                       },
                     );
 
-    my %new = ( language  => $self->{language},
+    my %new = ( locale    => $self->{locale},
                 time_zone => $self->{tz},
               );
 
@@ -1270,10 +1278,7 @@ sub STORABLE_freeze
         $data .= "$key:$self->{$key}|";
     }
 
-    my $lang = ref $self->{language};
-    $lang =~ s/^DateTime::Language:://;
-
-    $data .= "language:$lang";
+    $data .= "locale:" . $self->{locale}->id;
     $data .= "|tz:" . $self->{tz}->name;
     $data .= "|version:$VERSION";
 
@@ -1289,11 +1294,11 @@ sub STORABLE_thaw
     my %data = map { split /:/ } split /\|/, $data;
 
     my $tz = DateTime::TimeZone->new( name => delete $data{tz} );
-    my $lang = delete $data{language};
+    my $locale = exists $data{language} ? delete $data{language} : delete $data{locale};
 
     %$self = %data;
     $self->{tz} = $tz;
-    $self->{language} = DateTime::Language->new( language => $lang );
+    $self->{locale} = DateTime::Locale->load($locale);
 
     $self->_calc_local_rd;
 
@@ -1361,7 +1366,7 @@ DateTime - A date and time object
 
   $is_leap  = $dt->is_leap_year;
 
-  # these are localizable, see LANGUAGES section
+  # these are localizable, see LOCALES section
   $month_name  = $dt->month_name # January, February, ...
   $month_abbr  = $dt->month_abbr # Jan, Feb, ...
   $day_name    = $dt->day_name   # Monday, Tuesday, ...
@@ -1430,18 +1435,15 @@ can only happen when calling constructor methods or methods that
 change the object, such as C<set()>.  Methods that retrieve
 information about the object, such as C<strftime()>, will never die.
 
-=head2 Languages
+=head2 Locales
 
-Some methods are localizable.  This is done by setting the language
+Some methods are localizable.  This is done by setting the locale
 when constructing a DateTime object.  There is also a
-C<DefaultLanguage()> class method which may be used to set the default
-language for all DateTime objects created.  If this is not set, then
+C<DefaultLocale()> class method which may be used to set the default
+locale for all DateTime objects created.  If this is not set, then
 "English" is used.
 
-Additional language subclasses are welcome.  See the Perl DateTime
-project page at http://perl-date-time.sf.net/ for more details.
-
-Some languages may return data as Unicode.  When using Perl 5.6.0 or
+Some locales may return data as Unicode.  When using Perl 5.6.0 or
 greater, this will be a native Perl Unicode string.  When using older
 Perls, this will be a sequence of bytes representing the Unicode
 character.
@@ -1458,7 +1460,7 @@ All constructors can die when invalid parameters are given.
 
 This class method accepts parameters for each date and time component:
 "year", "month", "day", "hour", "minute", "second", "nanosecond".
-Additionally, it "language", and "time_zone" parameters.
+It also accepts "locale" and "time_zone" parameters.
 
   my $dt = DateTime->new( year   => 1066,
                           month  => 10,
@@ -1514,9 +1516,9 @@ All of the parameters are optional except for "year".  The "month" and
 "day" parameters both default to 1, while the "hour", "minute", and
 "second", and "nanosecond" parameters all default to 0.
 
-The language parameter should be a string matching one of the valid
-languages, or a C<DateTime::Language> object.  See the
-L<DateTime::Language|DateTime::Language> documentation for details.
+The locale parameter should be a string matching one of the valid
+locales, or a C<DateTime::Locale> object.  See the
+L<DateTime::Locale|DateTime::Locale> documentation for details.
 
 The time_zone parameter can be either a scalar or a
 C<DateTime::TimeZone> object.  A string will simply be passed to the
@@ -1579,7 +1581,7 @@ This may change in future version of this module.
 
 This class method can be used to construct a new DateTime object from
 an epoch time instead of components.  Just as with the C<new()>
-method, it accepts "time_zone" and "language" parameters.
+method, it accepts "time_zone" and "locale" parameters.
 
 If the epoch value is not an integer, the part after the decimal will
 be converted to nanoseconds.  This is done in order to be compatible
@@ -1602,7 +1604,7 @@ This class method can be used to construct a new DateTime object from
 any object that implements the C<utc_rd_values()> method.  All
 C<DateTime::Calendar> modules must implement this method in order to
 provide cross-calendar compatibility.  This method accepts a
-"language" parameter
+"locale" parameter
 
 If the object passed to this method has a C<time_zone()> method, that
 is used to set the time zone of the newly created C<DateTime.pm>
@@ -1661,12 +1663,12 @@ Returns the month of the year, from 1..12.
 =item * month_name
 
 Returns the name of the current month.  See the
-L<LANGUAGES|/LANGUAGES> section for more details.
+L<LOCALES|/LOCALES> section for more details.
 
 =item * month_abbr
 
 Returns the abbreviated name of the current month.  See the
-L<LANGUAGES|/LANGUAGES> section for more details.
+L<LOCALES|/LOCALES> section for more details.
 
 =item * day_of_month, day, mday
 
@@ -1680,12 +1682,12 @@ Monday and 7 being Sunday.
 =item * day_name
 
 Returns the name of the current day of the week.  See the
-L<LANGUAGES|/LANGUAGES> section for more details.
+L<LOCALES|/LOCALES> section for more details.
 
 =item * day_abbr
 
 Returns the abbreviated name of the current day of the week.  See the
-L<LANGUAGES|/LANGUAGES> section for more details.
+L<LOCALES|/LOCALES> section for more details.
 
 =item * day_of_year, doy
 
@@ -1932,7 +1934,7 @@ possible. For example:
 =item * set( .. )
 
 This method can be used to change the local components of a date time,
-or its language.  This method accepts any parameter allowed by the
+or its locale.  This method accepts any parameter allowed by the
 C<new()> method except for "time_zone".  Time zones may be set using
 the C<set_time_zone()> method.
 
@@ -2015,10 +2017,10 @@ have deltas for day and seconds.
 
 =over 4
 
-=item * DefaultLanguage( $language )
+=item * DefaultLocale( $locale )
 
-This can be used to specify the default language to be used when
-creating DateTime objects.  If unset, then "English" is used.
+This can be used to specify the default locale to be used when
+creating DateTime objects.  If unset, then "en_US" is used.
 
 =item * compare
 
