@@ -747,7 +747,7 @@ sub epoch
         eval { $sub->( ( reverse @hms ),
                        $day,
                        $month - 1,
-                       $year - 1900,
+                       $year,
                      ) };
 
     return $self->{utc_c}{epoch};
