@@ -48,11 +48,13 @@ sub new
     $self->{seconds} =
         abs( ( $p{hours} * 3600 ) + ( $p{minutes} * 60 ) + $p{seconds} ) * $self->{sign};
 
-    if ( $p{nanoseconds} ) {
+    if ( $p{nanoseconds} )
+    {
         $self->{nanoseconds} = abs( $p{nanoseconds} ) * $self->{sign};
         $self->_normalize_nanoseconds;
     }
-    else {
+    else
+    {
         # shortcut - if they don't need nanoseconds
         $self->{nanoseconds} = 0;
     }
@@ -60,15 +62,19 @@ sub new
     return $self;
 }
 
-sub _normalize_nanoseconds {
+sub _normalize_nanoseconds
+{
     my $self = shift;
-    if ( $self->{nanoseconds} < 0 ) {
-        my $overflow = int( $self->{nanoseconds} / MAX_NANOSECONDS );   
+
+    if ( $self->{nanoseconds} < 0 )
+    {
+        my $overflow = int( $self->{nanoseconds} / MAX_NANOSECONDS );
         $self->{nanoseconds} += $overflow * MAX_NANOSECONDS;
         $self->{seconds} -= $overflow;
     }
-    elsif ( $self->{nanoseconds} >= MAX_NANOSECONDS ) {
-        my $overflow = int( $self->{nanoseconds} / MAX_NANOSECONDS );   
+    elsif ( $self->{nanoseconds} >= MAX_NANOSECONDS )
+    {
+        my $overflow = int( $self->{nanoseconds} / MAX_NANOSECONDS );
         $self->{nanoseconds} -= $overflow * MAX_NANOSECONDS;
         $self->{seconds} += $overflow;
     }
@@ -93,10 +99,9 @@ sub delta_days    { $_[0]->{days} }
 sub delta_seconds { $_[0]->{seconds} }
 sub delta_nanoseconds { $_[0]->{nanoseconds} }
 
-sub deltas { 
-    # we might have to normalize_nanoseconds before comparing durations
-    $_[0]->_normalize_nanoseconds if $_[0]->{nanoseconds};
-    map { $_ => $_[0]->{$_} } qw( months days seconds nanoseconds ) 
+sub deltas
+{
+    map { $_ => $_[0]->{$_} } qw( months days seconds nanoseconds );
 }
 
 sub is_wrap_mode     { $_[0]->{eom_mode} eq 'wrap'   ? 1 : 0 }
@@ -125,18 +130,22 @@ sub add_duration
         $self->{$_} += $dur->{$_};
     }
 
+    # we might have to normalize_nanoseconds before comparing durations
+    $self->_normalize_nanoseconds if $self->{nanoseconds};
 }
 
-sub add { 
-    my $self = shift; 
-    $self->add_duration( (ref $self)->new(@_) ) 
+sub add
+{
+    my $self = shift;
+    $self->add_duration( (ref $self)->new(@_) )
 }
 
 sub subtract_duration { $_[0]->add_duration( $_[1]->inverse ) }
 
-sub subtract { 
+sub subtract
+{
     my $self = shift;
-    $self->subtract_duration( (ref $self)->new(@_) ) 
+    $self->subtract_duration( (ref $self)->new(@_) )
 }
 
 sub _add_overload
@@ -171,12 +180,17 @@ sub _subtract_overload
     return $new;
 }
 
-sub _multiply_overload {
+sub _multiply_overload
+{
     my ( $self, $times ) = @_;
+
     my $new = $self->clone;
-    foreach ( qw( months days seconds nanoseconds ) )  {
+
+    foreach ( qw( months days seconds nanoseconds ) )
+    {
         $new->{$_} *= $times;
     }
+
     return $new;
 }
 
@@ -336,8 +350,8 @@ positive or negative.
 
 =item * deltas
 
-Returns a hash with the keys "months", "days", "seconds", and "nanoseconds",
-containing all the delta information for the object.
+Returns a hash with the keys "months", "days", "seconds", and
+"nanoseconds", containing all the delta information for the object.
 
 =item * is_positive, is_negative
 
