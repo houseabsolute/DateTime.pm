@@ -13,84 +13,82 @@ my %vals =
       second => 17,
     );
 
-my $dt = DateTime->new(%vals);
-
 {
-    my $c = $dt->clone;
-    $c->truncate( to => 'second' );
+    my $dt = DateTime->new(%vals);
+    $dt->truncate( to => 'second' );
     foreach my $f ( qw( year month day hour minute ) )
     {
-        is( $c->$f(), $vals{$f}, "$f should be $vals{$f}" );
+        is( $dt->$f(), $vals{$f}, "$f should be $vals{$f}" );
     }
 
     foreach my $f ( qw( second ) )
     {
-        is( $c->$f(), 0, "$f should be 0" );
+        is( $dt->$f(), 0, "$f should be 0" );
     }
 }
 
 {
-    my $c = $dt->clone;
-    $c->truncate( to => 'minute' );
+    my $dt = DateTime->new(%vals);
+    $dt->truncate( to => 'minute' );
     foreach my $f ( qw( year month day hour ) )
     {
-        is( $c->$f(), $vals{$f}, "$f should be $vals{$f}" );
+        is( $dt->$f(), $vals{$f}, "$f should be $vals{$f}" );
     }
 
     foreach my $f ( qw( minute second ) )
     {
-        is( $c->$f(), 0, "$f should be 0" );
+        is( $dt->$f(), 0, "$f should be 0" );
     }
 }
 
 {
-    my $c = $dt->clone;
-    $c->truncate( to => 'hour' );
+    my $dt = DateTime->new(%vals);
+    $dt->truncate( to => 'hour' );
     foreach my $f ( qw( year month day ) )
     {
-        is( $c->$f(), $vals{$f}, "$f should be $vals{$f}" );
+        is( $dt->$f(), $vals{$f}, "$f should be $vals{$f}" );
     }
 
     foreach my $f ( qw( hour minute second ) )
     {
-        is( $c->$f(), 0, "$f should be 0" );
+        is( $dt->$f(), 0, "$f should be 0" );
     }
 }
 
 {
-    my $c = $dt->clone;
-    $c->truncate( to => 'day' );
+    my $dt = DateTime->new(%vals);
+    $dt->truncate( to => 'day' );
     foreach my $f ( qw( year month ) )
     {
-        is( $c->$f(), $vals{$f}, "$f should be $vals{$f}" );
+        is( $dt->$f(), $vals{$f}, "$f should be $vals{$f}" );
     }
 
     foreach my $f ( qw( day ) )
     {
-        is( $c->$f(), 1, "$f should be 1" );
+        is( $dt->$f(), 1, "$f should be 1" );
     }
 
     foreach my $f ( qw( hour minute second ) )
     {
-        is( $c->$f(), 0, "$f should be 0" );
+        is( $dt->$f(), 0, "$f should be 0" );
     }
 }
 
 {
-    my $c = $dt->clone;
-    $c->truncate( to => 'month' );
+    my $dt = DateTime->new(%vals);
+    $dt->truncate( to => 'month' );
     foreach my $f ( qw( year ) )
     {
-        is( $c->$f(), $vals{$f}, "$f should be $vals{$f}" );
+        is( $dt->$f(), $vals{$f}, "$f should be $vals{$f}" );
     }
 
     foreach my $f ( qw( month day ) )
     {
-        is( $c->$f(), 1, "$f should be 1" );
+        is( $dt->$f(), 1, "$f should be 1" );
     }
 
     foreach my $f ( qw( hour minute second ) )
     {
-        is( $c->$f(), 0, "$f should be 0" );
+        is( $dt->$f(), 0, "$f should be 0" );
     }
 }
