@@ -210,6 +210,9 @@ DateTime::Duration - Duration objects for date math
 This is a simple class for representing duration objects.  These
 objects are used whenever you do date math with DateTime.pm.
 
+See the L<How Date Math is Done|DateTime/"How Date Math is Done">
+section of the DateTime.pm documentation for more details.
+
 =head1 METHODS
 
 DateTime::Duration has the following methods:
@@ -222,6 +225,10 @@ This method takes the parameters "years", "months", "weeks", "days",
 "hours", "minutes", "seconds", and "end_of_month".  All of these
 except "end_of_month" are numbers.  If any of the numbers are
 negative, the entire duration is negative.
+
+Internally, years as just treated as 12 months.  Similarly, weeks are
+treated as 7 days, and hours and minutes are both converted into
+seconds.
 
 The "end_of_month" parameter must be either "wrap", "limit", or
 "preserve".  These specify how changes across the end of a month are
