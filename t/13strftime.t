@@ -11,7 +11,7 @@ BEGIN
 
 use strict;
 
-use Test::More tests => 131;
+use Test::More tests => 132;
 
 use DateTime;
 
@@ -161,6 +161,7 @@ year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42, nanos
 %Z	UTC
 %z	+0000
 %E	%E
+%{foobar}	%{foobar}
 %{month}	9
 %{year}	1999
 %x	Sep 7, 1999
