@@ -223,6 +223,8 @@ sub from_epoch
 # use scalar time in case someone's loaded Time::Piece
 sub now { shift->from_epoch( epoch => (scalar time), @_ ) }
 
+sub today { shift->now(@_)->truncate( to => 'day' ) }
+
 sub from_object
 {
     my $class = shift;
@@ -1077,6 +1079,12 @@ once the object is created.
 
 This class method is equivalent to calling C<from_epoch()> with the
 value returned from Perl's C<time()> function.
+
+=item * today( ... )
+
+This class method is equivalent to:
+
+  DateTime->now->truncate( to => 'day' );
 
 =item * from_object( object => $object, ... )
 
