@@ -2,6 +2,9 @@
 
 [IMPROVEMENTS]
 
+- All set/modify methods now return the datetime object, in order to
+make method chaining possible.  Patch by Iain Truskett.
+
 - The _greg2rd and _rd2greg methods have been renamed _ymd2rd and
 _rd2ymd, so as to make them look more normal when used in subclasses.
 
