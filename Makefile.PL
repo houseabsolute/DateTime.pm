@@ -84,7 +84,7 @@ sub write_makefile
                    PREREQ_PM    => { 'Class::Factory::Util' => 1.3,
                                      'DateTime::Locale' => 0.03,
                                      'DateTime::TimeZone' => 0.25,
-                                     'Params::Validate' => 0.70,
+                                     'Params::Validate' => 0.72,
                                      'Pod::Man'    => 1.14,
                                      'Test::More'  => 0,
                                      'Time::Local' => 1.04,
