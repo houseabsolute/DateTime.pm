@@ -12,7 +12,7 @@ use DateTime;
     ok( $e, "missing params to new" );
     ok( ref $e, "default should be exception object" );
     isa_ok( $e, "DateTime::Exception" );
-    like( $e->error, qr/Mandatory parameters/ );
+    like( $e->error, qr/Mandatory parameter/ );
 }
 
 # custom die
@@ -34,7 +34,7 @@ use DateTime;
 
     ok( $e, "missing params to new" );
     ok( ! ref $e, "RaiseError should not cause exception" );
-    like( $e, qr/Mandatory parameters/ );
+    like( $e, qr/Mandatory parameter/ );
 }
 
 # just a warning
@@ -48,7 +48,7 @@ use DateTime;
     my $e = $@;
 
     ok( ! $e, "missing params to new - no death" );
-    like( $warned, qr/Mandatory parameters/ );
+    like( $warned, qr/Mandatory parameter/ );
 }
 
 # combo
@@ -63,9 +63,9 @@ use DateTime;
 
     ok( $e, "missing params to new" );
     ok( ! ref $e, "RaiseError should not cause exception" );
-    like( $e, qr/Mandatory parameters/ );
+    like( $e, qr/Mandatory parameter/ );
 
-    like( $warned, qr/Mandatory parameters/ );
+    like( $warned, qr/Mandatory parameter/ );
 }
 
 # another combo - ErrorHandler overrides RaiseError
@@ -81,6 +81,6 @@ use DateTime;
     ok( $e, "missing params to new" );
     is( $e, "Boom!\n" );
 
-    like( $warned, qr/Mandatory parameters/ );
+    like( $warned, qr/Mandatory parameter/ );
 }
 
