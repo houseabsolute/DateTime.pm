@@ -1,4 +1,4 @@
 0.01_00
 
-The first alpha release.  This module draws on Date::ICal for much of
-its internals, so it has more history than a normal alpha release.
+- The first alpha release.  This module draws on Date::ICal for much
+of its internals, so it has more history than a normal alpha release.
