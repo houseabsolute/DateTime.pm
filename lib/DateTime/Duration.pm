@@ -20,14 +20,30 @@ sub new
 {
     my $class = shift;
     my %p = validate( @_,
-                         { years   => { type => SCALAR, default => 0 },
-                           months  => { type => SCALAR, default => 0 },
-                           weeks   => { type => SCALAR, default => 0 },
-                           days    => { type => SCALAR, default => 0 },
-                           hours   => { type => SCALAR, default => 0 },
-                           minutes => { type => SCALAR, default => 0 },
-                           seconds => { type => SCALAR, default => 0 },
-                           nanoseconds => { type => SCALAR, default => 0 },
+                         { years   => { type => SCALAR, default => 0,
+                                        regex => qr/^-?\d+$/,
+                                      },
+                           months  => { type => SCALAR, default => 0,
+                                        regex => qr/^-?\d+$/,
+                                      },
+                           weeks   => { type => SCALAR, default => 0,
+                                        regex => qr/^-?\d+$/,
+                                      },
+                           days    => { type => SCALAR, default => 0,
+                                        regex => qr/^-?\d+$/,
+                                      },
+                           hours   => { type => SCALAR, default => 0,
+                                        regex => qr/^-?\d+$/,
+                                      },
+                           minutes => { type => SCALAR, default => 0,
+                                        regex => qr/^-?\d+$/,
+                                      },
+                           seconds => { type => SCALAR, default => 0,
+                                        regex => qr/^-?\d+$/,
+                                      },
+                           nanoseconds => { type => SCALAR, default => 0,
+                                            regex => qr/^-?\d+$/,
+                                          },
                            end_of_month => { type => SCALAR, default => undef,
                                              regex => qr/^(?:wrap|limit|preserve)$/ },
                          } );
@@ -152,6 +168,7 @@ sub in_units
         $ret{hours} = int( $minutes / 60 );
         $minutes -= $ret{hours} * 60;
     }
+
     if ( $units{minutes} )
     {
         $ret{minutes} = $minutes
@@ -381,6 +398,8 @@ This method takes the parameters "years", "months", "weeks", "days",
 "hours", "minutes", "seconds", "nanoseconds", and "end_of_month".  All
 of these except "end_of_month" are numbers.  If any of the numbers are
 negative, the entire duration is negative.
+
+All of the numbers B<must be integers>.
 
 Internally, years as just treated as 12 months.  Similarly, weeks are
 treated as 7 days, and hours are converted to minutes.  Seconds and

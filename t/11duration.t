@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 111;
+use Test::More tests => 118;
 
 use DateTime;
 use DateTime::Duration;
@@ -308,4 +308,21 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
     ok( ! $dur->is_positive, 'is not positive' );
     ok( ! $dur->is_zero,     'is not zero' );
     ok( ! $dur->is_negative, 'is not negative' );
+}
+
+{
+    my $dur = DateTime::Duration->new( minutes => 50 );
+
+    is( $dur->in_units('years'), 0, 'in_units returns 0 for years' );
+    is( $dur->in_units('months'), 0, 'in_units returns 0 for months' );
+    is( $dur->in_units('days'), 0, 'in_units returns 0 for days' );
+    is( $dur->in_units('hours'), 0, 'in_units returns 0 for hours' );
+    is( $dur->in_units('seconds'), 0, 'in_units returns 0 for seconds' );
+    is( $dur->in_units('nanoseconds'), 0, 'in_units returns 0 for nanoseconds' );
+}
+
+{
+    eval { DateTime::Duration->new( minutes => 50.2 ) };
+
+    like( $@, qr/regex/, 'cannot create a duration with fractional units' );
 }
