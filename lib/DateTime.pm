@@ -737,11 +737,7 @@ sub set {
 sub set_time_zone {
     my ( $self, $tz ) = @_;
 
-    my $old_offset = $self->offset;
-
-    my $tz = ref $tz ? $tz : DateTime::TimeZone->new( name => $tz );
-
-    $self->{tz} = $tz;
+    $self->{tz} = ref $tz ? $tz : DateTime::TimeZone->new( name => $tz );
 
     $self->_calc_local_rd;
 }
