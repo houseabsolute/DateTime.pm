@@ -493,12 +493,7 @@ sub subtract {
 }
 
 sub clone {
-    my $self = shift;
-    my $class = ref $self;
-    my %hash = %$self;
-    my $new = \%hash;
-    bless $new, $class;
-    return $new;
+    return bless { %{ $_[0] } }, ref $_[0];
 }
 
 sub utc_datetime {
