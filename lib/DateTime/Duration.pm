@@ -34,7 +34,7 @@ sub new
 
     # if any component is negative we treat the whole duration as
     # negative
-    if ( grep { $p{$_} < 0 } qw( years months days hours minutes seconds ) )
+    if ( grep { $p{$_} < 0 } qw( years months weeks days hours minutes seconds ) )
     {
         $self->{sign} = -1;
     }
