@@ -93,7 +93,7 @@ sub new {
     # at year 0 internally
     $args{year}++ if $args{year} < 0;
     $self->{local_rd_days} =
-        $class->greg2rd( @args{ qw( year month day ) } );
+        $class->_greg2rd( @args{ qw( year month day ) } );
 
     $self->{local_rd_secs} =
         $class->time_as_seconds( @args{ qw( hour minute second ) } );
@@ -144,20 +144,16 @@ sub _calc_local_rd {
 sub _calc_components {
     my $self = shift;
 
+    # c stands for components or cache ;)
     delete $self->{c};
 
     @{ $self->{c} }{ qw( year month day ) } =
-        $self->rd2greg( $self->{local_rd_days} );
+        $self->_rd2greg( $self->{local_rd_days} );
 
     my $time = $self->{local_rd_secs};
 
-    # c stands for components or cache ;)
-    $self->{c}{hour} = int( $time / 3600 );
-    $time -= $self->{c}{hour} * 3600;
-
-    $self->{c}{minute} = int( $time / 60 );
-
-    $self->{c}{second} = $time - ( $self->{c}{minute} * 60 );
+    @{ $self->{c} }{ qw( hour minute second ) } =
+        $self->_seconds_as_components( $self->{local_rd_secs} );
 
     $self->{c}{day_of_week} = ( ( $self->{local_rd_days} + 6) % 7 ) + 1;
 
@@ -192,6 +188,28 @@ sub from_epoch {
 
 # use scalar time in case someone's loaded Time::Piece
 sub now { shift->from_epoch( epoch => (scalar time), @_ ) }
+
+sub from_object {
+    my $class = shift;
+    my %args = validate( @_,
+                         { object => { type => OBJECT,
+                                       can => 'utc_rd_values',
+                                     },
+                           language  => { type => SCALAR | OBJECT, optional => 1 },
+                           time_zone => { type => SCALAR | OBJECT, optional => 1 },
+                         },
+                       );
+
+    my $object = delete $args{object};
+
+    my ( $rd_days, $rd_secs ) = $object->utc_rd_values;
+
+    my %p;
+    @p{ qw( year month day ) } = $class->_rd2greg($rd_days);
+    @p{ qw( hour minute second ) } = $class->_seconds_as_components($rd_secs);
+
+    return $class->new( %p, %args );
+}
 
 sub last_day_of_month {
     my $class = shift;
@@ -250,7 +268,7 @@ sub time_as_seconds {
     return $secs;
 }
 
-sub rd2greg {
+sub _rd2greg {
     shift; # ignore class
 
     use integer;
@@ -287,7 +305,7 @@ sub rd2greg {
     return ( $y, $m, $d );
 }
 
-sub greg2rd {
+sub _greg2rd {
     shift; # ignore class
 
     use integer;
@@ -319,6 +337,21 @@ sub greg2rd {
     $d += ( $m * 367 - 1094 ) / 12 + $y % 100 * 1461 / 4 +
       ( $y / 100 * 36524 + $y / 400 ) - 306;
 }
+
+sub _seconds_as_components {
+    shift;
+    my $time = shift;
+
+    my $hour = int( $time / 3600 );
+    $time -= $hour * 3600;
+
+    my $minute = int( $time / 60 );
+
+    my $second = $time - ( $minute * 60 );
+
+    return ( $hour, $minute, $second );
+}
+
 
 BEGIN {
 
@@ -470,7 +503,7 @@ sub week
         $mid_week->add( days => 4 - ( ( $self->{local_rd_days} % 7 ) + 1 ) );
         $self->{c}{week_year} = $mid_week->year;
 
-        my $jan_four = $self->greg2rd( $self->{c}{week_year}, 1, 4 );
+        my $jan_four = $self->_greg2rd( $self->{c}{week_year}, 1, 4 );
         my $first_week = $jan_four - ( $jan_four % 7 );
         $self->{c}{week_number} =
             int( ( $self->{local_rd_days} - $first_week ) / 7 ) + 1;
@@ -490,6 +523,8 @@ sub _offset_from_local_time { $_[0]->{tz}->offset_for_local_datetime( $_[0] ) }
 sub time_zone_short_name { $_[0]->{tz}->short_name_for_datetime( $_[0] ) }
 
 sub language { $_[0]->{language} }
+
+sub utc_rd_values { @{ $_[0] }{ 'utc_rd_days', 'utc_rd_secs' } }
 
 sub utc_rd_as_seconds   { ( $_[0]->{utc_rd_days} * 86400 )   + $_[0]->{utc_rd_secs} }
 sub local_rd_as_seconds { ( $_[0]->{local_rd_days} * 86400 ) + $_[0]->{local_rd_secs} }
@@ -653,18 +688,18 @@ sub add_duration {
         # it the 0th day of the following month (which then will
         # normalize back to the last day of the new month).
         my ($y, $m, $d) = ( $dur->is_preserve_mode ?
-                            $self->rd2greg( $self->{utc_rd_days} + 1 ) :
-                            $self->rd2greg( $self->{utc_rd_days} )
+                            $self->_rd2greg( $self->{utc_rd_days} + 1 ) :
+                            $self->_rd2greg( $self->{utc_rd_days} )
                           );
         $d -= 1 if $dur->is_preserve_mode;
 
         if ( ! $dur->is_wrap_mode && $d > 28 )
         {
             # find the rd for the last day of our target month
-            $self->{utc_rd_days} = $self->greg2rd( $y, $m + $deltas{months} + 1, 0 );
+            $self->{utc_rd_days} = $self->_greg2rd( $y, $m + $deltas{months} + 1, 0 );
 
             # what day of the month is it? (discard year and month)
-            my $last_day = ($self->rd2greg( $self->{utc_rd_days} ))[2];
+            my $last_day = ($self->_rd2greg( $self->{utc_rd_days} ))[2];
 
             # if our original day was less than the last day,
             # use that instead
@@ -672,7 +707,7 @@ sub add_duration {
         }
         else
         {
-            $self->{utc_rd_days} = $self->greg2rd( $y, $m + $deltas{months}, $d );
+            $self->{utc_rd_days} = $self->_greg2rd( $y, $m + $deltas{months}, $d );
         }
     }
 
@@ -925,6 +960,14 @@ method, it accepts "language" and "time_zone" parameters.
 This class method is equivalent to calling C<from_epoch()> with the
 value returned from Perl's C<time()> function.
 
+=item * from_object( object => $object, ... )
+
+This class method can be used to construct a new DateTime object from
+any object that implements the C<utc_rd_values()> method.  All
+C<DateTime::Calendar> modules must implement this method in order to
+provide cross-calendar compatibility.  Just as with the C<new()>
+method, it accepts "language" and "time_zone" parameters.
+
 =item * last_day_of_month( ... )
 
 This constructor takes the same arguments as can be given to the
@@ -1089,6 +1132,12 @@ This method returns the time zone abbreviation for the current time
 zone, such as "PST" or "GMT".  These names are B<not> definitive, and
 should not be used in any application intended for general use by
 users around the world.
+
+=item * utc_rd_values
+
+Returns the current UTC Rata Die days and seconds as a two element
+list.  This exists primarily to allow other calendar modules to create
+objects based on the values provided by this object.
 
 =item * utc_rd_as_seconds
 
