@@ -1,3 +1,5 @@
+#!/usr/bin/perl -w
+
 use strict;
 
 use Test::More tests => 21;
@@ -18,7 +20,7 @@ use DateTime;
     is( $dt->second, '45', "Second accessor, outside the epoch" );
     is( $dt->nanosecond, '123456', "nanosecond accessor, outside the epoch" );
 
-    my $dt = DateTime->from_object( object => $dt );
+    $dt = DateTime->from_object( object => $dt );
     is( $dt->year, '1870', "Year should be identical" );
     is( $dt->month, '10',  "Month should be identical" );
     is( $dt->day, '21',    "Day should be identical" );

@@ -1,3 +1,5 @@
+#!/usr/bin/perl -w
+
 # test suite stolen shamelessly from TimeDate distro
 
 use strict;
