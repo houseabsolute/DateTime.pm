@@ -80,10 +80,10 @@ my $neg_as_string = $neginf . '';
     foreach my $m ( qw( year month day hour minute second
                         microsecond millisecond nanosecond ) )
     {
-        is( $pos->$m(), $pos_as_string,
+        is( $pos->$m() . '', $pos_as_string,
             "pos $m is $pos_as_string" );
 
-        is( $neg->$m(), $neg_as_string,
+        is( $neg->$m() . '', $neg_as_string,
             "neg $m is $pos_as_string" );
     }
 }
