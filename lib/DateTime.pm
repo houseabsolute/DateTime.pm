@@ -1151,35 +1151,39 @@ sub delta_md
     my $self = shift;
     my $dt = shift;
 
-    my $dur = $self->subtract_datetime($dt);
+    my ( $smaller, $greater ) = sort $self, $dt;
+
+    my $dur = $greater->subtract_datetime($smaller);
 
     return DateTime::Duration->new( months => $dur->delta_months,
                                     days   => $dur->delta_days );
 }
 
-sub delta_days { DateTime::Duration->new( days => int( $_[0]->jd - $_[1]->jd ) ) }
+sub delta_days
+{
+    my $self = shift;
+    my $dt = shift;
+
+    my ( $smaller, $greater ) = sort $self, $dt;
+
+    DateTime::Duration->new( days => int( $greater->jd - $smaller->jd ) );
+}
 
 sub delta_ms
 {
     my $self = shift;
     my $dt = shift;
 
-    my $days = abs( int( $self->jd - $dt->jd ) );
+    my ( $smaller, $greater ) = sort $self, $dt;
 
-    my $dur = $self->subtract_datetime($dt);
+    my $days = int( $greater->jd - $smaller->jd );
+
+    my $dur = $greater->subtract_datetime($smaller);
 
     my %p;
     $p{hours}   = $dur->hours + ( $days * 24 );
     $p{minutes} = $dur->minutes;
     $p{seconds} = $dur->seconds;
-
-    if ( $self < $dt )
-    {
-        for ( qw( hours minutes seconds ) )
-        {
-            $p{$_} *= -1 if $p{$_};
-        }
-    }
 
     return DateTime::Duration->new(%p);
 }

@@ -1,3 +1,12 @@
+0.26
+
+[ BUG FIXES ]
+
+- The docs claimed that the delta_ms(), delta_md(), delta_days()
+methods always returned a positive duration, but this was not true for
+delta_md() or delta_days().
+
+
 0.25    2005-01-10 (the "new year, new bugs" release)
 
 [ BUG FIXES ]
