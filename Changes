@@ -15,7 +15,7 @@ different calendars that conform to the DateTime::Calendar interface.
 by Flavio S. Glock.
 
 - Added support for specifying a language by ISO code ("en" or
-"pt-br") as well as the subclass name.  Based on a patch from Erich
+"pt-br") as well as the subclass name.  Based on a patch from Eric
 Cholet.
 
 - Revamped the externally visible DateTime::Language API.
