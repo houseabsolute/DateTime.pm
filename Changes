@@ -7,6 +7,10 @@ implementation of DateTime.pm included with this distribution.  If you
 don't have a C compiler it will be used instead of the XS
 implementation.
 
+- Document how floating time zones are handling in comparisons, and
+add the compare_ignore_floating method.  Based on a patch from Eugene
+van der Pijll.
+
 [BUG FIXES]
 
 - If a datetime had the floating timezone and then set_time_zone was

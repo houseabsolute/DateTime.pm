@@ -725,7 +725,17 @@ sub _compare_overload
 
 sub compare
 {
-    my ( $class, $dt1, $dt2 ) = ref $_[0] ? ( undef, @_ ) : @_;
+    shift->_compare( @_, 0 );
+}
+
+sub compare_ignore_floating
+{
+    shift->_compare( @_, 1 );
+}
+
+sub _compare
+{
+    my ( $class, $dt1, $dt2, $consistent ) = ref $_[0] ? ( undef, @_ ) : @_;
 
     return undef unless defined $dt2;
 
@@ -735,6 +745,24 @@ sub compare
     die "Cannot compare a datetime to a regular scalar"
         unless ( UNIVERSAL::can( $dt1, 'utc_rd_values' ) &&
                  UNIVERSAL::can( $dt2, 'utc_rd_values' ) );
+
+    if ( ! $consistent &&
+         UNIVERSAL::can( $dt1, 'time_zone' ) &&
+         UNIVERSAL::can( $dt2, 'time_zone' )
+       )
+    {
+        my $is_floating1 = $dt1->time_zone->is_floating;
+        my $is_floating2 = $dt2->time_zone->is_floating;
+
+        if ( $is_floating1 && ! $is_floating2 )
+        {
+            $dt1 = $dt1->clone->set_time_zone( $dt2->time_zone );
+        }
+        elsif ( $is_floating2 && ! $is_floating1 )
+        {
+            $dt2 = $dt2->clone->set_time_zone( $dt1->time_zone );
+        }
+    }
 
     my ($days1, $secs1) = $dt1->utc_rd_values;
     my ($days2, $secs2) = $dt2->utc_rd_values;
@@ -1373,18 +1401,38 @@ the difference between the two dates.
 
 =item * compare
 
-  $cmp = DateTime->compare($dt1, $dt2);
+=item * compare_ignore_floating
 
-  @dates = sort { DateTime->compare($a, $b) } @dates;
+  $cmp = DateTime->compare( $dt1, $dt2 );
+
+  $cmp = DateTime->compare_ignore_floating( $dt1, $dt2 );
 
 Compare two DateTime objects.  The semantics are compatible with
 Perl's C<sort()> function; it returns -1 if $a < $b, 0 if $a == $b, 1
 if $a > $b.
 
-Of course, since DateTime objects overload comparison operators, you
-can just do this anyway:
+If one of the two DateTime objects has a floating time zone, it will
+first be converted to the time zone of the other object.  This is what
+you want most of the time, but it can lead to inconsistent results
+when you compare a number of DateTime objects, some of which are
+floating, and some of which are in other time zones.
+
+If you want to have consistent results (because you want to sort a
+number of objects, for example), you can use the
+C<compare_ignore_floating()> method:
+
+  @dates = sort { DateTime->compare_ignore_floating($a, $b) } @dates;
+
+In this case, objects with a floating time zone will be sorted as if
+they were UTC times.
+
+Since DateTime objects overload comparison operators, this:
 
   @dates = sort @dates;
+
+is equivalent to this:
+
+  @dates = sort { DateTime->compare($a, $b) } @dates;
 
 =back
 
