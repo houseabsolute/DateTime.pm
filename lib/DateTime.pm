@@ -27,7 +27,7 @@ use DateTime::Duration;
 use DateTime::Language;
 use DateTime::TimeZone;
 use DateTime::LeapSecond;
-use Params::Validate qw( validate SCALAR BOOLEAN HASHREF  OBJECT );
+use Params::Validate qw( validate SCALAR BOOLEAN HASHREF OBJECT );
 use Time::Local ();
 
 # for some reason, overloading doesn't work unless fallback is listed

@@ -2,9 +2,6 @@ TODO list for Perl module DateTime
 
 * leap seconds
 
-- separate seconds from minutes in DateTime::Duration,
-    such that 'minutes' don't care about leap seconds (?)
-
 - what's the relation between UT1 and MJD/JD ?
   see:   http://hpiers.obspm.fr/eop-pc/earthor/utc/leapsecond.html
 
