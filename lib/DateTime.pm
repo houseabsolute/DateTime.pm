@@ -256,6 +256,9 @@ BEGIN {
 }
 
 sub year    { $_[0]->{local_c}{year} }
+sub ce_year { $_[0]->{local_c}{year} <= 0 ?
+              $_[0]->{local_c}{year} - 1 :
+              $_[0]->{local_c}{year} }
 
 sub month   { $_[0]->{local_c}{month} }
 *mon = \&month;
@@ -791,6 +794,15 @@ DateTime is the reference implementation for the base DateTime object
 API.  For details on the Perl DateTime Suite project please see
 L<http://perl-date-time.sf.net>.
 
+It represents the Gregorian calendar, extended backwards in time
+before its creation (in 1582).  This is sometimes know as the
+"proleptic Gregorian calendar".  In this calendar, its epoch (or
+beginning), is the first day of year 1, which corresponds to the date
+which was (incorrectly) believed to be the birth of Jesus.
+
+The calendar represented does have a year 0, and in that way differs
+from how dates are often written using "BCE/CE" or "BC/AD".
+
 =head1 LANGUAGES
 
 Some methods are localizable by setting a language for a DateTime
@@ -798,27 +810,6 @@ object.  There is also a C<DefaultLanguage()> class method which may
 be used to set the default language for all DateTime objects created.
 
 Languages are defined by creating a DateTime::Language subclass.
-Currently, the following language subclasses exist:
-
-=over 4
-
-=item * Austrian
-
-=item * Czech
-
-=item * Dutch
-
-=item * English
-
-=item * French
-
-=item * German
-
-=item * Italian
-
-=item * Norwegian
-
-=back
 
 If there is neither a class default or language constructor parameter,
 then the "default default" language is English.
@@ -962,8 +953,6 @@ month/week/year, are 1-based.  Any method that is one based also has
 an equivalent 0-based method ending in "_0".  So for example, this
 class provides both C<day_of_week()> and C<day_of_week_0()> methods.
 
-There is no year_0 method.
-
 The C<day_of_week_0> method still treats Monday as the first day of
 the week.
 
@@ -979,7 +968,12 @@ about an object.
 
 =item * year
 
-Returns the year.  The year before year 1 is year -1.
+Returns the year.  The year before year 1 is year 0.
+
+=item * ce_year
+
+Returns the year according to the BCE/CE system.  The year before year
+1 is year -1, aka "1 BCE".
 
 =item * month
 
