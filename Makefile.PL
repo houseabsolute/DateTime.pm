@@ -30,8 +30,13 @@ EOF
 
     close F or no_cc();
 
-    my $make = $^O =~ /win32/i ? 'nmake' : 'make';
-    system("$Config{make} test$Config{obj_ext}") and no_cc();
+    system( "$Config{make} test$Config{obj_ext}" ) and no_cc();
+
+    foreach ( 'test.c', "test$Config{obj_ext}" )
+    {
+	unlink $_
+	    or die "Cannot unlink $_: $!";
+    }
 
     if ( -d 'CVS' )
     {
@@ -72,7 +77,7 @@ sub write_makefile
                    VERSION_FROM => 'lib/DateTime.pm',
                    AUTHOR       => 'Dave Rolsky <autarch@urth.org>',
                    ABSTRACT     => 'DateTime base objects',
-                   clean        => { FILES => "test.c $zz" },
+                   clean        => { FILES => $zz },
                    CONFIGURE    => \&init,
 
                    PREREQ_PM    => { 'Class::Factory::Util' => 1.3,
