@@ -92,12 +92,20 @@ use DateTime;
 
 }
 
+SKIP:
 {
+    skip 1, 'Negative epoch times do not work on some operating systems, including Win32'
+        if grep { ! defined } localtime(-1);
+
     is( DateTime->new( year => 1904 )->epoch, -2082844800,
         "epoch should work back to at least 1904" );
 }
 
+SKIP:
 {
+    skip 3, 'Negative epoch times do not work on some operating systems, including Win32'
+        if grep { ! defined } localtime(-1);
+
     my $dt = DateTime->from_epoch( epoch => -2082844800 );
     is( $dt->year, 1904, 'year should be 1904' );
     is( $dt->month,   1, 'month should be 1904' );
