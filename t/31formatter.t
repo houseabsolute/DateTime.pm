@@ -1,15 +1,18 @@
 #!/usr/bin/perl -w
 
 use strict;
+
+use Test::More;
+
 BEGIN
 {
-    eval { require DateTime::Format::Strptime };
-    if ($@) {
-        require Test::More;
-        Test::More->import(skip_all => "DateTime::Format::Strptime not installed");
+    eval "use DateTime::Format::Strptime 1.0400";
+    if ($@)
+    {
+        plan skip_all => "DateTime::Format::Strptime 1.0400+ not installed";
     }
-    require Test::More;
-    Test::More->import(tests => 9);
+
+    plan tests => 9;
 }
 
 use DateTime;
