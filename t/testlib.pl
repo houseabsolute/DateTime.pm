@@ -4,13 +4,11 @@ sub fake_ical
 {
     my $dt = shift;
 
-    my $ical = sprintf( '%04d%02d%02d', $dt->year, $dt->month, $dt->day);
+    my $ical = $dt->ymd('');
 
     if ( $dt->hour || $dt->minute || $dt->second )
     {
-        $ical .=
-            sprintf ( 'T%02d%02d%02d',
-                      $dt->hour, $dt->minute, $dt->second );
+        $ical .= 'T' . $dt->hms('');
     }
 
     $ical .= 'Z';
