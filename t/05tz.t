@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 65;
+use Test::More tests => 67;
 
 use DateTime;
 
@@ -71,7 +71,9 @@ use DateTime;
                      );
     };
     like( $@, qr/Invalid local time .+/, 'exception for invalid time' );
+}
 
+{
     eval
     {
         DateTime->new( year => 2003, month => 4, day => 6,
@@ -80,6 +82,22 @@ use DateTime;
                      );
     };
     ok( ! $@, 'no exception for valid time' );
+
+    my $dt = DateTime->new( year => 2003, month => 4, day => 5,
+                            hour => 2,
+                            time_zone => 'America/Chicago',
+                          );
+
+    eval { $dt->add( days => 1 ) };
+    like( $@, qr/Invalid local time .+/, 'exception for invalid time produced via add' );
+
+    my $dt = DateTime->new( year => 2003, month => 4, day => 5,
+                            hour => 2,
+                            time_zone => 'America/Chicago',
+                          );
+    eval { $dt->add( hours => 24 ) };
+    ok( ! $@, 'add 24 hours should work even if add 1 day does not' );
+
 }
 
 {
@@ -119,7 +137,10 @@ use DateTime;
     # DateTime::TimeZone.
     local $ENV{TZ} = 'America/Chicago';
 
-    my $dt = DateTime->new( year => 2050, time_zone => 'America/Chicago' );
+    my $local_tz = DateTime::TimeZone->new( name => 'America/Chicago' );
+    my $utc_tz   = DateTime::TimeZone->new( name => 'UTC' );
+
+    my $dt = DateTime->new( year => 2050, time_zone => $local_tz );
 
     my $sixm = DateTime::Duration->new( months => 6 );
     foreach ( [ 2050, 7, 1, 1, 'CDT' ],
@@ -145,7 +166,11 @@ use DateTime;
               [ 2060, 7, 1, 1, 'CDT' ],
             )
     {
+        $dt->set_time_zone($utc_tz);
+
         $dt->add_duration($sixm);
+
+        $dt->set_time_zone($local_tz);
 
         $_->[1] = sprintf( '%02d', $_->[1] );
 
@@ -157,7 +182,10 @@ use DateTime;
 }
 
 {
-    my $dt = DateTime->new( year => 2060, time_zone => 'America/New_York' );
+    my $local_tz = DateTime::TimeZone->new( name => 'America/New_York' );
+    my $utc_tz   = DateTime::TimeZone->new( name => 'UTC' );
+
+    my $dt = DateTime->new( year => 2060, time_zone => $local_tz );
 
     my $neg_sixm = DateTime::Duration->new( months => -6 );
     foreach ( [ 2059, 7, 1, 1, 'EDT' ],
@@ -182,7 +210,11 @@ use DateTime;
               [ 2050, 1, 1, 0, 'EST' ],
             )
     {
+        $dt->set_time_zone($utc_tz);
+
         $dt->add_duration($neg_sixm);
+
+        $dt->set_time_zone($local_tz);
 
         $_->[1] = sprintf( '%02d', $_->[1] );
 
