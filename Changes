@@ -1,5 +1,10 @@
 0.11
 
+[ IMPROVEMENTS ]
+
+- Moved a little bit of the leap second code to XS, so DateTime.pm may
+be a tiny bit faster.
+
 [ BUG FIXES ]
 
 - The %I and %l strftime formats were formatting hours as 0-11, not
