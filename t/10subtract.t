@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 26;
+use Test::More tests => 30;
 
 use DateTime;
 
@@ -100,9 +100,17 @@ is( fake_ical($X), '20011011T040000Z', 'Subtract and get the right thing' );
 
 {
     my $dt = DateTime->new( year => 2001, month => 6, day => 12,
-                            hour => 5, minute => 7, second => 23,
+                            hour => 0, minute => 0, second => 0,
                             time_zone => 'UTC' );
     $dt->subtract( nanoseconds => 1 );
     is ( $dt->nanosecond, 999999999, 'negative nanoseconds normalize ok' );
+TODO: {
+    local $TODO = 'fixing normalization ...';
+    is ( $dt->second, 59, 'seconds normalize ok' );
+    is ( $dt->minute, 59, 'minutes normalize ok' );
+    is ( $dt->hour, 23, 'hours normalize ok' );
+    is ( $dt->day, 11, 'days normalize ok' );
+}
+
 }
 
