@@ -13,6 +13,18 @@ Implemented by Flavio Glock.
 - Added complete support for leap seconds (through use of
 DateTime::LeapSecond).  Mostly implemented by Flavio Glock.
 
+[ BACKWARDS INCOMPATIBILTIES ]
+
+- Because of the addition of leap seconds to the mix, we are now
+forced to handle seconds separately from minutes when doing date math.
+This means that several aspects of the DateTime::Duration API have
+changed.  Specifically:
+
+-- There is now an additional delta_minutes() method.
+-- The hash returned by the deltas() method now includes a "minutes" key.
+-- The seconds delta may be greater than 59.
+-- The seconds() method may return a number greater than 59.
+
 
 0.09     2003-04-05 (the "liberation through violence" release)
 
