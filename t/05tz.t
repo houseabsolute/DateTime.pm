@@ -1,6 +1,8 @@
+#!/usr/bin/perl -w
+
 use strict;
 
-use Test::More tests => 70;
+use Test::More tests => 71;
 
 use DateTime;
 
@@ -90,7 +92,9 @@ use DateTime;
 
     eval { $dt->add( days => 1 ) };
     like( $@, qr/Invalid local time .+/, 'exception for invalid time produced via add' );
+}
 
+{
     my $dt = DateTime->new( year => 2003, month => 4, day => 5,
                             hour => 2,
                             time_zone => 'America/Chicago',
@@ -135,6 +139,17 @@ use DateTime;
     is( $dt->hour, 3, 'hour should be 3 after switching to floating TZ' );
     is( $dt->local_rd_as_seconds - $dt->utc_rd_as_seconds, 0,
         'tz offset should be 0' );
+}
+
+{
+    eval
+    {
+        DateTime->new( year => 2040, month => 4, day => 1,
+                       hour => 2, minute => 59, second => 59,
+                       time_zone => 'America/Chicago',
+                     );
+    };
+    like( $@, qr/Invalid local time .+/, 'exception for invalid time' );
 }
 
 {
