@@ -37,8 +37,6 @@ is( $t3->minute, 30, "Minute accessor" );
 is( $t3->second, 20, "Second accessor" );
 # XXX Round-off error could make this 19 ?????
 
-# TODO: test the timezone accessor, when there is one
-
 my $t4 = new DateTime( year => 1870, month => 10, day => 21,
                        hour => 12, minute => 10, second => 45,
                        time_zone => 0 );
@@ -48,10 +46,3 @@ is( $t4->day, '21',    "Day accessor, outside the epoch" );
 is( $t4->hour, '12',   "Hour accessor, outside the epoch" );
 is( $t4->minute, '10', "Minute accessor, outside the epoch" );
 is( $t4->second, '45', "Second accessor, outside the epoch" );
-
-# OTHER TESTS WE NEED, once the code supports them:
-# - timezone testing
-# - UTC <-> localtime
-# - arithmetic, with and without unit rollovers
-
-
