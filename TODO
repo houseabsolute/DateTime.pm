@@ -1,7 +1,5 @@
 TODO list for Perl module DateTime
 
-- use test plan for all tests.
-
 - strftime - localizable!
 
 - last day of month
@@ -16,9 +14,6 @@ flushed on changes (add, etc.)
 - write INTERNALS document? (I say not needed, just comment the module appropriately - dave)
 
 - reasonable stringification.  numification?
-
-- add list of all component-returning methods to SYNOPSIS, specify
-which method are 0-based or 1-based.
 
 - more tests for setting offset via offset() method
 
