@@ -686,6 +686,7 @@ sub add_duration
         $self->{utc_rd_secs} += $deltas{seconds};
         _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
 
+        delete $self->{utc_c};
         $self->_calc_local_rd;
     }
 
