@@ -6,7 +6,7 @@ use Test::More;
 
 # XXX - hack alert - still need to really fix this
 my $is_win32 = $^O =~ /win32/i ? 1 : 0;
-plan tests => $is_win32 ? 37 : 38;
+plan tests => $is_win32 ? 39 : 40;
 
 use DateTime;
 
@@ -98,4 +98,20 @@ my $neg_as_string = $neginf . '';
 
     is( DateTime->compare($pos, $now),  1, 'positive infinite is greater than now' );
     is( DateTime->compare($neg, $now), -1, 'negative infinite is less than now' );
+}
+
+{
+    my $now = DateTime->now;
+    my $pos2 = $pos + DateTime::Duration->new( months => 1 );
+
+    ok( $pos == $pos2,
+        "infinity (datetime) == infinity (datetime)" );
+}
+
+{
+    my $now = DateTime->now;
+    my $neg2 = $neg + DateTime::Duration->new( months => 1 );
+
+    ok( $neg == $neg2,
+        "-infinity (datetime) == -infinity (datetime)" );
 }
