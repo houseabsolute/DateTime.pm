@@ -1717,10 +1717,24 @@ seconds.
 
 C<DateTime.pm> always adds (or subtracts) days, then months, and then
 seconds.  Then it normalizes the seconds to handle second values less
-than 0 or greater than 86,400 (or 86,401).
+than zero or greater than one day.
 
 This means that adding one month and one day to February 28, 2003 will
 produce the date April 1, 2003, not March 29, 2003.
+
+The presence of leap seconds can cause some strange anomalies in date
+math.  For example, the following is a legal datetime:
+
+  my $dt = DateTime->new( year => 1971, month => 12, day => 31,
+                          hour => 23, minute => 59, second => 60,
+                          time_zone => 'UTC' );
+
+If we do the following:
+
+ $dt->add( months => 1 );
+
+Then the datetime is now "1972-02-01 00:00:00", because there is no
+23:59:60 on 1972-01-31.
 
 =head3 Local vs. UTC and 24 hours vs. 1 day
 
