@@ -7,6 +7,13 @@ value with more than 9 digits after the decimal point, the object
 ended up containing a floating point number of nanoseconds.  We now
 truncate this number to an integer.  Fixed by Joshua Hoblitt.
 
+- The %V strftime specifier was documented, but not implemented.
+Reported by Joshua Hoblitt.
+
+- Test #56 in 03components.t would die with "Invalid offset: -124"
+when run with DateTime::TimeZone 0.2502+.  Next time, I'll read my own
+docs ;)
+
 
 0.17  2003-08-29  (the "math is hard" release)
 
