@@ -6,7 +6,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.1501';
+    $VERSION = '0.1502';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
