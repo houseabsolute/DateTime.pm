@@ -2,7 +2,9 @@
 
 [ IMPROVEMENTS ]
 
-- DateTime now does more validation of constructor parameters.
+- DateTime now does more validation of parameters given to
+constructors and to the set() method, so bogus values like a month of
+13 are a fatal error.
 
 [ BUG FIXES ]
 
@@ -13,6 +15,9 @@ tries to guess the century, and it doesn't do this by simply adding
 in the current century.  Ugh.
 
 - Fixed compilation on HPUX.  Patch from Dan Sully.
+
+- The last_day_of_month() method did not accept nanosecond or
+fractional_second parameters.
 
 
 0.12     2003-05-05
