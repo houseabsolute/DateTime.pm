@@ -2,7 +2,6 @@ package DateTime;
 
 use strict;
 
-require DateTime::LeapSecond;
 require DateTimePPExtra;
 
 my @MonthLengths =

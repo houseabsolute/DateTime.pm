@@ -2,6 +2,8 @@ package DateTime;
 
 use strict;
 
+require DateTime::LeapSecond;
+
 sub _normalize_tai_seconds
 {
     return if grep { $_ == INFINITY() || $_ == NEG_INFINITY() } @_[1,2];
