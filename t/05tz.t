@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 68;
+use Test::More tests => 70;
 
 use DateTime;
 
@@ -122,6 +122,8 @@ use DateTime;
     $dt->set_time_zone( 'America/Chicago' );
 
     is( $dt->hour, 3, 'hour should be 3 after switching from floating TZ' );
+    is( $dt->local_rd_as_seconds - $dt->utc_rd_as_seconds, -18000,
+        'tz offset should be -18000' );
 }
 
 {
@@ -131,6 +133,8 @@ use DateTime;
     $dt->set_time_zone( 'floating' );
 
     is( $dt->hour, 3, 'hour should be 3 after switching to floating TZ' );
+    is( $dt->local_rd_as_seconds - $dt->utc_rd_as_seconds, 0,
+        'tz offset should be 0' );
 }
 
 {

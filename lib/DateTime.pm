@@ -793,7 +793,8 @@ sub set_time_zone
 
     $self->{tz} = ref $tz ? $tz : DateTime::TimeZone->new( name => $tz );
 
-    if ( $self->{tz}->is_floating && ! $was_floating )
+    # if it either was or now is floating (but not both)
+    if ( $self->{tz}->is_floating xor $was_floating )
     {
         $self->_calc_utc_rd;
     }
