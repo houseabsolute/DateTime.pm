@@ -45,7 +45,7 @@ sub new
         ( abs( $p{years} * 12 ) + abs( $p{months} ) ) * $self->{sign};
 
     $self->{days} =
-        ( abs( ( $p{weeks} * 7 ) ) + abs( $p{days} ) ) * $self->{sign};
+        ( abs( $p{weeks} * 7 ) + abs( $p{days} ) ) * $self->{sign};
 
     $self->{minutes} = abs( ( $p{hours} * 60 ) + $p{minutes}  ) * $self->{sign};
 
