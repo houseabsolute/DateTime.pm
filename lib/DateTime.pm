@@ -106,7 +106,7 @@ sub new
                         day    => { type => SCALAR, default => 1,
                                     callbacks =>
                                     { 'is between 1 and 31' =>
-                                      sub { $_[0] >= 1 && $_[0] <= 12 },
+                                      sub { $_[0] >= 1 && $_[0] <= 31 },
                                     },
                                   },
                         hour   => { type => SCALAR, default => 0,
@@ -127,7 +127,12 @@ sub new
                                       sub { $_[0] >= 0 && $_[0] <= 61 },
                                     },
                                   },
-                        nanosecond => { type => SCALAR, default => 0 },
+                        nanosecond => { type => SCALAR, default => 0,
+                                        callbacks =>
+                                        { 'cannot be negative' =>
+                                          sub { $_[0] >= 0 },
+                                        }
+                                      },
                         fractional_second =>
                         { type => SCALAR, default => undef },
                         language  => { type => SCALAR | OBJECT,
@@ -1296,9 +1301,9 @@ This class method accepts parameters for each date and time component:
 Additionally, it accepts "fractional_second", "language",
 and "time_zone" parameters.
 
-  my $dt = DateTime->new( day    => 25,
+  my $dt = DateTime->new( year   => 1066,
                           month  => 10,
-                          year   => 1066,
+                          day    => 25,
                           hour   => 7,
                           minute => 15,
                           second => 47,
@@ -1309,12 +1314,45 @@ and "time_zone" parameters.
 If a "fractional_second" parameter is given, then the "nanosecond"
 parameter will be ignored.
 
-The behavior of this module when given parameters outside proper
-boundaries (like a minute parameter of 72) is not defined, though
-future versions may die.
+DateTime validates the "month", "day", "hour", "minute", and "second",
+and "nanosecond" parameters.  The valid values for these parameters are:
+
+=over 8
+
+=item * month
+
+1-12
+
+=item * day
+
+1-31
+
+=item * hour
+
+0-23
+
+=item * minute
+
+0-59
+
+=item * second
+
+0-61 (to allow for leap seconds)
+
+=item * nanosecond
+
+>= 0
+
+=back
 
 Invalid parameter types (like an array reference) will cause the
 constructor to die.
+
+DateTime does not do validation that the "day" exists in the given
+month, nor does it check if second values greater than 59 are valid
+based on current leap seconds.  In both of these cases, invalid values
+simply cause an overflow, so "year => 2001, month => 2, day => 31"
+will result in "March 3, 2003".
 
 All of the parameters are optional except for "year".  The "month" and
 "day" parameters both default to 1, while the "hour", "minute", and
