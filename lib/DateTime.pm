@@ -1093,7 +1093,7 @@ __END__
 
 =head1 NAME
 
-DateTime - Reference implementation for Perl DateTime objects
+DateTime - A date and time object
 
 =head1 SYNOPSIS
 
@@ -1125,7 +1125,7 @@ DateTime - Reference implementation for Perl DateTime objects
   $second = $dt->second;        # 0-61 (leap seconds!) - also sec
 
   $doy    = $dt->day_of_year    # 1-366 (leap years) - also doy
-  
+
   $doq    = $dt->day_of_quarter # 1.. - also doq
 
   $qtr    = $dt->quarter        # 1-4
