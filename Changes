@@ -15,6 +15,13 @@ it.  Reported by Eugene van der Pijll.
 - Fixed a bug when comparing a datetime object to infinity (or
 negative infinity).  Fixed by Flavio Glock.
 
+[BACKWARDS INCOMPATIBILITIES]
+
+- Objects constructed via the new() method now have a "floating" time
+zone by default, instead of using the "local" time zone.  This is just
+simpler to deal with, and for code where time zones are unimportant,
+this is the most appropriate default.
+
 
 0.07     2003-02-26
 
