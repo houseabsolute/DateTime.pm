@@ -1,6 +1,7 @@
-The core implementation of the DateTime.pm and DateTime::Duration
-modules come from Date::ICal and Date::ICal::Duration, both written by
-Rich Bowen <rbowen@rcbowen.com> with help from the Reefknot team.
+The core implementations for the DateTime.pm and DateTime::Duration
+modules come from Date::ICal and Date::ICal::Duration, both of which
+were written by Rich Bowen <rbowen@rcbowen.com> with help from the
+Reefknot team.
 
 Parts of the API come from Time::Piece, by Matt Sergeant
 <matt@sergeant.org>, who had help from Jarkko Hietaniemi <jhi@iki.fi>.
@@ -8,11 +9,8 @@ That API was originally created by Larry Wall.
 
 The DateTime::Language functionality is largely based on the
 Date::Language modules that come with Graham Barr's <gbarr@pobox.com>
-TimeDate modules suite.  The strftime method in this module also
-borrow heavily from Graham's implementation.
-
-Dave Rolsky <autarch@urth.org> jammed all the round pegs in the square
-holes until they fit.
+TimeDate module suite.  The strftime method in this module also
+borrows heavily from Graham's implementation.
 
 Matthew Simon Cavalleto implemented the week_{year,number}
 functionality.
