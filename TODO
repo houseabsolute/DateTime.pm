@@ -35,8 +35,6 @@ flushed on changes (add, etc.)
 
 * Other
 
-- more tests for setting offset via offset() method
-
 - sub-second resolution - at least microseconds (cooperate with
 Time::HiRes), but is micro small enough?
 
@@ -66,3 +64,10 @@ useful for other calendar implementors.
 - make add & subtract class methods
 
 - document error handling features
+
+- Time::Local is now a core module, with on CPAN existence.  But the
+version that works best is in 5.8.0, and not otherwise available.
+
+- tests for end_of_month_day_of_year (rename?) and month_lengths
+
+- fix offset handling.  currently all returned values are for UTC!
