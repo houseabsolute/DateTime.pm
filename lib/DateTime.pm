@@ -514,11 +514,11 @@ sub compare {
 
 =begin internal
 
-Um, what the hell is this used for? - Dave
-
- @MonthLengths = months($year);
-
 Returns the day of the year at the end of a month.
+
+    @MonthLengths  = months($self->year);
+    $end_march     = $MonthsLengths[3];        # Days at the end of march
+    $start_nov     = $MonthsLengths[ 11 - 1 ]; # Days at the start of nov
 
 =end internal
 
@@ -671,7 +671,7 @@ sub month_abbr {
 sub day_of_year {
     my $self = shift;
     my @m = months($self->year);
-    return $m[$self->month_0] + $self->day - 1;
+    return $m[$self->month_0] + $self->day;
 }
 
 
