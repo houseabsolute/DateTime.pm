@@ -156,7 +156,7 @@ sub _calc_components {
     $self->{c}{day_of_week} = ( ( $self->{local_rd_days} + 6) % 7 ) + 1;
 
     {
-        my $d = $self->_beginning_of_month_day_of_year( $self->{c}{year},
+        my $d = $self->_beginning_of_month_day_of_year( $self->year,
                                                         $self->{c}{month},
                                                       );
         $self->{c}{day_of_year} = $d + $self->{c}{day};
@@ -382,7 +382,7 @@ sub _beginning_of_month_day_of_year {
 }
 
 sub year    { $_[0]->{c}{year} <= 0 ? $_[0]->{c}{year} - 1 : $_[0]->{c}{year} }
-sub year_0  { $_[0]->{c}{year} - 1 }
+sub year_0  { $_[0]->{c}{year} }
 
 sub month   { $_[0]->{c}{month} }
 *mon = \&month;
@@ -435,8 +435,8 @@ sub day_of_year_0 { $_[0]->{c}{day_of_year} - 1 }
 sub ymd {
     my ( $self, $sep ) = @_;
     $sep = '-' unless defined $sep;
-    return sprintf( "%04d%s%02d%s%02d",
-                    $self->{c}{year}, $sep,
+    return sprintf( "%0.4d%s%0.2d%s%0.2d",
+                    $self->year, $sep,
                     $self->{c}{month}, $sep,
                     $self->{c}{day} );
 }
@@ -445,19 +445,19 @@ sub ymd {
 sub mdy {
     my ( $self, $sep ) = @_;
     $sep = '-' unless defined $sep;
-    return sprintf( "%02d%s%02d%s%04d",
+    return sprintf( "%0.2d%s%0.2d%s%0.4d",
                     $self->{c}{month}, $sep,
                     $self->{c}{day}, $sep,
-                    $self->{c}{year} );
+                    $self->year );
 }
 
 sub dmy {
     my ( $self, $sep ) = @_;
     $sep = '-' unless defined $sep;
-    return sprintf( "%02d%s%02d%s%04d",
+    return sprintf( "%0.2d%s%0.2d%s%0.4d",
                     $self->{c}{day}, $sep,
                     $self->{c}{month}, $sep,
-                    $self->{c}{year} );
+                    $self->year );
 }
 
 sub hour   { $_[0]->{c}{hour} }
@@ -471,7 +471,7 @@ sub second { $_[0]->{c}{second} }
 sub hms {
     my ( $self, $sep ) = @_;
     $sep = ':' unless defined $sep;
-    return sprintf( "%02d%s%02d%s%02d",
+    return sprintf( "%0.2d%s%0.2d%s%0.2d",
                     $self->{c}{hour}, $sep,
                     $self->{c}{minute}, $sep,
                     $self->{c}{second} );
@@ -481,7 +481,12 @@ sub hms {
 
 sub iso8601 {
     my $self = shift;
-    return join 'T', $self->ymd('-'), $self->hms(':');
+
+    # ISO 8601 uses astronomical years
+    my $ymd = sprintf( '%0.4d-%0.2d-%0.2d',
+                       @{ $self->{c} }{ 'year', 'month', 'day' } );
+
+    return join 'T', $ymd, $self->hms(':');
 }
 *datetime = \&iso8601;
 
@@ -1026,7 +1031,8 @@ month/week/year, are 1-based.  Any method that is one based also has
 an equivalent 0-based method ending in "_0".  So for example, this
 class provides both C<day_of_week()> and C<day_of_week_0()> methods.
 
-The C<year_0> method treats the year 1 CE as year 0.
+The C<year_0> method treats the year -1 BCE as year 0, as is
+conventional in astronomy.
 
 The C<day_of_week_0> method still treats Monday as the first day of
 the week.
@@ -1120,6 +1126,9 @@ If no separator is specified, a colon (:) is used by default.
 This method is equivalent to:
 
   $dt->ymd('-') . 'T' . $dt->hms(':')
+
+I<except> that the year is the year as returned by the C<year_0()>
+method.
 
 =item * is_leap_year
 
