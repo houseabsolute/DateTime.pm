@@ -309,8 +309,8 @@ of these except "end_of_month" are numbers.  If any of the numbers are
 negative, the entire duration is negative.
 
 Internally, years as just treated as 12 months.  Similarly, weeks are
-treated as 7 days, and hours and minutes are both converted into
-seconds.
+treated as 7 days, and hours are converted to minutes.  Seconds and
+nanoseconds are both treated separately.
 
 The "end_of_month" parameter must be either "wrap", "limit", or
 "preserve".  These specify how changes across the end of a month are
