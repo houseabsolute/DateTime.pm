@@ -22,6 +22,9 @@ fractional_second parameters.
 - A DT::Duration object created with just nanoseconds was always
 positive, regardless of the value given for nanoseconds.
 
+- Fixed a serious bug when subtracting one datetime from another that
+could cause the result to be a second off.
+
 
 0.12     2003-05-05
 
