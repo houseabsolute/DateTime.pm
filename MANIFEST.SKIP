@@ -16,3 +16,5 @@ CVS/.*
 \.zip$
 _uu$
 t/zz.*
+test\.[co]
+benchmarks/.*
