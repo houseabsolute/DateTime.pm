@@ -17,7 +17,7 @@ my @LeapSeconds;
 my @RD;
 my %RDLength;
 
-my $value = -1;#32 - 24;
+my $value = -1;
 while (<$fh>)
 {
     my ( $year, $mon, $day, $leap_seconds ) = split /\s+/;
