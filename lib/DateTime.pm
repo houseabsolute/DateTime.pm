@@ -1680,7 +1680,8 @@ method.
 =item * subtract_datetime( $datetime )
 
 This method returns a new C<DateTime::Duration> object representing
-the difference between the two dates.
+the difference between the two dates.  The duration object will only
+have deltas for day and seconds.
 
 =back
 
