@@ -52,3 +52,4 @@ t/16truncate.t
 t/17set_return.t
 t/18today.t
 t/testlib.pl
+META.yml                                Module meta-data in YAML
