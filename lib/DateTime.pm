@@ -1914,6 +1914,10 @@ Returns the current local Rata Die days and seconds purely as seconds.
 This number ignores any fractional seconds stored in the object,
 as well as leap seconds.
 
+=item * locale
+
+Returns the current locale as a string.
+
 =back
 
 =head3 "Set" Methods
