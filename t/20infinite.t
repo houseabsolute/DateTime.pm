@@ -10,7 +10,8 @@ my $pos = DateTime::Infinite::Future->new;
 my $neg = DateTime::Infinite::Past->new;
 my $posinf = 100 ** 100 ** 100;
 my $neginf = -1 * $posinf;
-my $nan = $posinf - $posinf;
+# for some reason, Windows only gets NaN if abs() is used
+my $nan = abs( $posinf - $posinf );
 
 # infinite date math
 {
