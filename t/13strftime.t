@@ -152,7 +152,7 @@ year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42, nanos
 %{year}	1999
 %x	Sep 7, 1999
 %X	1:02:42 PM
-%c	1:02:42 PM Sep 7, 1999
+%c	Sep 7, 1999 1:02:42 PM
 de
 %y	99
 %Y	1999
