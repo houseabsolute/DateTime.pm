@@ -363,7 +363,7 @@ section of the DateTime.pm documentation for more details.  The short
 course:  One cannot in general convert between seconds, minutes, days,
 and months, so this class will never do so.  Instead, create the
 duration with the desired units to begin with, for example by calling
-the appropriate subtraction method of L<DateTime>.
+the appropriate subtraction/delta method on a C<DateTime.pm> object.
 
 =head1 METHODS
 
