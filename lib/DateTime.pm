@@ -1574,7 +1574,7 @@ greater, this will be a native Perl Unicode string.  When using older
 Perls, this will be a sequence of bytes representing the Unicode
 character.
 
-=head2 The Floating Time Zone
+=head2 Floating DateTimes
 
 The default time zone for all DateTime objects is the "floating" time
 zone.  This concept comes from the iCal standard.  A floating datetime
