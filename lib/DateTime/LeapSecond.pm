@@ -143,7 +143,7 @@ system was implemented.
 =item * leap_seconds( $rd )
 
 Returns the number of accumulated leap seconds for a given day,
-in the range 9 .. 32.
+in the range 0 .. 23.
 
 =item * extra_seconds( $rd )
 
