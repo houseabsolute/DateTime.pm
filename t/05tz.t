@@ -37,7 +37,7 @@ use DateTime;
 
     is( $dt->offset, -18000, 'offset should be -18000' );
     is( $dt->is_dst, 1, 'is not dst' );
-    is( $dt->hour, 1, "crossing DST bounday changes local hour -1" );
+    is( $dt->hour, 1, "crossing DST bounday does not change local hour" );
 }
 
 {
