@@ -156,7 +156,7 @@ sub _calc_components {
     $self->{c}{day_of_week} = ( ( $self->{local_rd_days} + 6) % 7 ) + 1;
 
     {
-        my $d = $self->_beginning_of_month_day_of_year( $self->year,
+        my $d = $self->_beginning_of_month_day_of_year( $self->{c}{year},
                                                         $self->{c}{month},
                                                       );
         $self->{c}{day_of_year} = $d + $self->{c}{day};
