@@ -1574,6 +1574,8 @@ when they match actual leap seconds.
 
 =back
 
+=back
+
 Invalid parameter types (like an array reference) will cause the
 constructor to die.
 
@@ -1645,6 +1647,8 @@ no 02:00:00 through 02:59:59 on April 6!
 
 Attempting to create an invalid time currently causes a fatal error.
 This may change in future version of this module.
+
+=over 4
 
 =item * from_epoch( epoch => $epoch, ... )
 
