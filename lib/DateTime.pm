@@ -101,51 +101,51 @@ BEGIN
 __PACKAGE__->DefaultLanguage('English');
 
 my $BasicValidate =
-        { year   => { type => SCALAR },
-          month  => { type => SCALAR, default => 1,
+    { year   => { type => SCALAR },
+      month  => { type => SCALAR, default => 1,
+                  callbacks =>
+                  { 'is between 1 and 12' =>
+                    sub { $_[0] >= 1 && $_[0] <= 12 }
+                  },
+                },
+      day    => { type => SCALAR, default => 1,
+                  callbacks =>
+                  { 'is between 1 and 31' =>
+                    sub { $_[0] >= 1 && $_[0] <= 31 },
+                  },
+                },
+      hour   => { type => SCALAR, default => 0,
+                  callbacks =>
+                  { 'is between 0 and 23' =>
+                    sub { $_[0] >= 0 && $_[0] <= 23 },
+                  },
+                },
+      minute => { type => SCALAR, default => 0,
+                  callbacks =>
+                  { 'is between 0 and 59' =>
+                    sub { $_[0] >= 0 && $_[0] <= 59 },
+                  },
+                },
+      second => { type => SCALAR, default => 0,
+                  callbacks =>
+                  { 'is between 0 and 61' =>
+                    sub { $_[0] >= 0 && $_[0] <= 61 },
+                  },
+                },
+      nanosecond => { type => SCALAR, default => 0,
                       callbacks =>
-                      { 'is between 1 and 12' =>
-                        sub { $_[0] >= 1 && $_[0] <= 12 }
-                      },
+                      { 'cannot be negative' =>
+                        sub { $_[0] >= 0 },
+                      }
                     },
-          day    => { type => SCALAR, default => 1,
-                      callbacks =>
-                      { 'is between 1 and 31' =>
-                        sub { $_[0] >= 1 && $_[0] <= 31 },
-                      },
-                    },
-          hour   => { type => SCALAR, default => 0,
-                      callbacks =>
-                      { 'is between 0 and 23' =>
-                        sub { $_[0] >= 0 && $_[0] <= 23 },
-                      },
-                    },
-          minute => { type => SCALAR, default => 0,
-                      callbacks =>
-                      { 'is between 0 and 59' =>
-                        sub { $_[0] >= 0 && $_[0] <= 59 },
-                      },
-                    },
-          second => { type => SCALAR, default => 0,
-                      callbacks =>
-                      { 'is between 0 and 61' =>
-                        sub { $_[0] >= 0 && $_[0] <= 61 },
-                      },
-                    },
-          nanosecond => { type => SCALAR, default => 0,
-                          callbacks =>
-                          { 'cannot be negative' =>
-                            sub { $_[0] >= 0 },
-                          }
-                        },
-          language  => { type => SCALAR | OBJECT,
-                         default => __PACKAGE__->DefaultLanguage },
-        };
+      language  => { type => SCALAR | OBJECT,
+                     default => __PACKAGE__->DefaultLanguage },
+    };
 
 my $NewValidate =
     { %$BasicValidate,
-      fractional_second =>
-      { type => SCALAR, default => undef },
+      fractional_second => { type => SCALAR,
+                             optional => 1 },
       time_zone => { type => SCALAR | OBJECT,
                      default => 'floating' },
     };
