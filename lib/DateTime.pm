@@ -534,7 +534,7 @@ my %formats =
       'A' => sub { $_[0]->day_name },
       'b' => sub { $_[0]->month_abbr },
       'B' => sub { $_[0]->month_name },
-      'c' => sub { $_[0]->strftime( $_[0]->{language}->preferred_datetime_format ) },
+#      'c' => sub { $_[0]->strftime( $_[0]->{language}->preferred_datetime_format ) },
       'C' => sub { int( $_[0]->year / 100 ) },
       'd' => sub { sprintf( '%02d', $_[0]->day_of_month ) },
       'D' => sub { $_[0]->strftime( '%m/%d/%y' ) },
@@ -572,8 +572,8 @@ my %formats =
                    my $doy = $_[0]->day_of_year - 1;
                    return int( ( $doy - $dow + 13 ) / 7 - 1 )
                  },
-      'x' => sub { $_[0]->strftime( $_[0]->{language}->preferred_date_format ) },
-      'X' => sub { $_[0]->strftime( $_[0]->{language}->preferred_time_format ) },
+#      'x' => sub { $_[0]->strftime( $_[0]->{language}->preferred_date_format ) },
+#      'X' => sub { $_[0]->strftime( $_[0]->{language}->preferred_time_format ) },
       'y' => sub { sprintf( '%02d', substr( $_[0]->year, -2 ) ) },
       'Y' => sub { return $_[0]->year },
       'z' => sub { DateTime::TimeZone::offset_as_string( $_[0]->offset ) },
@@ -1320,10 +1320,6 @@ The abbreviated month name.
 
 The full month name.
 
-=item * %c
-
-The preferred date and time representation for the current language.
-
 =item * %C
 
 The century number (year/100) as a 2-digit integer.
@@ -1460,16 +1456,6 @@ also %u.
 
 The week number of the current year as a decimal number, range 00 to
 53, starting with the first Monday as the first day of week 01.
-
-=item * %x
-
-The preferred date representation for the current language without the
-time.
-
-=item * %X
-
-The preferred time representation for the current language without the
-date.
 
 =item * %y
 
