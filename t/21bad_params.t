@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 22;
+use Test::More tests => 25;
 
 use DateTime;
 
@@ -36,3 +36,17 @@ foreach my $p ( { year => 2000, month => 13 },
     like( $@, qr/did not pass/,
           "Parameters outside valid range should fail in call to last_day_of_month()" );
 }
+
+{
+    eval { DateTime->new( year => 2000, month => 4, day => 31 ) };
+    like( $@, qr/invalid day of month/i,
+          "Day past last day of month should fail" );
+
+    eval { DateTime->new( year => 2001, month => 2, day => 29 ) };
+    like( $@, qr/invalid day of month/i,
+          "Day past last day of month should fail" );
+
+    eval { DateTime->new( year => 2000, month => 2, day => 29 ) };
+    ok( ! $@, "February 29 should be valid in leap years" );
+}
+
