@@ -743,11 +743,7 @@ sub set_time_zone {
 
     $self->{tz} = $tz;
 
-    $self->{local_rd_secs} = $self->{local_rd_secs} + ( $self->offset - $old_offset );
-
-    _normalize_seconds( $self->{local_rd_days}, $self->{local_rd_secs} );
-
-    $self->_calc_components;
+    $self->_calc_local_rd;
 }
 
 # like "scalar localtime()" in Perl
