@@ -8,6 +8,8 @@ use vars qw( @RD @LEAP_SECONDS %RD_LENGTH );
 
 $VERSION = '0.04';  # last standalone distro was 0.03
 
+use DateTime;
+
 # Generates a Perl binary decision tree
 sub _make_utx {
     my ($beg, $end, $tab, $op) = @_;
@@ -34,7 +36,7 @@ sub _init {
            ( shift, shift, shift, shift );
         # print "$year,$mon,$mday\n";
 
-        my $utc_epoch = _ymd2rd( $year, ( $mon =~ /Jan/i ? 1 : 7 ), $mday );
+        my $utc_epoch = DateTime->_ymd2rd( $year, ( $mon =~ /Jan/i ? 1 : 7 ), $mday );
 
         $value++;
         push @LEAP_SECONDS, $value;
@@ -61,43 +63,6 @@ sub _init {
 
     eval $tmp;
 
-}
-
-# copied from DateTimePP.pm
-sub _ymd2rd
-{
-    use integer;
-    my ( $y, $m, $d ) = @_;
-    my $adj;
-
-    # make month in range 3..14 (treat Jan & Feb as months 13..14 of
-    # prev year)
-    if ( $m <= 2 )
-    {
-        $y -= ( $adj = ( 14 - $m ) / 12 );
-        $m += 12 * $adj;
-    }
-    elsif ( $m > 14 )
-    {
-        $y += ( $adj = ( $m - 3 ) / 12 );
-        $m -= 12 * $adj;
-    }
-
-    # make year positive (oh, for a use integer 'sane_div'!)
-    if ( $y < 0 )
-    {
-        $d -= 146097 * ( $adj = ( 399 - $y ) / 400 );
-        $y += 400 * $adj;
-    }
-
-    # add: day of month, days of previous 0-11 month period that began
-    # w/March, days of previous 0-399 year period that began w/March
-    # of a 400-multiple year), days of any 400-year periods before
-    # that, and 306 days to adjust from Mar 1, year 0-relative to Jan
-    # 1, year 1-relative (whew)
-
-    $d += ( $m * 367 - 1094 ) / 12 + $y % 100 * 1461 / 4 +
-          ( $y / 100 * 36524 + $y / 400 ) - 306;
 }
 
 sub extra_seconds {
