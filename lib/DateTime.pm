@@ -2116,7 +2116,7 @@ work:
 
   $dt->set_time_zone( 'Europe/Paris' );
 
-Yes, now we can know "ni3 na1 bian1 ji3dian2?"
+Yes, now we can know "ni3 na4 bian1 ji3dian2?"
 
 =item * add_duration( $duration_object )
 
