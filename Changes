@@ -1,10 +1,49 @@
 0.07
 
+[IMPROVEMENTS]
+
 - Added a small hack to the compare() method so that this module can
 be used with Set::Infinite.
 
 - Changed compare so that it can be used to compare two objects from
 different calendars that conform to the DateTime::Calendar interface.
+
+- Added explanation of exactly what calendar this module represents
+("proleptic Gregorian calendar") to docs.
+
+- Added a Spanish language DateTime::Language subclass.  Implemented
+by Flavio S. Glock.
+
+- Added support for specifying a language by ISO code ("en" or
+"pt-br") as well as the subclass name.  Based on a patch from Erich
+Cholet.
+
+- Revamped the externally visible DateTime::Language API.
+
+- Objects created via the from_object() method are set to the time
+zone of the object from which they were created, if it has one, or UTC
+otherwise.
+
+[BUG FIXES]
+
+- The from_object() method was broken because it retrieved a UTC
+datetime from the object passed in, and then created a new DateTime
+object using that UTC time as a _local_ time.
+
+[BACKWARDS INCOMPATIBILITIES]
+
+- Removed stringification overloading.  Having this in place made it
+impossible to create a strack trace in much of the time zone code.
+
+- Renamed the DateTime::Language->subclasses method as languages.
+
+- It is no longer possible to directly instantiate a
+DateTime::Language subclass, instead use:
+
+  my $en = DateTime::Language->new( language => 'English' );
+
+- The from_object() method no longer accepts a "time_zone" parameter.
+
 
 0.06     2003-02-16
 
