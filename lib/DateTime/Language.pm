@@ -4,11 +4,6 @@ use strict;
 
 use Class::Factory::Util;
 
-sub available
-{
-    return Class::Factory::Util::subclasses(__PACKAGE__);
-}
-
 sub new
 {
     my $class = shift;
@@ -81,8 +76,8 @@ localization for DateTime.pm.  A subclass of this language simply
 =head1 USAGE
 
 This module provides one somewhat interesting function,
-C<available()>.  Calling this method returns a list of subclass names,
-minus the leading "DateTime::Language::" portion.
+C<subclasses()>.  Calling this method returns a list of subclass
+names, minus the leading "DateTime::Language::" portion.
 
 =head1 SUBCLASSING
 
