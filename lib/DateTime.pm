@@ -86,6 +86,7 @@ sub new
                            hour   => { type => SCALAR, default => 0 },
                            minute => { type => SCALAR, default => 0 },
                            second => { type => SCALAR, default => 0 },
+                           nanosecond => { type => SCALAR, default => 0 },
                            language  => { type => SCALAR | OBJECT,
                                           default => $class->DefaultLanguage },
                            time_zone => { type => SCALAR | OBJECT,
@@ -115,6 +116,8 @@ sub new
 
     $self->{local_rd_secs} =
         $class->_time_as_seconds( @args{ qw( hour minute second ) } );
+
+    $self->{local_rd_nanosecs} = $args{nanosecond};
 
     bless $self, $class;
 
@@ -382,6 +385,8 @@ sub minute { $_[0]->{local_c}{minute} }
 
 sub second { $_[0]->{local_c}{second} }
 *sec = \&second;
+
+sub nanosecond { $_[0]->{local_rd_nanosecs} }
 
 sub hms
 {
@@ -799,12 +804,13 @@ sub set
                         hour     => { type => SCALAR, optional => 1 },
                         minute   => { type => SCALAR, optional => 1 },
                         second   => { type => SCALAR, optional => 1 },
+                        nanosecond   => { type => SCALAR, optional => 1 },
                         language => { type => SCALAR, optional => 1 },
                       } );
 
     my %old_p =
         ( map { $_ => $self->$_() }
-          qw( year month day hour minute second language time_zone )
+          qw( year month day hour minute second nanosecond language time_zone )
         );
 
     my $new_dt = (ref $self)->new( %old_p, %p );
@@ -819,7 +825,7 @@ sub truncate
     my $self = shift;
     my %p = validate( @_,
                       { to =>
-                        { regex => qr/^(?:year|month|day|hour|minute)$/ },
+                        { regex => qr/^(?:year|month|day|hour|minute|second)$/ },
                       },
                     );
 
@@ -827,7 +833,7 @@ sub truncate
                 time_zone => $self->{tz},
               );
 
-    foreach my $f ( qw( year month day hour minute ) )
+    foreach my $f ( qw( year month day hour minute second ) )
     {
         $new{$f} = $self->$f();
 
@@ -881,6 +887,7 @@ DateTime - Reference implementation for Perl DateTime objects
                        hour   => 16,
                        minute => 12,
                        second => 47,
+                       nanosecond => 500000000,
                        time_zone => 'Asia/Taipei',
                      );
 
@@ -1003,8 +1010,8 @@ All constructors can die when invalid parameters are given.
 =item * new( ... )
 
 This class method accepts parameters for each date and time component:
-"year", "month", "day", "hour", "minute", "second".  Additionally, it
-accepts "language" and "time_zone" parameters.
+"year", "month", "day", "hour", "minute", "second", "nanosecond".  
+Additionally, it accepts "language" and "time_zone" parameters.
 
   my $dt = DateTime->new( day => 25,
                           month => 10,
@@ -1012,6 +1019,7 @@ accepts "language" and "time_zone" parameters.
                           hour => 7,
                           minute => 15,
                           second => 47,
+                          nanosecond => 500000000,
                           time_zone => 'America/Chicago',
                         );
 
@@ -1372,7 +1380,7 @@ the C<set_time_zone()> method.
 This method allows you to reset some of the local time components in
 the object to their "zero" values.  The "to" parameter is used to
 specify which values to truncate, and it may be one of "year",
-"month", "day", "hour", or "minute".  For example, if "month" is
+"month", "day", "hour", "minute", or "second".  For example, if "month" is
 specified, then the local day becomes 1, and the hour, minute, and
 second all become 0.
 
