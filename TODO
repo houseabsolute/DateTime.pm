@@ -44,9 +44,6 @@ Time::HiRes), but is micro small enough?
 
 - wrapping mode bits in _add need to become class/object attribute
 
-- print_error, raise_error, & error_handler options ala DBI.  Default
-to Exception::Class throwing.
-
 - Offset should be specified as DateTime::TimeZone object (or
 something like that) as well as, or instead of, a string/number.
 
@@ -62,8 +59,10 @@ multiplication (duration * int), division? (duration / int).
 will be the reference for DateTime.pm internals, as well as being
 useful for other calendar implementors.
 
-- document setting DefaultLanguageClass method & setting it via import.
+- document DefaultLanguageClass method and language param to new
 
 - document stringification
 
 - make add & subtract class methods
+
+- document error handling features
