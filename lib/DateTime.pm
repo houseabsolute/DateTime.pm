@@ -753,7 +753,9 @@ sub add_duration
     if ( $deltas{seconds} || $deltas{nanoseconds})
     {
         my $is_floating = $self->time_zone->is_floating;
-        my $old_leap_seconds = DateTime::LeapSecond::leap_seconds( $self->{utc_rd_days} ) unless $is_floating;
+        my $old_leap_seconds =
+            DateTime::LeapSecond::leap_seconds( $self->{utc_rd_days} )
+                    unless $is_floating;
 
         $self->{utc_rd_secs} += $deltas{seconds};
 
@@ -766,10 +768,11 @@ sub add_duration
         _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} )
             if $deltas{seconds};
 
-        unless ( $is_floating ) {
+        unless ( $is_floating )
+        {
             my $new_leap_seconds = DateTime::LeapSecond::leap_seconds( $self->{utc_rd_days} );
-            if ( $new_leap_seconds != $old_leap_seconds ) {
-                # warn "add duration across leap seconds";
+            if ( $new_leap_seconds != $old_leap_seconds )
+            {
                 $self->{utc_rd_secs} += $old_leap_seconds - $new_leap_seconds;
                 _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} )
             }
