@@ -16,34 +16,20 @@ use constant MAX_NANOSECONDS => 1_000_000_000;  # 1E9 = almost 32 bits
 
 my @all_units = qw( months days minutes seconds nanoseconds );
 
+# XXX - need to reject non-integers but accept infinity, NaN, &
+# 1.56e+18
 sub new
 {
     my $class = shift;
     my %p = validate( @_,
-                         { years   => { type => SCALAR, default => 0,
-                                        regex => qr/^-?\d+$/,
-                                      },
-                           months  => { type => SCALAR, default => 0,
-                                        regex => qr/^-?\d+$/,
-                                      },
-                           weeks   => { type => SCALAR, default => 0,
-                                        regex => qr/^-?\d+$/,
-                                      },
-                           days    => { type => SCALAR, default => 0,
-                                        regex => qr/^-?\d+$/,
-                                      },
-                           hours   => { type => SCALAR, default => 0,
-                                        regex => qr/^-?\d+$/,
-                                      },
-                           minutes => { type => SCALAR, default => 0,
-                                        regex => qr/^-?\d+$/,
-                                      },
-                           seconds => { type => SCALAR, default => 0,
-                                        regex => qr/^-?\d+$/,
-                                      },
-                           nanoseconds => { type => SCALAR, default => 0,
-                                            regex => qr/^-?\d+$/,
-                                          },
+                         { years   => { type => SCALAR, default => 0 },
+                           months  => { type => SCALAR, default => 0 },
+                           weeks   => { type => SCALAR, default => 0 },
+                           days    => { type => SCALAR, default => 0 },
+                           hours   => { type => SCALAR, default => 0 },
+                           minutes => { type => SCALAR, default => 0 },
+                           seconds => { type => SCALAR, default => 0 },
+                           nanoseconds => { type => SCALAR, default => 0 },
                            end_of_month => { type => SCALAR, default => undef,
                                              regex => qr/^(?:wrap|limit|preserve)$/ },
                          } );

@@ -322,7 +322,9 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
 }
 
 {
+    local $TODO = 'reject fractional units in DateTime::Duration->new';
+
     eval { DateTime::Duration->new( minutes => 50.2 ) };
 
-    like( $@, qr/regex/, 'cannot create a duration with fractional units' );
+    like( $@, qr/is an integer/, 'cannot create a duration with fractional units' );
 }

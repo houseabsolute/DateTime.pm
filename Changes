@@ -1,11 +1,5 @@
 0.25
 
-[ ENHANCEMENTS ]
-
-- DateTime::Duration->new now throws an exception if given an
-non-integer units, since it cannot handle non-integers in any useful
-way.
-
 
 0.24    2004-12-10 (the "have I mentioned I hate leap seconds" release)
 
