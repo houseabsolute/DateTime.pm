@@ -15,6 +15,10 @@ subtraction across a DST change.  This method is used to implement
 subtraction overloading, so that was affected as well.  Reported by
 Mike Schilli.
 
+- The docs for the %U and %W strftime specifiers implied that these
+should be zero-padded, but the code was not doing so.  Reported by J
+Docauer.
+
 
 0.27    2005-01-31
 
