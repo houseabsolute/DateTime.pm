@@ -15,6 +15,9 @@ Based in part of a patch from Rick Measham.
 - Now any object method can be called in strftime format by using
 "%{method}" as a format specifier.  Patch from Rick Measham
 
+- Added an is_zero method to DateTime::Duration, for objects of zero
+length.
+
 [ BUG FIXES ]
 
 - Fix epoch() method to work properly with dates greater than 50 years

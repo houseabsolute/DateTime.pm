@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 56;
+use Test::More tests => 59;
 
 use DateTime;
 use DateTime::Duration;
@@ -33,6 +33,7 @@ require 'testlib.pl';
     is( $dur->delta_seconds, 8, "delta_seconds" );
 
     ok( $dur->is_positive, "should be positive" );
+    ok( ! $dur->is_zero, "should not be zero" );
     ok( ! $dur->is_negative, "should not be negative" );
 
     ok( $dur->is_wrap_mode, "wrap mode" );
@@ -102,6 +103,7 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
     is( $inverse->delta_seconds, -3, 'inverse delta seconds should be negative' );
 
     ok( $inverse->is_negative, "should be negative" );
+    ok( ! $inverse->is_zero, "should not be zero" );
     ok( ! $inverse->is_positive, "should not be positivea" );
 }
 
@@ -133,7 +135,9 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
 }
 
 {
-    my $dur1 = DateTime::Duration->new( months => 6, days => 10, seconds => 3, nanoseconds => 1200300400 );
+    my $dur1 =
+        DateTime::Duration->new
+            ( months => 6, days => 10, seconds => 3, nanoseconds => 1200300400 );
 
     my $dur2 = DateTime::Duration->new( seconds => 1, nanoseconds => 500000000 );
 
@@ -169,5 +173,6 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
     my $dur = DateTime::Duration->new( days => 0 );
     is( $dur->delta_days, 0, 'delta_days is 0' );
     ok( ! $dur->is_positive, 'not positive' );
+    ok( $dur->is_zero, 'is zero' );
     ok( ! $dur->is_negative, 'not negative' );
 }

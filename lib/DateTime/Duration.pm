@@ -101,7 +101,8 @@ sub minutes { int( ( abs( $_[0]->{minutes} ) - ( $_[0]->hours * 60 ) ) ) }
 sub seconds { abs( $_[0]->{seconds} ) }
 sub nanoseconds { abs( $_[0]->{nanoseconds} ) }
 
-sub is_positive { $_[0]->{sign} == 1 ? 1 : 0 }
+sub is_positive { $_[0]->{sign} ==  1 ? 1 : 0 }
+sub is_zero     { $_[0]->{sign} ==  0 ? 1 : 0 }
 sub is_negative { $_[0]->{sign} == -1 ? 1 : 0 }
 
 sub delta_months  { $_[0]->{months} }
@@ -239,6 +240,7 @@ DateTime::Duration - Duration objects for date math
   $d->sign;
 
   if ( $d->is_positive ) { ... }
+  if ( $d->is_zero )     { ... }
   if ( $d->is_negative ) { ... }
 
   # The important parts for date math
@@ -334,10 +336,9 @@ Returns a hash with the keys "months", "days", "minutes", "seconds",
 and "nanoseconds", containing all the delta information for the
 object.
 
-=item * is_positive, is_negative
+=item * is_positive, is_zero, is_negative
 
-Indicates whether or not the duration is positive or negative.  A
-duration of zero length is neither positive or negative.
+Indicates whether or not the duration is positive, zero, or negative.
 
 =item * is_wrap_mode, is_limit_mode, is_preserve_mode
 
