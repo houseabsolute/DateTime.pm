@@ -11,11 +11,17 @@ BEGIN
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
     {
-        require DynaLoader;
-
-        @DateTime::ISA = 'DynaLoader';
-
-        bootstrap DateTime $DateTime::VERSION;
+        if ( $] >= 5.6.0 )
+        {
+            require XSLoader;
+            XSLoader::load( 'DateTime', $DateTime::VERSION );
+        }
+        else
+        {
+            require DynaLoader;
+            @DateTime::ISA = 'DynaLoader';
+            DateTime->bootstrap( $DateTime::VERSION );
+        }
 
         $loaded = 1;
     }
@@ -138,9 +144,9 @@ sub new
         $self->{rd_nanosecs} += ( $p{fractional_second} - $int ) * MAX_NANOSECONDS;
     }
 
-    _normalize_nanoseconds( $self->{local_rd_secs}, $self->{rd_nanosecs} );
-
     bless $self, $class;
+
+    $self->_normalize_nanoseconds( $self->{local_rd_secs}, $self->{rd_nanosecs} );
 
     $self->_calc_utc_rd;
     $self->_calc_local_rd;
@@ -168,11 +174,11 @@ sub _calc_utc_rd
 
     if ( $self->{tz}->is_floating )
     {
-        _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+        $self->_normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
     }
     else
     {
-        _normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+        $self->_normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
     }
 }
 
@@ -182,35 +188,35 @@ sub _normalize_leap_seconds
     my $delta_days;
 
     # rough adjust - can adjust many days
-    if ( $_[1] < 0 )
+    if ( $_[2] < 0 )
     {
-        $delta_days = int( ($_[1] - 86399) / 86400 );
+        $delta_days = int( ($_[2] - 86399) / 86400 );
     }
     else
     {
-        $delta_days = int( $_[1] / 86400 );
+        $delta_days = int( $_[2] / 86400 );
     }
 
-    my $new_day = $_[0] + $delta_days;
-    my $delta_seconds = 86400 * ( $new_day - $_[0] ) +
+    my $new_day = $_[1] + $delta_days;
+    my $delta_seconds = 86400 * ( $new_day - $_[1] ) +
                         DateTime::LeapSecond::leap_seconds( $new_day ) -
-                        DateTime::LeapSecond::leap_seconds( $_[0] );
+                        DateTime::LeapSecond::leap_seconds( $_[1] );
 
-    $_[1] -= $delta_seconds;
-    $_[0] = $new_day;
+    $_[2] -= $delta_seconds;
+    $_[1] = $new_day;
 
     # fine adjust - up to 1 day
     my $day_length = DateTime::LeapSecond::day_length( $new_day );
-    if ( $_[1] >= $day_length )
+    if ( $_[2] >= $day_length )
     {
-        $_[1] -= $day_length;
-        $_[0]++;
+        $_[2] -= $day_length;
+        $_[1]++;
     }
-    elsif ( $_[1] < 0 )
+    elsif ( $_[2] < 0 )
     {
         $day_length = DateTime::LeapSecond::day_length( $new_day - 1 );
-        $_[1] += $day_length;
-        $_[0]--;
+        $_[2] += $day_length;
+        $_[1]--;
     }
 }
 
@@ -232,7 +238,7 @@ sub _calc_local_rd
         $self->{local_rd_days} = $self->{utc_rd_days};
         $self->{local_rd_secs} = $self->{utc_rd_secs} + $self->offset;
 
-        _normalize_seconds( $self->{local_rd_days}, $self->{local_rd_secs} );
+        $self->_normalize_seconds( $self->{local_rd_days}, $self->{local_rd_secs} );
     }
 
     $self->_calc_local_components;
@@ -709,6 +715,9 @@ sub epoch
     return $self->{utc_c}{epoch};
 }
 
+sub is_finite { 1 }
+sub is_infinite { 0 }
+
 # added for benefit of DateTime::TimeZone
 sub utc_year { ($_[0]->_utc_ymd)[0] }
 
@@ -833,16 +842,22 @@ sub add_duration
 
     foreach my $val ( values %deltas )
     {
+        my $inf;
         if ( $val == INFINITY )
         {
-            %$self = %{ DateTime::Infinite::Positive->new };
-            return;
+            $inf = DateTime::Infinite::Future->new;
+        }
+        elsif ( $val == NEG_INFINITY )
+        {
+            $inf = DateTime::Infinite::Past->new;
         }
 
-        if ( $val == NEG_INFINITY )
+        if ($inf)
         {
-            %$self = %{ DateTime::Infinite::Negative->new };
-            return;
+            %$self = %$inf;
+            bless $self, ref $inf;
+
+            return $self;
         }
     }
 
@@ -888,7 +903,7 @@ sub add_duration
     {
         $self->{utc_rd_secs} += $deltas{minutes} * 60;
 
-        _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+        $self->_normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
     }
 
     # We add seconds to the UTC time because if someone adds 24 hours,
@@ -901,7 +916,7 @@ sub add_duration
         if ( $deltas{nanoseconds} )
         {
             $self->{rd_nanosecs} += $deltas{nanoseconds};
-            _normalize_nanoseconds( $self->{utc_rd_secs}, $self->{rd_nanosecs} );
+            $self->_normalize_nanoseconds( $self->{utc_rd_secs}, $self->{rd_nanosecs} );
         }
 
         # must always normalize seconds, because a nanosecond change
@@ -909,11 +924,11 @@ sub add_duration
 
         if ( $self->time_zone->is_floating )
         {
-            _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+            $self->_normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
         }
         else
         {
-            _normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+            $self->_normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
         }
     }
 
@@ -986,21 +1001,20 @@ sub _compare
     return $dt1->nanosecond <=> $dt2->nanosecond;
 }
 
-
 sub _normalize_nanoseconds
 {
     # seconds, nanoseconds
-    if ( $_[1] < 0 )
+    if ( $_[2] < 0 )
     {
-        my $overflow = 1 + int( $_[1] / MAX_NANOSECONDS );
-        $_[1] += $overflow * MAX_NANOSECONDS;
-        $_[0] -= $overflow;
+        my $overflow = 1 + int( $_[2] / MAX_NANOSECONDS );
+        $_[2] += $overflow * MAX_NANOSECONDS;
+        $_[1] -= $overflow;
     }
-    elsif ( $_[1] >= MAX_NANOSECONDS )
+    elsif ( $_[2] >= MAX_NANOSECONDS )
     {
-        my $overflow = int( $_[1] / MAX_NANOSECONDS );
-        $_[1] -= $overflow * MAX_NANOSECONDS;
-        $_[0] += $overflow;
+        my $overflow = int( $_[2] / MAX_NANOSECONDS );
+        $_[2] -= $overflow * MAX_NANOSECONDS;
+        $_[1] += $overflow;
     }
 }
 
