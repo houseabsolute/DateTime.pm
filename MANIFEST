@@ -43,6 +43,7 @@ t/23storable.t
 t/24from_object.t
 t/25add_subtract.t
 t/26dt_leapsecond_pm.t
+t/27delta.t
 t/99-pod.t
 t/testlib.pl
 tools/leap_seconds_header.pl
