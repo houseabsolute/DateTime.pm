@@ -1,3 +1,13 @@
+0.22    2004-07-20
+
+[ *** BACKWARDS INCOMPATIBILITIES *** ]
+
+- The leap second table we were using mistakenly included a leap
+second on December 31, 1971.  This will break all versions of the
+DateTime::Format::Epoch::TAI64 module up to and including version
+0.06.  Most users of DateTime.pm will not be affected.
+
+
 0.2101  2004-06-10
 
 - There was a bug in the date math code that occurred if you tried to
