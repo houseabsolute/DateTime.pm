@@ -1573,7 +1573,8 @@ with C<Time::HiRes>.
 =item * now( ... )
 
 This class method is equivalent to calling C<from_epoch()> with the
-value returned from Perl's C<time()> function.
+value returned from Perl's C<time()> function.  Just as with the
+C<new()> method, it accepts "time_zone" and "locale" parameters.
 
 =item * today( ... )
 
