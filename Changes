@@ -11,6 +11,9 @@ implementation.
 add the compare_ignore_floating method.  Based on a patch from Eugene
 van der Pijll.
 
+- Allow from_epoch(), now(), and today() to accept a time_zone
+parameter.  Based on suggestions from Tim Bunce and Joshua Hoblitt.
+
 [BUG FIXES]
 
 - If a datetime had the floating timezone and then set_time_zone was
