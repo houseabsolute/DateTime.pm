@@ -40,6 +40,8 @@ Also note that locales should be specified via ISO codes, not names
 like "English".  The old DateTime::Language names will continue to
 work indefinitely, but they load DateTime::Locale objects instead.
 
+Locale-specific data will be returned in utf8 when necessary.
+
 - Similarly, the "language" and "DefaultLanguage" methods are now
 deprecated in favor of "locale" and "DefaultLocale".
 
