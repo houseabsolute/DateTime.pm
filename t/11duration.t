@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 68;
+use Test::More tests => 78;
 
 use DateTime;
 use DateTime::Duration;
@@ -194,4 +194,25 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
         is( $dur->delta_minutes, -237, 'delta_minutes should be -237' );
         is( $dur->delta_seconds, -2, 'delta_seconds should be -2' );
     }
+}
+
+{
+    my $min_1  = DateTime::Duration->new( minutes => 1 );
+    my $hour_1 = DateTime::Duration->new( hours => 1 );
+
+    my $min_59 = $hour_1 - $min_1;
+
+    is( $min_59->delta_months,   0, 'delta_months is 0' );
+    is( $min_59->delta_days,     0, 'delta_days is 0' );
+    is( $min_59->delta_minutes, 59, 'delta_minutes is 59' );
+    is( $min_59->delta_seconds,  0, 'delta_seconds is 0' );
+    is( $min_59->delta_nanoseconds, 0, 'delta_nanoseconds is 0' );
+
+    my $min_neg_59 = $min_1 - $hour_1;
+
+    is( $min_neg_59->delta_months,    0, 'delta_months is 0' );
+    is( $min_neg_59->delta_days,      0, 'delta_days is 0' );
+    is( $min_neg_59->delta_minutes, -59, 'delta_minutes is -59' );
+    is( $min_neg_59->delta_seconds,   0, 'delta_seconds is 0' );
+    is( $min_neg_59->delta_nanoseconds, 0, 'delta_nanoseconds is 0' );
 }
