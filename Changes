@@ -5,6 +5,9 @@
 - Moved a little bit of the leap second code to XS, so DateTime.pm may
 be a tiny bit faster.
 
+- Added name() method to DateTime::Language.  Suggested by Rick
+Measham.
+
 [ BUG FIXES ]
 
 - The %I and %l strftime formats were formatting hours as 0-11, not

@@ -111,6 +111,8 @@ sub _init
     }
 }
 
+sub name { (split /::/, ref $_[0])[-1] }
+
 sub month_names { $_[0]->{month_names} }
 
 sub month_name  { $_[0]->{month_names}[ $_[1]->month_0 ] }
@@ -236,6 +238,11 @@ globals as needed.  If you need to implement more complex algorithms,
 you can override the following methods:
 
 =over 4
+
+=item * name
+
+Returns the language name, which is the module name without the
+leading "DateTime::Language::" piece.
 
 =item * month_names
 
