@@ -203,7 +203,7 @@ sub _calc_utc_rd
     $self->{utc_rd_secs} =
         $self->{local_rd_secs} - $self->_offset_from_local_time;
 
-    _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+    _normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
 }
 
 sub _calc_local_rd
@@ -250,7 +250,7 @@ sub _calc_utc_components
 {
     my $self = shift;
 
-    $self->_calc_utc_rd unless defined $self->{utc_rd_days}
+    $self->_calc_utc_rd unless defined $self->{utc_rd_days};
 
     @{ $self->{utc_c} }{ qw( year month day ) } =
         $self->_rd2ymd( $self->{utc_rd_days} );
