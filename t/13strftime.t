@@ -72,7 +72,6 @@ year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42
 %A	Tuesday
 %b	Sep
 %B	September
-%c	09/07/99 13:02:42
 %C	19
 %d	07
 %e	 7
@@ -94,8 +93,6 @@ year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42
 %U	36
 %w	2
 %W	36
-%x	09/07/99
-%X	13:02:42
 %y	99
 %Y	1999
 %Z	UTC
@@ -108,7 +105,6 @@ German
 %A	Dienstag
 %b	Sep
 %B	September
-%c	09/07/99 13:02:42
 %C	19
 %d	07
 %e	 7
@@ -130,8 +126,6 @@ German
 %U	36
 %w	2
 %W	36
-%x	09/07/99
-%X	13:02:42
 %y	99
 %Y	1999
 %Z	UTC
@@ -144,7 +138,6 @@ Italian
 %A	Martedi
 %b	Set
 %B	Settembre
-%c	09/07/99 13:02:42
 %C	19
 %d	07
 %e	 7
@@ -166,8 +159,6 @@ Italian
 %U	36
 %w	2
 %W	36
-%x	09/07/99
-%X	13:02:42
 %y	99
 %Y	1999
 %Z	UTC
