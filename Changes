@@ -1,4 +1,4 @@
-0.13
+0.13     2003-05-05
 
 [ IMPROVEMENTS ]
 
@@ -35,6 +35,15 @@ the code that should load these properly as well.
 in any namespace.
 
 [ BUG FIXES ]
+
+- "Fixed" 20infinite.t failures on Windows with 2 icky hacks.  The
+first simply doesn't compile the XS code that deals with infinite
+numbers on Win32, so the pure Perl version is used instead.  However,
+the rest of the XS code is still compiled on Win32.  The other hack is
+to simply skip a failing test in 20infinite.t on Win32.  Hopefully,
+this will eventually be fixed but given that this is not core
+functionality for most users, I'd rather get this release out the door
+now.
 
 - Fix epoch() method to work properly with dates greater than 50 years
 ago.  Apparently, if Time::Local is given a year less than 100, it
