@@ -15,7 +15,7 @@ use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AM
 @MonthNames  = qw(januari februari maart april mei juni juli
            augustus september oktober november december);
 @MonthAbbreviations = map(substr($_, 0, 3), @MonthNames);
-@DayNames  = map($_ . "dag", qw(zon maan dins woens donder vrij zater));
+@DayNames  = map($_ . "dag", qw(maan dins woens donder vrij zater zon));
 @DayAbbreviations = map(substr($_, 0, 2), @DayNames);
 
 # these aren't normally used...

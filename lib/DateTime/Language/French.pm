@@ -9,7 +9,7 @@ use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AM
 @ISA = qw(DateTime::Language);
 $VERSION = "1.02";
 
-@DayNames = qw(dimanche lundi mardi mercredi jeudi vendredi samedi);
+@DayNames = qw(lundi mardi mercredi jeudi vendredi samedi dimanche);
 @MonthNames = qw(janvier février mars avril mai juin 
           juillet août septembre octobre novembre décembre);
 @DayAbbreviations = map { substr($_,0,3) } @DayNames;

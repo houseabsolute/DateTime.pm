@@ -7,7 +7,7 @@ use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AM
 @ISA = qw(DateTime::Language);
 
 
-@DayNames = qw(Sunday Monday Tuesday Wednesday Thursday Friday Saturday);
+@DayNames = qw(Monday Tuesday Wednesday Thursday Friday Saturday Sunday);
 @MonthNames = qw(January February March April May June
 	  July August September October November December);
 @DayAbbreviations = map { substr($_,0,3) } @DayNames;

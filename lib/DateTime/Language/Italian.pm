@@ -14,8 +14,8 @@ use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AM
 @MonthNames  = qw(Gennaio Febbraio Marzo Aprile Maggio Giugno
 	   Luglio Agosto Settembre Ottobre Novembre Dicembre);
 @MonthAbbreviations = qw(Gen Feb Mar Apr Mag Giu Lug Ago Set Ott Nov Dic);
-@DayNames  = qw(Domenica Lunedi Martedi Mercoledi Giovedi Venerdi Sabato);
-@DayAbbreviations = qw(Dom Lun Mar Mer Gio Ven Sab);
+@DayNames  = qw(Lunedi Martedi Mercoledi Giovedi Venerdi Sabato Domenica);
+@DayAbbreviations = map { substr($_,0,3) } @DayNames;
 
 require DateTime::Language::English;
 @AMPM =   @{DateTime::Language::English::AMPM};

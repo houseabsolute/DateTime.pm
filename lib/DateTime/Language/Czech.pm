@@ -18,8 +18,8 @@ use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @Mo
 for (@MonthNames2)
       { s!en$!na! or s!ec$!ce! or s!ad$!adu! or s!or$!ora!; }
 
-@DayNames = qw(nedìle pondìlí úterý støeda ètvrtek pátek sobota);
-@DayAbbreviations = qw(Ne Po Út St Èt Pá So);
+@DayNames = qw(pondìlí úterý støeda ètvrtek pátek sobota nedìle);
+@DayAbbreviations = qw(Po Út St Èt Pá So Ne);
 
 @AMPM = qw(dop. odp.);
 
