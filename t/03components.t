@@ -1,7 +1,7 @@
 use strict;
 
 use Test::More;
-plan tests => 43;
+plan tests => 45;
 
 use DateTime;
 
@@ -36,14 +36,14 @@ is( $d->sec, 50, '->sec' );
 
 is( $d->day_of_year, 186, '->day_of_year' );
 is( $d->day_of_year_0, 185, '->day_of_year' );
-is( $d->day_of_week, 5, '->day_of_week' );
-is( $d->day_of_week_0, 4, '->day_of_week' );
-is( $d->wday, 5, '->wday' );
-is( $d->wday_0, 4, '->wday' );
-is( $d->dow, 5, '->dow' );
-is( $d->dow_0, 4, '->dow' );
-is( $d->day_name, 'Thursday', '->day_of_week' );
-is( $d->day_abbr, 'Thu', '->day_of_week' );
+is( $d->day_of_week, 4, '->day_of_week' );
+is( $d->day_of_week_0, 3, '->day_of_week' );
+is( $d->wday, 4, '->wday' );
+is( $d->wday_0, 3, '->wday' );
+is( $d->dow, 4, '->dow' );
+is( $d->dow_0, 3, '->dow' );
+is( $d->day_name, 'Thursday', '->day_name' );
+is( $d->day_abbr, 'Thu', '->day_abrr' );
 
 is( $d->ymd, '2001-07-05', '->ymd' );
 is( $d->ymd('!'), '2001!07!05', "->ymd('!')" );
@@ -74,3 +74,19 @@ my $leap_d = DateTime->new( year => 2004,
                           );
 
 is( $leap_d->is_leap_year, 1, '->is_leap_year' );
+
+my $sunday = DateTime->new( year   => 2003,
+                            month  => 1,
+                            day    => 26,
+                            offset => 0,
+                          );
+
+is( $sunday->day_of_week, 7, "Sunday is day 7" );
+
+my $monday = DateTime->new( year   => 2003,
+                            month  => 1,
+                            day    => 27,
+                            offset => 0,
+                          );
+
+is( $monday->day_of_week, 1, "Monday is day 1" );
