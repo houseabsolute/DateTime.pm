@@ -1038,37 +1038,29 @@ sub delta_md
 
 sub delta_days { DateTime::Duration->new( days => int( $_[0]->jd - $_[1]->jd ) ) }
 
-sub delta_hms
+sub delta_ms
 {
     my $self = shift;
     my $dt = shift;
 
     my $days = abs( int( $self->jd - $dt->jd ) );
 
-    my $new_dt = $dt->clone->set( year  => $self->year,
-                                  month => $self->month,
-                                  day   => $self->day );
+    my $dur = $self->subtract_datetime($dt);
 
-    my $invert;
-    # if same time on $self's day is 
-    if ( ( $self < $dt && $self > $new_dt )
-         ||
-         ( $self > $dt && $self < $new_dt )
-       )
+    my %p;
+    $p{hours}   = $dur->hours + ( $days * 24 );
+    $p{minutes} = $dur->minutes;
+    $p{seconds} = $dur->seconds;
+
+    if ( $self < $dt )
     {
-        $invert = 1;
+        for ( qw( hours minutes seconds ) )
+        {
+            $p{$_} *= -1 if $p{$_};
+        }
     }
 
-    my $time_dur = $self->subtract_datetime($new_dt);
-
-    my $hours = $time_dur->hours + ( $days * 24 );
-
-    my $dur = DateTime::Duration->new( hours   => $hours,
-                                       minutes => $time_dur->minutes,
-                                       seconds => $time_dur->seconds,
-                                     );
-
-    return $invert ? $dur->inverse : $dur;
+    return DateTime::Duration->new(%p);
 }
 
 sub _add_overload
@@ -2044,7 +2036,7 @@ Returns the current UTC Rata Die days and seconds purely as seconds.
 This number ignores any fractional seconds stored in the object,
 as well as leap seconds.
 
-=item * local_rd_as_seconds
+=item * local_rd_as_seconds - deprecated
 
 Returns the current local Rata Die days and seconds purely as seconds.
 This number ignores any fractional seconds stored in the object,
@@ -2176,6 +2168,27 @@ have deltas for seconds and nanoseconds.  This is the only way to
 accurately measure the absolute amount of time between two datetimes,
 since units larger than a second do not represent a fixed number of
 seconds.
+
+=item * delta_md( $datetime )
+
+=item * delta_days( $datetime )
+
+=item * delta_ms( $datetime )
+
+Each of these methods returns a new C<DateTime::Duration> object
+representing some portion of the difference between two datetimes.
+The C<delta_md()> method returns a duration which contains only the
+month and day portions of the duration is represented.  The
+C<delta_days()> method returns a duration which contains only days,
+and the C<delta_ms()> method returns a duration which contains only
+minutes and seconds.
+
+The C<delta_md> and C<delta_days> methods truncate the duration so
+that any fractional portion of a day is ignored.  The C<delta_ms>
+method converts any day and months differences to minutes.
+
+Unlike the subtraction methods, B<these methods always return a
+positive (or zero) duration>.
 
 =back
 
