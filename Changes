@@ -1,5 +1,7 @@
 0.23
 
+[ ENHANCEMENTS ]
+
 - Added a number of convenience "set" methods: set_year, set_month,
 set_day, set_hour, set_minute, set_second, set_nanosecond, and
 set_locale.  Suggested by Michael Schwern.
@@ -8,6 +10,14 @@ set_locale.  Suggested by Michael Schwern.
 
 - Clarified that from_epoch(), today(), and now() all return objects
 in the UTC time zone.  Suggested by Sagar Shah and others.
+
+[ BUG FIXES ]
+
+- Trying to serialize DateTime::Infinite objects with Storable blew
+up.  Patch by Daisuke Maki.
+
+- Require Test::More 0.34+, since I use a function introduced in that
+version in the tests.  Suggested by Jean Forget.
 
 
 0.22    2004-07-23
@@ -22,6 +32,8 @@ Joshua Hoblitt.
 
 
 0.2101  2004-06-10
+
+[ BUG FIXES ]
 
 - There was a bug in the date math code that occurred if you tried to
 add enough days, minutes or seconds to generate a datetime 10 years in
