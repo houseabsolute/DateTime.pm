@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 65;
+use Test::More tests => 72;
 
 use DateTime;
 
@@ -14,6 +14,7 @@ my $d = DateTime->new( year => 2001,
                      );
 
 is( $d->year, 2001, '->year' );
+is( $d->ce_year, 2001, '->ce_year' );
 is( $d->month, 7, '->month' );
 is( $d->month_0, 6, '->month_0' );
 is( $d->month_name, 'July', '->month' );
@@ -101,6 +102,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
                          );
 
     is( $d->year, 2001, '->year' );
+    is( $d->ce_year, 2001, '->ce_year' );
     is( $d->month, 7, '->month' );
     is( $d->day_of_month, 5, '->day_of_month' );
     is( $d->hour, 2, '->hour' );
@@ -111,19 +113,23 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 {
     my $dt0 = DateTime->new( year => 1, time_zone => 'UTC' );
 
-    is( $dt0->year, 1, "Year 1 is year 1" );
+    is( $dt0->year, 1, "year 1 is year 1" );
+    is( $dt0->ce_year, 1, "ce_year 1 is year 1" );
 
     $dt0->subtract( years => 1 );
 
-    is( $dt0->year, 0, "Year 1 minus 1 is year 0" );
+    is( $dt0->year, 0, "year 1 minus 1 is year 0" );
+    is( $dt0->ce_year, -1, "ce_year 1 minus 1 is year -1" );
 }
 
 {
     my $dt_neg = DateTime->new( year => -10, time_zone => 'UTC', );
     is( $dt_neg->year, -10, "Year -10 is -10" );
+    is( $dt_neg->ce_year, -11, "year -10 is ce_year -11" );
 
     my $dt1 = $dt_neg + DateTime::Duration->new( years => 10 );
-    is( $dt1->year,   0, "year is 0 after adding ten years to year -10" );
+    is( $dt1->year, 0, "year is 0 after adding ten years to year -10" );
+    is( $dt1->ce_year, -1, "ce_year is -1 after adding ten years to year -10" );
 }
 
 {
@@ -165,5 +171,6 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
     is( $dt->ymd, '-0006-02-25', 'ymd is -0006-02-25' );
     is( $dt->iso8601, '-0006-02-25T00:00:00', 'iso8601 is -0005-02-25T00:00:00' );
-    is( $dt->year,   -6, 'year is -6' );
+    is( $dt->year, -6, 'year is -6' );
+    is( $dt->ce_year, -7, 'ce_year is -7' );
 }
