@@ -1271,7 +1271,7 @@ sub truncate
     my $self = shift;
     my %p = validate( @_,
                       { to =>
-                        { regex => qr/^(?:year|month|day|hour|minute|second)$/ },
+                        { regex => qr/^(?:year|month|week|day|hour|minute|second)$/ },
                       },
                     );
 
@@ -1279,11 +1279,23 @@ sub truncate
                 time_zone => $self->{tz},
               );
 
-    foreach my $f ( qw( year month day hour minute second ) )
+    if ( $p{to} eq 'week' )
     {
-        $new{$f} = $self->$f();
+	@new{ 'year', 'month' } = ( $self->year, $self->month );
 
-        last if $p{to} eq $f;
+	$new{day} =
+	    ( $self->day -
+	      ( $self->day_of_week - 1 )
+	   );
+    }
+    else
+    {
+	foreach my $f ( qw( year month day hour minute second ) )
+	{
+	    $new{$f} = $self->$f();
+
+	    last if $p{to} eq $f;
+	}
     }
 
     my $new_dt = (ref $self)->new(%new);
@@ -2007,9 +2019,12 @@ C<new()> method.
 This method allows you to reset some of the local time components in
 the object to their "zero" values.  The "to" parameter is used to
 specify which values to truncate, and it may be one of "year",
-"month", "day", "hour", "minute", or "second".  For example, if
-"month" is specified, then the local day becomes 1, and the hour,
+"month", "week", "day", "hour", "minute", or "second".  For example,
+if "month" is specified, then the local day becomes 1, and the hour,
 minute, and second all become 0.
+
+If "week" is given, then the datetime is set to the beginning of the
+week in which it occurs, and the time components are all set to 0.
 
 =item * set_time_zone( $tz )
 

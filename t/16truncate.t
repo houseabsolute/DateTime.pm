@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 30;
+use Test::More tests => 37;
 
 use DateTime;
 
@@ -92,5 +92,22 @@ my %vals =
     foreach my $f ( qw( hour minute second ) )
     {
         is( $dt->$f(), 0, "$f should be 0" );
+    }
+}
+
+{
+    my $dt = DateTime->new( year => 2003, month => 11, day => 17 );
+
+    for (1..6)
+    {
+	my $trunc = $dt->clone->add( days => $_ )->truncate( to => 'week' );
+
+	is( $trunc->day, 17, 'truncate to week should always truncate to monday of week' );
+    }
+
+    {
+	my $trunc = $dt->clone->add( days => 7 )->truncate( to => 'week' );
+
+	is( $trunc->day, 24, 'truncate to week should always truncate to monday of week' );
     }
 }

@@ -1,3 +1,8 @@
+0.1702  2003-09-18
+
+- Added truncate( to => 'week' ).  Suggested by Flavio Glock.
+
+
 0.1701  2003-09-15
 
 [ BUG FIXES ]
