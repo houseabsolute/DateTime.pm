@@ -611,9 +611,9 @@ sub strftime {
 sub epoch {
     my $self = shift;
 
-    # timegm may die if given components outside of the ranges it
-    # can handle.  In that case return undef.
-    return
+    return $self->{c}{epoch} if exists $self->{c}{epoch};
+
+    $self->{c}{epoch} =
         eval { Time::Local::timegm( $self->second,
                                     $self->minute,
                                     $self->hour,
@@ -621,6 +621,8 @@ sub epoch {
                                     $self->month_0,
                                     $self->year - 1900,
                                   ) };
+
+    return $self->{c}{epoch};
 }
 
 sub add { shift->add_duration( DateTime::Duration->new(@_) ) }
