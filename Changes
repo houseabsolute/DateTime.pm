@@ -5,7 +5,7 @@ definition, UTC times, so any time created from an epoch should always
 have its time zone set to "UTC".  This can be changed after the object
 is created.  Similarly, value returned by the epoch() method needs to
 be based on the object's UTC time, not it's local time.  Bug reported
-by Kellan.
+by Kellan Elliott-McCrea.
 
 - Change year_0 so that -1 BCE is 0, not 1 CE.  This corresponds to
 astronomical years.
