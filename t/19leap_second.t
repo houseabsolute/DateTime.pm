@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 74;
+use Test::More tests => 79;
 
 use DateTime;
 
@@ -106,7 +106,7 @@ use DateTime;
     is( $t->{utc_rd_secs} , 86400, "rd_sec" );
 }
 
-# test that we can set second to 60
+# test that we can set second to 60 (negative offset)
 {
     my $t = DateTime->new( year => 1972, month => 6, day => 30,
                            hour => 20, minute => 59, second => 60,
@@ -114,6 +114,52 @@ use DateTime;
                          );
 
     is( $t->second, 60, 'second set to 60 in constructor' );
+}
+
+{
+    my $t = DateTime->new( year => 1972, month => 6, day => 30,
+                           hour => 21, minute => 0, second => 0,
+                           time_zone => 'America/Sao_Paulo',
+                         );
+
+    is( $t->second, 0, 'datetime just after leap second' );
+}
+
+# test that we can set second to 60 (positive offset)
+{
+    eval
+    {
+        my $t = DateTime->new( year => 1972, month => 7, day => 1,
+                               hour => 0, minute => 59, second => 60,
+                               time_zone => '+0100',
+                             );
+
+        is( $t->second, 60, 'second set to 60 in constructor' );
+    };
+
+    if ($@)
+    {
+        ok( 0, "Error setting second to 60 in constructor: $@" );
+    }
+}
+
+{
+    my $t = DateTime->new( year => 1972, month => 7, day => 1,
+                           hour => 0, minute => 59, second => 59,
+                           time_zone => '+0100',
+                         );
+
+    is( $t->second, 59, 'datetime just before leap second' );
+}
+
+{
+    my $t = DateTime->new( year => 1972, month => 7, day => 1,
+                           hour => 0, minute => 0, second => 29,
+                           time_zone => '+00:00:30',
+                         );
+
+    is( $t->second, 29, 'time zone +00:00:30 and leap seconds, second value' );
+    is( $t->minute,  0, 'time zone +00:00:30 and leap seconds, minute value' );
 }
 
 {
