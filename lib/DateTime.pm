@@ -148,6 +148,14 @@ sub new
 
     $self->_normalize_nanoseconds( $self->{local_rd_secs}, $self->{rd_nanosecs} );
 
+    # Set this explicitly since it can't be calculated accurately
+    # without knowing our time zone offset, and it's possible that the
+    # offset can't be calculated without having at least a rough guess
+    # of the datetime's year.  This year need not be correct, as long
+    # as its equal or greater to the correct number, so we fudge by
+    # adding one to the local year given to the constructor.
+    $self->{utc_year} = $p{year} + 1;
+
     $self->_calc_utc_rd;
     $self->_calc_local_rd;
 
@@ -719,7 +727,7 @@ sub is_finite { 1 }
 sub is_infinite { 0 }
 
 # added for benefit of DateTime::TimeZone
-sub utc_year { ($_[0]->_utc_ymd)[0] }
+sub utc_year { $_[0]->{utc_year} }
 
 sub add { return shift->add_duration( DateTime::Duration->new(@_) ) }
 
@@ -895,6 +903,10 @@ sub add_duration
 
     if ( $deltas{days} || $deltas{months} )
     {
+        # Again, we fudge the year so that the calculations being done
+        # have something to work with.
+        $self->{utc_year} += int( $deltas{months} / 12 ) + 1;
+
         $self->_calc_utc_rd;
         $self->_calc_local_rd;
     }
