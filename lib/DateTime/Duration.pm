@@ -62,8 +62,8 @@ sub new
 
 sub _normalize_nanoseconds {
     my $self = shift;
-    if ( $self->{nanoseconds} < -(MAX_NANOSECONDS) ) {
-        my $overflow = int( abs( $self->{nanoseconds} ) / MAX_NANOSECONDS );   
+    if ( $self->{nanoseconds} < 0 ) {
+        my $overflow = int( $self->{nanoseconds} / MAX_NANOSECONDS );   
         $self->{nanoseconds} += $overflow * MAX_NANOSECONDS;
         $self->{seconds} -= $overflow;
     }
@@ -127,11 +127,17 @@ sub add_duration
 
 }
 
-sub add { shift->add_duration( (ref $_[0])->new(@_) ) }
+sub add { 
+    my $self = shift; 
+    $self->add_duration( (ref $self)->new(@_) ) 
+}
 
 sub subtract_duration { $_[0]->add_duration( $_[1]->inverse ) }
 
-sub subtract { shift->subtract_duration( (ref $_[0])->new(@_) ) }
+sub subtract { 
+    my $self = shift;
+    $self->subtract_duration( (ref $self)->new(@_) ) 
+}
 
 sub _add_overload
 {

@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 45;
+use Test::More tests => 52;
 
 use DateTime;
 use DateTime::Duration;
@@ -140,7 +140,25 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
 {
     my $dur1 = DateTime::Duration->new( months => 6, days => 10, seconds => 3, nanoseconds => 1200300400 );
 
+    my $dur2 = DateTime::Duration->new( seconds => 1, nanoseconds => 500000000 );
+
     is( $dur1->delta_seconds, 4, 'test nanoseconds overflow' );
     is( $dur1->delta_nanoseconds, 200300400, 'test nanoseconds remainder' );
 
+    my $new1 = $dur1 - $dur2;
+
+    is( $new1->delta_seconds, 3, 'seconds is positive' );
+    is( $new1->delta_nanoseconds, -299699600, 'nanoseconds remainder is negative' );
+
+    $new1->add( nanoseconds => 500000000 );
+    is( $new1->delta_seconds, 3, 'seconds are unaffected' );
+    is( $new1->delta_nanoseconds, 200300400, 'nanoseconds are back' );
+
+    my $new1 = $dur1 - $dur2;
+    $new1->add( nanoseconds => 1500000000 );
+    is( $new1->delta_seconds, 4, 'seconds go up' );
+    is( $new1->delta_nanoseconds, 200300400, 'nanoseconds are normalized' );
+
+    $new1->subtract( nanoseconds => 100000000 );
+    is( $new1->delta_nanoseconds, 100300400, 'sub nanoseconds works' );
 }
