@@ -49,7 +49,7 @@ EOF
 
             close F;
 
-            $test = "#!/usr/bin/perl -w\n\nBEGIN { \$ENV{PERL_DATETIME_PP} = 1}\n\n$test";
+            $test = "#!/usr/bin/perl -w\n\nBEGIN { \$ENV{PERL_DATETIME_PP} = 1 }\n\n$test";
 
             my $new_file = File::Spec->catfile( 't', "zz_$file" );
             open F, ">$new_file" or die "Cannot write $new_file: $!";
