@@ -264,6 +264,9 @@ sub from_object
 
     my $new = $class->new( %p, %args, time_zone => 'UTC' );
 
+    $new->set( nanosecond => $object->nanosecond )
+        if $object->can('nanosecond');
+
     $new->set_time_zone( $object->time_zone )
         if $object->can('time_zone');
 
@@ -1245,6 +1248,12 @@ Returns the minute of the hour, from 0..59.
 
 Returns the second., from 0..61.  The values 60 and 61 are used for
 leap seconds.
+
+=item * nanosecond
+
+Returns the fractional second, as nanoseconds (1E-9 seconds).
+
+Half a second is 500_000_000 nanoseconds.
 
 =item * hms( $optional_separator ), time
 
