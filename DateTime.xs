@@ -44,7 +44,7 @@ const int PREVIOUS_MONTH_DOLY[12] = { 0,
                                       335 };
 
 IV
-_real_is_leap(IV y)
+_real_is_leap_year(IV y)
 {
   IV r = 0;
 
@@ -111,7 +111,7 @@ _rd2greg(self, d, extra = 0)
           dow = ((rd_days + 6) % 7) + 1;
           PUSHs(sv_2mortal(newSViv(dow)));
 
-          if (_real_is_leap(y)) {
+          if (_real_is_leap_year(y)) {
             doy = PREVIOUS_MONTH_DOLY[m - 1] + d;
           } else {
             doy = PREVIOUS_MONTH_DOY[m - 1] + d;
@@ -206,10 +206,10 @@ void _time_as_seconds(self, h, m, s)
         EXTEND(SP, 1);
         PUSHs(sv_2mortal(newSViv(h * 3600 + m * 60 + s)));
 
-void _is_leap(self, y)
+void _is_leap_year(self, y)
      SV* self;
      IV y;
 
      PPCODE:
         EXTEND(SP, 1);
-        PUSHs(sv_2mortal(newSViv(_real_is_leap(y))));
+        PUSHs(sv_2mortal(newSViv(_real_is_leap_year(y))));

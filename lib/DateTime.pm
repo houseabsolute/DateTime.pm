@@ -236,7 +236,7 @@ sub last_day_of_month {
                       }
                     );
 
-    my $day = ( DateTime->_is_leap( $p{year} ) ?
+    my $day = ( DateTime->_is_leap_year( $p{year} ) ?
                 $LeapYearMonthLengths[ $p{month} - 1 ] :
                 $MonthLengths[ $p{month} - 1 ]
               );
@@ -359,7 +359,7 @@ sub iso8601 {
 }
 *datetime = \&iso8601;
 
-sub is_leap_year { $_[0]->_is_leap( $_[0]->year ) }
+sub is_leap_year { $_[0]->_is_leap_year( $_[0]->year ) }
 
 sub week
 {
