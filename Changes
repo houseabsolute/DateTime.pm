@@ -23,8 +23,12 @@ fractional_second parameters.
 positive, regardless of the value given for nanoseconds.
 
 - Fixed a serious bug when subtracting one datetime from another that
-could cause the result to be a second off.  This was caused by the
-introduction of nanoseconds 0.10.
+could cause the result to be off by up to a second, and negative when
+it should be positive.  This was caused by the introduction of
+nanoseconds 0.10.
+
+- A zero length duration reported itself as positive when it should be
+neither positive nor negative.
 
 
 0.12     2003-05-05
