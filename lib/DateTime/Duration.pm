@@ -12,7 +12,7 @@ use overload ( fallback => 1,
                '*'   => '_multiply_overload',
              );
 
-use constant MAX_NANO_SECONDS => 1000000000;  # 1E9 = almost 32 bits
+use constant MAX_NANOSECONDS => 1000000000;  # 1E9 = almost 32 bits
 
 sub new
 {
@@ -25,7 +25,7 @@ sub new
                            hours   => { type => SCALAR, default => 0 },
                            minutes => { type => SCALAR, default => 0 },
                            seconds => { type => SCALAR, default => 0 },
-                           nano_seconds => { type => SCALAR, default => 0 },
+                           nanoseconds => { type => SCALAR, default => 0 },
                            end_of_month => { type => SCALAR, default => 'wrap',
                                              regex => qr/^(?:wrap|limit|preserve)$/ },
                          } );
@@ -48,28 +48,28 @@ sub new
     $self->{seconds} =
         abs( ( $p{hours} * 3600 ) + ( $p{minutes} * 60 ) + $p{seconds} ) * $self->{sign};
 
-    if ( $p{nano_seconds} ) {
-        $self->{nano_seconds} = abs( $p{nano_seconds} ) * $self->{sign};
-        $self->_normalize_nano_seconds;
+    if ( $p{nanoseconds} ) {
+        $self->{nanoseconds} = abs( $p{nanoseconds} ) * $self->{sign};
+        $self->_normalize_nanoseconds;
     }
     else {
-        # shortcut - if they don't need nano_seconds
-        $self->{nano_seconds} = 0;
+        # shortcut - if they don't need nanoseconds
+        $self->{nanoseconds} = 0;
     }
 
     return $self;
 }
 
-sub _normalize_nano_seconds {
+sub _normalize_nanoseconds {
     my $self = shift;
-    if ( $self->{nano_seconds} < -(MAX_NANO_SECONDS) ) {
-        my $overflow = int( abs( $self->{nano_seconds} ) / MAX_NANO_SECONDS );   
-        $self->{nano_seconds} += $overflow * MAX_NANO_SECONDS;
+    if ( $self->{nanoseconds} < -(MAX_NANOSECONDS) ) {
+        my $overflow = int( abs( $self->{nanoseconds} ) / MAX_NANOSECONDS );   
+        $self->{nanoseconds} += $overflow * MAX_NANOSECONDS;
         $self->{seconds} -= $overflow;
     }
-    elsif ( $self->{nano_seconds} > MAX_NANO_SECONDS ) {
-        my $overflow = int( $self->{nano_seconds} / MAX_NANO_SECONDS );   
-        $self->{nano_seconds} -= $overflow * MAX_NANO_SECONDS;
+    elsif ( $self->{nanoseconds} > MAX_NANOSECONDS ) {
+        my $overflow = int( $self->{nanoseconds} / MAX_NANOSECONDS );   
+        $self->{nanoseconds} -= $overflow * MAX_NANOSECONDS;
         $self->{seconds} += $overflow;
     }
 }
@@ -83,7 +83,7 @@ sub days    { abs( $_[0]->{days} ) % 7 }
 sub hours   { abs( int( $_[0]->{seconds} / 3600 ) ) }
 sub minutes { int( ( abs( $_[0]->{seconds} ) - ( $_[0]->hours * 3600 ) ) / 60 ) }
 sub seconds { abs( $_[0]->{seconds} ) % 60 }
-sub nano_seconds { abs( $_[0]->{nano_seconds} ) }
+sub nanoseconds { abs( $_[0]->{nanoseconds} ) }
 
 sub is_positive { $_[0]->{sign} == 1 ? 1 : 0 }
 sub is_negative { $_[0]->{sign} == -1 ? 1 : 0 }
@@ -91,12 +91,12 @@ sub is_negative { $_[0]->{sign} == -1 ? 1 : 0 }
 sub delta_months  { $_[0]->{months} }
 sub delta_days    { $_[0]->{days} }
 sub delta_seconds { $_[0]->{seconds} }
-sub delta_nano_seconds { $_[0]->{nano_seconds} }
+sub delta_nanoseconds { $_[0]->{nanoseconds} }
 
 sub deltas { 
-    # we might have to normalize_nano_seconds before comparing durations
-    $_[0]->_normalize_nano_seconds if $_[0]->{nano_seconds};
-    map { $_ => $_[0]->{$_} } qw( months days seconds nano_seconds ) 
+    # we might have to normalize_nanoseconds before comparing durations
+    $_[0]->_normalize_nanoseconds if $_[0]->{nanoseconds};
+    map { $_ => $_[0]->{$_} } qw( months days seconds nanoseconds ) 
 }
 
 sub is_wrap_mode     { $_[0]->{eom_mode} eq 'wrap'   ? 1 : 0 }
@@ -109,7 +109,7 @@ sub inverse
 
     my %new = %$self;
 
-    foreach ( qw( months days seconds nano_seconds sign ) )
+    foreach ( qw( months days seconds nanoseconds sign ) )
     {
         $new{$_} *= -1;
     }
@@ -120,7 +120,7 @@ sub add_duration
 {
     my ( $self, $dur ) = @_;
 
-    foreach ( qw( months days seconds nano_seconds ) )
+    foreach ( qw( months days seconds nanoseconds ) )
     {
         $self->{$_} += $dur->{$_};
     }
@@ -168,7 +168,7 @@ sub _subtract_overload
 sub _multiply_overload {
     my ( $self, $times ) = @_;
     my $new = $self->clone;
-    foreach ( qw( months days seconds nano_seconds ) )  {
+    foreach ( qw( months days seconds nanoseconds ) )  {
         $new->{$_} *= $times;
     }
     return $new;
@@ -181,7 +181,7 @@ sub compare
     my %deltas1 = $dur1->deltas;
     my %deltas2 = $dur2->deltas;
 
-    foreach ( qw( months days seconds nano_seconds ) )
+    foreach ( qw( months days seconds nanoseconds ) )
     {
         if ( $deltas1{$_} < $deltas2{$_} )
         {
@@ -226,7 +226,7 @@ DateTime::Duration - Duration objects for date math
                                 hours   => 6,
                                 minutes => 15,
                                 seconds => 45, 
-                                nano_seconds => 12000 );
+                                nanoseconds => 12000 );
 
   # Human-readable accessors, always positive
   $d->years;
@@ -236,7 +236,7 @@ DateTime::Duration - Duration objects for date math
   $d->hours;
   $d->minutes;
   $d->seconds;
-  $d->nano_seconds;
+  $d->nanoseconds;
   $d->sign;
 
   if ( $d->is_positive ) { ... }
@@ -246,7 +246,7 @@ DateTime::Duration - Duration objects for date math
   $d->delta_months
   $d->delta_days
   $d->delta_seconds
-  $d->delta_nano_seconds
+  $d->delta_nanoseconds
 
   my %deltas = $d->deltas
 
@@ -277,7 +277,7 @@ DateTime::Duration has the following methods:
 =item * new( ... )
 
 This method takes the parameters "years", "months", "weeks", "days",
-"hours", "minutes", "seconds", "nano_seconds", and "end_of_month".  All of these
+"hours", "minutes", "seconds", "nanoseconds", and "end_of_month".  All of these
 except "end_of_month" are numbers.  If any of the numbers are
 negative, the entire duration is negative.
 
@@ -309,7 +309,7 @@ month to Feb 29, 2000 will result in Mar 31, 2000.
 Returns a new object with the same properties as the object on which
 this method was called.
 
-=item * years, months, weeks, days, hours, minutes, seconds, nano_seconds
+=item * years, months, weeks, days, hours, minutes, seconds, nanoseconds
 
 These methods return numbers indicating how many of the given unit the
 object representations.  These numbers are always positive.
@@ -322,7 +322,7 @@ given to the constructor.  For example:
   print $dur->years;  # prints 1
   print $dur->months; # prints 3
 
-=item * delta_months, delta_days, delta_seconds, delta_nano_seconds
+=item * delta_months, delta_days, delta_seconds, delta_nanoseconds
 
 These methods provide the same information as those above, but in a
 way suitable for doing date math.  The numbers returned may be
@@ -330,7 +330,7 @@ positive or negative.
 
 =item * deltas
 
-Returns a hash with the keys "months", "days", "seconds", and "nano_seconds",
+Returns a hash with the keys "months", "days", "seconds", and "nanoseconds",
 containing all the delta information for the object.
 
 =item * is_positive, is_negative

@@ -138,9 +138,9 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
 }
 
 {
-    my $dur1 = DateTime::Duration->new( months => 6, days => 10, seconds => 3, nano_seconds => 1200300400 );
+    my $dur1 = DateTime::Duration->new( months => 6, days => 10, seconds => 3, nanoseconds => 1200300400 );
 
-    is( $dur1->delta_seconds, 4, 'test nano_seconds overflow' );
-    is( $dur1->delta_nano_seconds, 200300400, 'test nano_seconds remainder' );
+    is( $dur1->delta_seconds, 4, 'test nanoseconds overflow' );
+    is( $dur1->delta_nanoseconds, 200300400, 'test nanoseconds remainder' );
 
 }
