@@ -33,3 +33,9 @@ Time::HiRes), but is micro small enough?
 to Exception::Class throwing.
 
 - make mjd method to return real mjd days/seconds and sub-seconds.
+
+- Offset should be specified as DateTime::TimeZone object (or
+something like that) as well as, or instead of, a string/number.
+
+- Implement DateTime::TimeZone (see
+http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/reefknot/Date-ICal-Timezone/)
