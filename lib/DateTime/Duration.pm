@@ -22,7 +22,8 @@ sub new
                            hours   => { type => SCALAR, default => 0 },
                            minutes => { type => SCALAR, default => 0 },
                            seconds => { type => SCALAR, default => 0 },
-                           end_of_month => { type => SCALAR, default => 'wrap' },
+                           end_of_month => { type => SCALAR, default => 'wrap',
+                                             regex => qr/^(?:wrap|limit|preserve)$/ },
                          } );
 
     my $self = bless { eom_mode => $p{end_of_month} }, $class;
