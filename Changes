@@ -1,3 +1,11 @@
+0.xx
+
+[ IMPROVEMENTS ]
+
+- DateTime.pm compare() method is now documented to work with any
+other calendar class that provides a utc_rd_values() method.
+
+
 0.1601  2003-08-07
 
 [ BUG FIXES ]
