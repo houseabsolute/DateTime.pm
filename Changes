@@ -1,11 +1,3 @@
-
-- added some support for leap seconds (more to come).
-  Implemented by Flavio Glock.
-  Depends on DateTime::LeapSecond.
-
-- DateTime::Duration objects store nano_second information. Implemented
-by Flavio Glock.
-
 0.10
 
 [IMPROVEMENTS]
@@ -14,6 +6,12 @@ by Flavio Glock.
 
 - DateTime::Duration objects now overload multiplication.  Implemented
 by Flavio Glock.
+
+- Added support for nanoseconds in DateTime.pm and DateTime::Duration.
+Implemented by Flavio Glock.
+
+- Added complete support for leap seconds (through use of
+DateTime::LeapSecond).  Most implemented by Flavio Glock.
 
 
 0.09     2003-04-05 (the "liberation through violence" release)
