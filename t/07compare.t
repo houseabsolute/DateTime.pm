@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 24;
+use Test::More tests => 26;
 
 use DateTime;
 
@@ -124,4 +124,29 @@ ok( ($infinity <=> $date1) == 1, 'Comparison overload $inf <=> $a');
     is( DateTime->compare( $date1, $date2 ), -1, 'Comparison with floating time (cmp)' );
     is( ($date1 <=> $date2), -1, 'Comparison with floating time (<=>)' );
     is( ($date1 cmp $date2), -1, 'Comparison with floating time (cmp)' );
+}
+
+{
+    package DT::Test;
+
+    sub new { shift; bless [@_] }
+
+    sub utc_rd_values { @{ $_[0] } }
+}
+
+{
+    my $dt = DateTime->new( year => 1950 );
+    my @values = $dt->utc_rd_values;
+
+    $values[2] += 50;
+
+    my $dt_test1 = DT::Test->new( @values );
+
+    ok( $dt < $dt_test1, 'comparison works across different classes' );
+
+    $values[0] -= 1;
+
+    my $dt_test2 = DT::Test->new( @values );
+
+    ok( $dt > $dt_test2, 'comparison works across different classes' );
 }
