@@ -1433,10 +1433,12 @@ objects based on the values provided by this object.
 
 Returns the current UTC Rata Die days and seconds purely as seconds.
 This is useful when you need a single number to represent a date.
+This number ignores any fractional seconds stored in the object.
 
 =item * local_rd_as_seconds
 
 Returns the current local Rata Die days and seconds purely as seconds.
+This number ignores any fractional seconds stored in the object.
 
 =item * strftime( $format, ... )
 
