@@ -86,7 +86,7 @@ sub write_makefile
                                      'DateTime::TimeZone' => 0.26,
                                      'Params::Validate' => 0.72,
                                      'Pod::Man'    => 1.14,
-                                     'Test::More'  => 0,
+                                     'Test::More'  => 0.34,
                                      'Time::Local' => 1.04,
                                    },
                  );
