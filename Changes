@@ -18,6 +18,10 @@ in the current century.  Ugh.
 
 - Fixed compilation on HPUX.  Patch from Dan Sully.
 
+- Fixed problem with use of finite() function on Windows.  Some tests
+still fail because apparently Windows thinks that (infinity -
+infinity) = 0 instead of NaN.
+
 - The last_day_of_month() method did not accept nanosecond or
 fractional_second parameters.
 
