@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 67;
+use Test::More tests => 71;
 
 use DateTime;
 
@@ -14,7 +14,7 @@ my $d = DateTime->new( year => 2001,
                      );
 
 is( $d->year, 2001, '->year' );
-is( $d->year_0, 2000, '->year_0' );
+is( $d->year_0, 2001, '->year_0' );
 is( $d->month, 7, '->month' );
 is( $d->month_0, 6, '->month_0' );
 is( $d->month_name, 'July', '->month' );
@@ -113,22 +113,22 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     my $dt0 = DateTime->new( year => 1, time_zone => 'UTC' );
 
     is( $dt0->year,   1, "Year 1 is year 1" );
-    is( $dt0->year_0, 0, "Year 1 is 0 in 0-index terms" );
+    is( $dt0->year_0, 1, "Year 1 is 0 in 0-index terms" );
 
     $dt0->subtract( years => 1 );
 
     is( $dt0->year,   -1, "Year -1 is year -1" );
-    is( $dt0->year_0, -1, "Year -1 is -1 in 0-index terms" );
+    is( $dt0->year_0,  0, "Year -1 is 0 in 0-index terms" );
 }
 
 {
     my $dt_neg = DateTime->new( year => -10, time_zone => 'UTC', );
     is( $dt_neg->year,   -10, "Year -10 is -10" );
-    is( $dt_neg->year_0, -10, "Year -10 is -10 with 0-index" );
+    is( $dt_neg->year_0,  -9, "Year -10 is -9 with 0-index" );
 
     my $dt1 = $dt_neg + DateTime::Duration->new( years => 10 );
     is( $dt1->year,   1, "year is 1 after adding ten years to year -10" );
-    is( $dt1->year_0, 0, "year_0 is 0 after adding ten years to year -10" );
+    is( $dt1->year_0, 1, "year_0 is 1 after adding ten years to year -10" );
 }
 
 {
@@ -161,4 +161,15 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
     is( $dt->day_of_year,   60, 'doy for 2000-02-29 should be 60' );
     is( $dt->day_of_year_0, 59, 'doy_0 for 2000-02-29 should be 59' );
+}
+
+{
+    my $dt = DateTime->new( year => -6, month => 2, day => 25,
+                            time_zone => 'UTC',
+                          );
+
+    is( $dt->ymd, '-0006-02-25', 'ymd is -0006-02-25' );
+    is( $dt->iso8601, '-0005-02-25T00:00:00', 'iso8601 is -0005-02-25T00:00:00' );
+    is( $dt->year,   -6, 'year is -6' );
+    is( $dt->year_0, -5, 'year_0 is -5' );
 }
