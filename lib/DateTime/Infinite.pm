@@ -106,7 +106,7 @@ C<is_infinite()> method returns true.
 
 =head1 AUTHOR
 
-Dave Rolsky <autarch@ur...>
+Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT
 
@@ -119,7 +119,7 @@ with this module.
 
 =head1 SEE ALSO
 
-datetime@pe... mailing list
+datetime@perl.org mailing list
 
 http://datetime.perl.org/
 
