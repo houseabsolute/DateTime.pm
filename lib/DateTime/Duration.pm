@@ -276,7 +276,10 @@ section of the DateTime.pm documentation for more details.
 
 =head1 METHODS
 
-DateTime::Duration has the following methods:
+Like C<DateTime> itself, C<DateTime::Duration> returns the object from
+mutator methods in order to make method chaining possible.
+
+C<DateTime::Duration> has the following methods:
 
 =over 4
 
