@@ -55,6 +55,16 @@ zero by -1 gives negative-zero, which breaks tests.
 
 Patch by Flavio Glock.
 
+- Comparing a DateTime::Infinite object to a regular datetime could
+cause a fatal error.  Reported by John Peacock.
+
+[ BACKWARDS INCOMPATIBILITIES ]
+
+- DateTime::Infinite objects no longer die is "set" methods are
+called.  Instead, these methods are now no-op methods that simply
+return the original object.  This makes these objects more usable when
+mixed with regular datetime objects.
+
 
 0.12     2003-05-05
 
