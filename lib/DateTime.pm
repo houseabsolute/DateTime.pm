@@ -2139,6 +2139,10 @@ A literal `%' character.
 Support for this module is provided via the datetime@perl.org email
 list.  See http://lists.perl.org/ for more details.
 
+Bug reports should be submitted to the mailing list or via
+rt.cpan.org.  If submitting a bug report via rt.cpan.org, please
+include your email address in the bug report.
+
 =head1 AUTHOR
 
 Dave Rolsky <autarch@urth.org>
