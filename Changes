@@ -1,3 +1,11 @@
+0.14
+
+[ IMPROVEMENTS ]
+
+- DateTime::Duration now returns the object from mutator methods, in
+order to make method chaining possible.  Suggested by Ben Bennett.
+
+
 0.13     2003-05-05
 
 [ IMPROVEMENTS ]
