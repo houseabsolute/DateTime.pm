@@ -11,11 +11,6 @@
 
 #include <math.h>
 
-/* fixes compilation problems on Win32 */
-#ifdef _finite
-#  define finite _finite
-#endif
-
 /* 2 ** 28 - 307 */
 #define RANGE_CUTOFF        (268435456 - 307)
 #define DAYS_PER_400_YEARS  146097
