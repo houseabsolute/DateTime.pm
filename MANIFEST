@@ -56,5 +56,8 @@ t/17set_return.t
 t/18today.t
 t/19leap_second.t
 t/20infinite.t
+t/21bad_params.t
+t/22from_doy.t
+t/23storable.t
 t/testlib.pl
 TODO
