@@ -478,6 +478,8 @@ sub utc_rd_values { @{ $_[0] }{ 'utc_rd_days', 'utc_rd_secs' } }
 sub utc_rd_as_seconds   { ( $_[0]->{utc_rd_days} * 86400 )   + $_[0]->{utc_rd_secs} }
 sub local_rd_as_seconds { ( $_[0]->{local_rd_days} * 86400 ) + $_[0]->{local_rd_secs} }
 
+use constant MAX_NANOSECONDS => 1000000000;  # 1E9 = almost 32 bits
+
 # RD 1 is JD 1,721,424.5 - a simple offset
 sub jd
 {
@@ -485,7 +487,9 @@ sub jd
 
     my $jd = $self->{utc_rd_days} + 1_721_424.5;
 
-    return $jd + ( $self->{utc_rd_secs} / 86400 );
+    return $jd + 
+        ( $self->{utc_rd_secs} / 86400 ) +
+        ( $self->{rd_nanosecs} / MAX_NANOSECONDS );
 }
 
 sub mjd { $_[0]->jd - 2_400_000.5 }
@@ -802,8 +806,6 @@ sub _compare
     return $dt1->nanosecond <=> $dt2->nanosecond;
 }
 
-
-use constant MAX_NANOSECONDS => 1000000000;  # 1E9 = almost 32 bits
 
 sub _normalize_nanoseconds {
     # seconds, nanoseconds 
