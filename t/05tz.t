@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 20;
+use Test::More tests => 24;
 
 use DateTime;
 
@@ -10,9 +10,11 @@ use DateTime;
                           );
     is( $dt->hour, 15, 'hour is 15' );
     is( $dt->offset, -18000, 'offset is -18000' );
+    is( $dt->is_dst, 1, 'is dst' );
 
     $dt->set_time_zone( 'America/New_York' );
     is( $dt->offset, -14400, 'offset is -14400' );
+    is( $dt->is_dst, 1, 'is dst' );
     is( $dt->hour, 16,
         'America/New_York is exactly one hour later than America/Chicago - hour' );
     is( $dt->minute, 0,
@@ -27,10 +29,12 @@ use DateTime;
                             time_zone => 'America/Chicago',
                           );
     is( $dt->offset, -18000, 'offset should be -18000' );
+    is( $dt->is_dst, 1, 'is dst' );
 
     $dt->add( seconds => 1 );
 
     is( $dt->offset, -21600, 'offset should be -21600' );
+    is( $dt->is_dst, 0, 'is not dst' );
     is( $dt->hour, 1, "crossing DST bounday changes local hour -1" );
 }
 
