@@ -7,9 +7,14 @@ use vars qw($VERSION);
 $VERSION = '0.01';
 
 use Carp;
+use Class::Data::Inheritable;
 use Date::Leapyear ();
 use DateTime::Duration;
 use Time::Local ();
+
+use base 'Class::Data::Inheritable';
+
+use Exception::Class ( 'DateTime::Exception' );
 
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
@@ -48,16 +53,16 @@ my $LocalOffset = _calc_local_offset();
         return $DefaultLanguageClass;
     }
 }
-__PACKAGE__->DefaultLanguageClass('English')
-    unless __PACKAGE__->DefaultLanguageClass;
+__PACKAGE__->DefaultLanguageClass('English');
 
-sub import {
-    my $class = shift;
-    my %args = @_;
+__PACKAGE__->mk_classdata('ErrorHandler');
+__PACKAGE__->ErrorHandler( sub { DateTime::Exception->throw( $_[0] ) } );
 
-    $class->DefaultLanguageClass( $args{language} )
-        if $args{language};
-}
+__PACKAGE__->mk_classdata('RaiseError');
+__PACKAGE__->RaiseError(0);
+
+__PACKAGE__->mk_classdata('PrintError');
+__PACKAGE__->PrintError(0);
 
 sub new {
     my $class = shift;
@@ -112,11 +117,12 @@ sub new {
         # names, only offsets, I think.  --srl
 
     } # Time specified as components#{{{
-    elsif ( defined( $args{day} ) ) {
+    elsif (%args) {
 
         # Choke if missing arguments
         foreach my $attrib(qw(day month year )) {
-            warn "Attribute $attrib required" unless defined $args{$attrib};
+            return $class->_error( "Attribute $attrib required" )
+                unless defined $args{$attrib};
         }
         foreach my $attrib(qw( hour min sec )) {
             $args{$attrib} = 0 unless defined $args{$attrib};
@@ -534,6 +540,7 @@ sub subtract {
 
     # Otherwise, we should call them nasty names and return undef
     } else {
+        # this must go - dave
         warn "Moron";
         return;
     }
@@ -937,6 +944,22 @@ sub _calc_local_offset {
 
     my $secdiff = $gm - $local;
     return _offset_from_seconds($secdiff);
+}
+
+sub _error {
+    my $self = shift;
+    my $error = shift;
+
+    warn $error if $self->PrintError;
+
+    my $h = $self->ErrorHandler;
+    if ( defined $h && $h ) {
+        return $h->($error);
+    }
+
+    die "$error\n" if $self->RaiseError;
+
+    return;
 }
 
 1;
