@@ -97,9 +97,9 @@ sub _normalize_nanoseconds
     if ( $self->{nanoseconds} < 0 )
     {
         my $overflow = int( $self->{nanoseconds} / MAX_NANOSECONDS );
-        # try to make nanoseconds positive, unless that would make
-        # seconds go below 0
-        $overflow++ if $overflow < $self->{seconds} || $self->{seconds} < 0;
+        # try to make nanoseconds positive if seconds are positive,
+        # unless that would make seconds go below 0
+        $overflow++ if $overflow < $self->{seconds};
         $self->{nanoseconds} += $overflow * MAX_NANOSECONDS;
         $self->{seconds} -= $overflow;
     }
