@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 17;
+use Test::More tests => 19;
 
 use DateTime;
 
@@ -59,4 +59,14 @@ use DateTime;
                           );
 
     is( $dt->epoch, 3600, 'epoch is 3600' );
+}
+
+{
+
+    my $dt = DateTime->from_epoch( epoch => 0,
+                                   time_zone => '-0100',
+                                 );
+
+    is( $dt->offset, -3600, 'offset should be -3600' );
+    is( $dt->epoch, 0, 'epoch is 0' );
 }
