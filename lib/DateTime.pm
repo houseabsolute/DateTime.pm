@@ -1281,12 +1281,14 @@ sub truncate
 
     if ( $p{to} eq 'week' )
     {
-	@new{ 'year', 'month' } = ( $self->year, $self->month );
+        my $day_diff = $self->day_of_week - 1;
 
-	$new{day} =
-	    ( $self->day -
-	      ( $self->day_of_week - 1 )
-	   );
+        if ($day_diff)
+        {
+            $self->add( days => -1 * $day_diff );
+        }
+
+        return $self->truncate( to => 'day' );
     }
     else
     {
