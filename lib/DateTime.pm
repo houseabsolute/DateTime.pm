@@ -7,7 +7,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.21';
+    $VERSION = '0.2101';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -1179,11 +1179,20 @@ sub add_duration
         }
     }
 
+    #
+    # In each case below, we fudge the value of utc_year to something
+    # that is _at least_ the correct year, but could be more.  This is
+    # done for the benefit of DateTime::TimeZone, which uses this
+    # value to determine how far into the future it should go when
+    # generating changes for a time zone.  As long as this value is at
+    # least as big as the actual value of the datetime, we will be
+    # able to find the correct offset from UTC.
+    #
+
     if ( $deltas{days} || $deltas{months} )
     {
-        # We fudge the year so that the calculations being done have
-        # something to work with.
         $self->{utc_year} += int( $deltas{months} / 12 ) + 1;
+        $self->{utc_year} += int( $deltas{days} / 365 ) + 1;
 
         $self->_calc_utc_rd;
         $self->_calc_local_rd;
@@ -1191,6 +1200,8 @@ sub add_duration
 
     if ( $deltas{minutes} )
     {
+        $self->{utc_year} += int( $deltas{minutes} / ( 365 * 1440 ) ) + 1;
+
         $self->{utc_rd_secs} += $deltas{minutes} * 60;
 
         # This intentionally ignores leap seconds
@@ -1200,8 +1211,12 @@ sub add_duration
     # We add seconds to the UTC time because if someone adds 24 hours,
     # we want this to be _different_ from adding 1 day when crossing
     # DST boundaries.
-    if ( $deltas{seconds} || $deltas{nanoseconds})
+    if ( $deltas{seconds} || $deltas{nanoseconds} )
     {
+        $self->{utc_year} += int( $deltas{seconds} / ( 365 * 86400 ) ) + 1;
+        $self->{utc_year} +=
+            int( $deltas{nanoseconds} / ( 365 * 86400 * MAX_NANOSECONDS ) ) + 1;
+
         $self->{utc_rd_secs} += $deltas{seconds};
 
         if ( $deltas{nanoseconds} )

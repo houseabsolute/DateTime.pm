@@ -1,3 +1,13 @@
+0.2101  2004-06-10
+
+- There was a bug in the date math code that occurred if you tried to
+add enough days, minutes or seconds to generate a datetime 10 years in
+the future (or so).  If the the DateTime object had a a time zone with
+recurring DST changes, then the date math operation would cause a
+fatal error "Invalid local time for date in time zone ...".  Reported
+by Dave Faraldo.
+
+
 0.21  2004-03-28 (The "Another YAPC::Taipei release party release" release)
 
 [ *** BACKWARDS INCOMPATIBILITIES *** ]
