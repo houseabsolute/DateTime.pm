@@ -66,7 +66,7 @@ sub new {
                            language  => { type => SCALAR | OBJECT,
                                           default => $class->DefaultLanguage },
                            time_zone => { type => SCALAR | OBJECT,
-                                          default => 'local' },
+                                          default => 'floating' },
                          }
                        );
 
@@ -192,7 +192,6 @@ sub from_epoch {
     $p{year} += 1900;
     $p{month}++;
 
-    # should tz be floating in some cases
     return $class->new( %args, %p, time_zone => 'UTC' );
 }
 
@@ -897,6 +896,8 @@ C<< DateTime::TimeZone->new >> method as its "name" parameter.  This
 string may be an Olson DB time zone name ("America/Chicago"), an
 offset string ("+0630"), or the words "floating" or "local".  See the
 C<DateTime::TimeZone> documentation for more details.
+
+The default time zone is "floating".
 
 =head3 Ambiguous Local Times
 
