@@ -841,10 +841,10 @@ sub subtract_datetime
     my $dt = shift;
 
     # We only want a negative duration if $dt > $self.
-    my ( $bigger, $smaller, $sign ) =
+    my ( $bigger, $smaller, $negative ) =
         ( $self >= $dt ?
-          ( $self, $dt, 1 ) :
-          ( $dt, $self, -1 )
+          ( $self, $dt, 0 ) :
+          ( $dt, $self, 1 )
         );
 
     my $is_floating = $self->time_zone->is_floating &&
@@ -858,7 +858,10 @@ sub subtract_datetime
               $is_floating,
             );
 
-    $_ *= $sign for $days, $seconds, $nanoseconds;
+    if ($negative)
+    {
+        $_ *= -1 for $days, $seconds, $nanoseconds;
+    }
 
     return
         DateTime::Duration->new
