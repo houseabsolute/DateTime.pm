@@ -6,6 +6,7 @@ use DateTime;
 
 my $pos = DateTime::Infinite::Positive->new;
 my $neg = DateTime::Infinite::Negative->new;
+my $nan = $pos->{utc_rd_days} - $pos->{utc_rd_days};
 
 {
     # that's a long time ago!
@@ -43,6 +44,6 @@ my $neg = DateTime::Infinite::Negative->new;
     my %deltas = $dur->deltas;
     foreach ( qw( days seconds nanoseconds ) )
     {
-        is( $deltas{$_}, 'nan', "infinity - infinity = nan ($_)" );
+        is( $deltas{$_}, $nan, "infinity - infinity = nan ($_)" );
     }
 }
