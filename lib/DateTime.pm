@@ -524,7 +524,7 @@ sub compare {
 
 Returns the day of the year at the end of a month.
 
-    @MonthLengths  = months($self->year);
+    @MonthLengths  = month_lengths($self->year);
     $end_march     = $MonthsLengths[3];        # Days at the end of march
     $start_nov     = $MonthsLengths[ 11 - 1 ]; # Days at the start of nov
 
@@ -543,8 +543,17 @@ BEGIN {
     }
 }
 
-sub months {
+sub month_lengths {
     return Date::Leapyear::isleap(shift) ? @LeapMonthLengths : @MonthLengths;
+}
+
+sub last_day_of_month {
+    shift;
+    my %p = validate( @_, { year  => { type => SCALAR },
+                            month => { type => SCALAR },
+                          } );
+
+    return (month_lengths( $p{year} ))[ $p{month} - 1 ];
 }
 
 =begin internal
@@ -678,7 +687,7 @@ sub month_abbr {
 
 sub day_of_year {
     my $self = shift;
-    my @m = months($self->year);
+    my @m = month_lengths($self->year);
     return $m[$self->month_0] + $self->day;
 }
 
@@ -697,7 +706,7 @@ sub day_of_month_0 { $_[0]->day_of_month - 1 }
 
 sub day_of_week {
     my $self = shift;
-    return $self->{rd_days} % 7 + 1;
+    return ($self->{rd_days} + 6) % 7 + 1;
 }
 *wday = \&day_of_week;
 *dow  = \&day_of_week;
