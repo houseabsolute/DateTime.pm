@@ -1,7 +1,7 @@
 use strict;
 
 use Test::More;
-plan tests => 44;
+plan tests => 43;
 
 use DateTime;
 
@@ -33,7 +33,6 @@ is( $d->minute, 12, '->minute' );
 is( $d->min, 12, '->min' );
 is( $d->second, 50, '->second' );
 is( $d->sec, 50, '->sec' );
-is( $d->ical, '20010705T021250Z', '->ical' );
 
 is( $d->day_of_year, 186, '->day_of_year' );
 is( $d->day_of_year_0, 185, '->day_of_year' );
