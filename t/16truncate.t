@@ -15,7 +15,7 @@ my %vals =
 
 {
     my $dt = DateTime->new(%vals);
-    $dt->truncate( to => 'second' );
+    $dt->truncate( to => 'minute' );
     foreach my $f ( qw( year month day hour minute ) )
     {
         is( $dt->$f(), $vals{$f}, "$f should be $vals{$f}" );
@@ -29,7 +29,7 @@ my %vals =
 
 {
     my $dt = DateTime->new(%vals);
-    $dt->truncate( to => 'minute' );
+    $dt->truncate( to => 'hour' );
     foreach my $f ( qw( year month day hour ) )
     {
         is( $dt->$f(), $vals{$f}, "$f should be $vals{$f}" );
@@ -43,7 +43,7 @@ my %vals =
 
 {
     my $dt = DateTime->new(%vals);
-    $dt->truncate( to => 'hour' );
+    $dt->truncate( to => 'day' );
     foreach my $f ( qw( year month day ) )
     {
         is( $dt->$f(), $vals{$f}, "$f should be $vals{$f}" );
@@ -57,7 +57,7 @@ my %vals =
 
 {
     my $dt = DateTime->new(%vals);
-    $dt->truncate( to => 'day' );
+    $dt->truncate( to => 'month' );
     foreach my $f ( qw( year month ) )
     {
         is( $dt->$f(), $vals{$f}, "$f should be $vals{$f}" );
@@ -76,7 +76,7 @@ my %vals =
 
 {
     my $dt = DateTime->new(%vals);
-    $dt->truncate( to => 'month' );
+    $dt->truncate( to => 'year' );
     foreach my $f ( qw( year ) )
     {
         is( $dt->$f(), $vals{$f}, "$f should be $vals{$f}" );
