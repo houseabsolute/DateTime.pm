@@ -84,7 +84,7 @@ use DateTime;
     is( $epochtest->min, 30, "minute" );
 
     $epochtest->add( hours => 2 );
-    $expected += 2*60*60;
+    $expected += 2 * 60 * 60;
 
     is( $epochtest->hour, 3, "adjusted hour" );
     is( $epochtest->epoch, $expected,
