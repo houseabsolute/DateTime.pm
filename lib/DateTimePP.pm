@@ -149,7 +149,7 @@ sub _seconds_as_components
 
     my $second = $secs - ( $minute * 60 );
 
-    if ( $utc_secs >= 86400 )
+    if ( $utc_secs && $utc_secs >= 86400 )
     {
         # there is no such thing as +3 or more leap seconds!
         die "Invalid UTC RD seconds value: $utc_secs"
