@@ -1966,8 +1966,8 @@ currently in Daylight Saving Time or not.
 
 =item * time_zone_long_name
 
-This is a shortcut for C<< $dt->tz->name >>.  It's provided so that
-one can use "%{time_zone_long_name}" inside as a strftime format
+This is a shortcut for C<< $dt->time_zone->name >>.  It's provided so
+that one can use "%{time_zone_long_name}" inside as a strftime format
 specifier.
 
 =item * time_zone_short_name
