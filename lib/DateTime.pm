@@ -485,6 +485,10 @@ sub ce_year { $_[0]->{local_c}{year} <= 0 ?
               $_[0]->{local_c}{year} - 1 :
               $_[0]->{local_c}{year} }
 
+sub era { $_[0]->ce_year > 0 ? 'CE' : 'BCE' }
+
+sub year_with_era { (abs $_[0]->ce_year) . $_[0]->era }
+
 sub month   { $_[0]->{local_c}{month} }
 *mon = \&month;
 
@@ -498,6 +502,8 @@ sub month_abbr { $_[0]->{language}->month_abbreviation( $_[0] ) }
 sub day_of_month { $_[0]->{local_c}{day} }
 *day  = \&day_of_month;
 *mday = \&day_of_month;
+
+sub weekday_of_month { int( ( $_[0]->day - 1 ) / 7 ) + 1 }
 
 sub quarter {$_[0]->{local_c}{quarter} };
 
@@ -564,6 +570,10 @@ sub dmy
 }
 
 sub hour   { $_[0]->{local_c}{hour} }
+sub hour_1 { $_[0]->{local_c}{hour} + 1 }
+
+sub hour_12   { my $h = $_[0]->hour % 12; return $h ? $h : 12 }
+sub hour_12_0 { $_[0]->hour % 12 }
 
 sub minute { $_[0]->{local_c}{minute} }
 *min = \&minute;
@@ -657,6 +667,16 @@ sub _weeks_in_year
 sub week_year   { ($_[0]->week)[0] }
 sub week_number { ($_[0]->week)[1] }
 
+# definition for week of month is taken from ICU and ISO
+sub week_of_month
+{
+    my $self = shift;
+
+    my $first_of_week = $self->clone->set( day => 1 );
+
+    return ( ( $self->week_number - $first_of_week->week_number ) + 1 );
+}
+
 sub time_zone { $_[0]->{tz} }
 
 sub offset { $_[0]->{tz}->offset_for_datetime( $_[0] ) }
@@ -707,10 +727,10 @@ my %formats =
       'g' => sub { substr( $_[0]->week_year, -2 ) },
       'G' => sub { $_[0]->week_year },
       'H' => sub { sprintf( '%02d', $_[0]->hour ) },
-      'I' => sub { sprintf( '%02d', $_[0]->_hour_12 ) },
+      'I' => sub { sprintf( '%02d', $_[0]->hour_12 ) },
       'j' => sub { $_[0]->day_of_year },
       'k' => sub { sprintf( '%2d', $_[0]->hour ) },
-      'l' => sub { sprintf( '%2d', $_[0]->_hour_12 ) },
+      'l' => sub { sprintf( '%2d', $_[0]->hour_12 ) },
       'm' => sub { sprintf( '%02d', $_[0]->month ) },
       'M' => sub { sprintf( '%02d', $_[0]->minute ) },
       'n' => sub { "\n" }, # should this be OS-sensitive?
@@ -748,8 +768,6 @@ my %formats =
 
 $formats{h} = $formats{b};
 
-sub _hour_12 { my $h = $_[0]->hour % 12; return $h ? $h : 12 }
-
 sub strftime
 {
     my $self = shift;
@@ -759,14 +777,20 @@ sub strftime
     my @r;
     foreach my $f (@formats)
     {
-        # regex from Date::Format - thanks Graham!
         $f =~ s/
+	        %{(\w+)}
+	       /
+                $self->$1() if $self->can($1);
+               /sgex;
+
+        # regex from Date::Format - thanks Graham!
+       $f =~ s/
 	        %([%a-zA-Z])
 	       /
                 $formats{$1} ? $formats{$1}->($self) : $1
                /sgex;
 
-        #  %3N 
+        # %3N
         $f =~ s/
                 %(\d+)N
                /
@@ -1539,6 +1563,16 @@ Returns the year.
 Returns the year according to the BCE/CE numbering system.  The year
 before year 1 in this system is year -1, aka "1 BCE".
 
+=item * era
+
+Returns a string, either "BCE" or "CE", according to the year.
+
+=item * year_with_era
+
+Returns a string containing the year immediately followed by its era.
+The year is the absolute value of C<ce_year()>, so that year 1 is
+"1CE" and year 0 is "1BCE".
+
 =item * month
 
 Returns the month of the year, from 1..12.
@@ -1576,13 +1610,19 @@ L<LANGUAGES|/LANGUAGES> section for more details.
 
 Returns the day of the year.
 
+=item * quarter
+
+Returns the quarter of the year, from 1..4.
+
 =item * day_of_quarter, doq
 
 Returns the day of the quarter.
 
-=item * quarter
+=item * weekday_of_month
 
-Returns the quarter of the year, from 1..4.
+Returns a number from 1..5 indicating which week day of the month this
+is.  For example, June 9, 2003 is the second Monday of the month, and
+so this method returns 2 for that day.
 
 =item * ymd( $optional_separator ), date
 
@@ -1600,6 +1640,18 @@ overridden by passing a value to the method.
 =item * hour
 
 Returns the hour of the day, from 0..23.
+
+=item * hour_1
+
+Returns the hour of the day, from 1..24.
+
+=item * hour_12
+
+Returns the hour of the day, from 1..12.
+
+=item * hour_12_0
+
+Returns the hour of the day, from 0..11.
 
 =item * minute, min
 
@@ -1676,6 +1728,10 @@ Returns the year of the week.
 =item * week_number
 
 Returns the week of the year, from 1..53.
+
+=item * week_of_month
+
+XXX ???
 
 =item * jd, mjd
 
@@ -2197,6 +2253,11 @@ The time zone or name or abbreviation.
 =item * %%
 
 A literal `%' character.
+
+=item * %{method}
+
+Any method name may be specified using the format C<%{method}> name
+where "method" is a valid C<DateTime.pm> object method.
 
 =back
 
