@@ -156,6 +156,8 @@ sub _calc_local_rd {
 sub _calc_components {
     my $self = shift;
 
+    delete $self->{c};
+
     @{ $self->{c} }{ qw( year month day ) } =
         $self->rd2greg( $self->{local_rd_days} );
 
@@ -168,6 +170,13 @@ sub _calc_components {
     $self->{c}{minute} = int( $time / 60 );
 
     $self->{c}{second} = $time - ( $self->{c}{minute} * 60 );
+
+    $self->{c}{day_of_week} = ( ( $self->{local_rd_days} + 6) % 7 ) + 1;
+
+    {
+        my @m = end_of_month_day_of_year( $self->{c}{year} );
+        $self->{c}{day_of_year} = $m[ $self->{c}{month} - 1 ] + $self->{c}{day};
+    }
 }
 
 sub from_epoch {
@@ -395,14 +404,11 @@ sub day_of_month_0 { $_[0]->{c}{day} - 1 }
 *day_0  = \&day_of_month_0;
 *mday_0 = \&day_of_month_0;
 
-sub day_of_week {
-    my $self = shift;
-    return ($self->{local_rd_days} + 6) % 7 + 1;
-}
+sub day_of_week { $_[0]->{c}{day_of_week} }
 *wday = \&day_of_week;
 *dow  = \&day_of_week;
 
-sub day_of_week_0 { $_[0]->day_of_week - 1 }
+sub day_of_week_0 { $_[0]->{c}{day_of_week} - 1 }
 *wday_0 = \&day_of_week_0;
 *dow_0  = \&day_of_week_0;
 
@@ -416,14 +422,11 @@ sub day_abbr {
     return $self->{language}->day_abbreviation( $self->day_of_week_0 );
 }
 
-sub day_of_year {
-    my $self = shift;
-    my @m = end_of_month_day_of_year($self->year);
-    return $m[$self->month_0] + $self->day;
-}
+sub day_of_year { $_[0]->{c}{day_of_year} }
 *doy = \&day_of_year;
 
-sub day_of_year_0 { $_[0]->day_of_year - 1 }
+sub day_of_year_0 { $_[0]->{c}{day_of_year} - 1 }
+*doy_0 = \&day_of_year_0;
 
 sub ymd {
     my ( $self, $sep ) = @_;
@@ -472,19 +475,24 @@ sub iso8601 {
 
 sub is_leap_year { Date::Leapyear::isleap( $_[0]->year ) ? 1 : 0 }
 
-sub week {
-     my $self = shift;
+sub week
+{
+    my $self = shift;
 
-     my $mid_week = $self->clone;
-     # mid week if Sunday is the first day of the week
-     $mid_week->add( days => 4 - ( ( $self->{local_rd_days} % 7 ) + 1 ) );
-     my $week_year = $mid_week->year;
+    unless ( defined $self->{c}{week_year} )
+    {
+        my $mid_week = $self->clone;
+        # Thursday if Sunday is the first day of the week
+        $mid_week->add( days => 4 - ( ( $self->{local_rd_days} % 7 ) + 1 ) );
+        $self->{c}{week_year} = $mid_week->year;
 
-     my $jan_four = $self->greg2rd( $week_year, 1, 4 );
-     my $first_week = $jan_four - ( $jan_four % 7 );
-     my $week_number = int( ($self->{local_rd_days} - $first_week) / 7 ) + 1;
+        my $jan_four = $self->greg2rd( $self->{c}{week_year}, 1, 4 );
+        my $first_week = $jan_four - ( $jan_four % 7 );
+        $self->{c}{week_number} =
+            int( ( $self->{local_rd_days} - $first_week ) / 7 ) + 1;
+    }
 
-     return ( $week_year, $week_number );
+    return @{ $self->{c} }{ 'week_year', 'week_number' }
 }
 
 sub week_year   { ($_[0]->week)[0] }
