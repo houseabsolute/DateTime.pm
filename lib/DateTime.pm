@@ -81,53 +81,53 @@ __PACKAGE__->DefaultLanguage('English');
 sub new
 {
     my $class = shift;
-    my %args = validate( @_,
-                         { year   => { type => SCALAR },
-                           month  => { type => SCALAR, default => 1 },
-                           day    => { type => SCALAR, default => 1 },
-                           hour   => { type => SCALAR, default => 0 },
-                           minute => { type => SCALAR, default => 0 },
-                           second => { type => SCALAR, default => 0 },
-                           nanosecond => { type => SCALAR, default => 0 },
-                           fractional_second =>
-                           { type => SCALAR, default => undef },
-                           language  => { type => SCALAR | OBJECT,
-                                          default => $class->DefaultLanguage },
-                           time_zone => { type => SCALAR | OBJECT,
-                                          default => 'floating' },
-                         }
-                       );
+    my %p = validate( @_,
+                      { year   => { type => SCALAR },
+                        month  => { type => SCALAR, default => 1 },
+                        day    => { type => SCALAR, default => 1 },
+                        hour   => { type => SCALAR, default => 0 },
+                        minute => { type => SCALAR, default => 0 },
+                        second => { type => SCALAR, default => 0 },
+                        nanosecond => { type => SCALAR, default => 0 },
+                        fractional_second =>
+                        { type => SCALAR, default => undef },
+                        language  => { type => SCALAR | OBJECT,
+                                       default => $class->DefaultLanguage },
+                        time_zone => { type => SCALAR | OBJECT,
+                                       default => 'floating' },
+                      }
+                    );
 
     my $self = {};
 
-    if ( ref $args{language} )
+    if ( ref $p{language} )
     {
-        $self->{language} = $args{language};
+        $self->{language} = $p{language};
     }
     else
     {
-        $self->{language} = DateTime::Language->new( language => $args{language} );
+        $self->{language} = DateTime::Language->new( language => $p{language} );
     }
 
     $self->{tz} =
-        ( ref $args{time_zone} ?
-          $args{time_zone} :
-          DateTime::TimeZone->new( name => $args{time_zone} )
+        ( ref $p{time_zone} ?
+          $p{time_zone} :
+          DateTime::TimeZone->new( name => $p{time_zone} )
         );
 
     $self->{local_rd_days} =
-        $class->_ymd2rd( @args{ qw( year month day ) } );
+        $class->_ymd2rd( @p{ qw( year month day ) } );
 
     $self->{local_rd_secs} =
-        $class->_time_as_seconds( @args{ qw( hour minute second ) } );
+        $class->_time_as_seconds( @p{ qw( hour minute second ) } );
 
-    $self->{rd_nanosecs} = $args{nanosecond};
+    $self->{rd_nanosecs} = $p{nanosecond};
 
-    if ( defined $args{fractional_second} )
+    if ( defined $p{fractional_second} )
     {
-        my $int = int( $args{fractional_second} );
+        my $int = int( $p{fractional_second} );
         $self->{local_rd_secs} += $int;
-        $self->{rd_nanosecs} += ( $args{fractional_second} - $int ) * MAX_NANOSECONDS;
+        $self->{rd_nanosecs} += ( $p{fractional_second} - $int ) * MAX_NANOSECONDS;
     }
 
     _normalize_nanoseconds( $self->{local_rd_secs}, $self->{rd_nanosecs} );
@@ -244,7 +244,7 @@ sub from_epoch
     $args{year} += 1900;
     $args{month}++;
 
-    my $self = $class->new( %args, %p, time_zone => 'UTC' );
+    my $self = $class->new( %p, %args, time_zone => 'UTC' );
 
     $self->set_time_zone( $p{time_zone} ) if exists $p{time_zone};
 
@@ -259,21 +259,21 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
 sub from_object
 {
     my $class = shift;
-    my %args = validate( @_,
-                         { object => { type => OBJECT,
-                                       can => 'utc_rd_values',
-                                     },
-                           language  => { type => SCALAR | OBJECT, optional => 1 },
-                         },
-                       );
+    my %p = validate( @_,
+                      { object => { type => OBJECT,
+                                    can => 'utc_rd_values',
+                                  },
+                        language  => { type => SCALAR | OBJECT, optional => 1 },
+                      },
+                    );
 
-    my $object = delete $args{object};
+    my $object = delete $p{object};
 
     my ( $rd_days, $rd_secs ) = $object->utc_rd_values;
 
-    my %p;
-    @p{ qw( year month day ) } = $class->_rd2ymd($rd_days);
-    @p{ qw( hour minute second ) } = $class->_seconds_as_components($rd_secs);
+    my %args;
+    @args{ qw( year month day ) } = $class->_rd2ymd($rd_days);
+    @args{ qw( hour minute second ) } = $class->_seconds_as_components($rd_secs);
 
     my $new = $class->new( %p, %args, time_zone => 'UTC' );
 
