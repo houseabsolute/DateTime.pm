@@ -409,9 +409,7 @@ sub local_rd_as_seconds { ( $_[0]->{local_rd_days} * 86400 ) + $_[0]->{local_rd_
 sub jd {
     my $self = shift;
 
-    my $jd = $self->{utc_rd_days} + 1_721_424;
-    $jd = ($jd + 1) % 2_914_695 - 1;
-    $jd += .5;
+    my $jd = $self->{utc_rd_days} + 1_721_424.5
 
     return $jd + ( $self->{utc_rd_secs} / 86400 );
 }
