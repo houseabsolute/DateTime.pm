@@ -2277,6 +2277,10 @@ The abbreviated month name.
 
 The full month name.
 
+=item * %c
+
+The default datetime format for the object's locale.
+
 =item * %C
 
 The century number (year/100) as a 2-digit integer.
@@ -2420,6 +2424,14 @@ also %u.
 
 The week number of the current year as a decimal number, range 00 to
 53, starting with the first Monday as the first day of week 01.
+
+=item * %x
+
+The default date format for the object's locale.
+
+=item * %X
+
+The default time format for the object's locale.
 
 =item * %y
 
