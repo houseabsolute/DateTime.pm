@@ -647,8 +647,8 @@ use constant INFINITY     =>       100 ** 100 ** 100 ;
 use constant NEG_INFINITY => -1 * (100 ** 100 ** 100);
 
 sub _compare_overload {
-    # note: $_[1]->compare( $_[0] ) is an error 
-    #    when $_[1] is not a DateTime (such as the INFINITY value)
+    # note: $_[1]->compare( $_[0] ) is an error when $_[1] is not a
+    # DateTime (such as the INFINITY value)
     return $_[2] ? - $_[0]->compare( $_[1] ) : $_[0]->compare( $_[1] );
 }
 
@@ -821,30 +821,32 @@ DateTime - Reference implementation for Perl DateTime objects
 
 =head1 DESCRIPTION
 
-DateTime is the reference implementation for the base DateTime object
-API.  For details on the Perl DateTime Suite project please see
-L<http://perl-date-time.sf.net>.
+DateTime is a class for the representation of date/time combinations,
+and is part of the Perl DateTime project.  For details on this project
+please see L<http://perl-date-time.sf.net/>.
 
 It represents the Gregorian calendar, extended backwards in time
-before its creation (in 1582).  This is sometimes know as the
-"proleptic Gregorian calendar".  In this calendar, its epoch (or
-beginning), is the first day of year 1, which corresponds to the date
-which was (incorrectly) believed to be the birth of Jesus.
+before its creation (in 1582).  This is sometimes known as the
+"proleptic Gregorian calendar".  In this calendar, the first day of
+the calendar (the epoch), is the first day of year 1, which
+corresponds to the date which was (incorrectly) believed to be the
+birth of Jesus Christ.
 
 The calendar represented does have a year 0, and in that way differs
 from how dates are often written using "BCE/CE" or "BC/AD".
 
 =head1 LANGUAGES
 
-Some methods are localizable by setting a language for a DateTime
-object.  There is also a C<DefaultLanguage()> class method which may
-be used to set the default language for all DateTime objects created.
+Some methods are localizable by setting a language when constructing a
+DateTime object.  There is also a C<DefaultLanguage()> class method
+which may be used to set the default language for all DateTime objects
+created.
 
 If there is neither a class default or language constructor parameter,
 then the "default default" language is English.
 
 Additional language subclasses are welcome.  See the Perl DateTime
-Suite project page at http://perl-date-time.sf.net/ for more details.
+project page at http://perl-date-time.sf.net/ for more details.
 
 =head1 ERROR HANDLING
 
@@ -863,7 +865,7 @@ All constructors can die when invalid parameters are given.
 
 =item * new( ... )
 
-This class method accepts parameters for each date and time component,
+This class method accepts parameters for each date and time component:
 "year", "month", "day", "hour", "minute", "second".  Additionally, it
 accepts "language" and "time_zone" parameters.
 
@@ -887,8 +889,9 @@ All of the parameters are optional except for "year".  The "month" and
 "day" parameters both default to 1, while the "hour", "minute", and
 "second" parameters all default to 0.
 
-The language parameter should be a strict matching one of the valid
-languages L<previously listed|/LANGUAGES>.
+The language parameter should be a string matching one of the valid
+languages.  See the L<DateTime::Language|DateTime::Language>
+documentation for details.
 
 The time_zone parameter can be either a scalar or a
 C<DateTime::TimeZone> object.  A string will simply be passed to the
@@ -903,8 +906,8 @@ The default time zone is "floating".
 
 Because of Daylight Saving Time, it is possible to specify a local
 time that is ambiguous.  For example, in the US in 2003, the
-transition from to saving to standard time will occur on October 26,
-at 02:00:00 local time.  The local clock changes from 01:59:59 (saving
+transition from to saving to standard time occurs on October 26, at
+02:00:00 local time.  The local clock changes from 01:59:59 (saving
 time) to 01:00:00 (standard time).  This means that the hour from
 01:00:00 through 01:59:59 actually occurs twice, though the UTC time
 continues to move forward.
@@ -979,16 +982,19 @@ This object method returns a replica of the given object.
 The DateTime.pm module follows a simple consistent logic for
 determining whether or not a given number is 0-based or 1-based.
 
-All I<date>-related numbers such as year, month, day of
-month/week/year, are 1-based.  Any method that is one based also has
-an equivalent 0-based method ending in "_0".  So for example, this
-class provides both C<day_of_week()> and C<day_of_week_0()> methods.
+Month, day of month, day of week, and day of year are 1-based.  Any
+method that is 1-based also has an equivalent 0-based method ending in
+"_0".  So for example, this class provides both C<day_of_week()> and
+C<day_of_week_0()> methods.
 
 The C<day_of_week_0> method still treats Monday as the first day of
 the week.
 
 All I<time>-related numbers such as hour, minute, and second are
 0-based.
+
+Years are neither, as they can be both positive or negative, unlike
+any other datetime component.  There I<is> a year 0.
 
 =head2 Methods
 
@@ -999,12 +1005,12 @@ about an object.
 
 =item * year
 
-Returns the year.  The year before year 1 is year 0.
+Returns the year.
 
 =item * ce_year
 
-Returns the year according to the BCE/CE system.  The year before year
-1 is year -1, aka "1 BCE".
+Returns the year according to the BCE/CE numbering system.  The year
+before year 1 in this system is year -1, aka "1 BCE".
 
 =item * month
 
@@ -1113,7 +1119,7 @@ Returns the week of the year, from 1..53.
 =item * jd, mjd
 
 These return the Julian Day and Modified Julian Day, respectively.
-The value returned is a floating point number, the fractional portion
+The value returned is a floating point number.  The fractional portion
 of the number represents the time portion of the datetime.
 
 =item * time_zone
@@ -1158,8 +1164,8 @@ This method implements functionality similar to the C<strftime()>
 method in C.  However, if given multiple format strings, then it will
 return multiple elements, one for each format string.
 
-See the L<strftime Specifiers|/strftime Specifiers> section for a list of
-all possible format specifiers.
+See the L<strftime Specifiers|/strftime Specifiers> section for a list
+of all possible format specifiers.
 
 =item * epoch
 
@@ -1171,8 +1177,10 @@ start of the epoch will be returned as a negative number.
 Since epoch times cannot represent many dates on most platforms, this
 method may simply return undef in some cases.
 
-Using your system's epoch time is not recommended, since they have
-such a limited range, at least on 32-bit machines.
+Using your system's epoch time may be error-prone, since epoch times
+have such a limited range on 32-bit machines.  Additionally, the fact
+that different operating systems have different epoch beginnings is
+another source of bugs.
 
 =back
 
@@ -1193,8 +1201,8 @@ This method allows you to reset some of the local time components in
 the object to their "zero" values.  The "to" parameter is used to
 specify which values to truncate, and it may be one of "month", "day",
 "hour", "minute", or "second".  For example, if "day" is specified,
-then the local hour, minute, and second all become 0, and the day
-becomes 1.
+then the local day becomes 1, and the hour, minute, and second all
+become 0.
 
 =item * set_time_zone( $tz )
 
@@ -1261,8 +1269,9 @@ the difference between the two dates.
 
   @dates = sort { DateTime->compare($a, $b) } @dates;
 
-Compare two DateTime objects. Semantics are compatible with sort;
-returns -1 if $a < $b, 0 if $a == $b, 1 if $a > $b.
+Compare two DateTime objects.  The semantics are compatible with
+Perl's C<sort()> function; it returns -1 if $a < $b, 0 if $a == $b, 1
+if $a > $b.
 
 Of course, since DateTime objects overload comparison operators, you
 can just do this anyway:
@@ -1293,7 +1302,7 @@ produce the date April 1, 2003, not March 29, 2003.
 =head2 Overloading
 
 This module explicitly overloads the addition (+), subtraction (-),
-string and numberic comparison operators.  This means that the
+string and numeric comparison operators.  This means that the
 following all do sensible things:
 
   my $new_dt = $dt + $duration_obj;
@@ -1310,7 +1319,8 @@ increment (++) or decrement (--) to do anything useful.
 
 =head2 strftime Specifiers
 
-The following specifiers are allowed in the format string:
+The following specifiers are allowed in the format string given to the
+C<strftime()> method:
 
 =over 4
 
