@@ -15,3 +15,4 @@ CVS/.*
 \.tar\.gz$
 \.zip$
 _uu$
+t/zz.*

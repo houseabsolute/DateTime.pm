@@ -29,6 +29,7 @@ lib/DateTime/Language/Sidama.pm
 lib/DateTime/Language/Somali.pm
 lib/DateTime/Language/Spanish.pm
 lib/DateTime/Language/Swedish.pm
+lib/DateTime/Language/Tigre.pm
 lib/DateTime/Language/TigrinyaEritrean.pm
 lib/DateTime/Language/TigrinyaEthiopian.pm
 ppport.h
