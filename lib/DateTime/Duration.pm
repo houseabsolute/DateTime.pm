@@ -144,20 +144,24 @@ sub add_duration
 
     # we might have to normalize_nanoseconds before comparing durations
     $self->_normalize_nanoseconds if $self->{nanoseconds};
+
+    return $self;
 }
 
 sub add
 {
     my $self = shift;
-    $self->add_duration( (ref $self)->new(@_) )
+
+    return $self->add_duration( (ref $self)->new(@_) );
 }
 
-sub subtract_duration { $_[0]->add_duration( $_[1]->inverse ) }
+sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
 sub subtract
 {
     my $self = shift;
-    $self->subtract_duration( (ref $self)->new(@_) )
+
+    return $self->subtract_duration( (ref $self)->new(@_) )
 }
 
 sub _add_overload
