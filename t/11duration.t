@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 43;
+use Test::More tests => 45;
 
 use DateTime;
 use DateTime::Duration;
@@ -134,5 +134,13 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
     my $new1 = $dur1 * 4;
     is( $new1->delta_months, 24, 'test * overloading' );
     is( $new1->delta_days, 40, 'test * overloading' );
+
+}
+
+{
+    my $dur1 = DateTime::Duration->new( months => 6, days => 10, seconds => 3, nano_seconds => 1200300400 );
+
+    is( $dur1->delta_seconds, 4, 'test nano_seconds overflow' );
+    is( $dur1->delta_nano_seconds, 200300400, 'test nano_seconds remainder' );
 
 }

@@ -1,3 +1,7 @@
+
+- DateTime::Duration objects store nano_second information. Implemented
+by Flavio Glock.
+
 0.10
 
 [IMPROVEMENTS]

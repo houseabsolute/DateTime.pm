@@ -10,6 +10,8 @@ TODO list for Perl module DateTime
 - sub-second resolution - at least microseconds (cooperate with
 Time::HiRes), but is micro small enough?
 
+    - add micro_seconds, milli_seconds to DateTime::Duration
+
 - overloading for DateTime::Duration: multiplication (duration * int),
 division? (duration / int).
 
