@@ -110,7 +110,8 @@ sub _calc_utc_rd
 
     delete $self->{utc_c};
 
-    if ( $self->{tz}->is_utc ) {
+    if ( $self->{tz}->is_utc )
+    {
         $self->{utc_rd_days} = $self->{local_rd_days};
         $self->{utc_rd_secs} = $self->{local_rd_secs};
 
