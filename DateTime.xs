@@ -11,8 +11,10 @@
 
 #include <math.h>
 
-#ifdef _HPUX_SOURCE
-#define finite isfinite
+#ifndef isfinite
+#  ifdef finite
+#    define finite isfinite
+#  endif
 #endif
 
 /* 2 ** 28 - 307 */
@@ -204,7 +206,7 @@ _seconds_as_components(self, secs, utc_secs = 0)
         PUSHs(sv_2mortal(newSViv(m)));
         PUSHs(sv_2mortal(newSViv(s)));
 
-#if !defined(WIN32)
+#ifdef isfinite
 void
 _normalize_seconds(self, days, secs)
      SV* self;
@@ -212,7 +214,7 @@ _normalize_seconds(self, days, secs)
      SV* secs;
 
      PPCODE:
-        if (finite(SvNV(days)) && finite(SvNV(secs))) {
+        if (isfinite(SvNV(days)) && isfinite(SvNV(secs))) {
           IV d = SvIV(days);
           IV s = SvIV(secs);
           IV adj;
@@ -230,7 +232,7 @@ _normalize_seconds(self, days, secs)
           sv_setiv(secs, (IV) s);
         }
 
-#endif /* WIN32 */
+#endif /* finite */
 
 void
 _time_as_seconds(self, h, m, s)
