@@ -40,7 +40,7 @@ sub write_makefile
                    VERSION_FROM => 'lib/DateTime.pm',
                    AUTHOR       => 'Dave Rolsky <autarch@urth.org>',
                    ABSTRACT     => 'DateTime base objects',
-                   clean           => { FILES => 'test.c' },
+                   clean        => { FILES => 'test.c' },
 
                    PREREQ_PM    => { 'Class::Factory::Util' => 1.3,
                                      'DateTime::TimeZone' => 0.10,
