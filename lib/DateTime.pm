@@ -1193,6 +1193,12 @@ Returns the year of the week.
 
 Returns the week of the year, from 1..53.
 
+=item * jd, mjd
+
+These return the Julian Day and Modified Julian Day, respectively.
+The value returned is a floating point number, the fractional portion
+of the number represents the time portion of the datetime.
+
 =item * time_zone
 
 This returns the C<DateTime::TimeZone> object for the datetime object.
