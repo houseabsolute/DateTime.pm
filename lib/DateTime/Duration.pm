@@ -288,6 +288,8 @@ Syntactic sugar for addition and subtraction.  The parameters given to
 these methods are used to create a new object, which is then passed to
 C<add_duration()> or C<subtract_duration()>, as appropriate.
 
+=back
+
 =head2 Overloading
 
 Addition, subtraction, and comparison are overloaded for objects of
