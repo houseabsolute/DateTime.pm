@@ -1,3 +1,12 @@
+0.05
+
+- Change year_0 so that -1 BCE is 0, not 1 CE.  This corresponds to
+astronomical years.
+
+- Change ymd, dmy, mdy, and iso8601 to use Gregorian years (..., -2,
+-1, 1, 2, ... ) as opposed to astronomical years.  Also make sure all
+negative years are formatted as 4 digits.
+
 0.04     2003-02-10
 
 - Explicitly set time zone for objects created during tests.
