@@ -26,7 +26,15 @@ BEGIN
         $loaded = 1;
     }
 
-    require DateTimePP unless $loaded;
+    if ($loaded)
+    {
+        require DateTimeWin32
+            unless defined &DateTime::_normalize_seconds;
+    }
+    else
+    {
+        require DateTimePP;
+    }
 }
 
 use DateTime::Duration;
