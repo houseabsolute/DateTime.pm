@@ -1,13 +1,6 @@
-CREDITS
 Changes
+CREDITS
 DateTime.xs
-LICENSE
-MANIFEST			This list of files
-MANIFEST.SKIP
-META.yml
-Makefile.PL
-README
-TODO
 leap_seconds.h
 leaptab.txt
 lib/DateTime.pm
@@ -16,7 +9,13 @@ lib/DateTime/Infinite.pm
 lib/DateTime/LeapSecond.pm
 lib/DateTimePP.pm
 lib/DateTimePPExtra.pm
+LICENSE
+Makefile.PL
+MANIFEST			This list of files
+MANIFEST.SKIP
+META.yml
 ppport.h
+README
 t/00load.t
 t/01sanity.t
 t/02last_day.t
@@ -46,6 +45,8 @@ t/26dt_leapsecond_pm.t
 t/27delta.t
 t/28dow.t
 t/29overload.t
+t/30future_tz.t
 t/99-pod.t
 t/testlib.pl
+TODO
 tools/leap_seconds_header.pl
