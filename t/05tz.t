@@ -115,6 +115,10 @@ use DateTime;
 }
 
 {
+    # Doing this triggered a recursion bug in earlier versions of
+    # DateTime::TimeZone.
+    local $ENV{TZ} = 'America/Chicago';
+
     my $dt = DateTime->new( year => 2050, time_zone => 'America/Chicago' );
 
     my $sixm = DateTime::Duration->new( months => 6 );
