@@ -8,6 +8,8 @@ use overload ( fallback => 1,
                '+'   => '_add_overload',
                '-'   => '_subtract_overload',
                '*'   => '_multiply_overload',
+               '<=>' => '_compare_overload',
+               'cmp' => '_compare_overload',
              );
 
 use constant MAX_NANOSECONDS => 1000000000;  # 1E9 = almost 32 bits
@@ -182,6 +184,29 @@ sub subtract
     return $self->subtract_duration( (ref $self)->new(@_) )
 }
 
+sub multiply
+{
+    my $self = shift;
+    my $multiplier = shift;
+
+    foreach ( qw( months days minutes seconds nanoseconds ) )
+    {
+        $self->{$_} *= $multiplier;
+    }
+
+    return $self;
+}
+
+sub compare
+{
+    my ( $class, $dur1, $dur2, $dt ) = @_;
+
+    $dt ||= DateTime->now;
+
+    return
+        DateTime->compare( $dt->clone->add_duration($dur1), $dt->clone->add_duration($dur2) );
+}
+
 sub _add_overload
 {
     my ( $d1, $d2, $rev ) = @_;
@@ -212,16 +237,16 @@ sub _subtract_overload
 
 sub _multiply_overload
 {
-    my ( $self, $times ) = @_;
+    my $self = shift;
 
     my $new = $self->clone;
 
-    foreach ( qw( months days minutes seconds nanoseconds ) )
-    {
-        $new->{$_} *= $times;
-    }
+    return $new->multiply(@_);
+}
 
-    return $new;
+sub _compare_overload
+{
+    die "DateTime::Duration does not overload comparison.  See the documentation on the compare() method for details.";
 }
 
 
@@ -278,6 +303,11 @@ DateTime::Duration - Duration objects for date math
 
   my $bigger  = $dur1 + $dur2;
   my $smaller = $dur1 - $dur2; # the result could be negative
+  my $bigger  = $dur1 * 3;
+
+  my $base_dt = DateTime->new( year => 2000 );
+  my @sorted =
+      sort { DateTime::Duration->compare( $a, $b, $base_dt ) } @durations;
 
 =head1 DESCRIPTION
 
@@ -384,15 +414,38 @@ Syntactic sugar for addition and subtraction.  The parameters given to
 these methods are used to create a new object, which is then passed to
 C<add_duration()> or C<subtract_duration()>, as appropriate.
 
+=item * multiply( $number )
+
+Multiplies each unit in the by the specified number.
+
+=item * DateTime::Duration->compare( $duration1, $duration2, $base_datetime )
+
+This is a class method that can be used to compare or sort durations.
+Comparison is done by adding each duration to the specified
+C<DateTime.pm> object and comparing the resulting datetimes.  This is
+necessary because without a base, many durations are not comparable.
+For example, 1 month may otr may not be longer than 29 days, depending
+on what datetime it is added to.
+
+If no base datetime is given, then the result of C<< DateTime->now >>
+is used instead.  Using this default will give non-repeatable results
+if used to compare two duration objects containing different units.
+It will also give non-repeatable results if the durations contain
+multiple types of units, such as months and days.
+
+However, if you know that both objects only contain the same units,
+and just a single I<type>, then the results of the comparison will be
+repeatable.
+
 =back
 
 =head2 Overloading
 
 This class overload addition, subtraction, and mutiplication.
 
-Comparison is B<not> overloaded, because there is no way to
-meaningfully compare durations containing different units (i.e. is 30
-days greater than or less than one month?).
+Comparison is B<not> overloaded.  If you attempt to compare durations
+using C<< <=> >> or C<cmp>, then an exception will be thrown!  Use the
+C<compare()> class method instead.
 
 =head1 SUPPORT
 

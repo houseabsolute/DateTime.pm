@@ -1,3 +1,21 @@
+0.xx
+
+[ IMPROVEMENTS ]
+
+- DateTime::Duration now provides a compare() class method.
+
+- DateTime::Duration now overloads comparison to throw an exception,
+because comparison requires a base DateTime object.  Note that
+previous versions of DateTime::Duration _did not_ overload comparison,
+so if you were comparing them, you were just comparing the value of
+the object references.  Thanks to Rick Measham, Jon Swartz, and Max
+Maischein for contributing to the discussion on datetime@perl.org
+about how to implement this feature.
+
+- Added DateTime::Duration->multiply to complement multiplication
+overloading.
+
+
 0.18  2003-10-26  (the "delta, delta, delta, can I help ya, help ya, help ya?" release)
 
 [ IMPROVEMENTS ]
