@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 63;
+use Test::More tests => 67;
 
 use DateTime;
 
@@ -140,4 +140,19 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     is( $dt->dmy('%s'), '01%s02%s0050', 'use %s as separator in dmy' );
 
     is( $dt->hms('%s'), '03%s20%s05', 'use %s as separator in hms' );
+}
+
+# test doy in leap year
+{
+    my $dt = DateTime->new( year => 2000, month => 1, day => 5, );
+
+    is( $dt->day_of_year,   5, 'doy for 2000-01-05 should be 5' );
+    is( $dt->day_of_year_0, 4, 'doy_0 for 2000-01-05 should be 4' );
+}
+
+{
+    my $dt = DateTime->new( year => 2000, month => 2, day => 29, );
+
+    is( $dt->day_of_year,   60, 'doy for 2000-02-29 should be 60' );
+    is( $dt->day_of_year_0, 59, 'doy_0 for 2000-02-29 should be 59' );
 }
