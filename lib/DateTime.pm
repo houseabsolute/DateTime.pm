@@ -20,10 +20,20 @@ use Time::Local ();
 
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
+#
+# 3rd parameter ( $_[2] ) means the parameters are 'reversed'.
+# see: "Calling conventions for bynary operations" in overload docs.
+#
 use overload ( 'fallback' => 1,
-               '<=>' => 'compare',
-               'cmp' => 'compare',
-               '-' => '_subtract_overload',
+               '<=>' => sub { 
+                   $_[2] ? - __PACKAGE__->compare(@_) : 
+                             __PACKAGE__->compare(@_) },
+               'cmp' => sub {
+                   $_[2] ? - __PACKAGE__->compare(@_) :
+                             __PACKAGE__->compare(@_) },
+               '-' => sub {
+                   $_[2] ? - __PACKAGE__->_subtract_overload(@_) :
+                             __PACKAGE__->_subtract_overload(@_) },
                '+' => '_add_overload',
              );
 
