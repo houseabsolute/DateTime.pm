@@ -873,7 +873,7 @@ DateTime - Reference implementation for Perl DateTime objects
   $dt = DateTime->from_epoch( epoch => $epoch );
   $dt = DateTime->now; # same as ( epoch => time() )
 
-  $year   = $dt->year;          # there is no year 0
+  $year   = $dt->year;
   $month  = $dt->month;         # 1-12
   # also $dt->mon
 
@@ -1086,8 +1086,7 @@ about an object.
 
 =item * year
 
-Returns the year.  There is no year 0.  The year before year 1 is year
--1.
+Returns the year.  The year before year 1 is year -1.
 
 =item * month
 
