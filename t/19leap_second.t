@@ -2,8 +2,7 @@
 
 use strict;
 
-use Test::More tests => 79;
-
+use Test::More tests => 111;
 use DateTime;
 
 
@@ -15,6 +14,10 @@ use DateTime;
                            time_zone => 'UTC',
                          );
     my $t1 = $t->clone;
+
+    is( $t->year, 1972, "year is 1972" );
+    is( $t->minute, 58, "minute is 58" );
+    is( $t->second, 20, "second is 20" );
 
     # 1972-06-30T23:59:20 UTC
     $t->add( seconds => 60 );
@@ -125,6 +128,33 @@ use DateTime;
     is( $t->second, 0, 'datetime just after leap second' );
 }
 
+{
+    my $t = DateTime->new( year => 1972, month => 6, day => 30,
+                           hour => 21, minute => 0, second => 1,
+                           time_zone => 'America/Sao_Paulo',
+                         );
+
+    is( $t->second, 1, 'datetime two seconds after leap second' );
+}
+
+# test that we can set second to 60 (negative offset)
+{
+    eval
+    {
+        my $t = DateTime->new( year => 1972, month => 6, day => 30,
+                               hour => 22, minute => 59, second => 60,
+                               time_zone => '-0100',
+                             );
+
+        is( $t->second, 60, 'second set to 60 in constructor, negative TZ offset' );
+    };
+
+    if ($@)
+    {
+        ok( 0, "Error setting second to 60 in constructor: $@" );
+    }
+}
+
 # test that we can set second to 60 (positive offset)
 {
     eval
@@ -134,12 +164,12 @@ use DateTime;
                                time_zone => '+0100',
                              );
 
-        is( $t->second, 60, 'second set to 60 in constructor' );
+        is( $t->second, 60, 'second set to 60 in constructor, positive TZ offset' );
     };
 
     if ($@)
     {
-        ok( 0, "Error setting second to 60 in constructor: $@" );
+        ok( 0, "Error setting second to 60 in constructor, positive TZ offset: $@" );
     }
 }
 
@@ -150,6 +180,25 @@ use DateTime;
                          );
 
     is( $t->second, 59, 'datetime just before leap second' );
+}
+
+{
+    my $t = DateTime->new( year => 1972, month => 7, day => 1,
+                           hour => 1, minute => 0, second => 0,
+                           time_zone => '+0100',
+                         );
+
+    is( $t->second, 0, 'datetime just after leap second' );
+}
+
+
+{
+    my $t = DateTime->new( year => 1972, month => 7, day => 1,
+                           hour => 1, minute => 0, second => 1,
+                           time_zone => '+0100',
+                         );
+
+    is( $t->second, 1, 'datetime two seconds after leap second' );
 }
 
 {
@@ -172,9 +221,10 @@ use DateTime;
     is( $t->second, 60, 'second after setting time zone' );
     is( $t->hour, 23, 'hour after setting time zone' );
 
-    # and and subtract days so that _calc_utc_rd and _calc_local_rd
-    # are both called
     $t->add( days => 1 );
+    is( $t->datetime, '1972-07-02T00:00:00',
+        'add 1 day starting on leap second' );
+
     $t->subtract( days => 1 );
 
     is( $t->datetime, '1972-07-01T00:00:00',
@@ -364,4 +414,269 @@ use DateTime;
     is( $pos_dur->delta_minutes, 0, 'delta_minutes is 0' );
     is( $pos_dur->delta_seconds, 60, 'delta_seconds is 60' );
     is( $pos_dur->delta_nanoseconds, 999999999, 'delta_nanoseconds is 999...' );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 6, day => 30,
+                            hour => 23, minute => 58, second => 20,
+                            time_zone => 'UTC',
+                          );
+
+    $dt->add( days => 2 );
+
+    is( $dt->datetime, '1972-07-02T23:58:20', "add two days crossing a leap second (UTC)" );
+}
+
+# a bunch of tests that math works across a leap second for various time zones
+{
+    my $dt = DateTime->new( year => 1972, month => 6, day => 30,
+                            hour => 20, minute => 58, second => 20,
+                            time_zone => '-0300',
+                          );
+
+    $dt->add( days => 2 );
+
+    is( $dt->datetime, '1972-07-02T20:58:20', "add two days crossing a leap second (-0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 1,
+                            hour => 2, minute => 58, second => 20,
+                            time_zone => '+0300',
+                          );
+
+    $dt->add( days => 2 );
+
+    is( $dt->datetime, '1972-07-03T02:58:20', "add two days crossing a leap second (+0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 6, day => 30,
+                            hour => 23, minute => 58, second => 20,
+                            time_zone => 'UTC',
+                          );
+
+    $dt->add( hours => 48 );
+
+    is( $dt->datetime, '1972-07-02T23:58:20', "add 48 hours crossing a leap second (UTC)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 6, day => 30,
+                            hour => 20, minute => 58, second => 20,
+                            time_zone => '-0300',
+                          );
+
+    $dt->add( hours => 48 );
+
+    is( $dt->datetime, '1972-07-02T20:58:20', "add 48 hours crossing a leap second (-0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 1,
+                            hour => 2, minute => 58, second => 20,
+                            time_zone => '+0300',
+                          );
+
+    $dt->add( hours => 48 );
+
+    is( $dt->datetime, '1972-07-03T02:58:20', "add 48 hours crossing a leap second (+0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 6, day => 30,
+                            hour => 23, minute => 58, second => 20,
+                            time_zone => 'UTC',
+                          );
+
+    $dt->add( minutes => 2880 );
+
+    is( $dt->datetime, '1972-07-02T23:58:20', "add 2880 minutes crossing a leap second (UTC)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 6, day => 30,
+                            hour => 20, minute => 58, second => 20,
+                            time_zone => '-0300',
+                          );
+
+    $dt->add( minutes => 2880 );
+
+    is( $dt->datetime, '1972-07-02T20:58:20', "add 2880 minutes crossing a leap second (-0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 1,
+                            hour => 2, minute => 58, second => 20,
+                            time_zone => '+0300',
+                          );
+
+    $dt->add( minutes => 2880 );
+
+    is( $dt->datetime, '1972-07-03T02:58:20', "add 2880 minutes crossing a leap second (+0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 6, day => 30,
+                            hour => 23, minute => 58, second => 20,
+                            time_zone => 'UTC',
+                          );
+
+    $dt->add( seconds => 172801 );
+
+    is( $dt->datetime, '1972-07-02T23:58:20', "add 172801 seconds crossing a leap second (UTC)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 6, day => 30,
+                            hour => 20, minute => 58, second => 20,
+                            time_zone => '-0300',
+                          );
+
+    $dt->add( seconds => 172801 );
+
+    is( $dt->datetime, '1972-07-02T20:58:20', "add 172801 seconds crossing a leap second (-0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 1,
+                            hour => 2, minute => 58, second => 20,
+                            time_zone => '+0300',
+                          );
+
+    $dt->add( seconds => 172801 );
+
+    is( $dt->datetime, '1972-07-03T02:58:20', "add 172801 seconds crossing a leap second (+0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 2,
+                            hour => 23, minute => 58, second => 20,
+                            time_zone => 'UTC',
+                          );
+
+    $dt->subtract( days => 2 );
+
+    is( $dt->datetime, '1972-06-30T23:58:20', "subtract two days crossing a leap second (UTC)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 2,
+                            hour => 20, minute => 58, second => 20,
+                            time_zone => '-0300',
+                          );
+
+    $dt->subtract( days => 2 );
+
+    is( $dt->datetime, '1972-06-30T20:58:20', "subtract two days crossing a leap second (-0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 3,
+                            hour => 2, minute => 58, second => 20,
+                            time_zone => '+0300',
+                          );
+
+    $dt->subtract( days => 2 );
+
+    is( $dt->datetime, '1972-07-01T02:58:20', "subtract two days crossing a leap second (+0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 2,
+                            hour => 23, minute => 58, second => 20,
+                            time_zone => 'UTC',
+                          );
+
+    $dt->subtract( hours => 48 );
+
+    is( $dt->datetime, '1972-06-30T23:58:20', "subtract 48 hours crossing a leap second (UTC)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 2,
+                            hour => 20, minute => 58, second => 20,
+                            time_zone => '-0300',
+                          );
+
+    $dt->subtract( hours => 48 );
+
+    is( $dt->datetime, '1972-06-30T20:58:20', "subtract 48 hours crossing a leap second (-0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 3,
+                            hour => 2, minute => 58, second => 20,
+                            time_zone => '+0300',
+                          );
+
+    $dt->subtract( hours => 48 );
+
+    is( $dt->datetime, '1972-07-01T02:58:20', "subtract 48 hours crossing a leap second (+0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 2,
+                            hour => 23, minute => 58, second => 20,
+                            time_zone => 'UTC',
+                          );
+
+    $dt->subtract( minutes => 2880 );
+
+    is( $dt->datetime, '1972-06-30T23:58:20', "subtract 2880 minutes crossing a leap second (UTC)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 2,
+                            hour => 20, minute => 58, second => 20,
+                            time_zone => '-0300',
+                          );
+
+    $dt->subtract( minutes => 2880 );
+
+    is( $dt->datetime, '1972-06-30T20:58:20', "subtract 2880 minutes crossing a leap second (-0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 3,
+                            hour => 2, minute => 58, second => 20,
+                            time_zone => '+0300',
+                          );
+
+    $dt->subtract( minutes => 2880 );
+
+    is( $dt->datetime, '1972-07-01T02:58:20', "subtract 2880 minutes crossing a leap second (+0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 2,
+                            hour => 23, minute => 58, second => 20,
+                            time_zone => 'UTC',
+                          );
+
+    $dt->subtract( seconds => 172801 );
+
+    is( $dt->datetime, '1972-06-30T23:58:20', "subtract 172801 seconds crossing a leap second (UTC)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 2,
+                            hour => 20, minute => 58, second => 20,
+                            time_zone => '-0300',
+                          );
+
+    $dt->subtract( seconds => 172801 );
+
+    is( $dt->datetime, '1972-06-30T20:58:20', "subtract 172801 seconds crossing a leap second (-0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 3,
+                            hour => 2, minute => 58, second => 20,
+                            time_zone => '+0300',
+                          );
+
+    $dt->subtract( seconds => 172801 );
+
+    is( $dt->datetime, '1972-07-01T02:58:20', "subtract 172801 seconds crossing a leap second (+0300)" );
 }
