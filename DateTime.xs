@@ -164,9 +164,10 @@ _ymd2rd(self, y, m, d)
         PUSHs(sv_2mortal(newSViv(d)));
 
 void
-_seconds_as_components(self, secs)
+_seconds_as_components(self, secs, utc_secs = 0)
      SV* self;
      IV secs;
+     IV utc_secs;
 
      PREINIT:
         IV h, m, s;
@@ -178,6 +179,19 @@ _seconds_as_components(self, secs)
         m = secs / 60;
 
         s = secs - (m * 60);
+
+        if (utc_secs >= SECONDS_PER_DAY) {
+
+          if (utc_secs >= SECONDS_PER_DAY + 1)
+            croak("Invalid UTC RD seconds value: %d", utc_secs);
+
+          s += (utc_secs - SECONDS_PER_DAY) + 60;
+          m = 59;
+          h--;
+
+          if (h < 0)
+            h = 23;
+        }
 
         EXTEND(SP, 3);
         PUSHs(sv_2mortal(newSViv(h)));

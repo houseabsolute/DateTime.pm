@@ -240,10 +240,7 @@ sub _calc_local_components
         $self->_rd2ymd( $self->{local_rd_days}, 1 );
 
     @{ $self->{local_c} }{ qw( hour minute second ) } =
-        $self->_seconds_as_components( $self->{local_rd_secs} );
-
-    $self->_adjust_components_for_leap_seconds
-        if $self->{utc_rd_secs} >= 86400;
+        $self->_seconds_as_components( $self->{local_rd_secs}, $self->{utc_rd_secs} );
 }
 
 sub _calc_utc_components
@@ -257,24 +254,6 @@ sub _calc_utc_components
 
     @{ $self->{utc_c} }{ qw( hour minute second ) } =
         $self->_seconds_as_components( $self->{utc_rd_secs} );
-}
-
-sub _adjust_components_for_leap_seconds
-{
-    my $self = shift;
-
-    # we don't have to check 'is_floating' here, because floating
-    # times will never have 86400 seconds.
-    if ( $self->{utc_rd_secs} >= 86400 )
-    {
-        # there is no such thing as +3 or more leap seconds!
-        die "Incorrect UTC RD seconds" if $self->{utc_rd_secs} > 86401;
-
-        $self->{local_c}{second} += $self->{utc_rd_secs} - 86400 + 60;
-        $self->{local_c}{minute}  = 59;
-        $self->{local_c}{hour}--;
-        $self->{local_c}{hour} = 23 if $self->{local_c}{hour} < 0;
-    }
 }
 
 sub _utc_ymd
