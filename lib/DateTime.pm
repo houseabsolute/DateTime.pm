@@ -6,7 +6,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.09';
+    $VERSION = '0.10';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -687,6 +687,8 @@ sub strftime
     return @r;
 }
 
+# The Time::Local included with 5.00503 doesn't have timegm_nocheck,
+# but its timegm doesn't do boundary checking
 my $sub =
     ( defined &Time::Local::timegm_nocheck ?
       \&Time::Local::timegm_nocheck :
@@ -746,11 +748,11 @@ sub subtract_datetime
     {
         my $days = $self->{utc_rd_days} - 1;
         my $secs;
-        if ( $is_floating ) 
+        if ( $is_floating )
         {
             $secs = $self->{utc_rd_secs} + 86400;
         }
-        else 
+        else
         {
             $secs = $self->{utc_rd_secs} + DateTime::LeapSecond::day_length( $days );
         }
