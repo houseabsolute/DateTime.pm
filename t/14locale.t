@@ -1,8 +1,9 @@
 use strict;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use DateTime;
+use DateTime::Locale;
 
 eval { DateTime->new( year => 100, locale => 'en_US' ) };
 ok( ! $@, 'make sure constructor accepts locale parameter' );
@@ -26,3 +27,6 @@ ok( ! $@, 'make sure constructor accepts locale parameter' );
 
 eval { DateTime->from_object( object => (bless {}, 'DT::Object'), locale => 'en_US' ) };
 ok( ! $@, 'make sure constructor accepts locale parameter' );
+
+eval { DateTime->new( year => 100, locale => DateTime::Locale->load('en_US') ) };
+ok( ! $@, 'make sure constructor accepts locale parameter as object' );
