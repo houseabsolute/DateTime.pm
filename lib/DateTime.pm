@@ -6,7 +6,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.1503';
+    $VERSION = '0.16';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -250,6 +250,8 @@ sub _calc_utc_rd
 sub _normalize_seconds
 {
     my $self = shift;
+
+    return if $self->{utc_rd_secs} >= 0 && $self->{utc_rd_secs} <= 86399;
 
     if ( $self->{tz}->is_floating )
     {
