@@ -1234,9 +1234,9 @@ then the I<local> time is adjusted accordingly.
 
 For example:
 
-  my $dt = DateTime::TimeZone->new( year => 2000, month => 5, day => 10,
-                                    hour => 15, minute => 15,
-                                    time_zone => '-0600', );
+  my $dt = DateTime->new( year => 2000, month => 5, day => 10,
+                          hour => 15, minute => 15,
+                          time_zone => '-0600', );
 
   print $dt->hour; # prints 15
 
