@@ -12,6 +12,9 @@ _rd2ymd, so as to make them look more normal when used in subclasses.
 
 - Added Swedish language module.  Contributed by Christian Hansen.
 
+- Added language modules for Afar, Amharic, Gedeo, Oromo, Somali, and
+Tigrinya, all courtesy of Daniel Yacob.
+
 [BUG FIXES]
 
 - The week() method was wrong for many dates.  Reported by Christian
