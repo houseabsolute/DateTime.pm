@@ -1213,8 +1213,8 @@ of all possible format specifiers.
 
 =item * epoch
 
-Return the epoch value for the datetime object.  Internally, this is
-implemented using C<Time::Local>, which uses the Unix epoch even on
+Return the UTC epoch value for the datetime object.  Internally, this
+is implemented using C<Time::Local>, which uses the Unix epoch even on
 machines with a different epoch (such as MacOS).  Datetimes before the
 start of the epoch will be returned as a negative number.
 
