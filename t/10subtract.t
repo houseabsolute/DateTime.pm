@@ -23,11 +23,11 @@ my $dur = 'P1W1DT1H1M1S';
 
 my $X = $d - $dur;
 
-ok( $X, 'Defined' );
+ok( defined $X, 'Defined' );
 is( $X->ical, '20011011T040000Z', 'Subtract and get the right thing' );
 
 my $Y = $d - 'P1W1DT1H1M1S';
-ok( $Y, 'Defined' );
+ok( defined $Y, 'Defined' );
 is( $Y->ical, '20011011T040000Z', 'Subtract and get the right thing' );
 
 $date1 = DateTime->new( ical => '20010510T040302Z' );
