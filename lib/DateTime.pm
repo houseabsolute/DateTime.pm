@@ -23,23 +23,37 @@ my( @MonthLengths, @LeapMonthLengths, %AddUnits );
 my $LocalZone   = $ENV{TZ} || 0;
 my $LocalOffset = _calc_local_offset();
 
-my $DefaultLanguageClass = 'DateTime::Language::English';
+{
+    # I'd rather use Class::Data::Inheritable for this, but there's no
+    # way to add the module-loading behavior to an accessor it
+    # creates, despite what its docs say!
+    my $DefaultLanguageClass;
+    sub DefaultLanguageClass {
+        my $class = shift;
+
+        if (@_) {
+            my $lang_class = shift;
+
+            $lang_class = "DateTime::Language::$lang_class"
+                unless $lang_class =~ /^DateTime::Language::/;
+
+            eval "use $lang_class";
+            die $@ if $@;
+
+            $DefaultLanguageClass = $lang_class;
+        }
+
+        return $DefaultLanguageClass;
+    }
+}
+__PACKAGE__->DefaultLanguageClass('English');
 
 sub import {
     my $class = shift;
     my %args = @_;
 
-    if ( $args{language} ) {
-        my $module = 'DateTime::Language::' . ucfirst $args{language};
-
-        eval "use $module";
-        die $@ if $@;
-
-        $DefaultLanguageClass = $module;
-    } else {
-        eval "use $DefaultLanguageClass";
-        die $@ if $@;
-    }
+    $class->DefaultLanguageClass( $args{language} )
+        if $args{language};
 }
 
 sub new {
@@ -62,7 +76,7 @@ sub new {
         my $class = 'DateTime::Language::' . ucfirst $args{language};
         $self->{language} = $class->new;
     } else {
-        $self->{language} = $DefaultLanguageClass->new;
+        $self->{language} = $class->DefaultLanguageClass->new;
     }
 
     # Date is specified as epoch#{{{
