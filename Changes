@@ -11,6 +11,9 @@ set_locale.  Suggested by Michael Schwern.
 - Clarified that from_epoch(), today(), and now() all return objects
 in the UTC time zone.  Suggested by Sagar Shah and others.
 
+- Added formatter parameter to constructor, which allows per-object
+stringification.
+
 [ BUG FIXES ]
 
 - Trying to serialize DateTime::Infinite objects with Storable blew
