@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 34;
+use Test::More tests => 36;
 
 use DateTime;
 
@@ -14,6 +14,8 @@ my $nan = $posinf - $posinf;
 {
     ok( $pos->is_infinite, 'positive infinity should be infinite' );
     ok( $neg->is_infinite, 'negative infinity should be infinite' );
+    ok( !$pos->is_finite, 'positive infinity should not be finite' );
+    ok( !$neg->is_finite, 'negative infinity should not be finite' );
 
     # that's a long time ago!
     my $long_ago = DateTime->new( year => -100_000 );
