@@ -416,16 +416,18 @@ sub from_object
 
     my $object = delete $p{object};
 
-    my ( $rd_days, $rd_secs ) = $object->utc_rd_values;
+    my ( $rd_days, $rd_secs, $rd_nanosecs ) = $object->utc_rd_values;
+
+    # A kludge because until all calendars are updated to return all
+    # three values, $rd_nanosecs could be undef
+    $rd_nanosecs ||= 0;
 
     my %args;
     @args{ qw( year month day ) } = $class->_rd2ymd($rd_days);
     @args{ qw( hour minute second ) } = $class->_seconds_as_components($rd_secs);
+    $args{nanosecond} = $rd_nanosecs;
 
     my $new = $class->new( %p, %args, time_zone => 'UTC' );
-
-    $new->set( nanosecond => $object->nanosecond )
-        if $object->can('nanosecond');
 
     $new->set_time_zone( $object->time_zone )
         if $object->can('time_zone');
@@ -728,7 +730,7 @@ sub time_zone_short_name { $_[0]->{tz}->short_name_for_datetime( $_[0] ) }
 sub locale { $_[0]->{locale} }
 *language = \&locale;
 
-sub utc_rd_values { @{ $_[0] }{ 'utc_rd_days', 'utc_rd_secs' } }
+sub utc_rd_values { @{ $_[0] }{ 'utc_rd_days', 'utc_rd_secs', 'rd_nanosecs' } }
 
 # NOTE: no nanoseconds, no leap seconds
 sub utc_rd_as_seconds   { ( $_[0]->{utc_rd_days} * 86400 ) + $_[0]->{utc_rd_secs} }
@@ -1900,9 +1902,9 @@ L<DateTime::Infinite|DateTime::Infinite>.
 
 =item * utc_rd_values
 
-Returns the current UTC Rata Die days and seconds as a two element
-list.  This exists primarily to allow other calendar modules to create
-objects based on the values provided by this object.
+Returns the current UTC Rata Die days, seconds, and nanoseconds as a
+three element list.  This exists primarily to allow other calendar
+modules to create objects based on the values provided by this object.
 
 =item * utc_rd_as_seconds
 
