@@ -61,6 +61,8 @@ _real_is_leap_year(IV y)
 
 MODULE = DateTime       PACKAGE = DateTime
 
+PROTOTYPES: ENABLE
+
 void
 _rd2greg(self, d, extra = 0)
      SV* self;
