@@ -208,7 +208,6 @@ sub from_object {
                                        can => 'utc_rd_values',
                                      },
                            language  => { type => SCALAR | OBJECT, optional => 1 },
-                           time_zone => { type => SCALAR | OBJECT, optional => 1 },
                          },
                        );
 
@@ -220,7 +219,7 @@ sub from_object {
     @p{ qw( year month day ) } = $class->_rd2greg($rd_days);
     @p{ qw( hour minute second ) } = $class->_seconds_as_components($rd_secs);
 
-    return $class->new( %p, %args );
+    return $class->new( %p, %args, time_zone => 'UTC' );
 }
 
 sub last_day_of_month {
@@ -934,8 +933,10 @@ value returned from Perl's C<time()> function.
 This class method can be used to construct a new DateTime object from
 any object that implements the C<utc_rd_values()> method.  All
 C<DateTime::Calendar> modules must implement this method in order to
-provide cross-calendar compatibility.  Just as with the C<new()>
-method, it accepts "language" and "time_zone" parameters.
+provide cross-calendar compatibility.  This method accepts a
+"language" parameter, but the time zone is always set to UTC, since we
+use the C<utc_rd_values()> method to translate from one calendar to
+another.
 
 =item * last_day_of_month( ... )
 
