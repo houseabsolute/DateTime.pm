@@ -1145,7 +1145,25 @@ returns -1 if $a < $b, 0 if $a == $b, 1 if $a > $b.
 
 =back
 
-=head2 OVERLOADING
+=head2 How Date Math is Done
+
+It's important to have some understanding of how date math is
+implemented in order to effectively use this module and
+C<DateTime::Duration>.
+
+The parts of a duration can be broken into three parts.  These are
+months, days, and seconds.  Adding one month to a date is different
+than adding 4 weeks or 28, 30, or 31 days.  Similarly, with leap
+seconds, adding a day can be different than adding 86,400 seconds.
+
+C<DateTime.pm> always adds (or subtracts) days and seconds first.
+Then it normalizes the seconds to handle second values less than 0 or
+greater than 86,400 (or 86,401).  Then it adds months.
+
+This means that adding one month and one day to February 28, 2003 will
+produce the date April 1, 2003, not March 29, 2003.
+
+=head2 Overloading
 
 This module explicitly overloads the addition (+), subtraction (-),
 and stringification operators.  This means that the following all do
