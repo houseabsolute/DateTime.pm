@@ -3,7 +3,7 @@
 use strict;
 
 use Test::More;
-plan tests => 105;
+plan tests => 108;
 
 use DateTime;
 
@@ -40,6 +40,22 @@ while (<DATA>)
     {
         is( $dt->strftime($fmt), $res );
     }
+}
+
+# test use of strftime with multiple params - in list and scalar
+# context
+{
+    my $dt = DateTime->new( year => 1800,
+                            month => 1,
+                            day => 10,
+                          );
+
+    my ($y, $d) = $dt->strftime( '%Y', '%d' );
+    is( $y, 1800 );
+    is( $d, 10 );
+
+    $y = $dt->strftime( '%Y', '%d' );
+    is( $y, 1800 );
 }
 
 # add these if we do roman-numeral stuff
