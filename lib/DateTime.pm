@@ -13,10 +13,12 @@ use Time::Local ();
 
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
-use overload 'fallback' => 1,
-             '<=>' => 'compare',
-             '-' => \&subtract,
-             '+' => \&_add_overload;
+use overload ( 'fallback' => 1,
+               '<=>' => 'compare',
+               '-' => 'subtract',
+               '+' => \&_add_overload,
+               '""' => '_stringify',
+             );
 
 my( @MonthLengths, @LeapMonthLengths, %AddUnits );
 
@@ -133,7 +135,7 @@ sub new {
         $month++;
     }
 
-    $self->{rd_days} = greg2jd( $year, $month, $day );
+    $self->{rd_days} = greg2rd( $year, $month, $day );
     $self->{rd_secs} = time_as_seconds( $hour, $min, $sec );
     bless $self, $class;
 
@@ -351,7 +353,7 @@ $AddUnits{minutes} = $AddUnits{min};
 
 # redo this to just accept params like a normal freaking method!
 sub _add {
-    my ($jd, $secs) = splice(@_, 0, 2);
+    my ($rd, $secs) = splice(@_, 0, 2);
     my $eom_mode = 0;
     my ($add, $unit, $count);
 
@@ -383,41 +385,41 @@ sub _add {
             $count *= $add->[1]; # multiply by the factor for this unit
 
             if ($add->[0] == 0) { # add to days
-                $jd += $count;
+                $rd += $count;
             } elsif ($add->[0] == 1) { # add to seconds
                 $secs += $count;
             } else {            # add to months
                 my ($y, $mo, $d);
 
-                _normalize_seconds( $jd, $secs );
+                _normalize_seconds( $rd, $secs );
                 if ($eom_mode == 2) { # sticky eom mode
                     # if it is the last day of the month, make it the 0th
                     # day of the following month (which then will normalize
                     # back to the last day of the new month).
-                    ($y, $mo, $d) = jd2greg( $jd+1 );
+                    ($y, $mo, $d) = rd2greg( $rd+1 );
                     --$d;
                 } else {
-                    ($y, $mo, $d) = jd2greg( $jd );
+                    ($y, $mo, $d) = rd2greg( $rd );
                 }
 
                 if ($eom_mode && $d > 28) { # limit day to last of new month
                     # find the jd of the last day of our target month
-                    $jd = greg2jd( $y, $mo+$count+1, 0 );
+                    $rd = greg2rd( $y, $mo+$count+1, 0 );
 
                     # what day of the month is it? (discard year and month)
-                    my $lastday = scalar jd2greg( $jd );
+                    my $lastday = scalar rd2greg( $rd );
 
                     # if our original day was less than the last day,
                     # use that instead
-                    $jd -= $lastday - $d if $lastday > $d;
+                    $rd -= $lastday - $d if $lastday > $d;
                 } else {
-                    $jd = greg2jd( $y, $mo+$count, $d );
+                    $rd = greg2rd( $y, $mo+$count, $d );
                 }
             }
         }
     }
 
-    _normalize_seconds( $jd, $secs );
+    _normalize_seconds( $rd, $secs );
 }
 
 sub _add_overload {
@@ -437,7 +439,7 @@ sub _add_overload {
 
 =begin internal
 
-    ($jd, $secs) = _normalize_seconds( $jd, $secs );
+    ($rd, $secs) = _normalize_seconds( $rd, $secs );
 
     Corrects seconds that have gone into following or previous day(s).
     Adjusts the passed days and seconds as well as returning them.
@@ -616,7 +618,7 @@ sub time_as_seconds {
     return $secs;
 }
 
-sub jd2greg {
+sub rd2greg {
     use integer;
     my $d = shift;
     my $yadj = 0;
@@ -650,7 +652,7 @@ sub jd2greg {
     return ( $y, $m, $d );
 }
 
-sub greg2jd {
+sub greg2rd {
     use integer;
     my ( $y, $m, $d ) = @_;
     my $adj;
@@ -688,7 +690,7 @@ sub week {
      $mid_week->add( day => 4 - $self->day_of_week );
      my $week_year = $mid_week->year;
 
-     my $jan_four = greg2jd( $week_year, 1, 4 );
+     my $jan_four = greg2rd( $week_year, 1, 4 );
      my $first_week = $jan_four - ( $jan_four % 7 );
      my $week_number = int( ($self->{rd_days} - $first_week) / 7 ) + 1;
 
@@ -726,7 +728,7 @@ sub month_abbr {
 
 sub day_of_year {
     my $self = shift;
-    my $janone = greg2jd( $self->year, 1, 1 );
+    my $janone = greg2rd( $self->year, 1, 1 );
     return ($self->{rd_days} + 1) - $janone ;
 }
 
@@ -817,7 +819,87 @@ sub iso8601 {
 
 sub is_leap_year { Date::Leapyear::isleap( $_[0]->year ) }
 
-sub _as_greg { jd2greg( $_[0]->{rd_days} ) }
+sub _as_greg { rd2greg( $_[0]->{rd_days} ) }
+
+my %formats =
+    ( 'a' => sub { $_[0]->day_abbr },
+      'A' => sub { $_[0]->day_name },
+      'b' => sub { $_[0]->month_abbr },
+      'B' => sub { $_[0]->month_name },
+      'c' => sub { $_[0]->strftime( $_[0]->{language}->preferred_datetime_format ) },
+      'C' => sub { int( $_[0]->year / 100 ) },
+      'd' => sub { sprintf( '%02d', $_[0]->day_of_month ) },
+      'D' => sub { $_[0]->strftime( '%m/%d/%y' ) },
+      'e' => sub { sprintf( '%2d', $_[0]->day_of_month ) },
+      'F' => sub { $_[0]->ymd('-') },
+      'g' => sub { substr( $_[0]->week_year, -2 ) },
+      'G' => sub { $_[0]->week_year },
+      'H' => sub { sprintf( '%02d', $_[0]->hour ) },
+      'I' => sub { my $h = $_[0]->hour; $h -= 12 if $h >= 12; sprintf( '%02d', $h ) },
+      'j' => sub { $_[0]->day_of_year },
+      'k' => sub { sprintf( '%2d', $_[0]->hour ) },
+      'l' => sub { my $h = $_[0]->hour; $h -= 12 if $h >= 12; sprintf( '%2d', $h ) },
+      'm' => sub { sprintf( '%02d', $_[0]->month ) },
+      'M' => sub { sprintf( '%02d', $_[0]->minute ) },
+      'n' => sub { "\n" }, # should this be OS-sensitive?
+      'p' => sub { $_[0]->{language}->am_pm( $_[0] ) },
+      'P' => sub { lc $_[0]->{language}->am_pm( $_[0] ) },
+      'r' => sub { $_[0]->strftime( '%I:%M:%S %p' ) },
+      'R' => sub { $_[0]->strftime( '%H:%M' ) },
+      's' => sub { $_[0]->epoch },
+      'S' => sub { sprintf( '%02d', $_[0]->second ) },
+      't' => sub { "\t" },
+      'T' => sub { $_[0]->strftime( '%H:%M:%S' ) },
+      'u' => sub { $_[0]->day_of_week },
+      # algorithm from Date::Format::wkyr
+      'U' => sub { my $dow = $_[0]->day_of_week;
+                   $dow = 0 if $dow == 7; # convert to 0-6, Sun-Sat
+                   my $doy = $_[0]->day_of_year - 1;
+                   return int( ( $doy - $dow + 13 ) / 7 - 1 )
+                 },
+      'w' => sub { my $dow = $_[0]->day_of_week;
+                   return $dow == 7 ? 0 : $dow - 1
+                 },
+      'W' => sub { my $dow = $_[0]->day_of_week;
+                   my $doy = $_[0]->day_of_year - 1;
+                   return int( ( $doy - $dow + 13 ) / 7 - 1 )
+                 },
+      'x' => sub { $_[0]->strftime( $_[0]->{language}->preferred_date_format ) },
+      'X' => sub { $_[0]->strftime( $_[0]->{language}->preferred_time_format ) },
+      'y' => sub { sprintf( '%02d', substr( $_[0]->year, -2 ) ) },
+      'Y' => sub { return $_[0]->year },
+      'z' => sub { $_[0]->{timezone}->abbreviation },
+      'Z' => sub { $_[0]->{timezone}->offset_string },
+      '%' => sub { '%' },
+    );
+
+$formats{h} = $formats{b};
+
+sub strftime {
+    my $self = shift;
+    # make a copy or caller's scalars get munged
+    my @formats = @_;
+
+    my @r;
+    foreach my $f (@formats)
+    {
+        # regex from Date::Format - thanks Graham!
+        $f =~ s/
+	        %([OE]?[%a-zA-Z])
+	       /
+                $formats{$1} ? $formats{$1}->($self) : $1
+               /sgex;
+
+        return $f unless wantarray;
+
+        push @r, $f;
+    }
+
+    return @r;
+}
+
+# like "scalar localtime()" in Perl
+sub _stringify { $_[0]->strftime( '%a, %d %b %Y %H:%M:%S %Z' ) }
 
 =begin internal
 
@@ -883,20 +965,24 @@ DateTime - Reference implement for Perl DateTime objects
   $year   = $dt->year;          # ?-neg 1, 1-..
   $month  = $dt->month;         # 1-12
   # also $dt->mon
+
   $day    = $dt->day;           # 1-31
   # also $dt->day_of_month, $dt->mday
-  $dow    = $dt->day_of_week;   # 1-7
+
+  $dow    = $dt->day_of_week;   # 1-7 (Monday is 1)
   # also $dt->dow, $dt->wday
+
   $hour   = $dt->hour;          # 0-23
   $minute = $dt->minute;        # 0-59
   # also $dt->min
+
   $second = $dt->second;        # 0-60 (leap seconds!)
   # also $dt->sec
 
   $doy    = $dt->day_of_year    # 1-366 (leap years)
 
   # all of the start-at-1 methods above have correponding start-at-0
-  # methods, such as $dt->day_of_month_0 and so on
+  # methods, such as $dt->day_of_month_0, $dt->month_0 and so on
 
   $ymd    = $dt->ymd            # 2002-12-06
   $ymd    = $dt->ymd('/')       # 2002/12/06
@@ -1168,22 +1254,6 @@ Month is returned as a number in the range 1..12
 
 Returns the year.
 
-=head2 jd2greg
-
-  ($year, $month, $day) = jd2greg( $jd );
-
-Convert number of days on or after Jan 1, 1 CE (Gregorian) to
-gregorian year,month,day.
-
-=head2 greg2jd
-
-  $jd = greg2jd( $year, $month, $day );
-
-Convert gregorian year,month,day to days on or after Jan 1, 1 CE
-(Gregorian).  Normalization is performed (e.g. month of 28 means April
-two years after given year) for month < 1 or > 12 or day < 1 or > last
-day of month.
-
 =head2 day_of_year
 
   $yday = $dt->day_of_year;
@@ -1195,7 +1265,8 @@ gmtime (or localtime) except that it works outside of the epoch.
 
   $day_of_week = $dt->day_of_week
 
-Returns the day of week as 0..6 (0 is Sunday, 6 is Saturday).
+Returns the day of the week as a number, from 1 to 7, with 1 being
+Monday and 7 being Sunday.
 
 =head2 hour
 
