@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 72;
+use Test::More tests => 74;
 
 use DateTime;
 
@@ -65,6 +65,7 @@ use DateTime;
                        hour => 2, time_zone => 'America/Chicago',
                      )
     };
+
     like( $@, qr/Invalid local time .+/, 'exception for invalid time' );
 
     eval
@@ -152,6 +153,21 @@ use DateTime;
                      );
     };
     like( $@, qr/Invalid local time .+/, 'exception for invalid time' );
+}
+
+{
+    my $dt =
+        DateTime->new( year => 2001, month => 10, day => 28,
+                       hour => 0, minute => 59,
+                       time_zone => 'UTC' );
+
+    $dt->set_time_zone('Europe/Vienna');
+
+    is( $dt->hour, 2, 'hour should be 2 in vienna at 00:59:00 UTC' );
+
+    $dt->set_time_zone('UTC')->add( minutes => 1 )->set_time_zone('Europe/Vienna');
+
+    is( $dt->hour, 2, 'hour should be 2 in vienna at 01:00:00 UTC' );
 }
 
 {
