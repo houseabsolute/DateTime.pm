@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 86;
+use Test::More tests => 88;
 
 use DateTime;
 use DateTime::Duration;
@@ -163,6 +163,12 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
 
     $new2->subtract( nanoseconds => 100000000 );
     is( $new2->delta_nanoseconds, 100300400, 'sub nanoseconds works' );
+
+    my $new3 = $dur2 * 3;
+
+    is( $new3->delta_seconds, 4, 'seconds normalized after multiplication');
+    is( $new3->delta_nanoseconds, 500000000,
+        'nanoseconds normalized after multiplication' );
 }
 
 {

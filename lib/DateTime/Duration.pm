@@ -162,7 +162,6 @@ sub add_duration
         $self->{$_} += $dur->{$_};
     }
 
-    # we might have to normalize_nanoseconds before comparing durations
     $self->_normalize_nanoseconds if $self->{nanoseconds};
 
     return $self;
@@ -193,6 +192,8 @@ sub multiply
     {
         $self->{$_} *= $multiplier;
     }
+
+    $self->_normalize_nanoseconds if $self->{nanoseconds};
 
     return $self;
 }

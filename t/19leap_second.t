@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 71;
+use Test::More tests => 74;
 
 use DateTime;
 
@@ -298,4 +298,24 @@ use DateTime;
 
     is( $neg_dur->delta_minutes, 0, 'delta_minutes is 0' );
     is( $neg_dur->delta_seconds, -36, 'delta_seconds is -36' );
+}
+
+# catch off-by-one when carrying a leap second
+{
+    my $dt1 = DateTime->new( year => 1998, month => 12, day => 31,
+                             hour => 23,  minute => 59, second => 0,
+                             nanosecond => 1,
+                             time_zone => 'UTC',
+                           );
+
+    my $dt2 = DateTime->new( year => 1999, month => 1, day => 1,
+                             hour => 0,  minute => 0, second => 0,
+                             time_zone => 'UTC',
+                           );
+
+    my $pos_dur = $dt2 - $dt1;
+
+    is( $pos_dur->delta_minutes, 0, 'delta_minutes is 0' );
+    is( $pos_dur->delta_seconds, 60, 'delta_seconds is 60' );
+    is( $pos_dur->delta_nanoseconds, 999999999, 'delta_nanoseconds is 999...' );
 }

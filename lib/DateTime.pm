@@ -908,7 +908,7 @@ sub subtract_datetime
     {
         my ( $utc_rd_days, $utc_rd_secs ) = $smaller->utc_rd_values;
 
-        if ( $utc_rd_secs > 86340 && ! $is_floating )
+        if ( $utc_rd_secs >= 86340 && ! $is_floating )
         {
             # If the bigger of the two datetimes occurs in the last UTC minute
             # of the UTC day, then that minute may not be 60 seconds long.  If
