@@ -1,4 +1,4 @@
-0.23
+0.23    2004-12-09 (the "oh how I hate leap seconds" release)
 
 [ ENHANCEMENTS ]
 
@@ -12,7 +12,7 @@ set_locale.  Suggested by Michael Schwern.
 in the UTC time zone.  Suggested by Sagar Shah and others.
 
 - Added formatter parameter to constructor, which allows per-object
-stringification.
+stringification.  Based on a patch from Daisuke Maki.
 
 [ BUG FIXES ]
 
@@ -25,6 +25,9 @@ version in the tests.  Suggested by Jean Forget.
 - Fix a bug in strftime() which could cause weirdness with
 pathological specifiers like "%%{day_name}%n".  Reported by Jean
 Forget.
+
+- Fixed a number of bugs related to leap seconds and time zones.
+Reported by Eugene van der Pijll.
 
 
 0.22    2004-07-23
