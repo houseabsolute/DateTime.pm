@@ -949,8 +949,10 @@ sub _compare
 
     return undef unless defined $dt2;
 
-    return -1 if ! ref $dt2 && $dt2 == INFINITY;
-    return  1 if ! ref $dt2 && $dt2 == NEG_INFINITY;
+    if ( ! ref $dt2 && ( $dt2 == INFINITY || $dt2 == NEG_INFINITY ) )
+    {
+        return $dt1->{utc_rd_days} <=> $dt2;
+    }
 
     die "Cannot compare a datetime to a regular scalar"
         unless ( UNIVERSAL::can( $dt1, 'utc_rd_values' ) &&
