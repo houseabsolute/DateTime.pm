@@ -705,19 +705,19 @@ sub day_of_month {
 
 sub day_of_week {
     my $self = shift;
-    return $self->{julian} % 7;
+    return $self->{julian} % 7 + 1;
 }
 *wday = \&day_of_week;
 *dow  = \&day_of_week;
 
 sub day_name {
     my $self = shift;
-    return $self->{language}->day_name( $self->day_of_week );
+    return $self->{language}->day_name( $self->day_of_week - 1 );
 }
 
 sub day_abbr {
     my $self = shift;
-    return $self->{language}->day_abbreviation( $self->day_of_week );
+    return $self->{language}->day_abbreviation( $self->day_of_week - 1 );
 }
 
 sub ymd {
@@ -1199,16 +1199,14 @@ versions, as the jd method is now thrown over for plain hash references.
 
 =head1 0-BASED VERSUS 1-BASED NUMBERS
 
-The DateTime.pm module follows a consistent logic for determining
-whether or not a given number is 0-based or 1-based.
+The DateTime.pm module follows a simple consistent logic for
+determining whether or not a given number is 0-based or 1-based.
 
-Numbers are 1-based if they are 1-based in real usage.  For example,
-March 1 is the 1st day of the month, not the 0th.  Calling March 1 day
-0 will inevitably confuse everyone who did not write the module.
+All I<date>-related numbers such as year, month, day of
+month/week/year, are 1-based.
 
-The one exception to this rule is month numbers.  Because numeric
-dates are always written with 1-based numbers, months are 1-based,
-even though we generally I<speak> of them by name.
+All I<time>-related numbers such as hour, minute, and second are
+0-based.
 
 =head1 AUTHOR
 
