@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 13;
+use Test::More tests => 15;
 
 use DateTime;
 
@@ -44,6 +44,8 @@ $t = DateTime->new( year => 1971, month => 12, day => 31,
                        hour => 23, minute => 58, second => 20,
                        time_zone => 'floating',
                      );
+$t1 = $t->clone;
+
 $t->add( seconds => 60);
 is( $t->minute, 59, "min");
 is( $t->second, 20, "sec");
@@ -51,5 +53,15 @@ is( $t->second, 20, "sec");
 $t->add( seconds => 60);
 is( $t->minute, 0, "min");
 is( $t->second, 20, "sec");
+
+# subtract_datetime, using floating times
+
+my $t2 = DateTime->new( year => 1972, month => 1, day => 1,
+                       hour => 0, minute => 0, second => 20,
+                       time_zone => 'floating',
+                     );
+my $dt = $t2 - $t1;
+is( $dt->minutes, 2, "min duration");
+is( $dt->seconds, 0, "sec duration");
 
 

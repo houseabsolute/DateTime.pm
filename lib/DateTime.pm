@@ -696,6 +696,9 @@ sub subtract_datetime
     my $self = shift;
     my $dt = shift;
 
+    my $is_floating = $self->time_zone->is_floating &&
+                      $dt->time_zone->is_floating;
+
     # We only want a negative duration if $dt > $self.  If just the
     # seconds are greater (but the days are equal or less), then
     # returning a negative duration is wrong.
@@ -712,8 +715,15 @@ sub subtract_datetime
             $self->{utc_rd_secs} < $dt->{utc_rd_secs} )
     {
         my $days = $self->{utc_rd_days} - 1;
-        my $secs = $self->{utc_rd_secs} + DateTime::LeapSecond::day_length( $days );
-
+        my $secs;
+        if ( $is_floating ) 
+        {
+            $secs = $self->{utc_rd_secs} + 86400;
+        }
+        else 
+        {
+            $secs = $self->{utc_rd_secs} + DateTime::LeapSecond::day_length( $days );
+        }
         return DateTime::Duration->new
             ( days        => $days - $dt->{utc_rd_days},
               seconds     => $secs - $dt->{utc_rd_secs},
@@ -724,8 +734,15 @@ sub subtract_datetime
             $dt->{utc_rd_secs} < $self->{utc_rd_secs} )
     {
         my $days = $dt->{utc_rd_days} - 1;
-        my $secs = $dt->{utc_rd_secs} + DateTime::LeapSecond::day_length( $days );
-
+        my $secs;
+        if ( $is_floating )
+        {
+            $secs = $self->{utc_rd_secs} + 86400;
+        }
+        else
+        {
+            $secs = $dt->{utc_rd_secs} + DateTime::LeapSecond::day_length( $days );
+        }
         return DateTime::Duration->new
             ( days    => $self->{utc_rd_days} - $days,
               seconds => $self->{utc_rd_secs} - $secs,
