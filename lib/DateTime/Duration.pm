@@ -5,8 +5,8 @@ use strict;
 use Params::Validate qw( validate SCALAR );
 
 use overload ( fallback => 1,
-               'cmp' => 'compare',
-               '<=>' => 'compare',
+               'cmp' => '_compare_overload',
+               '<=>' => '_compare_overload',
                '+'   => '_add_overload',
                '-'   => '_subtract_overload',
              );
@@ -152,6 +152,16 @@ sub compare
     }
 
     return 0;
+}
+
+
+sub _compare_overload
+{
+    my ( $d1, $d2, $rev ) = @_;
+
+    ($d1, $d2) = ($d2, $d1) if $rev;
+
+    return $d1->compare($d2);
 }
 
 
