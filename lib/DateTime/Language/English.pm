@@ -23,13 +23,4 @@ use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AM
 @DayNumbers{@DayNames}  = (0 .. scalar(@DayNames));
 @DayNumbers{@DayAbbreviations} = (0 .. scalar(@DayAbbreviations));
 
-# Formatting routines
-
-sub format_a { $DayAbbreviations[$_[0]->[6]] }
-sub format_A { $DayNames[$_[0]->[6]] }
-sub format_b { $MonthAbbreviations[$_[0]->[4]] }
-sub format_B { $MonthNames[$_[0]->[4]] }
-sub format_h { $MonthAbbreviations[$_[0]->[4]] }
-sub format_p { $_[0]->[2] >= 12 ?  $AMPM[1] : $AMPM[0] }
-
 1;

@@ -5,6 +5,8 @@
 
 package DateTime::Language::Czech;
 
+use strict;
+
 use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @MonthNames2 @AMPM %MonthNames %DayNames $VERSION);
 @ISA = qw(DateTime::LanguageDateTime::Format::Generic);
 
@@ -26,20 +28,7 @@ for (@MonthNames2)
 @DayNames{@DayNames}  = (0 .. scalar(@DayNames));
 @DayNames{@DayAbbreviations} = (0 .. scalar(@DayAbbreviations));
 
-# Formatting routines
-
-sub format_a { $DayAbbreviations[$_[0]->[6]] }
-sub format_A { $DayNames[$_[0]->[6]] }
-sub format_b { $MonthAbbreviations[$_[0]->[4]] }
-sub format_B { $MonthNames[$_[0]->[4]] }
-sub format_h { $MonthAbbreviations[$_[0]->[4]] }
-sub format_p { $_[0]->[2] >= 12 ?  $AMPM[1] : $AMPM[0] }
-
-sub format_d { $_[0]->[3] }
-sub format_m { $_[0]->[4] + 1 }
-sub format_o { $_[0]->[3] . '.' }
-
-sub format_Q { $MonthNames2[$_[0]->[4]] }
+# contact Honza to make sense of this before deleting! - dave
 
 sub time2str {
       my $ref = shift;

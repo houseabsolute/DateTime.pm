@@ -53,9 +53,13 @@ sub month_number { $_[0]->{month_numbers}{ $_[1] } }
 
 sub day_number { $_[0]->{day_numbers}{ $_[1] } }
 
-sub ampm { $_[0]->{am_pm}[ $_[1] > 12 ? 0 : 1 ] }
+sub am_pm { $_[0]->{am_pm}[ $_[1]->hour < 12 ? 0 : 1 ] }
 
 sub ordinal_suffixes { $_[0]->{ordinal_suffixes} }
+
+sub preferred_datetime_format { '%m/%d/%y %H:%M:%S' }
+sub preferred_date_format { '%m/%d/%y' }
+sub preferred_time_format { '%H:%M:%S' }
 
 1;
 

@@ -4,6 +4,8 @@
 
 package DateTime::Language::Norwegian;
 
+use strict;
+
 use DateTime::Language;
 use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AMPM @OrdinalSuffixes %MonthNames %DayNames $VERSION);
 @ISA = qw(DateTime::Language);
@@ -23,14 +25,5 @@ require DateTime::Language::English;
 @MonthNames{@MonthAbbreviations} = (1 .. scalar(@MonthAbbreviations));
 @DayNames{@DayNames}  = (0 .. scalar(@DayNames));
 @DayNames{@DayAbbreviations} = (0 .. scalar(@DayAbbreviations));
-
-# Formatting routines
-
-sub format_a { $DayAbbreviations[$_[0]->[6]] }
-sub format_A { $DayNames[$_[0]->[6]] }
-sub format_b { $MonthAbbreviations[$_[0]->[4]] }
-sub format_B { $MonthNames[$_[0]->[4]] }
-sub format_h { $MonthAbbreviations[$_[0]->[4]] }
-sub format_p { $_[0]->[2] >= 12 ?  $AMPM[1] : $AMPM[0] }
 
 1;
