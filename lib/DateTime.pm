@@ -141,6 +141,34 @@ sub new
     return $self;
 }
 
+sub _calc_utc_rd
+{
+    my $self = shift;
+
+    delete $self->{utc_c};
+
+    if ( $self->{tz}->is_utc || $self->{tz}->is_floating )
+    {
+        $self->{utc_rd_days} = $self->{local_rd_days};
+        $self->{utc_rd_secs} = $self->{local_rd_secs};
+    }
+    else
+    {
+        $self->{utc_rd_days} = $self->{local_rd_days};
+        $self->{utc_rd_secs} =
+            $self->{local_rd_secs} - $self->_offset_from_local_time;
+    }
+
+    if ( $self->{tz}->is_floating )
+    {
+        _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+    }
+    else
+    {
+        _normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+    }
+}
+
 sub _normalize_leap_seconds
 {
     # args: 0 => days, 1 => seconds
@@ -176,34 +204,6 @@ sub _normalize_leap_seconds
         $day_length = DateTime::LeapSecond::day_length( $new_day - 1 );
         $_[1] += $day_length;
         $_[0]--;
-    }
-}
-
-sub _calc_utc_rd
-{
-    my $self = shift;
-
-    delete $self->{utc_c};
-
-    if ( $self->{tz}->is_utc || $self->{tz}->is_floating )
-    {
-        $self->{utc_rd_days} = $self->{local_rd_days};
-        $self->{utc_rd_secs} = $self->{local_rd_secs};
-    }
-    else
-    {
-        $self->{utc_rd_days} = $self->{local_rd_days};
-        $self->{utc_rd_secs} =
-            $self->{local_rd_secs} - $self->_offset_from_local_time;
-    }
-
-    if ( $self->{tz}->is_floating )
-    {
-        _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
-    }
-    else
-    {
-        _normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
     }
 }
 
@@ -593,21 +593,6 @@ sub jd
 
 sub mjd { $_[0]->jd - 2_400_000.5 }
 
-sub _format_nanosecs
-{
-    my $self = shift;
-    my $precision = shift;
-
-    my $ret = sprintf( "%09d", $self->{rd_nanosecs} );
-    return $ret unless $precision;   # default = 9 digits
-
-    # rd_nanosecs might contain a fractional separator
-    my ( $int, $frac ) = split /[.,]/, $self->{rd_nanosecs};
-    $ret .= $frac if $frac;
-
-    return substr( $ret, 0, $precision );
-}
-
 my %formats =
     ( 'a' => sub { $_[0]->day_abbr },
       'A' => sub { $_[0]->day_name },
@@ -622,10 +607,10 @@ my %formats =
       'g' => sub { substr( $_[0]->week_year, -2 ) },
       'G' => sub { $_[0]->week_year },
       'H' => sub { sprintf( '%02d', $_[0]->hour ) },
-      'I' => sub { my $h = $_[0]->hour; $h -= 12 if $h >= 12; sprintf( '%02d', $h ) },
+      'I' => sub { sprintf( '%02d', $_[0]->_hour_12 ) },
       'j' => sub { $_[0]->day_of_year },
       'k' => sub { sprintf( '%2d', $_[0]->hour ) },
-      'l' => sub { my $h = $_[0]->hour; $h -= 12 if $h >= 12; sprintf( '%2d', $h ) },
+      'l' => sub { sprintf( '%2d', $_[0]->_hour_12 ) },
       'm' => sub { sprintf( '%02d', $_[0]->month ) },
       'M' => sub { sprintf( '%02d', $_[0]->minute ) },
       'n' => sub { "\n" }, # should this be OS-sensitive?
@@ -693,6 +678,23 @@ sub strftime
 
     return @r;
 }
+
+sub _format_nanosecs
+{
+    my $self = shift;
+    my $precision = shift;
+
+    my $ret = sprintf( "%09d", $self->{rd_nanosecs} );
+    return $ret unless $precision;   # default = 9 digits
+
+    # rd_nanosecs might contain a fractional separator
+    my ( $int, $frac ) = split /[.,]/, $self->{rd_nanosecs};
+    $ret .= $frac if $frac;
+
+    return substr( $ret, 0, $precision );
+}
+
+sub _hour_12 { my $h = $_[0]->hour % 12; return $h ? $h : 12 }
 
 # The Time::Local included with 5.00503 doesn't have timegm_nocheck,
 # but its timegm doesn't do boundary checking

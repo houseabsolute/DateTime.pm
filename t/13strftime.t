@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 103;
+use Test::More tests => 117;
 
 use DateTime;
 
@@ -49,6 +49,41 @@ while (<DATA>)
     $y = $dt->strftime( '%Y', '%d' );
     is( $y, 1800 );
 }
+
+{
+    my $dt = DateTime->new( year => 2003,
+                            hour => 0,
+                            minute => 0
+                          ) ;
+
+    is($dt->strftime('%I %M %p'), '12 00 AM');
+    is($dt->strftime('%l %M %p'), '12 00 AM');
+
+    $dt->set(hour => 1) ;
+    is($dt->strftime('%I %M %p'), '01 00 AM');
+    is($dt->strftime('%l %M %p'), ' 1 00 AM');
+
+    $dt->set(hour => 11) ;
+    is($dt->strftime('%I %M %p'), '11 00 AM');
+    is($dt->strftime('%l %M %p'), '11 00 AM');
+
+    $dt->set(hour => 12) ;
+    is($dt->strftime('%I %M %p'), '12 00 PM');
+    is($dt->strftime('%l %M %p'), '12 00 PM');
+
+    $dt->set(hour => 13) ;
+    is($dt->strftime('%I %M %p'), '01 00 PM');
+    is($dt->strftime('%l %M %p'), ' 1 00 PM');
+
+    $dt->set(hour => 23) ;
+    is($dt->strftime('%I %M %p'), '11 00 PM');
+    is($dt->strftime('%l %M %p'), '11 00 PM');
+
+    $dt->set(hour => 0) ;
+    is($dt->strftime('%I %M %p'), '12 00 AM');
+    is($dt->strftime('%l %M %p'), '12 00 AM');
+}
+
 
 # add these if we do roman-numeral stuff
 # %Od	VII
