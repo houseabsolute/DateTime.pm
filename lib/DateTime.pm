@@ -155,6 +155,11 @@ sub new
     my $class = shift;
     my %p = validate( @_, $NewValidate );
 
+    my $last_day = $class->_last_day_of_month( $p{year}, $p{month} );
+
+    die "Invalid day of month (day = $p{day} - month = $p{month})\n"
+        if $p{day} > $last_day;
+
     my $self = {};
 
     if ( ref $p{language} )
@@ -414,12 +419,17 @@ sub last_day_of_month
     my $class = shift;
     my %p = validate( @_, $LastDayOfMonthValidate );
 
-    my $day = ( $class->_is_leap_year( $p{year} ) ?
-                $LeapYearMonthLengths[ $p{month} - 1 ] :
-                $MonthLengths[ $p{month} - 1 ]
-              );
+    my $day = $class->_last_day_of_month( $p{year}, $p{month} );
 
     return $class->new( %p, day => $day );
+}
+
+sub _last_day_of_month
+{
+    return ( $_[0]->_is_leap_year( $_[1] ) ?
+             $LeapYearMonthLengths[ $_[2] - 1 ] :
+             $MonthLengths[ $_[2] - 1 ]
+           );
 }
 
 my $FromDayOfYearValidate = { %$NewValidate };
@@ -1369,7 +1379,8 @@ and "nanosecond" parameters.  The valid values for these parameters are:
 
 =item * day
 
-1-31
+1-31, and it must be within the valid range of days for the specified
+month
 
 =item * hour
 
@@ -1392,11 +1403,8 @@ and "nanosecond" parameters.  The valid values for these parameters are:
 Invalid parameter types (like an array reference) will cause the
 constructor to die.
 
-DateTime does not do validation that the "day" exists in the given
-month, nor does it check if second values greater than 59 are valid
-based on current leap seconds.  In both of these cases, invalid values
-simply cause an overflow, so "year => 2001, month => 2, day => 31"
-will result in "March 3, 2003".
+DateTime does not if second values greater than 59 are valid based on
+current leap seconds, and invalid values simply cause an overflow.
 
 All of the parameters are optional except for "year".  The "month" and
 "day" parameters both default to 1, while the "hour", "minute", and
@@ -1497,6 +1505,14 @@ object.  Otherwise UTC is used.
 This constructor takes the same arguments as can be given to the
 C<new()> method, except for "day".  Additionally, both "year" and
 "month" are required.
+
+=item * from_day_of_year( ... )
+
+This constructor takes the same arguments as can be given to the
+C<new()> method, except that it does not accept a "month" or "day"
+argument.  Instead, it requires both "year" and "day_of_year".  The
+day of year must be between 1 and 366, and 366 is only allowed for
+leap years.
 
 =item * clone
 
