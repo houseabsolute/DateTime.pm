@@ -26,14 +26,12 @@ use Time::Local ();
 #
 use overload ( 'fallback' => 1,
                '<=>' => sub { 
-                   $_[2] ? - $_[0]->compare($_[1]) : 
+                   $_[2] ? - $_[0]->compare($_[1]) :
                              $_[0]->compare($_[1]) },
                'cmp' => sub {
                    $_[2] ? - $_[0]->compare($_[1]) :
                              $_[0]->compare($_[1]) },
-               '-' => sub {
-                   $_[2] ? - $_[0]->_subtract_overload($_[1]) :
-                             $_[0]->_subtract_overload($_[1]) },
+               '-' => '_subtract_overload',
                '+' => '_add_overload',
              );
 
