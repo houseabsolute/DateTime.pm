@@ -10,6 +10,7 @@ use strict;
 use DateTime::Language;
 use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AMPM $VERSION);
 @ISA = qw(DateTime::Language);
+$VERSION = "0.10";
 
 @DayNames = qw(Axad Isniin Salaaso Arbaco Khamiis Jimco Sabti);
 @MonthNames = (

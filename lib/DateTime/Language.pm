@@ -23,6 +23,7 @@ foreach my $set ( [ 'aa', 'aar'                 => 'Afar' ],
                   # not quite right, but better than failing
                   [ 'pt', 'por'                 => 'Brazilian' ],
                   [ 'pt-br', 'por-br'           => 'Brazilian' ],
+                  [ 'sid'                       => 'Sidama' ],
                   [ 'so', 'som'                 => 'Somali' ],
                   [ 'sv', 'sve', 'swe'          => 'Swedish' ],
                   [ 'ti', 'tig'                 => 'Tigrinya' ],

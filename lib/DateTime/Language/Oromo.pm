@@ -7,7 +7,7 @@ package DateTime::Language::Oromo;
 use strict;
 
 use DateTime::Language;
-use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AMPM $VERSION);
+use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AMPM);
 @ISA = qw(DateTime::Language);
 
 @DayNames   = qw(Dilbata Wiixata Qibxata Roobii Kamiisa Jimaata Sanbata);
