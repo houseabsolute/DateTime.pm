@@ -49,7 +49,7 @@ sub new
     $self->{days} = 0 +
         ( abs( $p{weeks} * 7 ) + abs( $p{days} ) ) * $self->{sign};
 
-    $self->{minutes} = abs( ( $p{hours} * 60 ) + $p{minutes}  ) * $self->{sign};
+    $self->{minutes} = ( abs( $p{hours} * 60 ) + abs( $p{minutes} )  ) * $self->{sign};
 
     $self->{seconds} = 0 + abs( $p{seconds} ) * $self->{sign};
 
