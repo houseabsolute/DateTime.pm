@@ -129,14 +129,14 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     is( $dt0->year, 1, "year 1 is year 1" );
     is( $dt0->ce_year, 1, "ce_year 1 is year 1" );
     is( $dt0->era, 'CE', 'era is CE' );
-    is( $dt0->extended_year, '1CE', 'extended_year is 1CE' );
+    is( $dt0->year_with_era, '1CE', 'year_with_era is 1CE' );
 
     $dt0->subtract( years => 1 );
 
     is( $dt0->year, 0, "year 1 minus 1 is year 0" );
     is( $dt0->ce_year, -1, "ce_year 1 minus 1 is year -1" );
     is( $dt0->era, 'BCE', 'era is BCE' );
-    is( $dt0->extended_year, '1BCE', 'extended_year is 1BCE' );
+    is( $dt0->year_with_era, '1BCE', 'year_with_era is 1BCE' );
 }
 
 {
