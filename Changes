@@ -1,3 +1,16 @@
+0.xx
+
+[ BUG FIXES ]
+
+- In the datetime subtraction code, there was an off-by-one error in
+the code to determine if one of the datetimes occurred in a minute
+containing a leap second.  This led to the result of the subtraction
+being off by one second.  Patch by Andrew Pimlott.
+
+- A duration's nanoseconds weren't normalized after multiplication.
+Patch by Andrew Pimlott.
+
+
 0.1901  2004-01-07  (the "people care about ancient history?" release)
 
 [ BUG FIXES ]
