@@ -195,9 +195,7 @@ sub _add_overload
     }
 
     # will also work if $d1 is a DateTime.pm object
-    my $new = $d1->clone;
-    $new->add_duration($d2);
-    return $new;
+    return $d1->clone->add_duration($d2);
 }
 
 sub _subtract_overload
@@ -209,9 +207,7 @@ sub _subtract_overload
     die "Cannot subtract a DateTime object from a DateTime::Duration object"
         if UNIVERSAL::isa( $d2, 'DateTime' );
 
-    my $new = $d1->clone;
-    $new->subtract_duration($d2);
-    return $new;
+    return $d1->clone->subtract_duration($d2);
 }
 
 sub _multiply_overload
@@ -393,6 +389,10 @@ C<add_duration()> or C<subtract_duration()>, as appropriate.
 =head2 Overloading
 
 This class overload addition, subtraction, and mutiplication.
+
+Comparison is B<not> overloaded, because there is no way to
+meaningfully compare durations containing different units (i.e. is 30
+days greater than or less than one month?).
 
 =head1 SUPPORT
 
