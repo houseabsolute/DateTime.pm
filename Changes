@@ -13,6 +13,10 @@ Implemented by Flavio Glock.
 - Added complete support for leap seconds (through use of
 DateTime::LeapSecond).  Mostly implemented by Flavio Glock.
 
+- Added attributes system, which includes a new constructor parameter
+("attributes"), and the methods attribute(), set_attribute(), and
+has_attribute().
+
 [ BACKWARDS INCOMPATIBILTIES ]
 
 - Because of the addition of leap seconds to the mix, we are now

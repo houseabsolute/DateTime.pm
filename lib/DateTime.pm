@@ -27,7 +27,7 @@ use DateTime::Duration;
 use DateTime::Language;
 use DateTime::TimeZone;
 use DateTime::LeapSecond;
-use Params::Validate qw( validate SCALAR BOOLEAN OBJECT );
+use Params::Validate qw( validate SCALAR BOOLEAN HASHREF  OBJECT );
 use Time::Local ();
 
 # for some reason, overloading doesn't work unless fallback is listed
@@ -96,10 +96,11 @@ sub new
                                        default => $class->DefaultLanguage },
                         time_zone => { type => SCALAR | OBJECT,
                                        default => 'floating' },
+                        attributes => { type => HASHREF, default => {} },
                       }
                     );
 
-    my $self = {};
+    my $self = { attributes => $p{attributes} };
 
     if ( ref $p{language} )
     {
@@ -140,7 +141,6 @@ sub new
 
     return $self;
 }
-
 
 sub _normalize_leap_seconds
 {
@@ -301,8 +301,9 @@ sub from_epoch
     my $class = shift;
     my %p = validate( @_,
                       { epoch => { type => SCALAR },
-                        language => { type => SCALAR | OBJECT, optional => 1 },
-                        time_zone => { type => SCALAR | OBJECT, optional => 1 },
+                        language   => { type => SCALAR | OBJECT, optional => 1 },
+                        time_zone  => { type => SCALAR | OBJECT, optional => 1 },
+                        attributes => { type => HASHREF, optional => 1 },
                       }
                     );
 
@@ -333,7 +334,8 @@ sub from_object
                       { object => { type => OBJECT,
                                     can => 'utc_rd_values',
                                   },
-                        language  => { type => SCALAR | OBJECT, optional => 1 },
+                        language   => { type => SCALAR | OBJECT, optional => 1 },
+                        attributes => { type => HASHREF, optional => 1 },
                       },
                     );
 
@@ -365,8 +367,9 @@ sub last_day_of_month
                         hour   => { type => SCALAR, optional => 1 },
                         minute => { type => SCALAR, optional => 1 },
                         second => { type => SCALAR, optional => 1 },
-                        language  => { type => SCALAR | OBJECT, optional => 1 },
-                        time_zone => { type => SCALAR | OBJECT, optional => 1 },
+                        language   => { type => SCALAR | OBJECT, optional => 1 },
+                        time_zone  => { type => SCALAR | OBJECT, optional => 1 },
+                        attributes => { type => HASHREF, optional => 1 },
                       }
                     );
 
@@ -593,6 +596,12 @@ sub jd
 }
 
 sub mjd { $_[0]->jd - 2_400_000.5 }
+
+sub attribute { $_[0]->{attributes}{ $_[1] } }
+
+sub set_attribute { $_[0]->{attributes}{ $_[1] } = $_[2]; $_[0] }
+
+sub has_attribute { exists $_[0]->{attributes}{ $_[1] } }
 
 sub _format_nanosecs
 {
@@ -1232,8 +1241,8 @@ All constructors can die when invalid parameters are given.
 
 This class method accepts parameters for each date and time component:
 "year", "month", "day", "hour", "minute", "second", "nanosecond".
-Additionally, it accepts "fractional_second", "language" and
-"time_zone" parameters.
+Additionally, it accepts "fractional_second", "language",
+"time_zone", and "attributes" parameters.
 
   my $dt = DateTime->new( day    => 25,
                           month  => 10,
@@ -1271,6 +1280,19 @@ offset string ("+0630"), or the words "floating" or "local".  See the
 C<DateTime::TimeZone> documentation for more details.
 
 The default time zone is "floating".
+
+The "attributes" parameter is an optional hash reference containing
+arbitrary key/value pairs to be associated with the object.
+
+=head4 Attributes
+
+The attributes of a DateTime object are simply arbitrary key/value
+pairs.  This is useful for authors of DateTime-related modules who
+want to add additional information to a DateTime object, but for whom
+subclassing would be overkill.
+
+For example, a module that returned objects for Catholic saint's days
+might attach a "saint" attribute the objects it returns.
 
 =head4 Ambiguous Local Times
 
@@ -1542,19 +1564,6 @@ zone, such as "PST" or "GMT".  These names are B<not> definitive, and
 should not be used in any application intended for general use by
 users around the world.
 
-=item * utc_rd_values
-
-Returns the current UTC Rata Die days and seconds as a two element
-list.  This exists primarily to allow other calendar modules to create
-objects based on the values provided by this object.
-
-=item * utc_rd_as_seconds
-
-Returns the current UTC Rata Die days and seconds purely as seconds.
-This is useful when you need a single number to represent a date.
-This number ignores any fractional seconds stored in the object,
-as well as leap seconds.
-
 =item * local_rd_as_seconds
 
 Returns the current local Rata Die days and seconds purely as seconds.
@@ -1569,6 +1578,18 @@ return multiple scalars, one for each format string.
 
 See the L<strftime Specifiers|/strftime Specifiers> section for a list
 of all possible format specifiers.
+
+=item * attribute( $name )
+
+Returns the value of the requested attribute.  If the attribute
+doesn't exist, it returns C<undef>.  To distinguish between a
+nonexistent attribute and one explicitly set to to C<undef>, use the
+C<has_attribute()> method.
+
+=item * has_attribute( $name )
+
+Returns a boolean value indicating whether or not the attribute is
+specified for the object.
 
 =item * epoch
 
@@ -1588,6 +1609,19 @@ Using your system's epoch time may be error-prone, since epoch times
 have such a limited range on 32-bit machines.  Additionally, the fact
 that different operating systems have different epoch beginnings is
 another source of possible bugs.
+
+=item * utc_rd_values
+
+Returns the current UTC Rata Die days and seconds as a two element
+list.  This exists primarily to allow other calendar modules to create
+objects based on the values provided by this object.
+
+=item * utc_rd_as_seconds
+
+Returns the current UTC Rata Die days and seconds purely as seconds.
+This is useful when you need a single number to represent a date.
+This number ignores any fractional seconds stored in the object,
+as well as leap seconds.
 
 =back
 
@@ -1682,6 +1716,10 @@ method.
 This method returns a new C<DateTime::Duration> object representing
 the difference between the two dates.  The duration object will only
 have deltas for day and seconds.
+
+=item * set_attribute( $name => $value )
+
+Sets the specified attribute to the given value.
 
 =back
 
