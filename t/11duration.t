@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 53;
+use Test::More tests => 56;
 
 use DateTime;
 use DateTime::Duration;
@@ -163,4 +163,11 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
     is( $dur->nanoseconds, 10, 'nanoseconds is 10' );
     is( $dur->delta_nanoseconds, -10, 'delta_nanoseconds is -10' );
     ok( $dur->is_negative, 'duration is negative' );
+}
+
+{
+    my $dur = DateTime::Duration->new( days => 0 );
+    is( $dur->delta_days, 0, 'delta_days is 0' );
+    ok( ! $dur->is_positive, 'not positive' );
+    ok( ! $dur->is_negative, 'not negative' );
 }
