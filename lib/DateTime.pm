@@ -894,16 +894,16 @@ sub add_duration
             _normalize_nanoseconds( $self->{utc_rd_secs}, $self->{rd_nanosecs} );
         }
 
-        if ( $deltas{seconds} )
+        # must always normalize seconds, because a nanosecond change
+        # might cause a day change
+
+        if ( $self->time_zone->is_floating )
         {
-            if ( $self->time_zone->is_floating )
-            {
-                _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
-            }
-            else
-            {
-                _normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
-            }
+            _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+        }
+        else
+        {
+            _normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
         }
 
         delete $self->{utc_c};

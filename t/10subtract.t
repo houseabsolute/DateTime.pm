@@ -98,19 +98,16 @@ is( fake_ical($X), '20011011T040000Z', 'Subtract and get the right thing' );
         'adding difference back to dt2 should give same datetime' );
 }
 
+# test if the day changes because of a nanosecond subtract
 {
     my $dt = DateTime->new( year => 2001, month => 6, day => 12,
                             hour => 0, minute => 0, second => 0,
                             time_zone => 'UTC' );
     $dt->subtract( nanoseconds => 1 );
     is ( $dt->nanosecond, 999999999, 'negative nanoseconds normalize ok' );
-TODO: {
-    local $TODO = 'fixing normalization ...';
     is ( $dt->second, 59, 'seconds normalize ok' );
     is ( $dt->minute, 59, 'minutes normalize ok' );
     is ( $dt->hour, 23, 'hours normalize ok' );
     is ( $dt->day, 11, 'days normalize ok' );
-}
-
 }
 
