@@ -124,6 +124,7 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
 
     my @d = sort ($dur1, $dur2);
 
-    is( $d[0], $dur2, "smaller delta should come first in sorted list" );
+    is( $d[0]->delta_months, $dur2->delta_months,
+        "smaller delta should come first in sorted list" );
 }
 
