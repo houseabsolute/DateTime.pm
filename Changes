@@ -12,6 +12,9 @@ _rd2ymd, so as to make them look more normal when used in subclasses.
 - The last_day_of_month() method had the DateTime class hard-coded in
 it.  Reported by Eugene van der Pijll.
 
+- Fixed a bug when comparing a datetime object to infinity (or
+negative infinity).  Fixed by Flavio Glock.
+
 
 0.07     2003-02-26
 
