@@ -1,14 +1,20 @@
 use strict;
 
-use Test::More tests => 12;
+use Test::More tests => 34;
 
 use DateTime;
 
-my $pos = DateTime::Infinite::Positive->new;
-my $neg = DateTime::Infinite::Negative->new;
-my $nan = $pos->{utc_rd_days} - $pos->{utc_rd_days};
+my $pos = DateTime::Infinite::Future->new;
+my $neg = DateTime::Infinite::Past->new;
+my $posinf = 100 ** 100 ** 100;
+my $neginf = -1 * $posinf;
+my $nan = $posinf - $posinf;
 
+# infinite date math
 {
+    ok( $pos->is_infinite, 'positive infinity should be infinite' );
+    ok( $neg->is_infinite, 'negative infinity should be infinite' );
+
     # that's a long time ago!
     my $long_ago = DateTime->new( year => -100_000 );
 
@@ -45,11 +51,34 @@ my $nan = $pos->{utc_rd_days} - $pos->{utc_rd_days};
         is( $deltas{$_}, $nan, "infinity - infinity = nan ($_)" );
     }
 
-    my $new_pos = $pos->add( days => 10 );
+    my $new_pos = $pos->clone->add( days => 10 );
     ok( $new_pos == $pos,
         "infinity + normal duration = infinity" );
 
-    my $new_pos2 = $pos->subtract( days => 10 );
+    my $new_pos2 = $pos->clone->subtract( days => 10 );
     ok( $new_pos2 == $pos,
         "infinity - normal duration = infinity" );
+
+    ok( $pos == $posinf,
+        "infinity (datetime) == infinity (number)" );
+
+    ok( $neg == $neginf,
+        "neg infinity (datetime) == neg infinity (number)" );
+}
+
+# This could vary across platforms
+my $pos_as_string = $posinf . '';
+my $neg_as_string = $neginf . '';
+
+# formatting
+{
+    foreach my $m ( qw( year month day hour minute second
+                        microsecond millisecond nanosecond ) )
+    {
+        is( $pos->$m, $pos_as_string,
+            "pos $m is $pos_as_string" );
+
+        is( $neg->$m, $neg_as_string,
+            "neg $m is $pos_as_string" );
+    }
 }
