@@ -18,6 +18,10 @@ Based in part on a patch from Rick Measham.
 - Added an is_zero method to DateTime::Duration, for objects of zero
 length.
 
+- DateTime->from_epoch will now accept a floating point epoch and turn
+the post-decimal portion into nanoseconds.  This was done in order to
+interface more accurately with Time::HiRes.
+
 [ BUG FIXES ]
 
 - Fix epoch() method to work properly with dates greater than 50 years

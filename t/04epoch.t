@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 28;
+use Test::More tests => 29;
 
 use DateTime;
 
@@ -110,4 +110,9 @@ SKIP:
     is( $dt->year, 1904, 'year should be 1904' );
     is( $dt->month,   1, 'month should be 1904' );
     is( $dt->day,     1, 'day should be 1904' );
+}
+
+{
+    my $dt = DateTime->from_epoch( epoch => 0.5 );
+    is( $dt->nanosecond, 500_000_000, 'nanosecond should be 500,000,000 with 0.5 as epoch' );
 }

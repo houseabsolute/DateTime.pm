@@ -345,10 +345,16 @@ sub from_epoch
                     );
 
     my %args;
+
+    # Because epoch may come from Time::HiRes
+    my $fraction = $p{epoch} - int( $p{epoch} );
+    $args{nanosecond} = $fraction * MAX_NANOSECONDS
+        if $fraction;
+
     # Note, for very large negative values this may give a blatantly
     # wrong answer.
     @args{ qw( second minute hour day month year ) } =
-        ( gmtime( delete $p{epoch} ) )[ 0..5 ];
+        ( gmtime( int delete $p{epoch} ) )[ 0..5 ];
     $args{year} += 1900;
     $args{month}++;
 
@@ -1498,6 +1504,9 @@ This may change in future version of this module.
 This class method can be used to construct a new DateTime object from
 an epoch time instead of components.  Just as with the C<new()>
 method, it accepts "time_zone" and "language" parameters.
+
+If the epoch value is not an integer, the part after the decimal will
+be converted to nanoseconds.
 
 =item * now( ... )
 
