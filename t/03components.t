@@ -1,7 +1,7 @@
 use strict;
 
 use Test::More;
-plan tests => 43;
+plan tests => 44;
 
 use DateTime;
 
