@@ -83,7 +83,6 @@ sub initialize {
     # year month day number-of-leapseconds
     #
     _init ( qw(
-1972  Jan. 1  +1 
 1972  Jul. 1  +1
 1973  Jan. 1  +1
 1974  Jan. 1  +1
@@ -143,7 +142,7 @@ system was implemented.
 =item * leap_seconds( $rd )
 
 Returns the number of accumulated leap seconds for a given day,
-in the range 0 .. 23.
+in the range 0 .. 22.
 
 =item * extra_seconds( $rd )
 
