@@ -117,9 +117,9 @@ my $BasicValidate =
       day    => { type => SCALAR, default => 1,
                   callbacks =>
                   { 'is valid day of month' =>
-                    sub { $_[0] <=
-                          __PACKAGE__->_month_length
-                              ( $_[1]->{year}, $_[1]->{month} ) },
+                    sub { $_[0] >= 1 &&
+                          $_[0] <= __PACKAGE__->_month_length
+                                       ( $_[1]->{year}, $_[1]->{month} ) },
                   },
                 },
       hour   => { type => SCALAR, default => 0,
@@ -429,9 +429,6 @@ sub last_day_of_month
 
 sub _month_length
 {
-    use Devel::StackTrace;
-    warn Devel::StackTrace->new unless defined $_[1];
-
     return ( $_[0]->_is_leap_year( $_[1] ) ?
              $LeapYearMonthLengths[ $_[2] - 1 ] :
              $MonthLengths[ $_[2] - 1 ]
@@ -1313,8 +1310,10 @@ my $SetValidate =
 # There's no way to validate that the day is valid for the month
 # because the month & year may not be included in the params to this
 # method
-$SetValidate->{day}{callbacks} =
-    { 'is valid possible day of month' => sub { $_[0] >= 1 && $_[0] <= 31 } };
+$SetValidate->{day}{callbacks }=
+    { 'is valid possible day of month' =>
+      sub { $_[0] >= 1 && $_[0] <= 31 }
+    };
 
 sub set
 {
