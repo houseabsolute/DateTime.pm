@@ -58,7 +58,7 @@ use Time::Local ();
 use overload ( 'fallback' => 1,
                '<=>' => '_compare_overload',
                'cmp' => '_compare_overload',
-               '""'  => 'iso8601',
+               '""'  => 'format_datetime',
                '-'   => '_subtract_overload',
                '+'   => '_add_overload',
              );
@@ -157,6 +157,7 @@ my $NewValidate =
     { %$BasicValidate,
       time_zone => { type => SCALAR | OBJECT,
                      default => 'floating' },
+      formatter => { type => SCALAR | OBJECT, can => 'parse_datetime', optional => 1 },
     };
 
 sub new
@@ -194,7 +195,7 @@ sub new
         $class->_time_as_seconds( @p{ qw( hour minute second ) } );
 
     $self->{rd_nanosecs} = $p{nanosecond};
-
+    $self->{formatter} = $p{formatter};
     bless $self, $class;
 
     $self->_normalize_nanoseconds( $self->{local_rd_secs}, $self->{rd_nanosecs} );
@@ -340,6 +341,7 @@ sub from_epoch
                         locale     => { type => SCALAR | OBJECT, optional => 1 },
                         language   => { type => SCALAR | OBJECT, optional => 1 },
                         time_zone  => { type => SCALAR | OBJECT, optional => 1 },
+                        formatter  => { type => SCALAR | OBJECT, optional => 1 },
                       }
                     );
 
@@ -378,6 +380,7 @@ sub from_object
                                   },
                         locale     => { type => SCALAR | OBJECT, optional => 1 },
                         language   => { type => SCALAR | OBJECT, optional => 1 },
+                        formatter  => { type => SCALAR | OBJECT, can => 'parse_datetime', optional => 1 },
                       },
                     );
 
@@ -480,6 +483,8 @@ sub from_day_of_year
                           day   => $day,
                         );
 }
+
+sub formatter { $_[0]->{formatter} }
 
 sub clone { bless { %{ $_[0] } }, ref $_[0] }
 
@@ -610,6 +615,17 @@ sub leap_seconds
     return 0 if $self->{tz}->is_floating;
 
     return DateTime->_leap_seconds( $self->{utc_rd_days} );
+}
+
+sub format_datetime
+{
+    my $self = shift;
+    if (!$self->{formatter} || ! UNIVERSAL::can($self->{formatter}, 'format_datetime')) {
+        # XXX - could warn()
+        return $self->iso8601;
+    } else {
+        return $self->{formatter}->format_datetime($self);
+    }
 }
 
 sub hms
@@ -1358,6 +1374,8 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 
 sub set_locale { $_[0]->set( locale => $_[1] ) }
 
+sub set_formatter { $_[0]->{formatter} = $_[1] }
+
 sub truncate
 {
     my $self = shift;
@@ -1562,6 +1580,8 @@ DateTime - A date and time object
 
   $dt->set_time_zone( 'America/Chicago' );
 
+  $dt->set_formatter( $formatter );
+
 =head1 DESCRIPTION
 
 DateTime is a class for the representation of date/time combinations,
@@ -1658,7 +1678,7 @@ All constructors can die when invalid parameters are given.
 
 This class method accepts parameters for each date and time component:
 "year", "month", "day", "hour", "minute", "second", "nanosecond".
-It also accepts "locale" and "time_zone" parameters.
+It also accepts "locale", "time_zone", and "formatter" parameters.
 
   my $dt = DateTime->new( year   => 1066,
                           month  => 10,
@@ -1730,6 +1750,9 @@ C<DateTime::TimeZone> documentation for more details.
 
 The default time zone is "floating".
 
+The "formatter" can be either a scalar or an object, but the class specified
+by the scalar or the object must implement a parse_datetime() method.
+
 =head4 Ambiguous Local Times
 
 Because of Daylight Saving Time, it is possible to specify a local
@@ -1784,7 +1807,7 @@ This may change in future version of this module.
 
 This class method can be used to construct a new DateTime object from
 an epoch time instead of components.  Just as with the C<new()>
-method, it accepts "time_zone" and "locale" parameters.
+method, it accepts "time_zone", "locale", and "formatter" parameters.
 
 If the epoch value is not an integer, the part after the decimal will
 be converted to nanoseconds.  This is done in order to be compatible
@@ -1814,7 +1837,7 @@ This class method can be used to construct a new DateTime object from
 any object that implements the C<utc_rd_values()> method.  All
 C<DateTime::Calendar> modules must implement this method in order to
 provide cross-calendar compatibility.  This method accepts a
-"locale" parameter
+"locale" and "formatter" parameter
 
 If the object passed to this method has a C<time_zone()> method, that
 is used to set the time zone of the newly created C<DateTime.pm>
@@ -2518,6 +2541,30 @@ increment (++) or decrement (--) to do anything useful.
 
 The module also overloads stringification to use the C<iso8601()>
 method.
+
+=head2 Formatters And Stringification
+
+You can optionally specify a "formatter", which is usually a
+DateTime::Format::* object/class, to control how the stringification of
+the DateTime object. 
+
+Any of the constructor methods new(), from_object(), from_epoch() can
+accept a formatter argument:
+
+  my $formatter = DateTime::Format::Strptime->new(...);
+  my $dt = DateTime->new(year => 2004, formatter => $formatter);
+
+Or, you can set it afterwards:
+
+  $dt->set_formatter($formatter);
+  $formatter = $dt->formatter();
+
+Once you set the formatter, the overloaded stringification method will use
+the formatter. If unspecified, the iso8601() method is used
+
+A formatter can be handy when you know that in your application you want to 
+stringify your DateTime objects into a special format all the time, for example
+to a different language.
 
 =head2 strftime Specifiers
 
