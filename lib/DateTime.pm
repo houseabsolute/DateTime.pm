@@ -2412,6 +2412,36 @@ This avoids the possibility of having date math throw an exception,
 and makes sure that 1 day equals 24 hours.  Of course, this may not
 always be desirable, so caveat user!
 
+=head3 The Results of Date Math
+
+Because date math is done on each unit separately, the results of date
+math may not always be what you expect.
+
+Internally, a duration is made up internally of several different
+units, months, days, minutes, seconds, and nanoseconds.
+
+Of those, the only ones that convert or normalize to other units are
+seconds <=> nanoseconds.  For all the others, there is no fixed
+conversion between the two units, because of things like leap seconds,
+DST changes, etc.
+
+Here's an example, based on a question from Mark Fowler to the
+datetime@perl.org list.
+
+If you want to know how many seconds a duration really represents, you
+have to add it to a datetime to find out, so you could do:
+
+ my $now = DateTime->now( time_zone => 'UTC' );
+ my $later = $now->clone->add_duration($duration);
+
+ my $seconds_dur = $later->subtract_datetime_absolute($now);
+
+This returns a duration which only contains seconds and nanoseconds.
+There are other subtract/delta methods in DateTime.pm to generate
+different types of durations.  These methods are
+C<subtract_datetime()>, C<subtract_datetime_absolute()>,
+C<delta_md()>, L<delta_days()>, and C<delta_ms()>.
+
 =head2 Overloading
 
 This module explicitly overloads the addition (+), subtraction (-),
