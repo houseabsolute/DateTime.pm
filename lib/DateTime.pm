@@ -26,8 +26,14 @@ BEGIN
 use DateTime::Duration;
 use DateTime::Language;
 use DateTime::TimeZone;
+use DateTime::LeapSecond;
 use Params::Validate qw( validate SCALAR BOOLEAN OBJECT );
 use Time::Local ();
+
+# delay DateTime::LeapSecond initialization until after
+# DateTime BEGIN is done
+initialize DateTime::LeapSecond;
+
 
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
@@ -493,8 +499,10 @@ sub language { $_[0]->{language} }
 
 sub utc_rd_values { @{ $_[0] }{ 'utc_rd_days', 'utc_rd_secs' } }
 
+# NOTE: no nanoseconds, no leap seconds
 sub utc_rd_as_seconds   { ( $_[0]->{utc_rd_days} * 86400 ) + $_[0]->{utc_rd_secs} }
 
+# NOTE: no nanoseconds, no leap seconds
 sub local_rd_as_seconds { ( $_[0]->{local_rd_days} * 86400 ) + $_[0]->{local_rd_secs} }
 
 # RD 1 is JD 1,721,424.5 - a simple offset
@@ -504,9 +512,11 @@ sub jd
 
     my $jd = $self->{utc_rd_days} + 1_721_424.5;
 
+    my $day_length = DateTime::LeapSecond::day_length( $self->{utc_rd_days} );
+
     return ( $jd +
-             ( $self->{utc_rd_secs} / 86400 ) +
-             ( $self->{rd_nanosecs} / 86400 / MAX_NANOSECONDS )
+             ( $self->{utc_rd_secs} / $day_length )  +
+             ( $self->{rd_nanosecs} / $day_length / MAX_NANOSECONDS )
            );
 }
 
@@ -663,7 +673,7 @@ sub subtract_datetime
             $self->{utc_rd_secs} < $dt->{utc_rd_secs} )
     {
         my $days = $self->{utc_rd_days} - 1;
-        my $secs = $self->{utc_rd_secs} + 86400;
+        my $secs = $self->{utc_rd_secs} + DateTime::LeapSecond::day_length( $days );
 
         return DateTime::Duration->new
             ( days        => $days - $dt->{utc_rd_days},
@@ -675,7 +685,7 @@ sub subtract_datetime
             $dt->{utc_rd_secs} < $self->{utc_rd_secs} )
     {
         my $days = $dt->{utc_rd_days} - 1;
-        my $secs = $dt->{utc_rd_secs} + 86400;
+        my $secs = $dt->{utc_rd_secs} +  + DateTime::LeapSecond::day_length( $days );
 
         return DateTime::Duration->new
             ( days    => $self->{utc_rd_days} - $days,
@@ -742,6 +752,8 @@ sub add_duration
     # DST boundaries.
     if ( $deltas{seconds} || $deltas{nanoseconds})
     {
+        my $old_leap_seconds = DateTime::LeapSecond::leap_seconds( $self->{utc_rd_days} );
+
         $self->{utc_rd_secs} += $deltas{seconds};
 
         if ( $deltas{nanoseconds} )
@@ -752,6 +764,13 @@ sub add_duration
 
         _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} )
             if $deltas{seconds};
+
+        my $new_leap_seconds = DateTime::LeapSecond::leap_seconds( $self->{utc_rd_days} );
+        if ( $new_leap_seconds != $old_leap_seconds ) {
+            # warn "add duration across leap seconds";
+            $self->{utc_rd_secs} += $old_leap_seconds - $new_leap_seconds;
+            _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} )
+        }
 
         delete $self->{utc_c};
         $self->_calc_local_rd;
@@ -1433,12 +1452,14 @@ objects based on the values provided by this object.
 
 Returns the current UTC Rata Die days and seconds purely as seconds.
 This is useful when you need a single number to represent a date.
-This number ignores any fractional seconds stored in the object.
+This number ignores any fractional seconds stored in the object,
+as well as leap seconds.
 
 =item * local_rd_as_seconds
 
 Returns the current local Rata Die days and seconds purely as seconds.
-This number ignores any fractional seconds stored in the object.
+This number ignores any fractional seconds stored in the object,
+as well as leap seconds.
 
 =item * strftime( $format, ... )
 

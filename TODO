@@ -1,5 +1,12 @@
 TODO list for Perl module DateTime
 
+* leap seconds
+
+- do not use leap seconds for 'floating time'
+
+- separate seconds from minutes in DateTime::Duration,
+  such that minutes don't use leap seconds.
+
 * strftime method
 
 - more tests for other languages
