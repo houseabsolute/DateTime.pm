@@ -2,8 +2,6 @@ TODO list for Perl module DateTime
 
 * strftime method
 
-- strftime - mostly done except for TZ bits
-
 - either remove "preferred format" parts from strftime or add
 preferered_{date,time,datetime}_format methods for each language
 (which then has the US-en vs. UK-en mess to deal with, plus others no
@@ -38,15 +36,7 @@ flushed on changes (add, etc.)
 - sub-second resolution - at least microseconds (cooperate with
 Time::HiRes), but is micro small enough?
 
-- no ordinal suffixes for Czech language.  contact Honza Padziadora?
-
 - wrapping mode bits in _add need to become class/object attribute
-
-- Offset should be specified as DateTime::TimeZone object (or
-something like that) as well as, or instead of, a string/number.
-
-- Implement DateTime::TimeZone (see
-http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/reefknot/Date-ICal-Timezone/)
 
 - overloading for DateTime::Duration, addition, subtraction,
 multiplication (duration * int), division? (duration / int).
@@ -65,9 +55,9 @@ useful for other calendar implementors.
 
 - document error handling features
 
-- Time::Local is now a core module, with on CPAN existence.  But the
+- Time::Local is now a core module, with no CPAN existence.  But the
 version that works best is in 5.8.0, and not otherwise available.
 
 - tests for end_of_month_day_of_year (rename?) and month_lengths
 
-- fix offset handling.  currently all returned values are for UTC!
+- support years in durations
