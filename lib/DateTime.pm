@@ -97,11 +97,36 @@ sub new
     my $class = shift;
     my %p = validate( @_,
                       { year   => { type => SCALAR },
-                        month  => { type => SCALAR, default => 1 },
-                        day    => { type => SCALAR, default => 1 },
-                        hour   => { type => SCALAR, default => 0 },
-                        minute => { type => SCALAR, default => 0 },
-                        second => { type => SCALAR, default => 0 },
+                        month  => { type => SCALAR, default => 1,
+                                    callbacks =>
+                                    { 'is between 1 and 12' =>
+                                      sub { $_[0] >= 1 && $_[0] <= 12 }
+                                    },
+                                  },
+                        day    => { type => SCALAR, default => 1,
+                                    callbacks =>
+                                    { 'is between 1 and 31' =>
+                                      sub { $_[0] >= 1 && $_[0] <= 12 },
+                                    },
+                                  },
+                        hour   => { type => SCALAR, default => 0,
+                                    callbacks =>
+                                    { 'is between 0 and 23' =>
+                                      sub { $_[0] >= 0 && $_[0] <= 23 },
+                                    },
+                                  },
+                        minute => { type => SCALAR, default => 0,
+                                    callbacks =>
+                                    { 'is between 0 and 59' =>
+                                      sub { $_[0] >= 0 && $_[0] <= 59 },
+                                    },
+                                  },
+                        second => { type => SCALAR, default => 0,
+                                    callbacks =>
+                                    { 'is between 0 and 61' =>
+                                      sub { $_[0] >= 0 && $_[0] <= 61 },
+                                    },
+                                  },
                         nanosecond => { type => SCALAR, default => 0 },
                         fractional_second =>
                         { type => SCALAR, default => undef },
