@@ -998,9 +998,6 @@ method, it accepts a "language" parameter.  The time zone will always
 be "UTC" for any object created from an epoch.  This can be changed
 once the object is created.
 
-Because C<Time::Local> is used internally, all machines are treated as
-if they had the UNIX epoch of January 1, 1970 GMT.
-
 =item * now( ... )
 
 This class method is equivalent to calling C<from_epoch()> with the
