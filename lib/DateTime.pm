@@ -12,6 +12,12 @@ use DateTime::TimeZone;
 use Params::Validate qw( validate SCALAR BOOLEAN OBJECT );
 use Time::Local ();
 
+use DynaLoader;
+
+@DateTime::ISA = 'DynaLoader';
+
+bootstrap DateTime $DateTime::VERSION;
+
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
 use overload ( 'fallback' => 1,
@@ -90,7 +96,7 @@ sub new {
         $class->_greg2rd( @args{ qw( year month day ) } );
 
     $self->{local_rd_secs} =
-        $class->time_as_seconds( @args{ qw( hour minute second ) } );
+        $class->_time_as_seconds( @args{ qw( hour minute second ) } );
 
     bless $self, $class;
 
@@ -253,124 +259,6 @@ sub last_day_of_month {
 }
 
 sub clone { bless { %{ $_[0] } }, ref $_[0] }
-
-=begin internal
-
-    ($rd, $secs) = _normalize_seconds( $rd, $secs );
-
-    Corrects seconds that have gone into following or previous day(s).
-    Adjusts the passed days and seconds as well as returning them.
-
-=end internal
-
-=cut
-
-sub _normalize_seconds {
-    my $adj;
-
-    if ($_[1] < 0) {
-        $adj = int( ($_[1]-86399)/86400 );
-    } else {
-        $adj = int( $_[1]/86400 );
-    }
-    ($_[0] += $adj), ($_[1] -= $adj*86400);
-}
-
-sub time_as_seconds {
-    shift;
-    my ( $hour, $min, $sec ) = @_;
-
-    $hour ||= 0;
-    $min ||= 0;
-    $sec ||= 0;
-
-    my $secs = $hour * 3600 + $min * 60 + $sec;
-    return $secs;
-}
-
-sub _rd2greg {
-    shift; # ignore class
-
-    use integer;
-    my $d = shift;
-    my $yadj = 0;
-    my ( $c, $y, $m );
-
-    # add 306 days to make relative to Mar 1, 0; also adjust $d to be
-    # within a range (1..2**28-1) where our calculations will work
-    # with 32bit ints
-    if ( $d > 2**28 - 307 ) {
-
-        # avoid overflow if $d close to maxint
-        $yadj = ( $d - 146097 + 306 ) / 146097 + 1;
-        $d -= $yadj * 146097 - 306;
-    } elsif ( ( $d += 306 ) <= 0 ) {
-        $yadj =
-          -( -$d / 146097 + 1 );    # avoid ambiguity in C division of negatives
-        $d -= $yadj * 146097;
-    }
-
-    $c =
-      ( $d * 4 - 1 ) / 146097;      # calc # of centuries $d is after 29 Feb of yr 0
-    $d -= $c * 146097 / 4;          # (4 centuries = 146097 days)
-    $y = ( $d * 4 - 1 ) / 1461;     # calc number of years into the century,
-    $d -= $y * 1461 / 4;            # again March-based (4 yrs =~ 146[01] days)
-    $m =
-      ( $d * 12 + 1093 ) / 367;     # get the month (3..14 represent March through
-    $d -= ( $m * 367 - 1094 ) / 12; # February of following year)
-    $y += $c * 100 + $yadj * 400;   # get the real year, which is off by
-    ++$y, $m -= 12 if $m > 12;      # one if month is January or February
-
-    return ( $y, $m, $d );
-}
-
-sub _greg2rd {
-    shift; # ignore class
-
-    use integer;
-    my ( $y, $m, $d ) = @_;
-    my $adj;
-
-    # make month in range 3..14 (treat Jan & Feb as months 13..14 of
-    # prev year)
-    if ( $m <= 2 ) {
-        $y -= ( $adj = ( 14 - $m ) / 12 );
-        $m += 12 * $adj;
-    } elsif ( $m > 14 ) {
-        $y += ( $adj = ( $m - 3 ) / 12 );
-        $m -= 12 * $adj;
-    }
-
-    # make year positive (oh, for a use integer 'sane_div'!)
-    if ( $y < 0 ) {
-        $d -= 146097 * ( $adj = ( 399 - $y ) / 400 );
-        $y += 400 * $adj;
-    }
-
-    # add: day of month, days of previous 0-11 month period that began
-    # w/March, days of previous 0-399 year period that began w/March
-    # of a 400-multiple year), days of any 400-year periods before
-    # that, and 306 days to adjust from Mar 1, year 0-relative to Jan
-    # 1, year 1-relative (whew)
-
-    $d += ( $m * 367 - 1094 ) / 12 + $y % 100 * 1461 / 4 +
-      ( $y / 100 * 36524 + $y / 400 ) - 306;
-}
-
-sub _seconds_as_components {
-    shift;
-    my $time = shift;
-
-    my $hour = int( $time / 3600 );
-    $time -= $hour * 3600;
-
-    my $minute = int( $time / 60 );
-
-    my $second = $time - ( $minute * 60 );
-
-    return ( $hour, $minute, $second );
-}
-
 
 BEGIN {
 
@@ -553,9 +441,8 @@ sub jd {
     my $self = shift;
 
     my $jd = $self->{utc_rd_days} + 1_721_424.5;
-    my ( $h, $m, $s ) = $self->_utc_hms;
 
-    return $jd + ( $h + ( $m + $s / 60 ) / 60 ) / 24;
+    return $jd + ( $self->{utc_rd_secs} / 86400 );
 }
 
 sub mjd { $_[0]->jd - + 2_400_000.5 }
@@ -849,6 +736,116 @@ sub set_time_zone {
 
 # like "scalar localtime()" in Perl
 sub _stringify { $_[0]->strftime( '%a, %d %b %Y %H:%M:%S %Z' ) }
+
+
+#
+# Everything below is now implemented in DateTime.xs
+#
+sub _rd2greg {
+    shift; # ignore class
+
+    use integer;
+    my $d = shift;
+    my $yadj = 0;
+    my ( $c, $y, $m );
+
+    # add 306 days to make relative to Mar 1, 0; also adjust $d to be
+    # within a range (1..2**28-1) where our calculations will work
+    # with 32bit ints
+    if ( $d > 2**28 - 307 ) {
+
+        # avoid overflow if $d close to maxint
+        $yadj = ( $d - 146097 + 306 ) / 146097 + 1;
+        $d -= $yadj * 146097 - 306;
+    } elsif ( ( $d += 306 ) <= 0 ) {
+        $yadj =
+          -( -$d / 146097 + 1 );    # avoid ambiguity in C division of negatives
+        $d -= $yadj * 146097;
+    }
+
+    $c =
+      ( $d * 4 - 1 ) / 146097;      # calc # of centuries $d is after 29 Feb of yr 0
+    $d -= $c * 146097 / 4;          # (4 centuries = 146097 days)
+    $y = ( $d * 4 - 1 ) / 1461;     # calc number of years into the century,
+    $d -= $y * 1461 / 4;            # again March-based (4 yrs =~ 146[01] days)
+    $m =
+      ( $d * 12 + 1093 ) / 367;     # get the month (3..14 represent March through
+    $d -= ( $m * 367 - 1094 ) / 12; # February of following year)
+    $y += $c * 100 + $yadj * 400;   # get the real year, which is off by
+    ++$y, $m -= 12 if $m > 12;      # one if month is January or February
+
+    return ( $y, $m, $d );
+}
+
+sub _greg2rd {
+    shift; # ignore class
+
+    use integer;
+    my ( $y, $m, $d ) = @_;
+    my $adj;
+
+    # make month in range 3..14 (treat Jan & Feb as months 13..14 of
+    # prev year)
+    if ( $m <= 2 ) {
+        $y -= ( $adj = ( 14 - $m ) / 12 );
+        $m += 12 * $adj;
+    } elsif ( $m > 14 ) {
+        $y += ( $adj = ( $m - 3 ) / 12 );
+        $m -= 12 * $adj;
+    }
+
+    # make year positive (oh, for a use integer 'sane_div'!)
+    if ( $y < 0 ) {
+        $d -= 146097 * ( $adj = ( 399 - $y ) / 400 );
+        $y += 400 * $adj;
+    }
+
+    # add: day of month, days of previous 0-11 month period that began
+    # w/March, days of previous 0-399 year period that began w/March
+    # of a 400-multiple year), days of any 400-year periods before
+    # that, and 306 days to adjust from Mar 1, year 0-relative to Jan
+    # 1, year 1-relative (whew)
+
+    $d += ( $m * 367 - 1094 ) / 12 + $y % 100 * 1461 / 4 +
+      ( $y / 100 * 36524 + $y / 400 ) - 306;
+}
+
+sub _seconds_as_components {
+    shift;
+    my $time = shift;
+
+    my $hour = int( $time / 3600 );
+    $time -= $hour * 3600;
+
+    my $minute = int( $time / 60 );
+
+    my $second = $time - ( $minute * 60 );
+
+    return ( $hour, $minute, $second );
+}
+
+sub _time_as_seconds {
+    shift;
+    my ( $hour, $min, $sec ) = @_;
+
+    $hour ||= 0;
+    $min ||= 0;
+    $sec ||= 0;
+
+    my $secs = $hour * 3600 + $min * 60 + $sec;
+    return $secs;
+}
+
+sub _normalize_seconds {
+    my $adj;
+
+    if ($_[1] < 0) {
+        $adj = int( ($_[1]-86399)/86400 );
+    } else {
+        $adj = int( $_[1]/86400 );
+    }
+    ($_[0] += $adj), ($_[1] -= $adj*86400);
+}
 
 
 1;
@@ -1306,7 +1303,7 @@ Yes, now we can know "ni3 na1 bian1 ji3dian2?"
 =item * add_duration( $duration_object )
 
 This method adds a C<DateTime::Duration> to the current datetime.  See
-the L<DateTime::TimeZone|DateTime::TimeZone> docs for more detais.
+the L<DateTime::Duration|DateTime::Duration> docs for more detais.
 
 =item * add( DateTime::Duration->new parameters )
 
