@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 18;
+use Test::More tests => 20;
 
 use DateTime;
 
@@ -90,4 +90,22 @@ use DateTime;
 
     is( $dt->hour, 1, 'hour should be 1' );
     is( $dt->offset, -21600, 'offset should be -21600' );
+}
+
+{
+    my $dt = DateTime->new( year => 2003, month => 4, day => 6,
+                            hour => 3, time_zone => 'floating',
+                          );
+    $dt->set_time_zone( 'America/Chicago' );
+
+    is( $dt->hour, 3, 'hour should be 3 after switching from floating TZ' );
+}
+
+{
+    my $dt = DateTime->new( year => 2003, month => 4, day => 6,
+                            hour => 3, time_zone => 'America/Chicago',
+                          );
+    $dt->set_time_zone( 'floating' );
+
+    is( $dt->hour, 3, 'hour should be 3 after switching to floating TZ' );
 }
