@@ -20,8 +20,9 @@ use DateTime;
 # These tests come from one of the zdump-generated test files in
 # DT::TZ
 {
-    my $dt = DateTime->new( year => 1934, month => 2, day => 26, hour => 0, minute => 59, second => 59,
-                             time_zone => 'UTC',
+    my $dt = DateTime->new( year => 1934, month => 2, day => 26,
+                            hour => 0, minute => 59, second => 59,
+                            time_zone => 'UTC',
                            );
     $dt->set_time_zone( 'Africa/Niamey' );
 
