@@ -203,21 +203,26 @@ sub _utc_hms
 sub from_epoch
 {
     my $class = shift;
-    my %args = validate( @_,
+    my %p = validate( @_,
                          { epoch => { type => SCALAR },
                            language => { type => SCALAR | OBJECT, optional => 1 },
+                           time_zone => { type => SCALAR | OBJECT, optional => 1 },
                          }
                        );
 
-    my %p;
+    my %args;
     # Note, for very large negative values this may give a blatantly
     # wrong answer.
-    @p{ qw( second minute hour day month year ) } =
-        ( gmtime( delete $args{epoch} ) )[ 0..5 ];
-    $p{year} += 1900;
-    $p{month}++;
+    @args{ qw( second minute hour day month year ) } =
+        ( gmtime( delete $p{epoch} ) )[ 0..5 ];
+    $args{year} += 1900;
+    $args{month}++;
 
-    return $class->new( %args, %p, time_zone => 'UTC' );
+    my $self = $class->new( %args, %p, time_zone => 'UTC' );
+
+    $self->set_time_zone( $p{time_zone} ) if exists $p{time_zone};
+
+    return $self;
 }
 
 # use scalar time in case someone's loaded Time::Piece
@@ -1071,9 +1076,7 @@ This may change in future version of this module.
 
 This class method can be used to construct a new DateTime object from
 an epoch time instead of components.  Just as with the C<new()>
-method, it accepts a "language" parameter.  The time zone will always
-be "UTC" for any object created from an epoch.  This can be changed
-once the object is created.
+method, it accepts "time_zone" and "language" parameters.
 
 =item * now( ... )
 
