@@ -79,7 +79,20 @@ sub _rd2ymd
 
         $doy += $d;
 
-        return ( $y, $m, $d, $dow, $doy );
+        my $quarter;
+        {
+            no integer;
+            $quarter = int( ( 1 / 3.1 ) * $m ) + 1;
+        }
+
+        my $qm = ( 3 * $quarter ) - 2;
+
+        my $doq =
+            ( $doy -
+              $class->_end_of_last_month_day_of_year( $y, $qm )
+            );
+
+        return ( $y, $m, $d, $dow, $doy, $quarter, $doq );
     }
 
     return ( $y, $m, $d );

@@ -164,7 +164,8 @@ sub _calc_local_components
 {
     my $self = shift;
 
-    @{ $self->{local_c} }{ qw( year month day day_of_week day_of_year ) } =
+    @{ $self->{local_c} }{ qw( year month day day_of_week
+                               day_of_year quarter day_of_quarter) } =
         $self->_rd2ymd( $self->{local_rd_days}, 1 );
 
     @{ $self->{local_c} }{ qw( hour minute second ) } =
@@ -310,6 +311,8 @@ sub day_of_month { $_[0]->{local_c}{day} }
 *day  = \&day_of_month;
 *mday = \&day_of_month;
 
+sub quarter {$_[0]->{local_c}{quarter} };
+
 sub day_of_month_0 { $_[0]->{local_c}{day} - 1 }
 *day_0  = \&day_of_month_0;
 *mday_0 = \&day_of_month_0;
@@ -325,6 +328,12 @@ sub day_of_week_0 { $_[0]->{local_c}{day_of_week} - 1 }
 sub day_name { $_[0]->{language}->day_name( $_[0] ) }
 
 sub day_abbr { $_[0]->{language}->day_abbreviation( $_[0] ) }
+
+sub day_of_quarter { $_[0]->{local_c}{day_of_quarter} }
+*doq = \&day_of_quarter;
+
+sub day_of_quarter_0 { $_[0]->day_of_quarter - 1 }
+*doq_0 = \&day_of_quarter_0;
 
 sub day_of_year { $_[0]->{local_c}{day_of_year} }
 *doy = \&day_of_year;
@@ -896,6 +905,11 @@ DateTime - Reference implementation for Perl DateTime objects
 
   $doy    = $dt->day_of_year    # 1-366 (leap years)
   # also $dt->doy
+  
+  $doq    = $dt->day_of_quarter # 1-(number of days)
+  # also $dt->doq
+
+  $qtr    = $dt->quarter        # 1-4
 
   # all of the start-at-1 methods above have correponding start-at-0
   # methods, such as $dt->day_of_month_0, $dt->month_0 and so on
@@ -1125,7 +1139,7 @@ method that is 1-based also has an equivalent 0-based method ending in
 "_0".  So for example, this class provides both C<day_of_week()> and
 C<day_of_week_0()> methods.
 
-The C<day_of_week_0> method still treats Monday as the first day of
+The C<day_of_week_0()> method still treats Monday as the first day of
 the week.
 
 All I<time>-related numbers such as hour, minute, and second are
@@ -1133,6 +1147,8 @@ All I<time>-related numbers such as hour, minute, and second are
 
 Years are neither, as they can be both positive or negative, unlike
 any other datetime component.  There I<is> a year 0.
+
+There is no C<quarter_0()> method.
 
 =head2 Methods
 
@@ -1186,6 +1202,14 @@ L<LANGUAGES|/LANGUAGES> section for more details.
 =item * day_of_year, doy
 
 Returns the day of the year.
+
+=item * day_of_quarter, doq
+
+Returns the day of the quarter.
+
+=item * quarter
+
+Returns the quarter of the year.
 
 =item * ymd( $optional_separator ), date
 

@@ -16,6 +16,9 @@ parameter.  Based on suggestions from Tim Bunce and Joshua Hoblitt.
 
 - Allow extraction of AM/PM string list from DateTime::Language classes.
 
+- Added quarter() and day_of_quarter() methods.  Based on a patch from
+Tim Allwine.
+
 [BUG FIXES]
 
 - If a datetime had the floating timezone and then set_time_zone was

@@ -73,8 +73,9 @@ _rd2ymd(self, d, extra = 0)
      PREINIT:
         IV y, m;
         IV c;
+        IV quarter;
         IV yadj = 0;
-        IV dow, doy;
+        IV dow, doy, doq;
         IV rd_days;
 
      PPCODE:
@@ -105,22 +106,27 @@ _rd2ymd(self, d, extra = 0)
           m -= 12;
         }
 
-        EXTEND(SP, extra ? 5 : 3);
+        EXTEND(SP, extra ? 7 : 3);
         PUSHs(sv_2mortal(newSViv(y)));
         PUSHs(sv_2mortal(newSViv(m)));
         PUSHs(sv_2mortal(newSViv(d)));
 
         if (extra) {
+	  quarter = ( ( 1.0 / 3.1 ) * m ) + 1;
           dow = ((rd_days + 6) % 7) + 1;
           PUSHs(sv_2mortal(newSViv(dow)));
 
           if (_real_is_leap_year(y)) {
             doy = PREVIOUS_MONTH_DOLY[m - 1] + d;
+	    doq = doy - PREVIOUS_MONTH_DOLY[ (3 * quarter) - 3 ];
           } else {
             doy = PREVIOUS_MONTH_DOY[m - 1] + d;
+	    doq = doy-PREVIOUS_MONTH_DOY[ (3 * quarter ) - 3 ];
           }
 
           PUSHs(sv_2mortal(newSViv(doy)));
+          PUSHs(sv_2mortal(newSViv(quarter)));
+          PUSHs(sv_2mortal(newSViv(doq)));
         }
 
 void

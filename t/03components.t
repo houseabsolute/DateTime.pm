@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 72;
+use Test::More tests => 85;
 
 use DateTime;
 
@@ -16,17 +16,18 @@ my $d = DateTime->new( year => 2001,
 is( $d->year, 2001, '->year' );
 is( $d->ce_year, 2001, '->ce_year' );
 is( $d->month, 7, '->month' );
+is( $d->quarter, 3, '->quarter');
 is( $d->month_0, 6, '->month_0' );
-is( $d->month_name, 'July', '->month' );
-is( $d->month_abbr, 'Jul', '->month' );
+is( $d->month_name, 'July', '->month_name' );
+is( $d->month_abbr, 'Jul', '->month_abbr' );
 is( $d->day_of_month, 5, '->day_of_month' );
-is( $d->day_of_month_0, 4, '->day_of_month' );
+is( $d->day_of_month_0, 4, '->day_of_month_0' );
 is( $d->day, 5, '->day' );
 is( $d->day_0, 4, '->day_0' );
 is( $d->mday, 5, '->mday' );
 is( $d->mday_0, 4, '->mday_0' );
 is( $d->mday, 5, '->mday' );
-is( $d->mday_0, 4, '->mday' );
+is( $d->mday_0, 4, '->mday_0' );
 is( $d->hour, 2, '->hour' );
 is( $d->minute, 12, '->minute' );
 is( $d->min, 12, '->min' );
@@ -35,12 +36,16 @@ is( $d->sec, 50, '->sec' );
 
 is( $d->day_of_year, 186, '->day_of_year' );
 is( $d->day_of_year_0, 185, '->day_of_year' );
+is( $d->day_of_quarter, 5, '->day_of_quarter' );
+is( $d->doq, 5, '->doq' );
+is( $d->day_of_quarter_0, 4, '->day_of_quarter_0' );
+is( $d->doq_0, 4, '->doq_0' );
 is( $d->day_of_week, 4, '->day_of_week' );
-is( $d->day_of_week_0, 3, '->day_of_week' );
+is( $d->day_of_week_0, 3, '->day_of_week_0' );
 is( $d->wday, 4, '->wday' );
-is( $d->wday_0, 3, '->wday' );
+is( $d->wday_0, 3, '->wday_0' );
 is( $d->dow, 4, '->dow' );
-is( $d->dow_0, 3, '->dow' );
+is( $d->dow_0, 3, '->dow_0' );
 is( $d->day_name, 'Thursday', '->day_name' );
 is( $d->day_abbr, 'Thu', '->day_abrr' );
 
@@ -173,4 +178,32 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     is( $dt->iso8601, '-0006-02-25T00:00:00', 'iso8601 is -0005-02-25T00:00:00' );
     is( $dt->year, -6, 'year is -6' );
     is( $dt->ce_year, -7, 'ce_year is -7' );
+}
+
+{
+    my $dt = DateTime->new( year => 1996, month => 2, day => 1 );
+
+    is( $dt->quarter, 1, '->quarter is 1' );
+    is( $dt->day_of_quarter, 32, '->day_of_quarter' );
+}
+
+{
+    my $dt = DateTime->new( year => 1996, month => 5, day => 1 );
+
+    is( $dt->quarter, 2, '->quarter is 2' );
+    is( $dt->day_of_quarter, 31, '->day_of_quarter' );
+}
+
+{
+    my $dt = DateTime->new( year => 1996, month => 8, day => 1 );
+
+    is( $dt->quarter, 3, '->quarter is 3' );
+    is( $dt->day_of_quarter, 32, '->day_of_quarter' );
+}
+
+{
+    my $dt = DateTime->new( year => 1996, month => 11, day => 1 );
+
+    is( $dt->quarter, 4, '->quarter is 4' );
+    is( $dt->day_of_quarter, 32, '->day_of_quarter' );
 }
