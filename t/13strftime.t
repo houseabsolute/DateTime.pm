@@ -2,8 +2,7 @@
 
 use strict;
 
-use Test::More;
-plan tests => 108;
+use Test::More tests => 108;
 
 use DateTime;
 
@@ -16,7 +15,7 @@ while (<DATA>)
     if (/^year =>/)
     {
         $params = $_;
-        $dt = eval "DateTime->new( $params, offset => 0 )";
+        $dt = eval "DateTime->new( $params, time_zone => 0 )";
         next;
     }
     elsif (/^(\w+)/)
@@ -25,21 +24,13 @@ while (<DATA>)
         eval "use DateTime::Language::$1";
         die $@ if $@;
 
-        $dt = eval "DateTime->new( $params, offset => 0, language => '$lang' )";
+        $dt = eval "DateTime->new( $params, time_zone => 0, language => '$lang' )";
         next;
     }
 
     my ($fmt, $res) = split /\t+/,$_;
 
-    if ( $fmt =~ /z/i )
-    {
-        local $TODO = 'Needs TimeZone object to work';
-        is( eval{ $dt->strftime($fmt) }, $res );
-    }
-    else
-    {
-        is( $dt->strftime($fmt), $res );
-    }
+    is( $dt->strftime($fmt), $res );
 }
 
 # test use of strftime with multiple params - in list and scalar
@@ -107,7 +98,7 @@ year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42
 %X	13:02:42
 %y	99
 %Y	1999
-%Z	GMT
+%Z	UTC
 %z	+0000
 German
 %y	99
@@ -143,7 +134,7 @@ German
 %X	13:02:42
 %y	99
 %Y	1999
-%Z	GMT
+%Z	UTC
 %z	+0000
 Italian
 %y	99
@@ -179,5 +170,5 @@ Italian
 %X	13:02:42
 %y	99
 %Y	1999
-%Z	GMT
+%Z	UTC
 %z	+0000
