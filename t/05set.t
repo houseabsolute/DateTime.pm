@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 14;
+use Test::More tests => 21;
 
 use DateTime;
 
@@ -22,12 +22,22 @@ is( $t->hour, 18, 'check hour after setting month' );
 is( $t->minute, 30, 'check minute after setting month' );
 is( $t->second, 20, 'check second after setting month' );
 
-$t->set( time_zone => 'America/Chicago' );
+$t->set_time_zone( -21601 );
 is( $t->year, 1996, 'check year after setting time zone' );
 is( $t->month, 5, 'check month after setting time zone' );
 is( $t->day, 22, 'check day after setting time zone' );
-is( $t->hour, 18, 'check hour after setting time zone' );
+is( $t->hour, 12, 'check hour after setting time zone' );
+is( $t->minute, 30, 'check minute after setting time zone' );
+is( $t->second, 19, 'check second after setting time zone' );
+is( $t->offset, -21601,
+    'check time zone offset after setting new time zone' );
+
+$t->set_time_zone( 3600 );
+is( $t->year, 1996, 'check year after setting time zone' );
+is( $t->month, 5, 'check month after setting time zone' );
+is( $t->day, 22, 'check day after setting time zone' );
+is( $t->hour, 19, 'check hour after setting time zone' );
 is( $t->minute, 30, 'check minute after setting time zone' );
 is( $t->second, 20, 'check second after setting time zone' );
-is( $t->time_zone->name, 'America/Chicago',
-    'check time zone name after setting new time zone' );
+is( $t->offset, 3600,
+    'check time zone offset after setting new time zone' );
