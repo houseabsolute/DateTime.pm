@@ -599,17 +599,20 @@ sub _subtract_overload {
 sub add_duration {
     my ( $self, $dur ) = @_;
 
-    delete $self->{utc_c};
-
     my %deltas = $dur->deltas;
 
-    $self->{utc_rd_days} += $deltas{days} if $deltas{days};
-
+    # We add seconds to the UTC time because if someone adds 24 hours,
+    # we want this to be _different_ from adding 1 day when crossing
+    # DST boundaries.
     if ( $deltas{seconds} )
     {
         $self->{utc_rd_secs} += $deltas{seconds};
         _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+
+        $self->_calc_local_rd;
     }
+
+    $self->{local_rd_days} += $deltas{days} if $deltas{days};
 
     if ( $deltas{months} )
     {
@@ -617,30 +620,34 @@ sub add_duration {
         # it the 0th day of the following month (which then will
         # normalize back to the last day of the new month).
         my ($y, $m, $d) = ( $dur->is_preserve_mode ?
-                            $self->_rd2ymd( $self->{utc_rd_days} + 1 ) :
-                            $self->_rd2ymd( $self->{utc_rd_days} )
+                            $self->_rd2ymd( $self->{local_rd_days} + 1 ) :
+                            $self->_rd2ymd( $self->{local_rd_days} )
                           );
         $d -= 1 if $dur->is_preserve_mode;
 
         if ( ! $dur->is_wrap_mode && $d > 28 )
         {
             # find the rd for the last day of our target month
-            $self->{utc_rd_days} = $self->_ymd2rd( $y, $m + $deltas{months} + 1, 0 );
+            $self->{local_rd_days} = $self->_ymd2rd( $y, $m + $deltas{months} + 1, 0 );
 
             # what day of the month is it? (discard year and month)
-            my $last_day = ($self->_rd2ymd( $self->{utc_rd_days} ))[2];
+            my $last_day = ($self->_rd2ymd( $self->{local_rd_days} ))[2];
 
             # if our original day was less than the last day,
             # use that instead
-            $self->{utc_rd_days} -= $last_day - $d if $last_day > $d;
+            $self->{local_rd_days} -= $last_day - $d if $last_day > $d;
         }
         else
         {
-            $self->{utc_rd_days} = $self->_ymd2rd( $y, $m + $deltas{months}, $d );
+            $self->{local_rd_days} = $self->_ymd2rd( $y, $m + $deltas{months}, $d );
         }
     }
 
-    $self->_calc_local_rd;
+    if ( $deltas{days} || $deltas{months} )
+    {
+        $self->_calc_utc_rd;
+        $self->_calc_local_rd;
+    }
 
     return $self;
 }
@@ -1315,6 +1322,49 @@ greater than 86,400 (or 86,401).  Then it adds months.
 
 This means that adding one month and one day to February 28, 2003 will
 produce the date April 1, 2003, not March 29, 2003.
+
+=head3 Local/UTC and 24 hours/1 day
+
+When doing date math, you are changing the I<local> datetime.  This is
+generally the same as changing the UTC datetime, except when a change
+crosses a daylight saving boundary.  The net effect of this is that 24
+hours is not always the same as 1 day.
+
+Specifically, if you do this:
+
+  my $dt = DateTime->new( year => 2003, month => 4, day => 5,
+                          hour => 2,
+                          time_zone => 'America/Chicago',
+                        );
+  $dt->add( days => 1 );
+
+then you will produce an I<invalid> local time, and therefore an
+exception will be thrown.
+
+However, this works:
+
+  my $dt = DateTime->new( year => 2003, month => 4, day => 5,
+                          hour => 2,
+                          time_zone => 'America/Chicago',
+                        );
+  $dt->add( hours => 24 );
+
+and produces a datetime with the local time of "03:00".
+
+Another way of thinking of this is that when doing date math, each of
+the seconds, days, and months components is added separately to the
+local time.
+
+So when we add 1 day to "2003-02-22 12:00:00" we are incrementing
+adding one to the day component, to produce 23.  If we add 24 hours,
+however, we're adding "24 * 60 * 60" sceonds to the time component,
+and then normalizing the result (because there is no "36:00:00").
+
+If all this makes your head hurt, there is a simple workaround.  Just
+convert your datetime object to the "UTC" time zone before doing date
+math on it, and switch it back to the local time zone afterwards.
+This avoids the possibility of having date math throw an exception,
+and makes sure that 1 day equals 24 hours.
 
 =head2 Overloading
 
