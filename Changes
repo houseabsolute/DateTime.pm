@@ -25,6 +25,12 @@ interface more accurately with Time::HiRes.
 - Added a DateTime->hires_epoch method that returns a floating point
 value for epoch, also for compatibility with Time::HiRes.
 
+- DateTime.pm now implements Storable hooks to reduce the size of
+serialized DateTime objects.  In particular, the contained time zone
+object is not serialized along with the DateTime object.  If you have
+serialized objects stored from earlier versions, there is a hack in
+the code that should load these properly as well.
+
 [ BUG FIXES ]
 
 - Fix epoch() method to work properly with dates greater than 50 years
