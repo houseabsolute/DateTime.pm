@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 51;
+use Test::More tests => 55;
 
 use DateTime;
 
@@ -107,4 +107,16 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     is( $d->hour, 2, '->hour' );
     is( $d->minute, 12, '->minute' );
     is( $d->second, 50, '->second' );
+}
+
+{
+    my $dt0 = DateTime->new( year => 1 );
+
+    is( $dt0->year,   1, "Year 1 is year 1" );
+    is( $dt0->year_0, 0, "Year 1 is 0 in 0-index terms" );
+
+    $dt0->subtract( years => 1 );
+
+    is( $dt0->year,   -1, "Year -1 is year -1" );
+    is( $dt0->year_0, -1, "Year -1 is -1 in 0-index terms" );
 }
