@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 85;
+use Test::More tests => 100;
 
 use DateTime;
 
@@ -206,4 +206,37 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
     is( $dt->quarter, 4, '->quarter is 4' );
     is( $dt->day_of_quarter, 32, '->day_of_quarter' );
+}
+
+# nano, micro, and milli seconds
+{
+    my $dt = DateTime->new( year => 1996, nanosecond => 500_000_000 );
+
+    is( $dt->nanosecond, 500_000_000, 'nanosecond is 500,000,000' );
+    is( $dt->microsecond, 500_000, 'microsecond is 500,000' );
+    is( $dt->millisecond, 500, 'millisecond is 500' );
+
+    $dt->set( nanosecond => 500_000_500 );
+
+    is( $dt->nanosecond, 500_000_500, 'nanosecond is 500,000,500' );
+    is( $dt->microsecond, 500_001, 'microsecond is 500,001' );
+    is( $dt->millisecond, 500, 'millisecond is 500' );
+
+    $dt->set( nanosecond => 499_999_999 );
+
+    is( $dt->nanosecond, 499_999_999, 'nanosecond is 499,999,999' );
+    is( $dt->microsecond, 500_000, 'microsecond is 500,000' );
+    is( $dt->millisecond, 500, 'millisecond is 500' );
+
+    $dt->set( nanosecond => 450_000_001 );
+
+    is( $dt->nanosecond, 450_000_001, 'nanosecond is 450,000,001' );
+    is( $dt->microsecond, 450_000, 'microsecond is 450,000' );
+    is( $dt->millisecond, 450, 'millisecond is 450' );
+
+    $dt->set( nanosecond => 450_500_000 );
+
+    is( $dt->nanosecond, 450_500_000, 'nanosecond is 450,500,000' );
+    is( $dt->microsecond, 450_500, 'microsecond is 450,500' );
+    is( $dt->millisecond, 451, 'millisecond is 451' );
 }
