@@ -830,7 +830,7 @@ my %formats =
                    return int( ( $doy - $dow + 13 ) / 7 - 1 )
                  },
       'w' => sub { my $dow = $_[0]->day_of_week;
-                   return $dow == 7 ? 0 : $dow - 1
+                   return $dow % 7;
                  },
       'W' => sub { my $dow = $_[0]->day_of_week;
                    my $doy = $_[0]->day_of_year - 1;
