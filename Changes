@@ -19,6 +19,9 @@ in the current century.  Ugh.
 - The last_day_of_month() method did not accept nanosecond or
 fractional_second parameters.
 
+- A DT::Duration object created with just nanoseconds was always
+positive, regardless of the value given for nanoseconds.
+
 
 0.12     2003-05-05
 
