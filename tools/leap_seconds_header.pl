@@ -7,7 +7,8 @@ my $VERSION = 0.01;
 
 my $leap = shift || './leaptab.txt';
 
-open my $fh, "<$leap" or die "Cannot read $leap: $!";
+my $fh = do { local *FH; *FH };
+open $fh, "<$leap" or die "Cannot read $leap: $!";
 
 my $x = 1;
 my %months = map { $_ => $x++ } qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
