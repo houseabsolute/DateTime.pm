@@ -174,7 +174,7 @@ sub epoch {
                                         $self->hour,
                                         $self->day,
                                         $self->month_0,
-                                        $self->year_0 - 1900,
+                                        $self->year - 1900,
                                       ) };
     }
 
