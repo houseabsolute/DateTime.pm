@@ -23,7 +23,7 @@ require 'testlib.pl';
     is( $dt->minute, 30, 'check minute after setting month' );
     is( $dt->second, 20, 'check second after setting month' );
 
-    $dt->set_time_zone( -21601 );
+    $dt->set_time_zone( '-060001' );
     is( $dt->year, 1996, 'check year after setting time zone' );
     is( $dt->month, 5, 'check month after setting time zone' );
     is( $dt->day, 22, 'check day after setting time zone' );
@@ -33,7 +33,7 @@ require 'testlib.pl';
     is( $dt->offset, -21601,
         'check time zone offset after setting new time zone' );
 
-    $dt->set_time_zone( 3600 );
+    $dt->set_time_zone( '+0100' );
     is( $dt->year, 1996, 'check year after setting time zone' );
     is( $dt->month, 5, 'check month after setting time zone' );
     is( $dt->day, 22, 'check day after setting time zone' );
