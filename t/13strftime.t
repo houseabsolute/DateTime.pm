@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 108;
+use Test::More tests => 99;
 
 use DateTime;
 
