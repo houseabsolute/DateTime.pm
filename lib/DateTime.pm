@@ -843,10 +843,10 @@ DateTime - Reference implementation for Perl DateTime objects
   $is_leap  = $dt->is_leap_year;
 
   # these are localizable, see LANGUAGES section
-  $month_name  = $dt->month_name # January, February
-  $month_abbr  = $dt->month_abbr # Jan, Feb
-  $day_name    = $dt->day_name   # Sunday, Monday
-  $day_abbr    = $dt->day_abbr   # Sun, Mon
+  $month_name  = $dt->month_name # January, February, ...
+  $month_abbr  = $dt->month_abbr # Jan, Feb, ...
+  $day_name    = $dt->day_name   # Monday, Tuesday, ...
+  $day_abbr    = $dt->day_abbr   # Mon, Tue, ...
 
   $epoch_time  = $dt->epoch;     # may return undef for non-epoch times
 
@@ -933,7 +933,7 @@ accepts "language" and "time_zone" parameters.
 
 The behavior of this module when given parameters outside proper
 boundaries (like a minute parameter of 72) is not defined, though
-future versions may be die.
+future versions may die.
 
 Invalid parameter types (like an array reference) will cause the
 constructor to die.
