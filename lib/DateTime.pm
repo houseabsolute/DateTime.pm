@@ -250,6 +250,8 @@ sub _calc_utc_components
 {
     my $self = shift;
 
+    $self->_calc_utc_rd unless defined $self->{utc_rd_days}
+
     @{ $self->{utc_c} }{ qw( year month day ) } =
         $self->_rd2ymd( $self->{utc_rd_days} );
 
