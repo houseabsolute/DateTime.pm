@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 45;
+use Test::More tests => 65;
 
 use DateTime;
 
@@ -142,6 +142,43 @@ use DateTime;
             )
     {
         $dt->add_duration($sixm);
+
+        $_->[1] = sprintf( '%02d', $_->[1] );
+
+        my $expect = join ' ', @$_;
+
+        is( $dt->strftime( '%Y %m%e%k %Z' ), $expect,
+            "datetime is $expect" );
+    }
+}
+
+{
+    my $dt = DateTime->new( year => 2060, time_zone => 'America/New_York' );
+
+    my $neg_sixm = DateTime::Duration->new( months => -6 );
+    foreach ( [ 2059, 7, 1, 1, 'EDT' ],
+              [ 2059, 1, 1, 0, 'EST' ],
+              [ 2058, 7, 1, 1, 'EDT' ],
+              [ 2058, 1, 1, 0, 'EST' ],
+              [ 2057, 7, 1, 1, 'EDT' ],
+              [ 2057, 1, 1, 0, 'EST' ],
+              [ 2056, 7, 1, 1, 'EDT' ],
+              [ 2056, 1, 1, 0, 'EST' ],
+              [ 2055, 7, 1, 1, 'EDT' ],
+              [ 2055, 1, 1, 0, 'EST' ],
+              [ 2054, 7, 1, 1, 'EDT' ],
+              [ 2054, 1, 1, 0, 'EST' ],
+              [ 2053, 7, 1, 1, 'EDT' ],
+              [ 2053, 1, 1, 0, 'EST' ],
+              [ 2052, 7, 1, 1, 'EDT' ],
+              [ 2052, 1, 1, 0, 'EST' ],
+              [ 2051, 7, 1, 1, 'EDT' ],
+              [ 2051, 1, 1, 0, 'EST' ],
+              [ 2050, 7, 1, 1, 'EDT' ],
+              [ 2050, 1, 1, 0, 'EST' ],
+            )
+    {
+        $dt->add_duration($neg_sixm);
 
         $_->[1] = sprintf( '%02d', $_->[1] );
 
