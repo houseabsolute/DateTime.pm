@@ -628,11 +628,45 @@ sub subtract_datetime {
     my $self = shift;
     my $dt = shift;
 
-    return
-        DateTime::Duration->new
-            ( days    => $self->{utc_rd_days} - $dt->{utc_rd_days},
-              seconds => $self->{utc_rd_secs} - $dt->{utc_rd_secs},
-            );
+    # We only want a negative duration if $dt > $self.  If just the
+    # seconds are greater (but the days are equal or less), then
+    # returning a negative duration is wrong.
+
+    if ( $self->{utc_rd_days} == $dt->{utc_rd_days} )
+    {
+        return
+            DateTime::Duration->new
+                ( seconds => $self->{utc_rd_secs} - $dt->{utc_rd_secs} );
+    }
+    elsif ( $self->{utc_rd_days} > $dt->{utc_rd_days} &&
+            $self->{utc_rd_secs} < $dt->{utc_rd_secs} )
+    {
+        my $days = $self->{utc_rd_days} - 1;
+        my $secs = $self->{utc_rd_secs} + 86400;
+
+        return
+            DateTime::Duration->new
+                ( days    => $days - $dt->{utc_rd_days},
+                  seconds => $secs - $dt->{utc_rd_secs} );
+    }
+    elsif ( $dt->{utc_rd_days} > $self->{utc_rd_days} &&
+            $dt->{utc_rd_secs} < $self->{utc_rd_secs} )
+    {
+        my $days = $dt->{utc_rd_days} - 1;
+        my $secs = $dt->{utc_rd_secs} + 86400;
+
+        return
+            DateTime::Duration->new
+                ( days    => $self->{utc_rd_days} - $days,
+                  seconds => $self->{utc_rd_secs} - $secs );
+    }
+    else
+    {
+        return
+            DateTime::Duration->new
+                ( days    => $self->{utc_rd_days} - $dt->{utc_rd_days},
+                  seconds => $self->{utc_rd_secs} - $dt->{utc_rd_secs} );
+    }
 }
 
 sub _add_overload {
