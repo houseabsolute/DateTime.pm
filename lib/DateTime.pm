@@ -629,7 +629,8 @@ sub _subtract_overload {
 
     if ( UNIVERSAL::isa( $date2, 'DateTime::Duration' ) ) {
         my $new = $date1->as_utc;
-        return $new->add_duration( $date2->inverse );
+        $new->add_duration( $date2->inverse );
+        return $new;
     } else {
         return $date1->subtract_datetime($date2);
     }
