@@ -4,9 +4,10 @@ use strict;
 
 use vars qw($VERSION);
 
+
 BEGIN
 {
-    $VERSION = '0.20';
+    $VERSION = '0.21';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -57,8 +58,9 @@ use Time::Local ();
 use overload ( 'fallback' => 1,
                '<=>' => '_compare_overload',
                'cmp' => '_compare_overload',
-               '-' => '_subtract_overload',
-               '+' => '_add_overload',
+               '""'  => 'iso8601',
+               '-'   => '_subtract_overload',
+               '+'   => '_add_overload',
              );
 
 # Have to load this after overloading is defined, after BEGIN blocks
@@ -2411,6 +2413,9 @@ following all do sensible things:
 Additionally, the fallback parameter is set to true, so other
 derivable operators (+=, -=, etc.) will work properly.  Do not expect
 increment (++) or decrement (--) to do anything useful.
+
+The module also overloads stringification to use the C<iso8601()>
+method.
 
 =head2 strftime Specifiers
 

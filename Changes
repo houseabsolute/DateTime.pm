@@ -8,6 +8,10 @@ no longer forces all arguments to be negative.
 - For mixed durations, the is_positive, is_zero, and is_negative
 methods all return false.
 
+- Brought back stringification overloading.  As of version 1.06,
+Devel::StackTrace will ignore this overloading when displaying a
+trace.
+
 [ ENHANCEMENTS ]
 
 - Add a new in_units method to DateTime::Duration.  Patch by Andrew
