@@ -27,6 +27,3 @@ NOTE TO FUTURE DEVELOPERS:
 
 Attempting to implement add_duration in XS actually seemed to slow
 date math operations down.  Sad but true.
-
-Same for implementing _normalize_tai_seconds.  Apparently the calls
-out to Perl from C overwhelmed any speed improvement.
