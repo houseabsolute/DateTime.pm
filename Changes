@@ -1,3 +1,12 @@
+0.16    2003-08-07
+
+[ BUG FIXES ]
+
+- On platforms like Win32, where we can't find a finite() or
+isfinite() function/macro, the DateTime::LeapSecond code wasn't being
+loaded, so many tests failed.  Reported by Ron Hill.
+
+
 0.16    2003-08-06
 
 [ IMPROVEMENTS ]
