@@ -318,3 +318,15 @@ _day_length(self, utc_rd)
 
         EXTEND(SP, 1);
         PUSHs(sv_2mortal(newSViv(day_length)));
+
+void
+_leap_seconds(self, utc_rd)
+     SV* self;
+     IV utc_rd;
+
+     PPCODE:
+        IV leap_seconds;
+        SET_LEAP_SECONDS(utc_rd, leap_seconds);
+
+        EXTEND(SP, 1);
+        PUSHs(sv_2mortal(newSViv(leap_seconds)));

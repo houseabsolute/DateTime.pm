@@ -6,7 +6,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.1601';
+    $VERSION = '0.17';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -161,7 +161,7 @@ sub new
     my $class = shift;
     my %p = validate( @_, $NewValidate );
 
-    my $last_day = $class->_last_day_of_month( $p{year}, $p{month} );
+    my $last_day = $class->_month_length( $p{year}, $p{month} );
 
     die "Invalid day of month (day = $p{day} - month = $p{month})\n"
         if $p{day} > $last_day;
@@ -423,12 +423,12 @@ sub last_day_of_month
     my $class = shift;
     my %p = validate( @_, $LastDayOfMonthValidate );
 
-    my $day = $class->_last_day_of_month( $p{year}, $p{month} );
+    my $day = $class->_month_length( $p{year}, $p{month} );
 
     return $class->new( %p, day => $day );
 }
 
-sub _last_day_of_month
+sub _month_length
 {
     return ( $_[0]->_is_leap_year( $_[1] ) ?
              $LeapYearMonthLengths[ $_[2] - 1 ] :
@@ -465,18 +465,17 @@ sub from_day_of_year
     die "$p{year} is not a leap year.\n"
         if $p{day_of_year} == 366 && ! $is_leap_year;
 
-    my $month_lengths = $is_leap_year ? \@LeapYearMonthLengths : \@MonthLengths;
-
-    my $month = 0;
+    my $month = 1;
     my $day = delete $p{day_of_year};
-    while ( $month <= 11 && $day > $month_lengths->[$month] )
+
+    while ( $month <= 12 && $day > $class->_month_length( $p{year}, $month ) )
     {
-        $day -= $month_lengths->[$month];
+        $day -= $class->_month_length( $p{year}, $month );
         $month++;
     }
 
     return DateTime->new( %p,
-                          month => $month + 1,
+                          month => $month,
                           day   => $day,
                         );
 }
@@ -879,6 +878,7 @@ sub subtract { return shift->subtract_duration( DateTime::Duration->new(@_) ) }
 
 sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
+# returns a result that is relative to the first datetime
 sub subtract_datetime
 {
     my $self = shift;
@@ -894,12 +894,29 @@ sub subtract_datetime
     my $is_floating = $self->time_zone->is_floating &&
                       $dt->time_zone->is_floating;
 
-    my ( $days, $seconds, $nanoseconds ) =
+    my $bigger_utc_rd_secs = ($bigger->utc_rd_values)[1];
+
+    # If the bigger of the two datetimes occurs in the last UTC minute
+    # of the UTC day, then that minute may not be 60 seconds long.  If
+    # we need to subtract a minute from the datetime in order to
+    # adjust the seconds difference to be positive, we need to know
+    # how long that minute was.  If one of the datetimes is floating,
+    # we just assume a minute is 60 seconds.
+    my $minute_length =
+	( $bigger_utc_rd_secs > 86340 && ! $is_floating ?
+	  $bigger_utc_rd_secs - 86340 :
+	  60
+	);
+
+    my ( $months, $days, $minutes, $seconds, $nanoseconds ) =
         $self->_adjust_for_positive_difference
-            ( $bigger->{utc_rd_days}, $smaller->{utc_rd_days},
-              $bigger->{utc_rd_secs}, $smaller->{utc_rd_secs},
-              $bigger->{rd_nanosecs}, $smaller->{rd_nanosecs},
-              $is_floating,
+            ( $bigger->year * 12 + $bigger->month, $smaller->year * 12 + $smaller->month,
+              $bigger->day, $smaller->day,
+              $bigger->hour * 60 + $bigger->minute, $smaller->hour * 60 + $smaller->minute,
+	      $bigger->second, $smaller->second,
+	      $bigger->nanosecond, $smaller->nanosecond,
+	      $minute_length,
+	      $self->_month_length( $bigger->year, $bigger->month ),
             );
 
     if ($negative)
@@ -907,7 +924,7 @@ sub subtract_datetime
         # in Perl 5.6.1 on Linux (Red Hat only?), $_ = 0; $_ * -1
         # gives -0 !!!
 
-        for ( $days, $seconds, $nanoseconds )
+        for ( $months, $days, $minutes, $seconds, $nanoseconds )
         {
             $_ *= -1 if $_;
         }
@@ -915,7 +932,9 @@ sub subtract_datetime
 
     return
         DateTime::Duration->new
-            ( days        => $days,
+            ( months      => $months,
+	      days        => $days,
+	      minutes     => $minutes,
               seconds     => $seconds,
               nanoseconds => $nanoseconds,
             );
@@ -923,7 +942,15 @@ sub subtract_datetime
 
 sub _adjust_for_positive_difference
 {
-    my ( $self, $day1, $day2, $sec1, $sec2, $nano1, $nano2, $is_floating ) = @_;
+    my ( $self,
+	 $month1, $month2,
+	 $day1, $day2,
+	 $min1, $min2,
+	 $sec1, $sec2,
+	 $nano1, $nano2,
+	 $minute_length,
+	 $month_length,
+       ) = @_;
 
     if ( $nano1 < $nano2 )
     {
@@ -933,14 +960,59 @@ sub _adjust_for_positive_difference
 
     if ( $sec1 < $sec2 )
     {
-        $day1--;
-        $sec1 += $is_floating ? 86400 : $self->_day_length($day1);
+        $min1--;
+        $sec1 += $minute_length;
     }
 
-    return ( $day1 - $day2,
+    # A day always has 25 * 60 minutes, though the minutes may vary in
+    # length.
+    if ( $min1 < $min2 )
+    {
+	$day1--;
+	$min1 += 24 * 60;
+    }
+
+    if ( $day1 < $day2 )
+    {
+	$month1--;
+	$day1 += $month_length;
+    }
+
+    return ( $month1 - $month2,
+	     $day1 - $day2,
+	     $min1 - $min2,
              $sec1 - $sec2,
              $nano1 - $nano2,
            );
+}
+
+sub subtract_datetime_absolute
+{
+    my $self = shift;
+    my $dt = shift;
+
+    my $utc_rd_secs1 = $self->utc_rd_as_seconds;
+    $utc_rd_secs1 += $self->_leap_seconds( $self->{utc_rd_days} )
+	if ! $self->time_zone->is_floating;
+
+    my $utc_rd_secs2 = $dt->utc_rd_as_seconds;
+    $utc_rd_secs2 += $dt->_leap_seconds( $dt->{utc_rd_days} )
+	if ! $dt->time_zone->is_floating;
+
+    my $seconds = $utc_rd_secs1 - $utc_rd_secs2;
+    my $nanoseconds = $self->nanosecond - $dt->nanosecond;
+
+    if ( $nanoseconds < 0 )
+    {
+	$seconds--;
+	$nanoseconds += MAX_NANOSECONDS;
+    }
+
+    return
+        DateTime::Duration->new
+            ( seconds     => $seconds,
+              nanoseconds => $nanoseconds,
+            );
 }
 
 sub _add_overload
@@ -1996,8 +2068,31 @@ method.
 =item * subtract_datetime( $datetime )
 
 This method returns a new C<DateTime::Duration> object representing
+the difference between the two dates.  The duration is B<relative> to
+the object from which C<$datetime> is subtracted.  For example:
+
+    2003-03-15 00:00:00.00000000
+ -  2003-02-15 00:00:00.00000000
+
+ -------------------------------
+
+ = 1 month
+
+Note that this duration is not an absolute measure of the amount of
+time between the two datetimes, because the length of a month varies
+by month, as well as the presence of leap seconds.
+
+The returned duration may deltas for months, days, minutes, seconds,
+and nanoseconds.
+
+=item * subtract_datetime_absolute( $datetime )
+
+This method returns a new C<DateTime::Duration> object representing
 the difference between the two dates.  The duration object will only
-have deltas for day and seconds.
+have deltas for seconds and nanoseconds.  This is the only way to
+accurately measure the absolute amount of time between two datetimes,
+since units larger than a second do not represent a fixed number of
+seconds.
 
 =back
 

@@ -1,9 +1,35 @@
 0.xx
 
+[ BACKWARDS INCOMPATIBILITIES ]
+
+- The default end_of_month mode for negative durations is now
+"preserve".  This makes more sense, as the previous default meant that
+the following code:
+
+ print DateTime->new( year => 2003, month => 5, day => 31 )->subtract( months => 1 )->ymd;
+
+printed "2003-05-01" as opposd to "2003-04-30".  Thanks to Thomas
+Klausner for starting a discussion on this problem.
+
+- The subtract_datetime method now returns different results, as does
+subtraction overloading when both sides of the subtraction are
+DateTime objects.
+
+The subtract_datetime_absolute method returns results similar to what
+was previously returned from subtract_datetime.
+
+Thanks to Matthew McGillis for bringing this up, and Joshua Hoblitt
+and Eugene van der Pijll for contributing to the ensuing discussion.
+
 [ IMPROVEMENTS ]
 
 - DateTime.pm compare() method is now documented to work with any
 other calendar class that provides a utc_rd_values() method.
+
+- Added the subtract_datetime_absolute method.  See the docs for
+details.
+
+- Documented the inverse() method in DateTime::Duration.
 
 
 0.1601  2003-08-07

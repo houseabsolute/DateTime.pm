@@ -41,10 +41,10 @@ use DateTime;
                             hour => 0, minute => 0, second => 20,
                             time_zone => 'UTC',
                           );
-    my $dur = $t2 - $t1;
+    my $dur = $t2->subtract_datetime_absolute($t1);
     is( $dur->delta_seconds, 121, "delta_seconds is 121" );
 
-    $dur = $t1 - $t2;
+    $dur = $t1->subtract_datetime_absolute($t2);
     is( $dur->delta_seconds, -121, "delta_seconds is -121" );
 }
 
@@ -72,10 +72,10 @@ use DateTime;
                             hour => 0, minute => 0, second => 20,
                             time_zone => 'floating',
                           );
-    my $dur = $t2 - $t1;
+    my $dur = $t2->subtract_datetime_absolute($t1);
     is( $dur->delta_seconds, 120, "delta_seconds is 120" );
 
-    $dur = $t1 - $t2;
+    $dur = $t1->subtract_datetime_absolute($t2);
     is( $dur->delta_seconds, -120, "delta_seconds is -120" );
 }
 
