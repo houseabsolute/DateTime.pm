@@ -9,7 +9,7 @@ WriteMakefile( NAME         => 'DateTime',
 
                PREREQ_PM    => { 'Class::Factory::Util' => 1.2,
                                  'Date::Leapyear' => 0,
-                                 'DateTime::TimeZone' => 0,
+                                 'DateTime::TimeZone' => 0.05,
                                  'Params::Validate' => 0,
                                  'Test::More'  => 0,
                                  'Time::Local' => 0,
