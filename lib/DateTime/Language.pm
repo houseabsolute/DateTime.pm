@@ -5,20 +5,32 @@ use strict;
 use Class::Factory::Util;
 use Params::Validate qw( validate SCALAR );
 
-my %ISOMap = ( 'cz'    => 'Czech',
-               'de'    => 'German',
-               'de-at' => 'Austrian',
-               'dk'    => 'Danish',
-               'en'    => 'English',
-               'es'    => 'Spanish',
-               'fr'    => 'French',
-               'it'    => 'Italian',
-               'nl'    => 'Dutch',
-               'no'    => 'Norwegian',
-               'pt'    => 'Brazilian', # not quite right, but better than failing
-               'pt-br' => 'Brazilian',
-               'sv'    => 'Swedish',
-             );
+my %ISOMap;
+foreach my $set ( [ 'aa', 'aar'                 => 'Afar' ],
+                  [ 'am', 'amh'                 => 'Amharic' ],
+                  [ 'cz', 'ces', 'cze'          => 'Czech' ],
+                  [ 'de', 'deu', 'ger'          => 'German' ],
+                  [ 'de-at', 'deu-at', 'ger-at' => 'Austrian' ],
+                  [ 'dk', 'dan'                 => 'Danish' ],
+                  [ 'en', 'eng'                 => 'English' ],
+                  [ 'es', 'esl', 'spa'          => 'Spanish' ],
+                  [ 'fr', 'fra', 'fre'          => 'French' ],
+                  [ 'x-drs', 'sil-drs'          => 'Gedeo' ],
+                  [ 'it', 'ita'                 => 'Italian' ],
+                  [ 'nl', 'dut', 'nla'          => 'Dutch' ],
+                  [ 'no', 'nor'                 => 'Norwegian' ],
+                  [ 'om', 'orm'                 => 'Oromo' ],
+                  # not quite right, but better than failing
+                  [ 'pt', 'por'                 => 'Brazilian' ],
+                  [ 'pt-br', 'por-br'           => 'Brazilian' ],
+                  [ 'so', 'som'                 => 'Somali' ],
+                  [ 'sv', 'sve', 'swe'          => 'Swedish' ],
+                  [ 'ti', 'tig'                 => 'Tigrinya' ],
+             )
+{
+    my $module = pop @$set;
+    @ISOMap{ @$set } = ($module) x @$set;
+}
 
 sub new
 {
@@ -45,7 +57,7 @@ sub load
     my $lang = shift;
 
     my $real_lang;
-    if ( $lang =~ /^\w\w$/ || $lang =~ /^(\w\w)-\w\w/ )
+    if ( $lang =~ /^((?:x-)?\w\w\w?)(?:-\w\w\w?)?$/ )
     {
         $real_lang =
             ( exists $ISOMap{$lang} ?
@@ -141,7 +153,7 @@ months names.
 
 This module is a factory for language subclasses, and can load a class
 either based on the language portion of its name, such as "English",
-or based on its ISO code, such as "en".
+or based on its ISO code, such as "en" or "eng".
 
 =head1 USAGE
 
@@ -173,7 +185,7 @@ Returns a list of supported language names.
 
 =item * iso_codes
 
-Returns a list of supported ISO language names.  See the C<new()>
+Returns a list of supported ISO language codes.  See the C<new()>
 method documentation for details.
 
 =back
