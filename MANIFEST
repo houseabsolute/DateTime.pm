@@ -10,6 +10,8 @@ TODO
 lib/DateTime.pm
 lib/DateTime/Duration.pm
 lib/DateTime/Language.pm
+lib/DateTime/Language/Afar.pm
+lib/DateTime/Language/Amharic.pm
 lib/DateTime/Language/Austrian.pm
 lib/DateTime/Language/Brazilian.pm
 lib/DateTime/Language/Czech.pm
@@ -17,11 +19,17 @@ lib/DateTime/Language/Danish.pm
 lib/DateTime/Language/Dutch.pm
 lib/DateTime/Language/English.pm
 lib/DateTime/Language/French.pm
+lib/DateTime/Language/Gedeo.pm
 lib/DateTime/Language/German.pm
 lib/DateTime/Language/Italian.pm
 lib/DateTime/Language/Norwegian.pm
+lib/DateTime/Language/Oromo.pm
+lib/DateTime/Language/Sidama.pm
+lib/DateTime/Language/Somali.pm
 lib/DateTime/Language/Spanish.pm
 lib/DateTime/Language/Swedish.pm
+lib/DateTime/Language/TigrinyaEritrean.pm
+lib/DateTime/Language/TigrinyaEthiopian.pm
 ppport.h
 t/00load.t
 t/01sanity.t
@@ -39,4 +47,6 @@ t/12week.t
 t/13strftime.t
 t/14language.t
 t/15jd.t
+t/16truncate.t
+t/17set_return.t
 t/testlib.pl
