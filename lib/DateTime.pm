@@ -1574,6 +1574,24 @@ greater, this will be a native Perl Unicode string.  When using older
 Perls, this will be a sequence of bytes representing the Unicode
 character.
 
+=head2 The Floating Time Zone
+
+The default time zone for all DateTime objects is the "floating" time
+zone.  This concept comes from the iCal standard.  A floating datetime
+is one which is not anchored to any particular time zone.  In
+addition, floating datetimes do not include leap seconds, since we
+cannot use them without knowing the datetime's time zone.
+
+The results of date math and comparison between a floating datetime
+and one with a real time zone are not really valid, because one
+includes leap seconds and the other does not.  Similarly, the results
+of datetime math between two floating datetimes and two datetimes with
+time zones are not really comparable.
+
+If you are planning to use any objects with a real time zone, it is
+strongly recommended that you B<do not> mix these with floating
+datetimes.
+
 =head2 Methods
 
 =head3 Constructors
