@@ -153,7 +153,7 @@ sub _normalize_leapseconds
     my $delta_days; 
 
     # rough adjust - can adjust many days
-    if ($_[1] < 0)
+    if ( $_[1] < 0 )
     {
         $delta_days = int( ($_[1] - 86399) / 86400 );
     }
@@ -161,33 +161,29 @@ sub _normalize_leapseconds
     {
         $delta_days = int( $_[1] / 86400 );
     }
+
     my $new_day = $_[0] + $delta_days;
     my $delta_seconds = 86400 * ( $new_day - $_[0] ) +
                         DateTime::LeapSecond::leap_seconds( $new_day ) -
                         DateTime::LeapSecond::leap_seconds( $_[0] );
 
-    # warn "day $_[0], $_[1] - $delta_days, $delta_seconds";
     $_[1] -= $delta_seconds;
     $_[0] = $new_day;
-    # warn "-> day $_[0], $_[1]";
 
     # fine adjust - up to 1 day
     my $day_length = DateTime::LeapSecond::day_length( $new_day );
-    if ( $_[1] >= $day_length ) 
+    if ( $_[1] >= $day_length )
     {
         $_[1] -= $day_length;
         $_[0]++;
     }
-    elsif ( $_[1] < 0 ) 
+    elsif ( $_[1] < 0 )
     {
         $day_length = DateTime::LeapSecond::day_length( $new_day - 1 );
         $_[1] += $day_length;
         $_[0]--;
     }
-
-    ($_[0], $_[1]);
 }
- 
 
 sub _calc_utc_rd
 {
@@ -790,6 +786,8 @@ sub add_duration
 
     my %deltas = $dur->deltas;
 
+    $self->{local_rd_days} += $deltas{days} if $deltas{days};
+
     if ( $deltas{months} )
     {
         # For preserve mode, if it is the last day of the month, make
@@ -820,15 +818,11 @@ sub add_duration
         }
     }
 
-    $self->{local_rd_days} += $deltas{days} if $deltas{days};
-
     if ( $deltas{days} || $deltas{months} )
     {
         $self->_calc_utc_rd;
         $self->_calc_local_rd;
     }
-
-    # warn "add months, days = ". $self->ymd.$self->hms;
 
     # We add seconds to the UTC time because if someone adds 24 hours,
     # we want this to be _different_ from adding 1 day when crossing
@@ -843,19 +837,20 @@ sub add_duration
             _normalize_nanoseconds( $self->{utc_rd_secs}, $self->{rd_nanosecs} );
         }
 
-        if ( $self->time_zone->is_floating ) {
-            _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} )
-                if $deltas{seconds};
-        }
-        else {
-            _normalize_leapseconds( $self->{utc_rd_days}, $self->{utc_rd_secs} )
-                if $deltas{seconds};
+        if ( $deltas{seconds} )
+        {
+            if ( $self->time_zone->is_floating )
+            {
+                _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+            }
+            else
+            {
+                _normalize_leapseconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+            }
         }
 
         delete $self->{utc_c};
         $self->_calc_local_rd;
-
-        # warn "add seconds $deltas{seconds} = ". $self->ymd.$self->hms;
     }
 
     return $self;
@@ -1668,9 +1663,9 @@ than adding 4 weeks or 28, 29, 30, or 31 days.  Similarly, due to DST
 and leap seconds, adding a day can be different than adding 86,400
 seconds.
 
-C<DateTime.pm> always adds (or subtracts) days and seconds first.
-Then it normalizes the seconds to handle second values less than 0 or
-greater than 86,400 (or 86,401).  Then it adds months.
+C<DateTime.pm> always adds (or subtracts) days, then months, and then
+seconds.  Then it normalizes the seconds to handle second values less
+than 0 or greater than 86,400 (or 86,401).
 
 This means that adding one month and one day to February 28, 2003 will
 produce the date April 1, 2003, not March 29, 2003.
