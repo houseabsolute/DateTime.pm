@@ -514,11 +514,11 @@ sub epoch {
 # added for benefit of DateTime::TimeZone
 sub utc_year { ($_[0]->_utc_ymd)[0] }
 
-sub add { shift->add_duration( DateTime::Duration->new(@_) ) }
+sub add { return shift->add_duration( DateTime::Duration->new(@_) ) }
 
-sub subtract { shift->subtract_duration( DateTime::Duration->new(@_) ) }
+sub subtract { return shift->subtract_duration( DateTime::Duration->new(@_) ) }
 
-sub subtract_duration { $_[0]->add_duration( $_[1]->inverse ) }
+sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
 sub subtract_datetime {
     my $self = shift;
@@ -641,6 +641,8 @@ sub add_duration {
     }
 
     $self->_calc_local_rd;
+
+    return $self;
 }
 
 use constant INFINITY     =>       100 ** 100 ** 100 ;
@@ -692,6 +694,8 @@ sub set {
     my $new_dt = (ref $self)->new( %old_p, %p );
 
     %$self = %$new_dt;
+
+    return $self;
 }
 
 sub truncate {
@@ -716,6 +720,8 @@ sub truncate {
     my $new_dt = (ref $self)->new(%new);
 
     %$self = %$new_dt;
+
+    return $self;
 }
 
 sub set_time_zone {
@@ -733,6 +739,8 @@ sub set_time_zone {
     {
         $self->_calc_local_rd;
     }
+
+    return $self;
 }
 
 
@@ -1184,7 +1192,16 @@ another source of bugs.
 
 =back
 
-Other methods provided by C<DateTime.pm> are:
+The remaining methods provided by C<DateTime.pm>, except where otherwise
+specified, return the object itself, thus making method chaining
+possible. For example:
+
+  my $dt = DateTime->now->set_time_zone( 'Australia/Sydney' );
+
+  my $first = DateTime
+		->last_day_of_month( year => 2003, month => 3 )
+		->add( days => 1 )
+                ->subtract( seconds => 1 );
 
 =over 4
 
