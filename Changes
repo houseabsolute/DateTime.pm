@@ -6,6 +6,9 @@
 However, this is only used on platforms where we can find a usable
 finite() or isfinite() function/macro, so it isn't used on Win32.
 
+- This distro has now borged the DateTime::LeapSecond module.  It is
+only loaded when the XS leap second code cannot be used.
+
 - Other miscellaneous performance improvements.
 
 
