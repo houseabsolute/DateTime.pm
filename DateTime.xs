@@ -201,7 +201,8 @@ _seconds_as_components(self, secs, utc_secs = 0)
         PUSHs(sv_2mortal(newSViv(s)));
 
 void
-_normalize_seconds(days, secs)
+_normalize_seconds(self, days, secs)
+     SV* self;
      SV* days;
      SV* secs;
 

@@ -166,20 +166,25 @@ sub _seconds_as_components
     return ( $hour, $minute, $second );
 }
 
+use constant INFINITY     =>       100 ** 100 ** 100 ;
+use constant NEG_INFINITY => -1 * (100 ** 100 ** 100);
+
 sub _normalize_seconds
 {
+    return if grep { $_ == INFINITY || $_ == NEG_INFINITY } @_[1,2];
+
     my $adj;
 
-    if ($_[1] < 0)
+    if ($_[2] < 0)
     {
-        $adj = int( ($_[1] - 86399) / 86400 );
+        $adj = int( ($_[2] - 86399) / 86400 );
     }
     else
     {
-        $adj = int( $_[1] / 86400 );
+        $adj = int( $_[2] / 86400 );
     }
 
-    ($_[0] += $adj), ($_[1] -= $adj*86400);
+    ($_[1] += $adj), ($_[2] -= $adj*86400);
 }
 
 sub _end_of_last_month_day_of_year
