@@ -886,7 +886,9 @@ DateTime - Reference implementation for Perl DateTime objects
   $day_name    = $dt->day_name   # Monday, Tuesday, ...
   $day_abbr    = $dt->day_abbr   # Mon, Tue, ...
 
-  $epoch_time  = $dt->epoch;     # may return undef for non-epoch times
+  $epoch_time  = $dt->epoch;
+  # may return undef if the datetime is outside the range that is
+  # representable by your OS's epoch system.
 
   $dt2 = $dt + $duration_object;
 
@@ -1091,8 +1093,7 @@ L<LANGUAGES|/LANGUAGES> section for more details.
 
 =item * day_of_year, doy
 
-Returns the day of the year.  Analogous to the yday attribute of
-gmtime (or localtime) except that it works outside of the epoch.
+Returns the day of the year.
 
 =item * ymd( $optional_separator ), date
 
@@ -1219,8 +1220,8 @@ start of the epoch will be returned as a negative number.
 Since epoch times cannot represent many dates on most platforms, this
 method may simply return undef in some cases.
 
-Using epochs is not recommended, since they have such a limited range,
-at least on 32-bit machines.
+Using your system's epoch time is not recommended, since they have
+such a limited range, at least on 32-bit machines.
 
 =back
 
@@ -1466,8 +1467,7 @@ seconds, see %T below.
 
 =item * %s
 
-The number of seconds since the Epoch, i.e., since 1970-01-01 00:00:00
-UTC.
+The number of seconds since the epoch.
 
 =item * %S
 
@@ -1519,7 +1519,7 @@ The year as a decimal number including the century.
 
 =item * %z
 
-The time-zone as hour offset from GMT.  Required to emit
+The time-zone as hour offset from UTC.  Required to emit
 RFC822-conformant dates (using "%a, %d %b %Y %H:%M:%S %z").
 
 =item * %Z
