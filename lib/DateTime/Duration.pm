@@ -24,11 +24,11 @@ sub new
                            minutes => { type => SCALAR, default => 0 },
                            seconds => { type => SCALAR, default => 0 },
                            nanoseconds => { type => SCALAR, default => 0 },
-                           end_of_month => { type => SCALAR, default => 'wrap',
+                           end_of_month => { type => SCALAR, default => undef,
                                              regex => qr/^(?:wrap|limit|preserve)$/ },
                          } );
 
-    my $self = bless { eom_mode => $p{end_of_month} }, $class;
+    my $self = bless {}, $class;
 
     # if any component is negative we treat the whole duration as
     # negative
@@ -40,6 +40,14 @@ sub new
     {
         $self->{sign} = 1;
     }
+
+    $self->{end_of_month} =
+	( defined $p{end_of_month}
+	  ? $p{end_of_month}
+	  : $self->is_negative
+	  ? 'preserve'
+	  : 'wrap'
+	);
 
     $self->{months} =
         ( abs( $p{years} * 12 ) + abs( $p{months} ) ) * $self->{sign};
@@ -116,22 +124,21 @@ sub deltas
     map { $_ => $_[0]->{$_} } qw( months days minutes seconds nanoseconds );
 }
 
-sub is_wrap_mode     { $_[0]->{eom_mode} eq 'wrap'   ? 1 : 0 }
-sub is_limit_mode    { $_[0]->{eom_mode} eq 'limit'  ? 1 : 0 }
-sub is_preserve_mode { $_[0]->{eom_mode} eq 'preserve' ? 1 : 0 }
+sub is_wrap_mode     { $_[0]->{end_of_month} eq 'wrap'   ? 1 : 0 }
+sub is_limit_mode    { $_[0]->{end_of_month} eq 'limit'  ? 1 : 0 }
+sub is_preserve_mode { $_[0]->{end_of_month} eq 'preserve' ? 1 : 0 }
 
 sub inverse
 {
     my $self = shift;
 
-    my %new = %$self;
-
-    foreach ( qw( months days minutes seconds nanoseconds sign ) )
+    my %new;
+    foreach ( qw( months days minutes seconds nanoseconds ) )
     {
-        $new{$_} *= -1;
+        $new{$_} = $self->{$_} * -1;
     }
 
-    return bless \%new, ref $self;
+    return (ref $self)->new(%new);
 }
 sub add_duration
 {
@@ -298,10 +305,9 @@ The "end_of_month" parameter must be either "wrap", "limit", or
 "preserve".  These specify how changes across the end of a month are
 handled.
 
-The default "end_of_month" mode, "wrap", means adding months or years
-that result in days beyond the end of the new month will roll over
-into the following month.  For instance, adding one year to Feb 29
-will result in Mar 1.
+In "wrap" mode, adding months or years that result in days beyond the
+end of the new month will roll over into the following month.  For
+instance, adding one year to Feb 29 will result in Mar 1.
 
 If you specify "end_of_month" mode as "limit", the end of the month
 is never crossed.  Thus, adding one year to Feb 29, 2000 will result
@@ -312,6 +318,10 @@ If you specify "end_of_month" mode as "preserve", the same calculation
 is done as for "limit" except that if the original date is at the end
 of the month the new date will also be.  For instance, adding one
 month to Feb 29, 2000 will result in Mar 31, 2000.
+
+For positive durations, the "end_of_month" parameter defaults to wrap.
+For negative durations, the default is "limit".  This should match how
+most people "intuitively" expect datetime math to work.
 
 =item * clone
 
@@ -350,6 +360,13 @@ Indicates whether or not the duration is positive, zero, or negative.
 =item * is_wrap_mode, is_limit_mode, is_preserve_mode
 
 Indicates what mode is used for end of month wrapping.
+
+=item * inverse
+
+Returns a new object with the same deltas as the current object, but
+multiple by -1.  The end of month mode for the new object will be the
+default end of month mode, which depends on whether the new duration
+is positive or negative.
 
 =item * add_duration( $duration_object ), subtract_duration( $duration_object )
 
