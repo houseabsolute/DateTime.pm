@@ -112,11 +112,13 @@ sub new {
     $args{year}++ if $args{year} < 0;
     $self->{local_rd_days} =
         $class->greg2rd( @args{ qw( year month day ) } );
+
     $self->{local_rd_secs} =
         $class->time_as_seconds( @args{ qw( hour minute second ) } );
 
     bless $self, $class;
 
+    $self->_calc_components;
     $self->_calc_utc_rd;
 
     return $self;
@@ -125,23 +127,18 @@ sub new {
 sub _calc_utc_rd {
     my $self = shift;
 
-    # We must short circuit for UTC times or else we could end up with
-    # loops between DateTime.pm and DateTime::TimeZone
     if ( $self->{tz}->is_utc ) {
         $self->{utc_rd_days} = $self->{local_rd_days};
         $self->{utc_rd_secs} = $self->{local_rd_secs};
-
-        $self->_calc_components;
 
         return;
     }
 
     $self->{utc_rd_days} = $self->{local_rd_days};
-    $self->{utc_rd_secs} = $self->{local_rd_secs} + $self->offset;
+    $self->{utc_rd_secs} =
+        $self->{local_rd_secs} - $self->_offset_from_local_time;
 
     _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
-
-    $self->_calc_components;
 }
 
 sub _calc_local_rd {
@@ -152,16 +149,12 @@ sub _calc_local_rd {
     if ( $self->{tz}->is_utc ) {
         $self->{local_rd_days} = $self->{utc_rd_days};
         $self->{local_rd_secs} = $self->{utc_rd_secs};
+    } else {
+        $self->{local_rd_days} = $self->{utc_rd_days};
+        $self->{local_rd_secs} = $self->{utc_rd_secs} + $self->offset;
 
-        $self->_calc_components;
-
-        return;
+        _normalize_seconds( $self->{local_rd_days}, $self->{local_rd_secs} );
     }
-
-    $self->{local_rd_days} = $self->{utc_rd_days};
-    $self->{local_rd_secs} = $self->{utc_rd_secs} - $self->offset;
-
-    _normalize_seconds( $self->{local_rd_days}, $self->{local_rd_secs} );
 
     $self->_calc_components;
 }
@@ -513,8 +506,14 @@ sub week_number { ($_[0]->week)[1] }
 sub time_zone { $_[0]->{tz} }
 
 sub offset { $_[0]->{tz}->offset_for_datetime( $_[0] ) }
+sub _offset_from_local_time { $_[0]->{tz}->offset_for_local_datetime( $_[0] ) }
+
+sub time_zone_short_name { $_[0]->{tz}->short_name_for_datetime( $_[0] ) }
 
 sub language { $_[0]->{language} }
+
+sub utc_rd_as_seconds   { ( $_[0]->{utc_rd_days} * 86400 )   + $_[0]->{utc_rd_secs} }
+sub local_rd_as_seconds { ( $_[0]->{local_rd_days} * 86400 ) + $_[0]->{local_rd_secs} }
 
 my %formats =
     ( 'a' => sub { $_[0]->day_abbr },
@@ -726,13 +725,13 @@ sub compare {
 sub set {
     my $self = shift;
     my %p = validate( @_,
-                      { year   => { type => SCALAR, optional => 1 },
-                        month  => { type => SCALAR, optional => 1 },
-                        day    => { type => SCALAR, optional => 1 },
-                        hour   => { type => SCALAR, optional => 1 },
-                        minute => { type => SCALAR, optional => 1 },
-                        second => { type => SCALAR, optional => 1 },
-                        language  => { type => SCALAR, optional => 1 },
+                      { year     => { type => SCALAR, optional => 1 },
+                        month    => { type => SCALAR, optional => 1 },
+                        day      => { type => SCALAR, optional => 1 },
+                        hour     => { type => SCALAR, optional => 1 },
+                        minute   => { type => SCALAR, optional => 1 },
+                        second   => { type => SCALAR, optional => 1 },
+                        language => { type => SCALAR, optional => 1 },
                       } );
 
     my %old_p =
@@ -1225,8 +1224,9 @@ C<DateTime::Duration>.
 
 The parts of a duration can be broken into three parts.  These are
 months, days, and seconds.  Adding one month to a date is different
-than adding 4 weeks or 28, 30, or 31 days.  Similarly, with leap
-seconds, adding a day can be different than adding 86,400 seconds.
+than adding 4 weeks or 28, 30, or 31 days.  Similarly, due to DST and
+leap seconds, adding a day can be different than adding 86,400
+seconds.
 
 C<DateTime.pm> always adds (or subtracts) days and seconds first.
 Then it normalizes the seconds to handle second values less than 0 or
