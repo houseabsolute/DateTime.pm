@@ -1916,7 +1916,7 @@ as well as leap seconds.
 
 =item * locale
 
-Returns the current locale as a string.
+Returns the current locale object.
 
 =back
 
