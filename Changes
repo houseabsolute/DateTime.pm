@@ -1,3 +1,11 @@
+0.1402   2003-07-24
+
+[ BUG FIXES ]
+
+- Fix DefaultLocale method, which didn't work at all.  Reported by
+Serge Leger.
+
+
 0.1401   2003-07-24
 
 [ BUG FIXES ]
