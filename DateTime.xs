@@ -9,6 +9,8 @@
 #include "XSUB.h"
 #include "ppport.h"
 
+#include <math.h>
+
 /* 2 ** 28 - 307 */
 #define RANGE_CUTOFF        (268435456 - 307)
 #define DAYS_PER_400_YEARS  146097
@@ -204,21 +206,23 @@ _normalize_seconds(days, secs)
      SV* secs;
 
      PPCODE:
-        IV d = SvIV(days);
-        IV s = SvIV(secs);
-        IV adj;
+        if (finite(SvNV(days)) && finite(SvNV(secs))) {
+          IV d = SvIV(days);
+          IV s = SvIV(secs);
+          IV adj;
 
-        if (s < 0) {
-          adj = (s - 86399) / SECONDS_PER_DAY;
-        } else {
-          adj = s / SECONDS_PER_DAY;
+          if (s < 0) {
+            adj = (s - 86399) / SECONDS_PER_DAY;
+          } else {
+            adj = s / SECONDS_PER_DAY;
+          }
+
+          d += adj;
+          s -= adj * SECONDS_PER_DAY;
+
+          sv_setiv(days, (IV) d);
+          sv_setiv(secs, (IV) s);
         }
-
-        d += adj;
-        s -= adj * SECONDS_PER_DAY;
-
-        sv_setiv(days, (IV) d);
-        sv_setiv(secs, (IV) s);
 
 void
 _time_as_seconds(self, h, m, s)
