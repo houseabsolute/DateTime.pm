@@ -1,17 +1,39 @@
 TODO list for Perl module DateTime
 
-- strftime - localizable!
+* strftime method
 
-- last day of month
+- strftime - mostly done except for TZ bits
 
-- week number of year
+- either remove "preferred format" parts from strftime or add
+preferered_{date,time,datetime}_format methods for each language
+(which then has the US-en vs. UK-en mess to deal with, plus others no
+doubt)
 
-- memo-ization for all the little component methods, with cache
-flushed on changes (add, etc.)
+- needs docs
+
+- figure out what %O* and %E* modifiers should do, if anything
+
+- more tests for other languages
+
+
+* More methods
+
+- last day of month (of week?).  first day of month (week?)
 
 - add gmtime and localtime methods, perhaps?
 
 - reasonable stringification.  numification?
+
+- jd/mjd methods?
+
+
+* Optimization
+
+- memo-ization for all the little component methods, with cache
+flushed on changes (add, etc.)
+
+
+* Other
 
 - more tests for setting offset via offset() method
 
@@ -35,8 +57,6 @@ http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/reefknot/Date-ICal-Timezone/)
 multiplication (duration * int), division? (duration / int).
 
 - add warnings about naughtiness of epoch to docs.
-
-- jd/mjd methods?
 
 - document RD days/seconds(/nanosecs?) in a separate document that
 will be the reference for DateTime.pm internals, as well as being
