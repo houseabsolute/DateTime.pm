@@ -2,13 +2,20 @@
 
 # test suite stolen shamelessly from TimeDate distro
 
+BEGIN
+{
+    return unless $] >= 5.006;
+
+    require utf8; import utf8;
+}
+
 use strict;
 
-use Test::More tests => 123;
+use Test::More tests => 126;
 
 use DateTime;
 
-my $lang = 'English';
+my $locale = 'en_US';
 my $dt;
 my $params;
 while (<DATA>)
@@ -22,11 +29,13 @@ while (<DATA>)
     }
     elsif (/^(\w+)/)
     {
-        $lang = $1;
-        eval "use DateTime::Language::$1";
+        $locale = $1;
+        eval "use DateTime::Locale::$1";
         die $@ if $@;
 
-        $dt = eval "DateTime->new( $params, time_zone => 'UTC', language => '$lang' )";
+        Test::More::diag("New locale: $locale\n");
+
+        $dt = eval "DateTime->new( $params, time_zone => 'UTC', locale => '$locale' )";
         next;
     }
 
@@ -141,11 +150,14 @@ year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42, nanos
 %z	+0000
 %{month}	9
 %{year}	1999
-German
+%x	Sep 7, 1999
+%X	1:02:42 PM
+%c	1:02:42 PM Sep 7, 1999
+de
 %y	99
 %Y	1999
 %%	%
-%a	Die
+%a	Di
 %A	Dienstag
 %b	Sep
 %B	September
@@ -161,8 +173,8 @@ German
 %l	 1
 %m	09
 %M	02
-%p	PM
-%r	01:02:42 PM
+%p	nachm.
+%r	01:02:42 nachm.
 %R	13:02
 %s	936709362
 %S	42
@@ -176,19 +188,19 @@ German
 %z	+0000
 %{month}	9
 %{year}	1999
-Italian
+it
 %y	99
 %Y	1999
 %%	%
-%a	Mar
-%A	Martedi
-%b	Set
-%B	Settembre
+%a	mar
+%A	martedì
+%b	set
+%B	settembre
 %C	19
 %d	07
 %e	 7
 %D	09/07/99
-%h	Set
+%h	set
 %H	13
 %I	01
 %j	250
@@ -196,8 +208,8 @@ Italian
 %l	 1
 %m	09
 %M	02
-%p	PM
-%r	01:02:42 PM
+%p	p.
+%r	01:02:42 p.
 %R	13:02
 %s	936709362
 %S	42
