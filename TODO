@@ -7,8 +7,6 @@ preferered_{date,time,datetime}_format methods for each language
 (which then has the US-en vs. UK-en mess to deal with, plus others no
 doubt)
 
-- figure out what %O* and %E* modifiers should do, if anything
-
 - more tests for other languages
 
 
@@ -19,11 +17,6 @@ doubt)
 - add gmtime and localtime methods, perhaps?
 
 - jd/mjd methods?
-
-
-* Optimization
-
-- optimize methods like week and day_of_year
 
 
 * Other
@@ -38,13 +31,7 @@ division? (duration / int).
 will be the reference for DateTime.pm internals, as well as being
 useful for other calendar implementors.
 
-- document stringification
-
-- document error handling features
-
 - Time::Local is now a core module, with no CPAN existence.  But the
 version that works best is in 5.8.0, and not otherwise available.
-
-- tests for end_of_month_day_of_year (rename?) and month_lengths
 
 - thorough tests for subtraction & addition overloading
