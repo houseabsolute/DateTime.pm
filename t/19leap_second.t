@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 111;
+use Test::More tests => 113;
 use DateTime;
 
 
@@ -679,4 +679,26 @@ use DateTime;
     $dt->subtract( seconds => 172801 );
 
     is( $dt->datetime, '1972-07-01T02:58:20', "subtract 172801 seconds crossing a leap second (+0300)" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 7, day => 1,
+                            hour => 12, minute => 58, second => 20,
+                            time_zone => '+1200',
+                          );
+
+    $dt->set_time_zone( '-1200' );
+
+    is( $dt->datetime, '1972-06-30T12:58:20', "24 hour time zone change near leap second" );
+}
+
+{
+    my $dt = DateTime->new( year => 1972, month => 6, day => 30,
+                            hour => 12, minute => 58, second => 20,
+                            time_zone => '-1200',
+                          );
+
+    $dt->set_time_zone( '+1200' );
+
+    is( $dt->datetime, '1972-07-01T12:58:20', "24 hour time zone change near leap second" );
 }
