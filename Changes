@@ -1,3 +1,9 @@
+0.1703  2003-09-22
+
+- truncate( to => 'week' ) caused a fatal error when the beginning of
+the week was in the previous month.  Reported by R. Mathews.
+
+
 0.1702  2003-09-18
 
 - Added truncate( to => 'week' ).  Suggested by Flavio Glock.
