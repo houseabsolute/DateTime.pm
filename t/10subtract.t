@@ -23,7 +23,7 @@ require 'testlib.pl';
     my $dur = $date2 - $date1;
 
     is( $dur->delta_months, 1, 'delta_months should be 1' );
-    is( $dur->delta_days, 2, 'delta_days should be 33' );
+    is( $dur->delta_days, 2, 'delta_days should be 2' );
     is( $dur->delta_minutes, 64, 'delta_minutes should be 64' );
     is( $dur->delta_seconds, 20, 'delta_seconds should be 20' );
     is( $dur->delta_nanoseconds, 999_999_995, 'delta_nanoseconds should be 999,999,995' );
