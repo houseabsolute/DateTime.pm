@@ -1411,7 +1411,7 @@ Yes, now we can know "ni3 na1 bian1 ji3dian2?"
 =item * add_duration( $duration_object )
 
 This method adds a C<DateTime::Duration> to the current datetime.  See
-the L<DateTime::Duration|DateTime::Duration> docs for more detais.
+the L<DateTime::Duration|DateTime::Duration> docs for more details.
 
 =item * add( DateTime::Duration->new parameters )
 
