@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 53;
+use Test::More tests => 56;
 
 use DateTime;
 
@@ -18,19 +18,22 @@ use DateTime;
 
     # 1971-12-31T23:59:20 UTC
     $t->add( seconds => 60 );
-    is( $t->minute, 59, "min");
-    is( $t->second, 20, "sec");
+    is( $t->year, 1971, "year is 1971" );
+    is( $t->minute, 59, "minute is 59" );
+    is( $t->second, 20, "second is 20" );
 
     # 1972-01-01T00:00:19 UTC
     $t->add( seconds => 60 );
-    is( $t->minute, 0, "min");
-    is( $t->second, 19, "sec");
+    is( $t->year, 1972, "year is 1972" );
+    is( $t->minute, 0, "minute is 0" );
+    is( $t->second, 19, "second is 19" );
 
     # 1971-12-31T23:59:60 UTC
     $t->subtract( seconds => 20 );
-    is( $t->minute, 59, "min");
-    is( $t->second, 60, "sec");
-    is( $t->{utc_rd_secs} , 86400, "rd_sec");
+    is( $t->year, 1971, "year is 1971" );
+    is( $t->minute, 59, "minute is 59" );
+    is( $t->second, 60, "second is 60" );
+    is( $t->{utc_rd_secs} , 86400, "utc_rd_secs is 86400" );
 
 
     # subtract_datetime
@@ -39,10 +42,10 @@ use DateTime;
                             time_zone => 'UTC',
                           );
     my $dur = $t2 - $t1;
-    is( $dur->delta_seconds, 121, "delta_seconds is 121");
+    is( $dur->delta_seconds, 121, "delta_seconds is 121" );
 
     $dur = $t1 - $t2;
-    is( $dur->delta_seconds, -121, "delta_seconds is -121");
+    is( $dur->delta_seconds, -121, "delta_seconds is -121" );
 }
 
 {
@@ -56,12 +59,12 @@ use DateTime;
     my $t1 = $t->clone;
 
     $t->add( seconds => 60);
-    is( $t->minute, 59, "min");
-    is( $t->second, 20, "sec");
+    is( $t->minute, 59, "min" );
+    is( $t->second, 20, "sec" );
 
     $t->add( seconds => 60);
-    is( $t->minute, 0, "min");
-    is( $t->second, 20, "sec");
+    is( $t->minute, 0, "min" );
+    is( $t->second, 20, "sec" );
 
     # subtract_datetime, using floating times
 
@@ -70,10 +73,10 @@ use DateTime;
                             time_zone => 'floating',
                           );
     my $dur = $t2 - $t1;
-    is( $dur->delta_seconds, 120, "delta_seconds is 120");
+    is( $dur->delta_seconds, 120, "delta_seconds is 120" );
 
     $dur = $t1 - $t2;
-    is( $dur->delta_seconds, -120, "delta_seconds is -120");
+    is( $dur->delta_seconds, -120, "delta_seconds is -120" );
 }
 
 {
@@ -87,20 +90,20 @@ use DateTime;
                          );
 
     $t->add( seconds => 60 );
-    is( $t->datetime, '1971-12-31T20:59:20', "normal add");
-    is( $t->minute, 59, "min");
-    is( $t->second, 20, "sec");
+    is( $t->datetime, '1971-12-31T20:59:20', "normal add" );
+    is( $t->minute, 59, "min" );
+    is( $t->second, 20, "sec" );
 
     $t->add( seconds => 60 );
-    is( $t->datetime, '1971-12-31T21:00:19', "add over a leap second");
-    is( $t->minute, 0, "min");
-    is( $t->second, 19, "sec");
+    is( $t->datetime, '1971-12-31T21:00:19', "add over a leap second" );
+    is( $t->minute, 0, "min" );
+    is( $t->second, 19, "sec" );
 
     $t->subtract( seconds => 20 );
-    is( $t->datetime, '1971-12-31T20:59:60', "subtract over a leap second");
-    is( $t->minute, 59, "min");
-    is( $t->second, 60, "sec");
-    is( $t->{utc_rd_secs} , 86400, "rd_sec");
+    is( $t->datetime, '1971-12-31T20:59:60', "subtract over a leap second" );
+    is( $t->minute, 59, "min" );
+    is( $t->second, 60, "sec" );
+    is( $t->{utc_rd_secs} , 86400, "rd_sec" );
 }
 
 # test that we can set second to 60
