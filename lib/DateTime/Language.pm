@@ -2,8 +2,12 @@ package DateTime::Language;
 
 use strict;
 
-# provides subclasses method
 use Class::Factory::Util;
+
+sub available
+{
+    return Class::Factory::Util::subclasses(__PACKAGE__);
+}
 
 sub new
 {
@@ -76,7 +80,9 @@ localization for DateTime.pm.  A subclass of this language simply
 
 =head1 USAGE
 
-End users will not have to use this module.
+This module provides one somewhat interesting function,
+C<available()>.  Calling this method returns a list of subclass names,
+minus the leading "DateTime::Language::" portion.
 
 =head1 SUBCLASSING
 
