@@ -10,5 +10,6 @@ WriteMakefile( NAME         => 'DateTime',
                PREREQ_PM    => { 'Time::Local' => 0,
                                  'Date::Leapyear' => 0,
                                  'Test::More'  => 0,
+                                 'Class::Factory::Util' => 1.2,
                                },
              );
