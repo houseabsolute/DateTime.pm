@@ -77,7 +77,7 @@ sub write_makefile
                                      'DateTime::TimeZone' => 0.17,
                                      'Params::Validate' => 0.52,
                                      'Test::More'  => 0,
-                                     'Time::Local' => 0,
+                                     'Time::Local' => ( $] < 5.008 ? 1.05 : 0 ),
                                      'DateTime::LeapSecond' => 0.02,
                                    },
                  );
