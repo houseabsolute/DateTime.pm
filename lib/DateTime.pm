@@ -1728,9 +1728,8 @@ Invalid parameter types (like an array reference) will cause the
 constructor to die.
 
 The value for seconds may be from 0 to 61, to account for leap
-seconds.  If you give a value greater than 59, DateTime does not check
-to see that it really matches a valid leap second.  Extra seconds
-simply overflow into the minutes portion of the time.
+seconds.  If you give a value greater than 59, DateTime does check to
+see that it really matches a valid leap second.
 
 All of the parameters are optional except for "year".  The "month" and
 "day" parameters both default to 1, while the "hour", "minute",
@@ -2518,7 +2517,7 @@ get a different number of seconds.
 There are other subtract/delta methods in DateTime.pm to generate
 different types of durations.  These methods are
 C<subtract_datetime()>, C<subtract_datetime_absolute()>,
-C<delta_md()>, L<delta_days()>, and C<delta_ms()>.
+C<delta_md()>, C<delta_days()>, and C<delta_ms()>.
 
 =head2 Overloading
 
@@ -2618,7 +2617,7 @@ Equivalent to %Y-%m-%d (the ISO 8601 date format)
 
 The ISO 8601 year with century as a decimal number.  The 4-digit year
 corresponding to the ISO week number (see %V).  This has the same
-format and value as %y, except that if the ISO week number belongs to
+format and value as %Y, except that if the ISO week number belongs to
 the previous or next year, that year is used instead. (TZ)
 
 =item * %g
