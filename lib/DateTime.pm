@@ -820,15 +820,15 @@ sub strftime
     foreach my $f (@formats)
     {
         $f =~ s/
-	        %{(\w+)}
-	       /
+                %{(\w+)}
+               /
                 $self->$1() if $self->can($1);
                /sgex;
 
         # regex from Date::Format - thanks Graham!
        $f =~ s/
-	        %([%a-zA-Z])
-	       /
+                %([%a-zA-Z])
+               /
                 $formats{$1} ? $formats{$1}->($self) : $1
                /sgex;
 
@@ -1933,8 +1933,8 @@ possible. For example:
   my $dt = DateTime->now->set_time_zone( 'Australia/Sydney' );
 
   my $first = DateTime
-		->last_day_of_month( year => 2003, month => 3 )
-		->add( days => 1 )
+                ->last_day_of_month( year => 2003, month => 3 )
+                ->add( days => 1 )
                 ->subtract( seconds => 1 );
 
 =over 4
