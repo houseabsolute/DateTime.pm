@@ -7,7 +7,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.23';
+    $VERSION = '0.24';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -1949,9 +1949,9 @@ provide cross-calendar compatibility.  This method accepts a
 
 If the object passed to this method has a C<time_zone()> method, that
 is used to set the time zone of the newly created C<DateTime.pm>
-object.  Otherwise UTC is used.
+object.
 
-By default, the returned object will be in the UTC time zone.
+Otherwise, the returned object will be in the floating time zone.
 
 =item * last_day_of_month( ... )
 
