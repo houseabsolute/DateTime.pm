@@ -11,6 +11,10 @@
 
 #include <math.h>
 
+#ifdef _HPUX_SOURCE
+#define finite isfinite
+#endif
+
 /* 2 ** 28 - 307 */
 #define RANGE_CUTOFF        (268435456 - 307)
 #define DAYS_PER_400_YEARS  146097
