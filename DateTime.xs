@@ -9,11 +9,15 @@
 #include "XSUB.h"
 #include "ppport.h"
 
-#include <math.h>
-
-#ifndef isfinite
-#  ifdef finite
-#    define finite isfinite
+/* This is a temporary hack until a better solution can be found to
+   get the finite() function on Win32 */
+#ifndef WIN32
+#  include <math.h>
+#
+#  ifndef isfinite
+#    ifdef finite
+#      define finite isfinite
+#    endif
 #  endif
 #endif
 
