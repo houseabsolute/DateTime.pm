@@ -7,7 +7,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.26';
+    $VERSION = '0.27';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -829,6 +829,7 @@ sub locale { $_[0]->{locale} }
 *language = \&locale;
 
 sub utc_rd_values { @{ $_[0] }{ 'utc_rd_days', 'utc_rd_secs', 'rd_nanosecs' } }
+sub local_rd_values { @{ $_[0] }{ 'local_rd_days', 'local_rd_secs', 'rd_nanosecs' } }
 
 # NOTE: no nanoseconds, no leap seconds
 sub utc_rd_as_seconds   { ( $_[0]->{utc_rd_days} * SECONDS_PER_DAY ) + $_[0]->{utc_rd_secs} }
@@ -2260,6 +2261,13 @@ L<DateTime::Infinite|DateTime::Infinite>.
 Returns the current UTC Rata Die days, seconds, and nanoseconds as a
 three element list.  This exists primarily to allow other calendar
 modules to create objects based on the values provided by this object.
+
+=item * local_rd_values
+
+Returns the current local Rata Die days, seconds, and nanoseconds as a
+three element list.  This exists for the benefit of other modules
+which might want to use this information for date math, such as
+C<DateTime::Event::Recurrence>.
 
 =item * leap_seconds
 
