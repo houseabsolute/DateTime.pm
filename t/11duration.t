@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 17;
+use Test::More tests => 27;
 
 use DateTime;
 use DateTime::Duration;
@@ -74,4 +74,23 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
         $leap_day + DateTime::Duration->new( months => 1,
                                              end_of_month => 'preserve' );
     is( fake_ical($new2), '20040331Z', "new date should be 2004-03-31" );
+}
+
+{
+    my $inverse =
+        DateTime::Duration->new( years => 1, months => 1,
+                                 weeks => 1, days => 1,
+                                 hours => 1, minutes => 2, seconds => 3, )->inverse;
+
+    is( $inverse->years, -1, 'inverse years should be negative' );
+    is( $inverse->months, -1, 'inverse months should be negative' );
+    is( $inverse->weeks, -1, 'inverse weeks should be negative' );
+    is( $inverse->days, -1, 'inverse days should be negative' );
+    is( $inverse->hours, -1, 'inverse hours should be negative' );
+    is( $inverse->minutes, -2, 'inverse minutes should be negative' );
+    is( $inverse->seconds, -3, 'inverse minutes should be negative' );
+
+    is( $inverse->delta_months, -13, 'inverse delta months should be negative' );
+    is( $inverse->delta_days, -8, 'inverse delta months should be negative' );
+    is( $inverse->delta_seconds, -3723, 'inverse delta seconds should be negative' );
 }
