@@ -31,9 +31,9 @@ is( $d->mday_0, 4, '->mday_0' );
 is( $d->mday, 5, '->mday' );
 is( $d->mday_0, 4, '->mday_0' );
 is( $d->hour, 2, '->hour' );
-is( $d->hour_1, 3, '->hour' );
-is( $d->hour_12, 3, '->hour' );
-is( $d->hour_12_0, 2, '->hour' );
+is( $d->hour_1, 3, '->hour_1' );
+is( $d->hour_12, 2, '->hour_12' );
+is( $d->hour_12_0, 2, '->hour_12_0' );
 is( $d->minute, 12, '->minute' );
 is( $d->min, 12, '->min' );
 is( $d->second, 50, '->second' );
@@ -118,7 +118,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     is( $d->month, 7, '->month' );
     is( $d->day_of_month, 5, '->day_of_month' );
     is( $d->hour, 2, '->hour' );
-    is( $d->hour_1, 3, '->hour' );
+    is( $d->hour_1, 3, '->hour_1' );
     is( $d->minute, 12, '->minute' );
     is( $d->second, 50, '->second' );
 }
@@ -129,14 +129,14 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     is( $dt0->year, 1, "year 1 is year 1" );
     is( $dt0->ce_year, 1, "ce_year 1 is year 1" );
     is( $dt0->era, 'CE', 'era is CE' );
-    is( $dt0->extended_year, 'CE', 'extended_year is 1CE' );
+    is( $dt0->extended_year, '1CE', 'extended_year is 1CE' );
 
     $dt0->subtract( years => 1 );
 
     is( $dt0->year, 0, "year 1 minus 1 is year 0" );
     is( $dt0->ce_year, -1, "ce_year 1 minus 1 is year -1" );
     is( $dt0->era, 'BCE', 'era is BCE' );
-    is( $dt0->extended_year, '-1BCE', 'extended_year is -1BCE' );
+    is( $dt0->extended_year, '1BCE', 'extended_year is 1BCE' );
 }
 
 {
