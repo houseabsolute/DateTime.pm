@@ -667,14 +667,22 @@ sub _weeks_in_year
 sub week_year   { ($_[0]->week)[0] }
 sub week_number { ($_[0]->week)[1] }
 
-# definition for week of month is taken from ICU and ISO
+# ISO says that the first week of a year is the first week containing
+# a Thursday.  Extending that says that the first week of the month is
+# the first week containing a Thursday.  ICU agrees.
+#
+# Algorithm supplied by Rick Measham, who doesn't understand how it
+# works.  Neither do I.  Please feel free to explain this to me!
 sub week_of_month
 {
     my $self = shift;
 
-    my $first_of_week = $self->clone->set( day => 1 );
+    # Faster than cloning just to get the dow
+    my $first_wday_of_month = ( 8 - ( $self->day - $self->dow ) % 7 ) % 7;
+    $first_wday_of_month = 7 unless $first_wday_of_month;
 
-    return ( ( $self->week_number - $first_of_week->week_number ) + 1 );
+    my $wom = int( ( $self->day + $first_wday_of_month - 2 ) / 7 );
+    return ( $first_wday_of_month <= 4 ) ? $wom + 1 : $wom;
 }
 
 sub time_zone { $_[0]->{tz} }
@@ -1731,7 +1739,11 @@ Returns the week of the year, from 1..53.
 
 =item * week_of_month
 
-XXX ???
+The week of the month, from 0..5.  The first week of the month is the
+first week that contains a Thursday.  This is based on the ICU
+definition of week of month, and correlates to the ISO8601 week of
+year definition.  A day in the week I<before> the week with the first
+Thursday will be week 0.
 
 =item * jd, mjd
 
