@@ -73,6 +73,8 @@ use constant INFINITY     =>       100 ** 100 ** 100 ;
 use constant NEG_INFINITY => -1 * (100 ** 100 ** 100);
 use constant NAN          => INFINITY - INFINITY;
 
+use constant SECONDS_PER_DAY => 86400;
+
 my( @MonthLengths, @LeapYearMonthLengths );
 
 BEGIN
@@ -157,7 +159,7 @@ my $NewValidate =
     { %$BasicValidate,
       time_zone => { type => SCALAR | OBJECT,
                      default => 'floating' },
-      formatter => { type => SCALAR | OBJECT, can => 'parse_datetime', optional => 1 },
+      formatter => { type => SCALAR | OBJECT, can => 'format_datetime', optional => 1 },
     };
 
 sub new
@@ -168,7 +170,7 @@ sub new
     die "Invalid day of month (day = $p{day} - month = $p{month})\n"
         if $p{day} > $class->_month_length( $p{year}, $p{month} );
 
-    my $self = {};
+    my $self = bless {}, $class;
 
     $p{locale} = delete $p{language} if exists $p{language};
     $p{locale} = $class->DefaultLocale unless defined $p{locale};
@@ -194,9 +196,10 @@ sub new
     $self->{local_rd_secs} =
         $class->_time_as_seconds( @p{ qw( hour minute second ) } );
 
+    $self->{offset_modifier} = 0;
+
     $self->{rd_nanosecs} = $p{nanosecond};
     $self->{formatter} = $p{formatter};
-    bless $self, $class;
 
     $self->_normalize_nanoseconds( $self->{local_rd_secs}, $self->{rd_nanosecs} );
 
@@ -209,6 +212,9 @@ sub new
     $self->{utc_year} = $p{year} + 1;
 
     $self->_calc_utc_rd;
+
+    $self->_handle_offset_modifier( $p{second} );
+
     $self->_calc_local_rd;
 
     if ( $p{second} > 59 )
@@ -228,6 +234,68 @@ sub new
     return $self;
 }
 
+sub _handle_offset_modifier
+{
+    my $self = shift;
+
+    return if $self->{tz}->is_floating;
+
+    my $second = shift;
+    my $utc_rd_days = @_ ? shift : $self->{utc_rd_days};
+
+    my $offset = $self->_offset_for_local_datetime;
+
+    if ( $offset >= 0
+         && $self->{local_rd_secs} >= $offset
+       )
+    {
+        if ( $second < 60 && $offset > 0 )
+        {
+            $self->{offset_modifier} =
+                $self->_day_length( $utc_rd_days - 1 ) - SECONDS_PER_DAY;
+
+            $self->{local_rd_secs} += $self->{offset_modifier};
+        }
+        elsif ( ( $self->{local_rd_secs} == $offset
+                  && $offset > 0 )
+                ||
+                ( $offset == 0
+                  && $self->{local_rd_secs} > 86399 ) )
+        {
+            my $mod = $self->_day_length( $utc_rd_days - 1 ) - SECONDS_PER_DAY;
+
+            unless ( $mod == 0 )
+            {
+                $self->{utc_rd_secs} -= $mod;
+
+                $self->_normalize_seconds;
+            }
+        }
+    }
+    elsif ( $offset < 0
+            && $self->{local_rd_secs} >= SECONDS_PER_DAY + $offset )
+    {
+        if ( $second < 60 )
+        {
+            $self->{offset_modifier} =
+                $self->_day_length( $utc_rd_days - 1 ) - SECONDS_PER_DAY;
+
+            $self->{local_rd_secs} += $self->{offset_modifier};
+        }
+        elsif ( $self->{local_rd_secs} == SECONDS_PER_DAY + $offset )
+        {
+            my $mod = $self->_day_length( $utc_rd_days - 1 ) - SECONDS_PER_DAY;
+
+            unless ( $mod == 0 )
+            {
+                $self->{utc_rd_secs} -= $mod;
+
+                $self->_normalize_seconds;
+            }
+        }
+    }
+}
+
 sub _calc_utc_rd
 {
     my $self = shift;
@@ -241,12 +309,17 @@ sub _calc_utc_rd
     }
     else
     {
+        my $offset = $self->_offset_for_local_datetime;
+
+        $offset += $self->{offset_modifier};
+
         $self->{utc_rd_days} = $self->{local_rd_days};
-        $self->{utc_rd_secs} =
-            $self->{local_rd_secs} - $self->_offset_from_local_time;
+        $self->{utc_rd_secs} = $self->{local_rd_secs} - $offset;
     }
 
-    $self->_normalize_seconds;
+    # We account for leap seconds in the new() method and nowhere else
+    # except date math.
+    $self->_normalize_tai_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
 }
 
 sub _normalize_seconds
@@ -280,8 +353,12 @@ sub _calc_local_rd
     }
     else
     {
+        my $offset = $self->offset;
+
+        $offset += $self->{offset_modifier};
+
         $self->{local_rd_days} = $self->{utc_rd_days};
-        $self->{local_rd_secs} = $self->{utc_rd_secs} + $self->offset;
+        $self->{local_rd_secs} = $self->{utc_rd_secs} + $offset;
 
         # intentionally ignore leap seconds here
         $self->_normalize_tai_seconds( $self->{local_rd_days}, $self->{local_rd_secs} );
@@ -299,14 +376,16 @@ sub _calc_local_components
         $self->_rd2ymd( $self->{local_rd_days}, 1 );
 
     @{ $self->{local_c} }{ qw( hour minute second ) } =
-        $self->_seconds_as_components( $self->{local_rd_secs}, $self->{utc_rd_secs} );
+        $self->_seconds_as_components
+            ( $self->{local_rd_secs}, $self->{utc_rd_secs}, $self->{offset_modifier} );
 }
 
 sub _calc_utc_components
 {
     my $self = shift;
 
-    $self->_calc_utc_rd unless defined $self->{utc_rd_days};
+    die "Cannot get UTC components before UTC RD has been calculated\n"
+        unless defined $self->{utc_rd_days};
 
     @{ $self->{utc_c} }{ qw( year month day ) } =
         $self->_rd2ymd( $self->{utc_rd_days} );
@@ -341,7 +420,7 @@ sub from_epoch
                         locale     => { type => SCALAR | OBJECT, optional => 1 },
                         language   => { type => SCALAR | OBJECT, optional => 1 },
                         time_zone  => { type => SCALAR | OBJECT, optional => 1 },
-                        formatter  => { type => SCALAR | OBJECT, can => 'parse_datetime',
+                        formatter  => { type => SCALAR | OBJECT, can => 'format_datetime',
                                         optional => 1 },
                       }
                     );
@@ -381,7 +460,7 @@ sub from_object
                                   },
                         locale     => { type => SCALAR | OBJECT, optional => 1 },
                         language   => { type => SCALAR | OBJECT, optional => 1 },
-                        formatter  => { type => SCALAR | OBJECT, can => 'parse_datetime',
+                        formatter  => { type => SCALAR | OBJECT, can => 'format_datetime',
                                         optional => 1 },
                       },
                     );
@@ -394,10 +473,24 @@ sub from_object
     # three values, $rd_nanosecs could be undef
     $rd_nanosecs ||= 0;
 
+    # This is a big hack to let _seconds_as_components operate naively
+    # on the given value.  If the object _is_ on a leap second, we'll
+    # add that to the generated seconds value later.
+    my $leap_seconds = 0;
+    if ( $object->can('time_zone') && ! $object->time_zone->is_floating
+         && $rd_secs > 86399 && $rd_secs <= $class->_day_length($rd_days) )
+    {
+        $leap_seconds = $rd_secs - 86399;
+        $rd_secs -= $leap_seconds;
+    }
+
     my %args;
     @args{ qw( year month day ) } = $class->_rd2ymd($rd_days);
-    @args{ qw( hour minute second ) } = $class->_seconds_as_components($rd_secs);
+    @args{ qw( hour minute second ) } =
+        $class->_seconds_as_components($rd_secs);
     $args{nanosecond} = $rd_nanosecs;
+
+    $args{second} += $leap_seconds;
 
     my $new = $class->new( %p, %args, time_zone => 'UTC' );
 
@@ -616,7 +709,7 @@ sub leap_seconds
 
     return 0 if $self->{tz}->is_floating;
 
-    return DateTime->_leap_seconds( $self->{utc_rd_days} );
+    return DateTime->_accumulated_leap_seconds( $self->{utc_rd_days} );
 }
 
 sub format_datetime
@@ -717,8 +810,8 @@ sub week_of_month
 
 sub time_zone { $_[0]->{tz} }
 
-sub offset { $_[0]->{tz}->offset_for_datetime( $_[0] ) }
-sub _offset_from_local_time { $_[0]->{tz}->offset_for_local_datetime( $_[0] ) }
+sub offset                     { $_[0]->{tz}->offset_for_datetime( $_[0] ) }
+sub _offset_for_local_datetime { $_[0]->{tz}->offset_for_local_datetime( $_[0] ) }
 
 sub is_dst { $_[0]->{tz}->is_dst_for_datetime( $_[0] ) }
 
@@ -731,10 +824,10 @@ sub locale { $_[0]->{locale} }
 sub utc_rd_values { @{ $_[0] }{ 'utc_rd_days', 'utc_rd_secs', 'rd_nanosecs' } }
 
 # NOTE: no nanoseconds, no leap seconds
-sub utc_rd_as_seconds   { ( $_[0]->{utc_rd_days} * 86400 ) + $_[0]->{utc_rd_secs} }
+sub utc_rd_as_seconds   { ( $_[0]->{utc_rd_days} * SECONDS_PER_DAY ) + $_[0]->{utc_rd_secs} }
 
 # NOTE: no nanoseconds, no leap seconds
-sub local_rd_as_seconds { ( $_[0]->{local_rd_days} * 86400 ) + $_[0]->{local_rd_secs} }
+sub local_rd_as_seconds { ( $_[0]->{local_rd_days} * SECONDS_PER_DAY ) + $_[0]->{local_rd_secs} }
 
 # RD 1 is JD 1,721,424.5 - a simple offset
 sub jd
@@ -1023,11 +1116,11 @@ sub subtract_datetime_absolute
     my $dt = shift;
 
     my $utc_rd_secs1 = $self->utc_rd_as_seconds;
-    $utc_rd_secs1 += DateTime->_leap_seconds( $self->{utc_rd_days} )
+    $utc_rd_secs1 += DateTime->_accumulated_leap_seconds( $self->{utc_rd_days} )
 	if ! $self->time_zone->is_floating;
 
     my $utc_rd_secs2 = $dt->utc_rd_as_seconds;
-    $utc_rd_secs2 += DateTime->_leap_seconds( $dt->{utc_rd_days} )
+    $utc_rd_secs2 += DateTime->_accumulated_leap_seconds( $dt->{utc_rd_days} )
 	if ! $dt->time_zone->is_floating;
 
     my $seconds = $utc_rd_secs1 - $utc_rd_secs2;
@@ -1163,7 +1256,12 @@ sub add_duration
 
     return $self if $self->is_infinite;
 
-    $self->{local_rd_days} += $deltas{days} if $deltas{days};
+    if ( $deltas{days} )
+    {
+        $self->{local_rd_days} += $deltas{days};
+
+        $self->{utc_year} += int( $deltas{days} / 365 ) + 1;
+    }
 
     if ( $deltas{months} )
     {
@@ -1193,46 +1291,29 @@ sub add_duration
         {
             $self->{local_rd_days} = $self->_ymd2rd( $y, $m + $deltas{months}, $d );
         }
-    }
 
-    #
-    # In each case below, we fudge the value of utc_year to something
-    # that is _at least_ the correct year, but could be more.  This is
-    # done for the benefit of DateTime::TimeZone, which uses this
-    # value to determine how far into the future it should go when
-    # generating changes for a time zone.  As long as this value is at
-    # least as big as the actual value of the datetime, we will be
-    # able to find the correct offset from UTC.
-    #
+        $self->{utc_year} += int( $deltas{months} / 12 ) + 1;
+    }
 
     if ( $deltas{days} || $deltas{months} )
     {
-        $self->{utc_year} += int( $deltas{months} / 12 ) + 1;
-        $self->{utc_year} += int( $deltas{days} / 365 ) + 1;
+        my $previous_utc_rd_days = $self->{utc_rd_days};
 
         $self->_calc_utc_rd;
-        $self->_calc_local_rd;
+
+        $self->_handle_offset_modifier( $self->second, $previous_utc_rd_days );
     }
 
     if ( $deltas{minutes} )
     {
-        $self->{utc_year} += int( $deltas{minutes} / ( 365 * 1440 ) ) + 1;
-
         $self->{utc_rd_secs} += $deltas{minutes} * 60;
 
         # This intentionally ignores leap seconds
         $self->_normalize_tai_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
     }
 
-    # We add seconds to the UTC time because if someone adds 24 hours,
-    # we want this to be _different_ from adding 1 day when crossing
-    # DST boundaries.
     if ( $deltas{seconds} || $deltas{nanoseconds} )
     {
-        $self->{utc_year} += int( $deltas{seconds} / ( 365 * 86400 ) ) + 1;
-        $self->{utc_year} +=
-            int( $deltas{nanoseconds} / ( 365 * 86400 * MAX_NANOSECONDS ) ) + 1;
-
         $self->{utc_rd_secs} += $deltas{seconds};
 
         if ( $deltas{nanoseconds} )
@@ -1241,16 +1322,19 @@ sub add_duration
             $self->_normalize_nanoseconds( $self->{utc_rd_secs}, $self->{rd_nanosecs} );
         }
 
-        # must always normalize seconds, because a nanosecond change
-        # might cause a day change
         $self->_normalize_seconds;
+
+        $self->_handle_offset_modifier( $self->second );
     }
 
-    if ( $deltas{minutes} || $deltas{seconds} || $deltas{nanoseconds})
-    {
-        delete $self->{utc_c};
-        $self->_calc_local_rd;
-    }
+    my $new =
+        (ref $self)->from_object
+            ( object => $self,
+              locale => $self->{locale},
+              ( $self->{formatter} ? ( formatter => $self->{formatter} ) : () ),
+             );
+
+    %$self = %$new;
 
     return $self;
 }
@@ -1428,6 +1512,8 @@ sub set_time_zone
 
     $self->{tz} = ref $tz ? $tz : DateTime::TimeZone->new( name => $tz );
 
+    $self->_handle_offset_modifier( $self->second );
+
     # if it either was or now is floating (but not both)
     if ( $self->{tz}->is_floating xor $was_floating )
     {
@@ -1457,7 +1543,10 @@ sub STORABLE_freeze
     # not used yet, but may be handy in the future.
     $serialized .= "version:$VERSION";
 
-    return $serialized, $self->{locale}, $self->{tz};
+    # Formatter needs to be returned as a reference since it may be
+    # undef or a class name, and Storable will complain if extra
+    # return values aren't refs
+    return $serialized, $self->{locale}, $self->{tz}, \$self->{formatter};
 }
 
 sub STORABLE_thaw
@@ -1468,12 +1557,12 @@ sub STORABLE_thaw
 
     my %serialized = map { split /:/ } split /\|/, $serialized;
 
-    my ( $locale, $tz );
+    my ( $locale, $tz, $formatter );
 
     # more recent code version
     if (@_)
     {
-        ( $locale, $tz ) = @_;
+        ( $locale, $tz, $formatter ) = @_;
     }
     else
     {
@@ -1488,14 +1577,30 @@ sub STORABLE_thaw
 
     delete $serialized{version};
 
-    %$self = %serialized;
-    $self->{tz} = $tz;
-    $self->{locale} = $locale;
+    my $object = bless { utc_vals => [ $serialized{utc_rd_days},
+                                       $serialized{utc_rd_secs},
+                                       $serialized{rd_nanosecs},
+                                     ],
+                         tz       => $tz,
+                       }, 'DateTime::_Thawed';
 
-    $self->_calc_local_rd;
+    my %formatter = defined $$formatter ? ( formatter => $$formatter ) : ();
+
+    my $new = (ref $self)->from_object( object => $object,
+                                        locale => $locale,
+                                        %formatter,
+                                      );
+
+    %$self = %$new;
 
     return $self;
 }
+
+package DateTime::_Thawed;
+
+sub utc_rd_values { @{ $_[0]->{utc_vals} } }
+
+sub time_zone { $_[0]->{tz} }
 
 
 1;
@@ -1747,8 +1852,9 @@ C<DateTime::TimeZone> documentation for more details.
 
 The default time zone is "floating".
 
-The "formatter" can be either a scalar or an object, but the class specified
-by the scalar or the object must implement a parse_datetime() method.
+The "formatter" can be either a scalar or an object, but the class
+specified by the scalar or the object must implement a
+C<format_datetime()> method.
 
 =head4 Ambiguous Local Times
 
