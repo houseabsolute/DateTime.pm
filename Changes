@@ -1,3 +1,13 @@
+0.10
+
+[IMPROVEMENTS]
+
+- Added Tigre language module.  Contributed by Daniel Yacob.
+
+- DateTime::Duration objects now overload multiplication.  Implemented
+by Flavio Glock.
+
+
 0.09     2003-04-05 (the "liberation through violence" release)
 
 [IMPROVEMENTS]
