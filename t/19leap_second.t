@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 22;
+use Test::More tests => 25;
 
 use DateTime;
 
@@ -27,10 +27,7 @@ is( $t->second, 19, "sec");
 # 1971-12-31T23:59:60 UTC
 $t->subtract( seconds => 20 );
 is( $t->minute, 59, "min");
-TODO: {
-    local $TODO = "can't show '60' seconds yet";
-    is( $t->second, 60, "sec");
-}
+is( $t->second, 60, "sec");
 is( $t->{utc_rd_secs} , 86400, "rd_sec");
 
 
