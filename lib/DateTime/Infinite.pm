@@ -15,7 +15,7 @@ package DateTime::Infinite::Positive;
                       local_rd_days => $infinity,
                       local_rd_secs => $infinity,
                       rd_nanosecs => $infinity,
-                      tz          => DateTime::TimeZone->new( name => 'UTC' ),
+                      tz          => DateTime::TimeZone->new( name => 'floating' ),
                     }, 'DateTime';
 
     sub new { $Pos }
@@ -29,7 +29,7 @@ package DateTime::Infinite::Negative;
                       local_rd_days => -1 * $infinity,
                       local_rd_secs => -1 * $infinity,
                       rd_nanosecs => -1 * $infinity,
-                      tz          => DateTime::TimeZone->new( name => 'UTC' ),
+                      tz          => DateTime::TimeZone->new( name => 'floating' ),
                     }, 'DateTime';
 
     sub new { $Neg }
