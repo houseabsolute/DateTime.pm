@@ -605,7 +605,7 @@ sub leap_seconds
 
     return 0 if $self->{tz}->is_floating;
 
-    return DateTime->_leap_seconds( $self->{utc_rd_days} ) - 9;
+    return DateTime->_leap_seconds( $self->{utc_rd_days} );
 }
 
 sub hms

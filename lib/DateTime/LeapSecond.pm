@@ -28,7 +28,7 @@ sub _make_utx {
 
 # Process BEGIN data and write binary tree decision table
 sub _init {
-    my $value = 32 - 24;
+    my $value = -1;
     while (@_) {
         my ( $year, $mon, $mday, $leap_seconds ) = 
            ( shift, shift, shift, shift );
