@@ -1,5 +1,12 @@
 0.09
 
+[IMPROVEMENTS]
+
+- As requested by numerous people, there is now a pure Perl
+implementation of DateTime.pm included with this distribution.  If you
+don't have a C compiler it will be used instead of the XS
+implementation.
+
 [BUG FIXES]
 
 - If a datetime had the floating timezone and then set_time_zone was
