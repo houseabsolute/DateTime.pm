@@ -670,8 +670,8 @@ sub month_abbr {
 
 sub day_of_year {
     my $self = shift;
-    my $janone = greg2rd( $self->year, 1, 1 );
-    return ($self->{rd_days} + 1) - $janone ;
+    my @m = months($self->year);
+    return $m[$self->month_0] + $self->day - 1;
 }
 
 
