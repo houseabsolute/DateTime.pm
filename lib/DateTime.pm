@@ -763,7 +763,7 @@ sub truncate
     my $self = shift;
     my %p = validate( @_,
                       { to =>
-                        { regex => qr/^(?:month|day|hour|minute|second)$/ },
+                        { regex => qr/^(?:year|month|day|hour|minute)$/ },
                       },
                     );
 
@@ -771,11 +771,11 @@ sub truncate
                 time_zone => $self->{tz},
               );
 
-    foreach my $f ( qw( year month day hour minute second ) )
+    foreach my $f ( qw( year month day hour minute ) )
     {
-        last if $p{to} eq $f;
-
         $new{$f} = $self->$f();
+
+        last if $p{to} eq $f;
     }
 
     my $new_dt = (ref $self)->new(%new);
@@ -1278,10 +1278,10 @@ the C<set_time_zone()> method.
 
 This method allows you to reset some of the local time components in
 the object to their "zero" values.  The "to" parameter is used to
-specify which values to truncate, and it may be one of "month", "day",
-"hour", "minute", or "second".  For example, if "day" is specified,
-then the local day becomes 1, and the hour, minute, and second all
-become 0.
+specify which values to truncate, and it may be one of "year",
+"month", "day", "hour", or "minute".  For example, if "month" is
+specified, then the local day becomes 1, and the hour, minute, and
+second all become 0.
 
 =item * set_time_zone( $tz )
 
