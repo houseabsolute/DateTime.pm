@@ -5,6 +5,9 @@
 - DateTime::Duration now returns the object from mutator methods, in
 order to make method chaining possible.  Suggested by Ben Bennett.
 
+- If the value for second given to new() is 60 or 61, then it must be
+a valid leap second.
+
 [ BUG FIXES ]
 
 - DateTime::Duration was not consistent in how it handled mixed
