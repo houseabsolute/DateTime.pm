@@ -39,6 +39,9 @@ which output localized date and time strings.
 - Added the time_zone_long_name method, primarily for the benefit of
 DateTime::Locale.
 
+- Added a note to the DateTime::Infinite docs warning that it may not
+work well on Win32.
+
 [ BUG FIXES ]
 
 - DateTime::Duration was not consistent in how it handled mixed

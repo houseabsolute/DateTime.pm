@@ -26,6 +26,7 @@ t/10subtract.t
 t/11duration.t
 t/12week.t
 t/13strftime.t
+t/14locale.t
 t/15jd.t
 t/16truncate.t
 t/17set_return.t
