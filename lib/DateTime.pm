@@ -1040,6 +1040,11 @@ sub set_time_zone
 {
     my ( $self, $tz ) = @_;
 
+    # This is a bit of a hack but it works because time zone objects
+    # are singletons, and if it doesn't work all we lose is a little
+    # bit of speed.
+    return if $self->{tz} eq $tz;
+
     my $was_floating = $self->{tz}->is_floating;
 
     $self->{tz} = ref $tz ? $tz : DateTime::TimeZone->new( name => $tz );
