@@ -88,10 +88,9 @@ sub new
                            hour   => { type => SCALAR, default => 0 },
                            minute => { type => SCALAR, default => 0 },
                            second => { type => SCALAR, default => 0 },
-                           nanosecond => { 
-                                          type => SCALAR, default => 0 },
-                           fractional_second => { 
-                                          type => SCALAR, default => undef },
+                           nanosecond => { type => SCALAR, default => 0 },
+                           fractional_second =>
+                           { type => SCALAR, default => undef },
                            language  => { type => SCALAR | OBJECT,
                                           default => $class->DefaultLanguage },
                            time_zone => { type => SCALAR | OBJECT,
@@ -124,7 +123,8 @@ sub new
 
     $self->{rd_nanosecs} = $args{nanosecond};
 
-    if ( defined $args{fractional_second} ) {
+    if ( defined $args{fractional_second} )
+    {
         my $int = int( $args{fractional_second} );
         $self->{local_rd_secs} += $int;
         $self->{rd_nanosecs} += ( $args{fractional_second} - $int ) * MAX_NANOSECONDS;
@@ -230,11 +230,11 @@ sub from_epoch
 {
     my $class = shift;
     my %p = validate( @_,
-                         { epoch => { type => SCALAR },
-                           language => { type => SCALAR | OBJECT, optional => 1 },
-                           time_zone => { type => SCALAR | OBJECT, optional => 1 },
-                         }
-                       );
+                      { epoch => { type => SCALAR },
+                        language => { type => SCALAR | OBJECT, optional => 1 },
+                        time_zone => { type => SCALAR | OBJECT, optional => 1 },
+                      }
+                    );
 
     my %args;
     # Note, for very large negative values this may give a blatantly
@@ -493,17 +493,9 @@ sub language { $_[0]->{language} }
 
 sub utc_rd_values { @{ $_[0] }{ 'utc_rd_days', 'utc_rd_secs' } }
 
-sub utc_rd_as_seconds   { 
-    ( $_[0]->{utc_rd_days} * 86400 ) + 
-    $_[0]->{utc_rd_secs} +
-    ( $_[0]->{rd_nanosecs} / MAX_NANOSECONDS )
-}
+sub utc_rd_as_seconds   { ( $_[0]->{utc_rd_days} * 86400 ) + $_[0]->{utc_rd_secs} }
 
-sub local_rd_as_seconds { 
-    ( $_[0]->{local_rd_days} * 86400 ) + 
-    $_[0]->{local_rd_secs} +
-    ( $_[0]->{rd_nanosecs} / MAX_NANOSECONDS )
-}
+sub local_rd_as_seconds { ( $_[0]->{local_rd_days} * 86400 ) + $_[0]->{local_rd_secs} }
 
 # RD 1 is JD 1,721,424.5 - a simple offset
 sub jd
@@ -512,21 +504,26 @@ sub jd
 
     my $jd = $self->{utc_rd_days} + 1_721_424.5;
 
-    return $jd + 
-        ( $self->{utc_rd_secs} / 86400 ) +
-        ( $self->{rd_nanosecs} / 86400 / MAX_NANOSECONDS );
+    return ( $jd +
+             ( $self->{utc_rd_secs} / 86400 ) +
+             ( $self->{rd_nanosecs} / 86400 / MAX_NANOSECONDS )
+           );
 }
 
 sub mjd { $_[0]->jd - 2_400_000.5 }
 
-sub _format_nanosecs {
+sub _format_nanosecs
+{
     my $self = shift;
     my $precision = shift;
+
     my $ret = sprintf( "%09d", $self->{rd_nanosecs} );
     return $ret unless $precision;   # default = 9 digits
+
     # rd_nanosecs might contain a fractional separator
-    my ($int, $frac) = split( /[.,]/, $self->{rd_nanosecs} );
+    my ( $int, $frac ) = split /[.,]/, $self->{rd_nanosecs};
     $ret .= $frac if $frac;
+
     return substr( $ret, 0, $precision );
 }
 
@@ -656,9 +653,11 @@ sub subtract_datetime
 
     if ( $self->{utc_rd_days} == $dt->{utc_rd_days} )
     {
-        return DateTime::Duration->new( 
-            seconds     => $self->{utc_rd_secs} - $dt->{utc_rd_secs},
-            nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs} );
+        return
+            DateTime::Duration->new
+                    ( seconds     => $self->{utc_rd_secs} - $dt->{utc_rd_secs},
+                      nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs},
+                    );
     }
     elsif ( $self->{utc_rd_days} > $dt->{utc_rd_days} &&
             $self->{utc_rd_secs} < $dt->{utc_rd_secs} )
@@ -666,10 +665,11 @@ sub subtract_datetime
         my $days = $self->{utc_rd_days} - 1;
         my $secs = $self->{utc_rd_secs} + 86400;
 
-        return DateTime::Duration->new( 
-            days        => $days - $dt->{utc_rd_days},
-            seconds     => $secs - $dt->{utc_rd_secs}, 
-            nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs} );
+        return DateTime::Duration->new
+            ( days        => $days - $dt->{utc_rd_days},
+              seconds     => $secs - $dt->{utc_rd_secs},
+              nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs},
+            );
     }
     elsif ( $dt->{utc_rd_days} > $self->{utc_rd_days} &&
             $dt->{utc_rd_secs} < $self->{utc_rd_secs} )
@@ -677,17 +677,19 @@ sub subtract_datetime
         my $days = $dt->{utc_rd_days} - 1;
         my $secs = $dt->{utc_rd_secs} + 86400;
 
-        return DateTime::Duration->new( 
-            days    => $self->{utc_rd_days} - $days,
-            seconds => $self->{utc_rd_secs} - $secs,
-            nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs} );
+        return DateTime::Duration->new
+            ( days    => $self->{utc_rd_days} - $days,
+              seconds => $self->{utc_rd_secs} - $secs,
+              nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs},
+            );
     }
     else
     {
-        return DateTime::Duration->new( 
-            days    => $self->{utc_rd_days} - $dt->{utc_rd_days},
-            seconds => $self->{utc_rd_secs} - $dt->{utc_rd_secs},
-            nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs} );
+        return DateTime::Duration->new
+            ( days    => $self->{utc_rd_days} - $dt->{utc_rd_days},
+              seconds => $self->{utc_rd_secs} - $dt->{utc_rd_secs},
+              nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs},
+            );
     }
 }
 
@@ -741,9 +743,15 @@ sub add_duration
     if ( $deltas{seconds} || $deltas{nanoseconds})
     {
         $self->{utc_rd_secs} += $deltas{seconds};
-        $self->{rd_nanosecs} += $deltas{nanoseconds};
-        _normalize_nanoseconds( $self->{utc_rd_secs}, $self->{rd_nanosecs} );
-        _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+
+        if ( $deltas{nanoseconds} )
+        {
+            $self->{rd_nanosecs} += $deltas{nanoseconds};
+            _normalize_nanoseconds( $self->{utc_rd_secs}, $self->{rd_nanosecs} );
+        }
+
+        _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} )
+            if $deltas{seconds};
 
         delete $self->{utc_c};
         $self->_calc_local_rd;
@@ -760,6 +768,7 @@ sub add_duration
                             $self->_rd2ymd( $self->{local_rd_days} + 1 ) :
                             $self->_rd2ymd( $self->{local_rd_days} )
                           );
+
         $d -= 1 if $dur->is_preserve_mode;
 
         if ( ! $dur->is_wrap_mode && $d > 28 )
@@ -851,14 +860,17 @@ sub _compare
 }
 
 
-sub _normalize_nanoseconds {
-    # seconds, nanoseconds 
-    if ( $_[1] < 0 ) {
+sub _normalize_nanoseconds
+{
+    # seconds, nanoseconds
+    if ( $_[1] < 0 )
+    {
         my $overflow = int( $_[1] / MAX_NANOSECONDS );
         $_[1] += $overflow * MAX_NANOSECONDS;
         $_[0] -= $overflow;
     }
-    elsif ( $_[1] >= MAX_NANOSECONDS ) {
+    elsif ( $_[1] >= MAX_NANOSECONDS )
+    {
         my $overflow = int( $_[1] / MAX_NANOSECONDS );
         $_[1] -= $overflow * MAX_NANOSECONDS;
         $_[0] += $overflow;
@@ -876,7 +888,7 @@ sub set
                         hour     => { type => SCALAR, optional => 1 },
                         minute   => { type => SCALAR, optional => 1 },
                         second   => { type => SCALAR, optional => 1 },
-                        nanosecond   => { type => SCALAR, optional => 1 },
+                        nanosecond => { type => SCALAR, optional => 1 },
                         language => { type => SCALAR, optional => 1 },
                       } );
 
@@ -1082,18 +1094,18 @@ All constructors can die when invalid parameters are given.
 =item * new( ... )
 
 This class method accepts parameters for each date and time component:
-"year", "month", "day", "hour", "minute", "second", "nanosecond".  
-Additionally, it accepts "fractional_second", 
-"language" and "time_zone" parameters.
+"year", "month", "day", "hour", "minute", "second", "nanosecond".
+Additionally, it accepts "fractional_second", "language" and
+"time_zone" parameters.
 
-  my $dt = DateTime->new( day => 25,
-                          month => 10,
-                          year => 1066,
-                          hour => 7,
+  my $dt = DateTime->new( day    => 25,
+                          month  => 10,
+                          year   => 1066,
+                          hour   => 7,
                           minute => 15,
                           second => 47,
                           nanosecond => 500000000,
-                          time_zone => 'America/Chicago',
+                          time_zone  => 'America/Chicago',
                         );
 
 The behavior of this module when given parameters outside proper
