@@ -1,7 +1,6 @@
 use strict;
 
-use Test::More;
-plan tests => 18;
+use Test::More tests => 18;
 
 use DateTime;
 

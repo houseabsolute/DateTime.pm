@@ -1,7 +1,6 @@
 use strict;
 
-use Test::More;
-plan tests => 45;
+use Test::More tests => 51;
 
 use DateTime;
 
@@ -11,7 +10,7 @@ my $d = DateTime->new( year => 2001,
                        hour => 2,
                        minute => 12,
                        second => 50,
-                       offset => 0,
+                       time_zone => 0,
                      );
 
 is( $d->year, 2001, '->year' );
@@ -70,7 +69,7 @@ my $leap_d = DateTime->new( year => 2004,
                             hour => 2,
                             minute => 12,
                             second => 50,
-                            offset => 0,
+                            time_zone => 0,
                           );
 
 is( $leap_d->is_leap_year, 1, '->is_leap_year' );
@@ -78,7 +77,7 @@ is( $leap_d->is_leap_year, 1, '->is_leap_year' );
 my $sunday = DateTime->new( year   => 2003,
                             month  => 1,
                             day    => 26,
-                            offset => 0,
+                            time_zone => 0,
                           );
 
 is( $sunday->day_of_week, 7, "Sunday is day 7" );
@@ -86,7 +85,26 @@ is( $sunday->day_of_week, 7, "Sunday is day 7" );
 my $monday = DateTime->new( year   => 2003,
                             month  => 1,
                             day    => 27,
-                            offset => 0,
+                            time_zone => 0,
                           );
 
 is( $monday->day_of_week, 1, "Monday is day 1" );
+
+{
+    # time zone offset should not affect the values returned
+    my $d = DateTime->new( year => 2001,
+                           month => 7,
+                           day => 5,
+                           hour => 2,
+                           minute => 12,
+                           second => 50,
+                           time_zone => -124,
+                         );
+
+    is( $d->year, 2001, '->year' );
+    is( $d->month, 7, '->month' );
+    is( $d->day_of_month, 5, '->day_of_month' );
+    is( $d->hour, 2, '->hour' );
+    is( $d->minute, 12, '->minute' );
+    is( $d->second, 50, '->second' );
+}

@@ -1,7 +1,6 @@
 use strict;
 
-use Test::More;
-plan tests => 5;
+use Test::More tests => 5;
 
 use DateTime;
 
@@ -11,7 +10,7 @@ my $t = DateTime->new( year   => 1996,
                        hour   => 18,
                        minute => 30,
                        second => 20,
-                       offset => 0,
+                       time_zone => 0,
                      );
 
 # Add 2 months
