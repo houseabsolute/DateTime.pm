@@ -25,12 +25,8 @@ use Time::Local ();
 # see: "Calling conventions for bynary operations" in overload docs.
 #
 use overload ( 'fallback' => 1,
-               '<=>' => sub { 
-                   $_[2] ? - $_[0]->compare($_[1]) :
-                             $_[0]->compare($_[1]) },
-               'cmp' => sub {
-                   $_[2] ? - $_[0]->compare($_[1]) :
-                             $_[0]->compare($_[1]) },
+               '<=>' => '_compare_overload',
+               'cmp' => '_compare_overload',
                '-' => '_subtract_overload',
                '+' => '_add_overload',
              );
@@ -652,6 +648,10 @@ sub add_duration {
 
 use constant INFINITY     =>       100 ** 100 ** 100 ;
 use constant NEG_INFINITY => -1 * (100 ** 100 ** 100);
+
+sub _compare_overload {
+    return $_[2] ? $_[1]->compare( $_[0] ) : $_[0]->compare( $_[1] );
+}
 
 sub compare {
     my ( $class, $dt1, $dt2 ) = ref $_[0] ? ( undef, @_ ) : @_;
