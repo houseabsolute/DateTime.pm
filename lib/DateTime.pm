@@ -1406,8 +1406,9 @@ month
 Invalid parameter types (like an array reference) will cause the
 constructor to die.
 
-DateTime does not if second values greater than 59 are valid based on
-current leap seconds, and invalid values simply cause an overflow.
+DateTime does not check if second values greater than 59 are valid
+based on current leap seconds, and invalid values simply cause an
+overflow.
 
 All of the parameters are optional except for "year".  The "month" and
 "day" parameters both default to 1, while the "hour", "minute", and
