@@ -547,7 +547,7 @@ BEGIN {
 
     @EndofMonthDayOfLeapYear = @EndofMonthDayOfYear;
 
-    for ( 2 .. 12 ) {
+    for ( 1 .. 11 ) {
         $EndofMonthDayOfLeapYear[$_] = $EndofMonthDayOfYear[$_] + 1;
     }
 }
