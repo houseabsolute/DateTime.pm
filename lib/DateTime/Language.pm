@@ -38,10 +38,11 @@ sub new
 {
     my $class = shift;
     my %p = validate( @_,
-                      { language => { type => SCALAR } },
+                      { language => { type => SCALAR, optional => 1 } },
                     );
 
-    my $real_class = $class->load( $p{language} );
+    my $real_class =
+        defined $p{language} ? $class->load( $p{language} ) : $class;
 
     my $obj = bless {}, $real_class;
 
@@ -178,6 +179,17 @@ after a dash, so things like "en" or "en-us" are both legal.  If a
 country code is given, then the most specific match is used.  For
 example, if "en-au" (English, Australian) is given, then the nearest
 match will be "en", which will be used instead.
+
+If you want to subclass this module outside of the DateTime::Language
+namespace, simply call C<new()> on your subclass, without a "language"
+parameter.  For example, you can simply do this:
+
+  package Foo::Language::PigLatin;
+  use base 'DateTime::Language';
+
+  ...
+
+  DateTime->new( ..., language => Foo::Language::PigLatin->new );
 
 =item * load( $language )
 
