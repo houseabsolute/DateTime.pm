@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 15;
+use Test::More tests => 17;
 
 use DateTime;
 
@@ -84,3 +84,10 @@ my $infinity = 100 ** 100 ** 100;
 ok($date1->compare($infinity) == -1, 'Comparison $a < inf');
 
 ok($date1->compare(-$infinity) == 1, 'Comparison $a > -inf');
+
+# comparison overloading, and infinity
+
+ok( ($date1 <=> $infinity) == -1, 'Comparison overload $a <=> inf');
+
+ok( ($infinity <=> $date1) == 1, 'Comparison overload $inf <=> $a');
+
