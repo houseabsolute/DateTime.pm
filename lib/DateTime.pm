@@ -107,6 +107,9 @@ sub new {
           DateTime::TimeZone->new( name => $args{time_zone} )
         );
 
+    # if user gives us year -10 that's really -9 to us, since we start
+    # at year 0 internally
+    $args{year}++ if $args{year} < 0;
     $self->{local_rd_days} =
         $class->greg2rd( @args{ qw( year month day ) } );
     $self->{local_rd_secs} =
@@ -295,9 +298,6 @@ sub rd2greg {
     $y += $c * 100 + $yadj * 400;   # get the real year, which is off by
     ++$y, $m -= 12 if $m > 12;      # one if month is January or February
 
-    # no year 0
-    --$y unless $y;
-
     return ( $y, $m, $d );
 }
 
@@ -381,8 +381,8 @@ sub last_day_of_month {
         );
 }
 
-sub year    { $_[0]->{c}{year} }
-sub year_0  { $_[0]->{c}{year} > 0 ? $_[0]->{c}{year} - 1 : $_[0]->{c}{year} }
+sub year    { $_[0]->{c}{year} <= 0 ? $_[0]->{c}{year} - 1 : $_[0]->{c}{year} }
+sub year_0  { $_[0]->{c}{year} - 1 }
 
 sub month   { $_[0]->{c}{month} }
 *mon = \&month;
