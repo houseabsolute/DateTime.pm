@@ -1,3 +1,13 @@
+0.18
+
+[ BUG FIXES ]
+
+- If from_epoch was given a fractional epoch with a floating point
+value with more than 9 digits after the decimal point, the object
+ended up containing a floating point number of nanoseconds.  We now
+truncate this number to an integer.  Fixed by Joshua Hoblitt.
+
+
 0.17  2003-08-29  (the "math is hard" release)
 
 [ BACKWARDS INCOMPATIBILITIES ]
