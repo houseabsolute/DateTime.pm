@@ -856,6 +856,10 @@ DateTime - Reference implementation for Perl DateTime objects
 
   $duration_object = $dt - $dt2;
 
+  $dt->set( year => 1882 );
+
+  $dt->set_time_zone( 'America/Chicago' );
+
 =head1 DESCRIPTION
 
 DateTime is the reference implementation for the base DateTime object
