@@ -19,12 +19,5 @@ The code for handling nanoseconds and the code for leap seconds were
 both largely written by Flavio Soibelmann Glock, who also has
 contributed various other features and fixes.
 
-
-Others who've helped out with code contributions include:
-
-Matthew Simon Cavalleto
-Eric Cholet
-Christian Hansen
-Iain Truskett
-Eugene van der Pijll
-Daniel Yacob
+Many others have helped out with code, ideas, and bug reports.  See
+the Changes file for details.
