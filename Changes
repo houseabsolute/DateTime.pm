@@ -14,13 +14,16 @@ trace.
 
 [ ENHANCEMENTS ]
 
-- Add a new in_units method to DateTime::Duration.  Patch by Andrew
+- Add a new in_units() method to DateTime::Duration.  Patch by Andrew
 Pimlott.
 
 - Rely on DateTime::TimeZone and DateTime::Locale having their own
 Storable hooks, as opposed to handling them in DateTime.pm's own
 Storable hooks.  This should fix RT ticket #5542, reported by Dan
 Rowles (I hope).
+
+- More docs on how date math is done.  See the new section "The
+Results of Date Math".
 
 [ BUG FIXES ]
 
