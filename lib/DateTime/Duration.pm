@@ -9,6 +9,7 @@ use overload ( fallback => 1,
                '<=>' => '_compare_overload',
                '+'   => '_add_overload',
                '-'   => '_subtract_overload',
+               '*'   => '_multiply_overload',
              );
 
 sub new
@@ -129,6 +130,15 @@ sub _subtract_overload
 
     my $new = $d1->clone;
     $new->subtract_duration($d2);
+    return $new;
+}
+
+sub _multiply_overload {
+    my ( $self, $times ) = @_;
+    my $new = $self->clone;
+    foreach ( qw( months days seconds ) )  {
+        $new->{$_} *= $times;
+    }
     return $new;
 }
 
@@ -310,8 +320,8 @@ C<add_duration()> or C<subtract_duration()>, as appropriate.
 
 =head2 Overloading
 
-Addition, subtraction, and comparison are overloaded for objects of
-this class.
+Addition, subtraction, mutiplication and comparison 
+are overloaded for objects of this class.
 
 =head1 SUPPORT
 

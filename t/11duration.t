@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 41;
+use Test::More tests => 43;
 
 use DateTime;
 use DateTime::Duration;
@@ -128,3 +128,11 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
         "smaller delta should come first in sorted list" );
 }
 
+{
+    my $dur1 = DateTime::Duration->new( months => 6, days => 10 );
+
+    my $new1 = $dur1 * 4;
+    is( $new1->delta_months, 24, 'test * overloading' );
+    is( $new1->delta_days, 40, 'test * overloading' );
+
+}
