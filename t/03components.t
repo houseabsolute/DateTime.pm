@@ -110,7 +110,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
                            hour => 2,
                            minute => 12,
                            second => 50,
-                           time_zone => -124,
+                           time_zone => '-0124',
                          );
 
     is( $d->year, 2001, '->year' );
