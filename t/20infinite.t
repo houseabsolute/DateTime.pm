@@ -38,7 +38,7 @@ my $nan = abs( $posinf - $posinf );
         'positive infinity is bigger than negative infinity' );
 
     my $pos_dur = $pos - $far_future;
-    is( $pos_dur->is_positive, 1,
+    ok( $pos_dur->is_positive,
         'infinity - normal = infinity' );
 
     my $pos2 = $long_ago + $pos_dur;
@@ -46,7 +46,7 @@ my $nan = abs( $posinf - $posinf );
         'normal + infinite duration = infinity' );
 
     my $neg_dur = $far_future - $pos;
-    is( $neg_dur->is_negative, 1,
+    ok( $neg_dur->is_negative,
         'normal - infinity = neg infinity' );
 
     my $neg2 = $long_ago + $neg_dur;
