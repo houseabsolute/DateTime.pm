@@ -1,4 +1,4 @@
-0.1xxx
+0.1704  2003-10-07
 
 [ IMPROVEMENTS ]
 
@@ -8,7 +8,11 @@
 [ BUG FIXES ]
 
 - The DateTime::Duration synopsis showed a sign() method that doesn't
-exist.  Reported by Flavio Glock.
+exist, so I removed it from the synopsis.  Reported by Flavio Glock.
+
+- Subtracting one datetime from another was seriously broken.  The
+values for days & weeks were wrong in many cases.  Reported by Pierre
+Denis.
 
 
 0.1703  2003-09-22
