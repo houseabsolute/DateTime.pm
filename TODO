@@ -2,31 +2,29 @@ TODO list for Perl module DateTime
 
 * leap seconds
 
-  - do not use leap seconds for 'floating time'
-    check with: $dt1->time_zone->is_floating
-    in: subtract_datetime()
-
-  - separate seconds from minutes in DateTime::Duration,
+- separate seconds from minutes in DateTime::Duration,
     such that 'minutes' don't care about leap seconds (?)
 
-  - allow printing '60' seconds
-
-  - test leap seconds in other timezones
+- what's the relation between UT1 and MJD/JD ?
+  see:   http://hpiers.obspm.fr/eop-pc/earthor/utc/leapsecond.html
 
 * strftime method
 
 - more tests for other languages
 
+* sub-second resolution
+
+- more tests: add/subtract/compare
+
+- add microseconds, milliseconds to:
+      DateTime new/truncate/accessors
+      DateTime::Duration new/accessors
+
+- jd, mjd should return nanosecond precision?
 
 * Other
 
-- sub-second resolution - at least microseconds (cooperate with
-Time::HiRes), but is micro small enough?
-
-    - add micro_seconds, milli_seconds to DateTime::Duration
-
-- overloading for DateTime::Duration: multiplication (duration * int),
-division? (duration / int).
+- overloading for DateTime::Duration: division? (duration / int).
 
 - document RD days/seconds(/nanosecs?) in a separate document that
 will be the reference for DateTime.pm internals, as well as being
@@ -36,8 +34,6 @@ useful for other calendar implementors.
 version that works best is in 5.8.0, and not otherwise available.
 
 - thorough tests for subtraction & addition overloading
-
-- handle leap seconds
 
 - by default, reject out of bounds datetime values (minute 75) but
 offer a "normalize" parameter that will wrap these.
