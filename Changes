@@ -13,6 +13,14 @@ Measham.
 - The %I and %l strftime formats were formatting hours as 0-11, not
 1-12 as documented.  Patch by Simon Newton.
 
+[ BACKWARDS INCOMPATIBILTIES ]
+
+- Because of changes in DateTime::TimeZone 0.13, which this version
+now requires, when a local time is ambiguous, the latest UTC time is
+used, rather than the earliest, as was done previously.
+
+- The Brazilian language module has been renamed as Portugese.
+
 
 0.10     2003-04-19 (the "I'm sure the new regime will be spiffy" release)
 
