@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 10;
+use Test::More tests => 20;
 
 use DateTime;
 
@@ -20,5 +20,9 @@ foreach my $p ( { year => 2000, month => 13 },
 {
     eval { DateTime->new(%$p) };
     like( $@, qr/did not pass/,
-          "Parameters outside valid range should fail" );
+          "Parameters outside valid range should fail in call to new()" );
+
+    eval { DateTime->new( year => 2000 )->set(%$p) };
+    like( $@, qr/did not pass/,
+          "Parameters outside valid range should fail in call to set()" );
 }
