@@ -13,9 +13,6 @@ TODO list for Perl module DateTime
 
 - more tests: add/subtract/compare
 
-- add microseconds, milliseconds to:
-      DateTime new/truncate/accessors
-      DateTime::Duration new/accessors
 
 * Other
 
@@ -30,3 +27,6 @@ NOTE TO FUTURE DEVELOPERS:
 
 Attempting to implement add_duration in XS actually seemed to slow
 date math operations down.  Sad but true.
+
+Same for implementing _normalize_tai_seconds.  Apparently the calls
+out to Perl from C overwhelmed any speed improvement.
