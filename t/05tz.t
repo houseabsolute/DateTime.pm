@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 71;
+use Test::More tests => 72;
 
 use DateTime;
 
@@ -23,6 +23,8 @@ use DateTime;
         'America/New_York is exactly one hour later than America/Chicago - minute' );
     is( $dt->second, 0,
         'America/New_York is exactly one hour later than America/Chicago - second' );
+
+    is( $dt->time_zone_long_name, 'America/New_York', 'time_zone_long_name' );
 }
 
 {
