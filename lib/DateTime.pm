@@ -370,6 +370,7 @@ sub hms
 *DateTime::time = \&hms;
 
 sub iso8601 { join 'T', $_[0]->ymd('-'), $_[0]->hms(':') }
+*datetime = \&iso8601;
 
 sub is_leap_year { $_[0]->_is_leap_year( $_[0]->year ) }
 
