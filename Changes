@@ -26,6 +26,10 @@ used to set it to something else, the internal UTC time of the object
 was not changed, meaning that its offset could be calculated
 incorrectly.  Patch by Eugene van der Pijll.
 
+- If datetime math was done with hours, minutes, or seconds, the
+return value of ->epoch would be wrong after this.  Based on report
+and patch from Iain Truskett.
+
 
 0.08     2003-03-21 (the "anti-war" release)
 
