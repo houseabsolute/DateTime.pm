@@ -407,7 +407,7 @@ sub from_object
                       { object => { type => OBJECT,
                                     can => 'utc_rd_values',
                                   },
-                        local      => { type => SCALAR | OBJECT, optional => 1 },
+                        locale     => { type => SCALAR | OBJECT, optional => 1 },
                         language   => { type => SCALAR | OBJECT, optional => 1 },
                       },
                     );
