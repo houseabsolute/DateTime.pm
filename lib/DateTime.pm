@@ -48,7 +48,8 @@ my $LocalOffset = _calc_local_offset();
         return $DefaultLanguageClass;
     }
 }
-__PACKAGE__->DefaultLanguageClass('English');
+__PACKAGE__->DefaultLanguageClass('English')
+    unless __PACKAGE__->DefaultLanguageClass;
 
 sub import {
     my $class = shift;
@@ -523,8 +524,8 @@ sub subtract {
               days    => $days,
               seconds => $secs
             );
-        } 
-    } elsif ( ref $date1 && 
+        }
+    } elsif ( ref $date1 &&
               ( $dur = DateTime::Duration->new( ical => $date2 ) )
             ) {
     # If $date1 is a DateTime object, and $date2 is a duration string,
