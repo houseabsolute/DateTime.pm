@@ -150,7 +150,7 @@ sub new
 sub _normalize_leap_seconds
 {
     # args: 0 => days, 1 => seconds
-    my $delta_days; 
+    my $delta_days;
 
     # rough adjust - can adjust many days
     if ( $_[1] < 0 )
@@ -214,7 +214,7 @@ sub _calc_local_rd
 
     # We must short circuit for UTC times or else we could end up with
     # loops between DateTime.pm and DateTime::TimeZone
-    if ( $self->{tz}->is_utc )
+    if ( $self->{tz}->is_utc || $self->{tz}->is_floating )
     {
         $self->{local_rd_days} = $self->{utc_rd_days};
         $self->{local_rd_secs} = $self->{utc_rd_secs};
@@ -241,7 +241,7 @@ sub _calc_local_components
     @{ $self->{local_c} }{ qw( hour minute second ) } =
         $self->_seconds_as_components( $self->{local_rd_secs} );
 
-    return if ( $self->time_zone->is_floating );
+    return if $self->time_zone->is_floating;
 
     $self->_calc_utc_components unless exists $self->{utc_c}{year};
 }
@@ -256,8 +256,8 @@ sub _calc_utc_components
     @{ $self->{utc_c} }{ qw( hour minute second ) } =
         $self->_seconds_as_components( $self->{utc_rd_secs} );
 
-    # we don't have to check 'is_floating' here, 
-    # because floating times will never have 86400 seconds.
+    # we don't have to check 'is_floating' here, because floating
+    # times will never have 86400 seconds.
     if ( $self->{utc_rd_secs} >= 86400 )
     {
         $self->{local_c}{second} += $self->{utc_rd_secs} - 86400 + 60;
