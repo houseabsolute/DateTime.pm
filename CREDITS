@@ -7,7 +7,7 @@ Parts of the API come from Time::Piece, by Matt Sergeant
 <matt@sergeant.org>, who had help from Jarkko Hietaniemi <jhi@iki.fi>.
 That API was originally created by Larry Wall.
 
-The DateTime::Language functionality is largely based on the
+The DateTime::Locale functionality is based in part on the
 Date::Language modules that come with Graham Barr's <gbarr@pobox.com>
 TimeDate module suite.  The strftime method in this module also
 borrows heavily from Graham's implementation.
