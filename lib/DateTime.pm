@@ -43,7 +43,14 @@ use overload ( 'fallback' => 1,
                '+' => '_add_overload',
              );
 
+# Have to load this after overloading is defined, after BEGIN blocks
+# or else weird crashes ensue
+require DateTime::Infinite;
+
 use constant MAX_NANOSECONDS => 1_000_000_000;  # 1E9 = almost 32 bits
+
+use constant INFINITY     =>       100 ** 100 ** 100 ;
+use constant NEG_INFINITY => -1 * (100 ** 100 ** 100);
 
 my( @MonthLengths, @LeapYearMonthLengths );
 
@@ -727,9 +734,10 @@ sub subtract_datetime
     {
         return
             DateTime::Duration->new
-                    ( seconds     => $self->{utc_rd_secs} - $dt->{utc_rd_secs},
-                      nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs},
-                    );
+                ( days        => $self->{utc_rd_days} - $dt->{utc_rd_days},
+                  seconds     => $self->{utc_rd_secs} - $dt->{utc_rd_secs},
+                  nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs},
+                );
     }
     elsif ( $self->{utc_rd_days} > $dt->{utc_rd_days} &&
             $self->{utc_rd_secs} < $dt->{utc_rd_secs} )
@@ -823,6 +831,21 @@ sub add_duration
 
     my %deltas = $dur->deltas;
 
+    foreach my $val ( values %deltas )
+    {
+        if ( $val == INFINITY )
+        {
+            %$self = %{ DateTime::Infinite::Positive->new };
+            return;
+        }
+
+        if ( $val == NEG_INFINITY )
+        {
+            %$self = %{ DateTime::Infinite::Negative->new };
+            return;
+        }
+    }
+
     $self->{local_rd_days} += $deltas{days} if $deltas{days};
 
     if ( $deltas{months} )
@@ -902,9 +925,6 @@ sub add_duration
 
     return $self;
 }
-
-use constant INFINITY     =>       100 ** 100 ** 100 ;
-use constant NEG_INFINITY => -1 * (100 ** 100 ** 100);
 
 sub _compare_overload
 {
