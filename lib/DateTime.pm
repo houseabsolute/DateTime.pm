@@ -687,6 +687,11 @@ sub strftime
     return @r;
 }
 
+my $sub =
+    ( defined &Time::Local::timegm_nocheck ?
+      \&Time::Local::timegm_nocheck :
+      \&Time::Local::timegm
+    );
 sub epoch
 {
     my $self = shift;
@@ -698,11 +703,11 @@ sub epoch
     my @hms = $self->_utc_hms;
 
     $self->{utc_c}{epoch} =
-        eval { Time::Local::timegm_nocheck( ( reverse @hms ),
-                                            $day,
-                                            $month - 1,
-                                            $year - 1900,
-                                          ) };
+        eval { $sub->( ( reverse @hms ),
+                       $day,
+                       $month - 1,
+                       $year - 1900,
+                     ) };
 
     return $self->{utc_c}{epoch};
 }
