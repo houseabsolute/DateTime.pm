@@ -895,25 +895,30 @@ sub subtract_datetime
     my $is_floating = $self->time_zone->is_floating &&
                       $dt->time_zone->is_floating;
 
-    my $bigger_utc_rd_secs = ($bigger->utc_rd_values)[1];
+    my $minute_length = 60;
 
-    # If the bigger of the two datetimes occurs in the last UTC minute
-    # of the UTC day, then that minute may not be 60 seconds long.  If
-    # we need to subtract a minute from the datetime in order to
-    # adjust the seconds difference to be positive, we need to know
-    # how long that minute was.  If one of the datetimes is floating,
-    # we just assume a minute is 60 seconds.
-    my $minute_length =
-	( $bigger_utc_rd_secs > 86340 && ! $is_floating ?
-	  $bigger_utc_rd_secs - 86340 :
-	  60
-	);
+    unless ($is_floating)
+    {
+        my ( $utc_rd_days, $utc_rd_secs ) = $smaller->utc_rd_values;
+
+        if ( $utc_rd_secs > 86340 && ! $is_floating )
+        {
+            # If the bigger of the two datetimes occurs in the last UTC minute
+            # of the UTC day, then that minute may not be 60 seconds long.  If
+            # we need to subtract a minute from the datetime in order to
+            # adjust the seconds difference to be positive, we need to know
+            # how long that minute was.  If one of the datetimes is floating,
+            # we just assume a minute is 60 seconds.
+
+            $minute_length = $self->_day_length($utc_rd_days) - 86340;
+        }
+    }
 
     my ( $months, $days, $minutes, $seconds, $nanoseconds ) =
         $self->_adjust_for_positive_difference
             ( $bigger->year * 12 + $bigger->month, $smaller->year * 12 + $smaller->month,
 
-              ($bigger->utc_rd_values)[0], ($smaller->utc_rd_values)[0],
+              $bigger->day, $smaller->day,
 
               $bigger->hour * 60 + $bigger->minute, $smaller->hour * 60 + $smaller->minute,
 
@@ -922,7 +927,8 @@ sub subtract_datetime
 	      $bigger->nanosecond, $smaller->nanosecond,
 
 	      $minute_length,
-	      $self->_month_length( $bigger->year, $bigger->month ),
+
+	      $self->_month_length( $smaller->year, $smaller->month ),
             );
 
     if ($negative)
@@ -968,7 +974,7 @@ sub _adjust_for_positive_difference
         $sec1 += $minute_length;
     }
 
-    # A day always has 25 * 60 minutes, though the minutes may vary in
+    # A day always has 24 * 60 minutes, though the minutes may vary in
     # length.
     if ( $min1 < $min2 )
     {
