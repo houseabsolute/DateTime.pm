@@ -45,11 +45,11 @@ while (<DATA>)
                           );
 
     my ($y, $d) = $dt->strftime( '%Y', '%d' );
-    is( $y, 1800 );
-    is( $d, 10 );
+    is( $y, 1800, 'first value is year' );
+    is( $d, 10, 'second value is day' );
 
     $y = $dt->strftime( '%Y', '%d' );
-    is( $y, 1800 );
+    is( $y, 1800, 'scalar context returns year' );
 }
 
 {
@@ -58,32 +58,32 @@ while (<DATA>)
                             minute => 0
                           ) ;
 
-    is($dt->strftime('%I %M %p'), '12 00 AM');
-    is($dt->strftime('%l %M %p'), '12 00 AM');
+    is( $dt->strftime('%I %M %p'), '12 00 AM', 'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), '12 00 AM', 'formatting of hours as 1-12' );
 
     $dt->set(hour => 1) ;
-    is($dt->strftime('%I %M %p'), '01 00 AM');
-    is($dt->strftime('%l %M %p'), ' 1 00 AM');
+    is( $dt->strftime('%I %M %p'), '01 00 AM', 'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), ' 1 00 AM', 'formatting of hours as 1-12' );
 
     $dt->set(hour => 11) ;
-    is($dt->strftime('%I %M %p'), '11 00 AM');
-    is($dt->strftime('%l %M %p'), '11 00 AM');
+    is( $dt->strftime('%I %M %p'), '11 00 AM', 'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), '11 00 AM', 'formatting of hours as 1-12' );
 
     $dt->set(hour => 12) ;
-    is($dt->strftime('%I %M %p'), '12 00 PM');
-    is($dt->strftime('%l %M %p'), '12 00 PM');
+    is( $dt->strftime('%I %M %p'), '12 00 PM', 'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), '12 00 PM', 'formatting of hours as 1-12' );
 
     $dt->set(hour => 13) ;
-    is($dt->strftime('%I %M %p'), '01 00 PM');
-    is($dt->strftime('%l %M %p'), ' 1 00 PM');
+    is( $dt->strftime('%I %M %p'), '01 00 PM', 'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), ' 1 00 PM', 'formatting of hours as 1-12' );
 
     $dt->set(hour => 23) ;
-    is($dt->strftime('%I %M %p'), '11 00 PM');
-    is($dt->strftime('%l %M %p'), '11 00 PM');
+    is( $dt->strftime('%I %M %p'), '11 00 PM', 'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), '11 00 PM', 'formatting of hours as 1-12' );
 
     $dt->set(hour => 0) ;
-    is($dt->strftime('%I %M %p'), '12 00 AM');
-    is($dt->strftime('%l %M %p'), '12 00 AM');
+    is( $dt->strftime('%I %M %p'), '12 00 AM', 'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), '12 00 AM', 'formatting of hours as 1-12' );
 }
 
 
