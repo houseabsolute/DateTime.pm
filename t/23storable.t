@@ -29,8 +29,8 @@ else
     is( $copy->time_zone->name, 'America/Chicago',
         'Storable freeze/thaw preserves tz' );
 
-    is( ref $copy->language, 'DateTime::Language::German',
-        'Storable freeze/thaw preserves language' );
+    is( ref $copy->locale, 'DateTime::Locale::de',
+        'Storable freeze/thaw preserves locale' );
 
     is( $copy->year, 1950,
         'Storable freeze/thaw preserves rd values' );
