@@ -218,6 +218,8 @@ sub from_object {
     @p{ qw( year month day ) } = $class->_rd2greg($rd_days);
     @p{ qw( hour minute second ) } = $class->_seconds_as_components($rd_secs);
 
+    my $tz = $object->can('time_zone') ? $object->time_zone : 'UTC';
+
     return $class->new( %p, %args, time_zone => 'UTC' );
 }
 
@@ -930,9 +932,11 @@ This class method can be used to construct a new DateTime object from
 any object that implements the C<utc_rd_values()> method.  All
 C<DateTime::Calendar> modules must implement this method in order to
 provide cross-calendar compatibility.  This method accepts a
-"language" parameter, but the time zone is always set to UTC, since we
-use the C<utc_rd_values()> method to translate from one calendar to
-another.
+"language" parameter
+
+If the object passed to this method has a C<time_zone()> method, that
+is used to set the time zone of the newly created C<DateTime.pm>
+object.  Otherwise UTC is used.
 
 =item * last_day_of_month( ... )
 
