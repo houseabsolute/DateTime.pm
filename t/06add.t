@@ -34,31 +34,28 @@ $t = DateTime->new( year => 1986, month => 1, day => 28,
                     hour => 16, minute => 38,
                     time_zone => 0 );
 
-$t->add(duration => 'PT1M12S' );
+$t->add( minutes => 1, seconds => 12 );
 is( fake_ical($t), '19860128T163912Z', "Adding durations with minutes and seconds works");
 
 $t = DateTime->new( year => 1986, month => 1, day => 28,
                     hour => 16, minute => 38,
                     time_zone => 0 );
 
-$t->add(duration => 'PT30S' );
+$t->add( seconds => 30 );
 is( fake_ical($t), '19860128T163830Z', "Adding durations with seconds only works");
 
 $t = DateTime->new( year => 1986, month => 1, day => 28,
                     hour => 16, minute => 38,
                     time_zone => 0 );
 
-$t->add(duration => 'PT1H10M' );
+$t->add( hours => 1, minutes => 10 );
 is( fake_ical($t), '19860128T174800Z', "Adding durations with hours and minutes works");
-
 
 $t = DateTime->new( year => 1986, month => 1, day => 28,
                     hour => 16, minute => 38,
                     time_zone => 0 );
 
-$t->add(duration => 'P3D' );
-# XXX: what is "right" in the following test? should the result
-# just be a date, or a date and time?
+$t->add( days => 3 );
 is( fake_ical($t), '19860131T163800Z', "Adding durations with days only works");
 
 
@@ -66,7 +63,7 @@ $t = DateTime->new( year => 1986, month => 1, day => 28,
                     hour => 16, minute => 38,
                     time_zone => 0 );
 
-$t->add(duration => 'P3DT2H' );
+$t->add( days => 3, hours => 2 );
 is( fake_ical($t), '19860131T183800Z', "Adding durations with days and hours works");
 
 
@@ -74,7 +71,7 @@ $t = DateTime->new( year => 1986, month => 1, day => 28,
                     hour => 16, minute => 38,
                     time_zone => 0 );
 
-$t->add(duration => 'P3DT2H20M15S' );
+$t->add( days => 3, hours => 2, minutes => 20, seconds => 15 );
 is( fake_ical($t), '19860131T185815Z', "Adding durations with days, hours, minutes, and seconds works");
 
 # Add 15M - this test failed at one point in N::I::Time
@@ -82,11 +79,11 @@ $t = DateTime->new( year => 2001, month => 4, day => 5,
                     hour => 16,
                     time_zone => 0 );
 
-$t->add( duration => 'PT15M' );
+$t->add( minutes => 15 );
 is( fake_ical($t), '20010405T161500Z', "Adding minutes to an ical string");
 
 # Subtract a duration
-$t->add( duration => '-PT15M' );
+$t->add( minutes => -15 );
 is( fake_ical($t), '20010405T160000Z', "Back where we started");
 
 undef $t;
@@ -95,9 +92,9 @@ $t = DateTime->new( year => 1986, month => 1, day => 28,
                     hour => 16, minute => 38,
                     time_zone => 0 );
 
-$t->add(seconds => '60' );
+$t->add( seconds => 60 );
 is( fake_ical($t), "19860128T163900Z", "adding positive seconds with seconds works" );
-$t->add(seconds => '-120' );
+$t->add( seconds => -120 );
 is( fake_ical($t), "19860128T163700Z", "adding negative seconds with seconds works" );
 
 # test sub months
