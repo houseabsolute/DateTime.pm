@@ -6,7 +6,7 @@ use strict;
 use vars qw( $VERSION );
 use vars qw( @RD @LEAP_SECONDS %RD_LENGTH );
 
-$VERSION = '0.04';  # last standalone distro was 0.03
+$VERSION = '0.05';  # last standalone distro was 0.03
 
 use DateTime;
 
