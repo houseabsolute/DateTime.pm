@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 13;
+use Test::More tests => 15;
 
 use DateTime;
 
@@ -79,4 +79,8 @@ $date2 = DateTime->new( year => 1996, month => 10, day => 24,
 ok($date1->compare($date2) == 1, 'Comparison $a > $b, 1 year diff');
 
 
+my $infinity = 100 ** 100 ** 100;
 
+ok($date1->compare($infinity) == -1, 'Comparison $a < inf');
+
+ok($date1->compare(-$infinity) == 1, 'Comparison $a > -inf');
