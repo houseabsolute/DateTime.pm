@@ -27,6 +27,9 @@ sub _seconds_as_components
     return ($_[1]) x 3;
 }
 
+sub STORABLE_freeze { return }
+sub STORABLE_thaw { return }
+
 package DateTime::Infinite::Future;
 
 use base qw(DateTime::Infinite);

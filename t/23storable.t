@@ -8,7 +8,7 @@ use DateTime;
 
 if ( eval { require Storable; 1 } )
 {
-    plan tests => 5;
+    plan tests => 15;
 }
 else
 {
@@ -16,29 +16,34 @@ else
 }
 
 {
-    my $dt =
+    my @dt = (
         DateTime->new( year => 1950,
                        hour => 1,
                        nanosecond => 1,
                        time_zone => 'America/Chicago',
                        language => 'German'
-                     );
+                     ),
+        DateTime::Infinite::Past->new,
+        DateTime::Infinite::Future->new,
+    );
 
-    my $copy = Storable::thaw( Storable::nfreeze($dt) );
-
-    is( $copy->time_zone->name, 'America/Chicago',
-        'Storable freeze/thaw preserves tz' );
-
-    is( ref $copy->locale, 'DateTime::Locale::de',
-        'Storable freeze/thaw preserves locale' );
-
-    is( $copy->year, 1950,
-        'Storable freeze/thaw preserves rd values' );
-
-    is( $copy->hour, 1,
-        'Storable freeze/thaw preserves rd values' );
-
-    is( $copy->nanosecond, 1,
-        'Storable freeze/thaw preserves rd values' );
+    foreach my $dt (@dt) {
+        my $copy = Storable::thaw( Storable::nfreeze($dt) );
+    
+        is( $copy->time_zone->name, $dt->time_zone->name,
+            'Storable freeze/thaw preserves tz' );
+    
+        is( ref $copy->locale, ref $dt->locale,
+            'Storable freeze/thaw preserves locale' );
+    
+        is( $copy->year, $dt->year,
+            'Storable freeze/thaw preserves rd values' );
+    
+        is( $copy->hour, $dt->hour,
+            'Storable freeze/thaw preserves rd values' );
+    
+        is( $copy->nanosecond, $dt->nanosecond,
+            'Storable freeze/thaw preserves rd values' );
+    }
 }
 
