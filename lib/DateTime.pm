@@ -921,11 +921,9 @@ sub subtract_datetime
 
     if ($negative)
     {
-        # in Perl 5.6.1 on Linux (Red Hat only?), $_ = 0; $_ * -1
-        # gives -0 !!!
-
         for ( $months, $days, $minutes, $seconds, $nanoseconds )
         {
+	    # Some versions of Perl can end up with -0 if we do "0 * -1"!!
             $_ *= -1 if $_;
         }
     }

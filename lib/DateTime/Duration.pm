@@ -72,6 +72,14 @@ sub new
         $self->{nanoseconds} = 0;
     }
 
+    if ( $self->{sign} == -1 )
+    {
+	foreach ( qw( months days minutes seconds nanoseconds ) )
+	{
+	    $self->{$_} = 0 unless $self->{$_};
+	}
+    }
+
     unless ( grep { $self->{$_} } qw( months days minutes seconds nanoseconds ) )
     {
         $self->{sign} = 0;
@@ -101,11 +109,11 @@ sub _normalize_nanoseconds
 sub clone { bless { %{ $_[0] } }, ref $_[0] }
 
 sub years   { abs( int( $_[0]->{months} / 12 ) ) }
-sub months  { int( abs( $_[0]->{months} ) % 12 ) }
+sub months  { abs( $_[0]->{months} ) % 12 }
 sub weeks   { abs( int( $_[0]->{days} / 7 ) ) }
 sub days    { abs( $_[0]->{days} ) % 7 }
 sub hours   { abs( int( $_[0]->{minutes} / 60 ) ) }
-sub minutes { int( ( abs( $_[0]->{minutes} ) - ( $_[0]->hours * 60 ) ) ) }
+sub minutes { abs( $_[0]->{minutes} ) - ( $_[0]->hours * 60 ) }
 sub seconds { abs( $_[0]->{seconds} ) }
 sub nanoseconds { abs( $_[0]->{nanoseconds} ) }
 
@@ -135,11 +143,14 @@ sub inverse
     my %new;
     foreach ( qw( months days minutes seconds nanoseconds ) )
     {
-        $new{$_} = $self->{$_} * -1;
+        $new{$_} = $self->{$_};
+	# avoid -0 bug
+	$new{$_} *= -1 if $new{$_};
     }
 
     return (ref $self)->new(%new);
 }
+
 sub add_duration
 {
     my ( $self, $dur ) = @_;

@@ -300,5 +300,5 @@ require 'testlib.pl';
     is( $diff->delta_months, 0, 'delta_months is 0' );
     is( $diff->delta_minutes, 0, 'delta_minutes is 0' );
     is( $diff->delta_seconds, -2_855_061, 'delta_seconds is -2,855,061' );
-    is( $diff->delta_nanoseconds, 0, 'delta_seconds is 0' );
+    is( $diff->delta_nanoseconds, 0, 'delta_nanoseconds is 0' );
 }
