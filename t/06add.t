@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 530;
+use Test::More tests => 531;
 
 use DateTime;
 
@@ -285,3 +285,5 @@ $t = DateTime->new( year => 1997, month => 1, day => 1,
 $t->add( months => -1 );
 is( fake_ical($t), '19961201Z', 'Subtracting months--rollover year' );
 
+my $new = $t + DateTime::Duration->new( years => 2 );
+is( fake_ical($new), '19981201Z', 'test + overloading' );
