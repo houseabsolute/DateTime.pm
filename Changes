@@ -1,4 +1,21 @@
-0.14
+0.14     2003-07-23
+
+[ BACKWARDS INCOMPATIBILITIES ]
+
+- The DateTime::Language modules are no longer being developed or
+distributed as part of the DateTime.pm distribution.
+
+Because of this, all "language" parameters should now be replaced by
+"locale" parameter.  The "language" parameter is deprecated and will
+be removed in a future release.
+
+Also note that locales should be specified via ISO codes, not names
+like "English".  The old DateTime::Language names will continue to
+work indefinitely, but they load DateTime::Locale objects instead.
+
+- Similarly, the "language" and "DefaultLanguage" methods are now
+deprecated in favor of "locale" and "DefaultLocale".
+
 
 [ IMPROVEMENTS ]
 
@@ -7,6 +24,20 @@ order to make method chaining possible.  Suggested by Ben Bennett.
 
 - If the value for second given to new() is 60 or 61, then it must be
 a valid leap second.
+
+- DateTime now uses DateTime::Locale for localization, which allows
+for real language and territory based localization.  The locale code
+is generated from the ICU project's data, and is much more complete
+than the DateTime::Language modules.  However, we are losing
+(hopefully only temporarily) support for the various African languages
+contributed by Daniel Yacob.  Support for those languages should
+return in a future release of DateTime::Locale.
+
+- Support for the '%c', '%x', and '%X' strftime format specifiers,
+which output localized date and time strings.
+
+- Added the time_zone_long_name method, primarily for the benefit of
+DateTime::Locale.
 
 [ BUG FIXES ]
 

@@ -87,6 +87,13 @@ C<DateTime::Infinite::Future> and C<DateTime::Infinite::Past>.
 The objects are in the "floating" timezone, and this cannot be
 changed.
 
+=head1 BUGS
+
+There seem to be lots of problems when dealing with infinite numbers
+on Win32.  This may be a problem with this code, Perl, or Win32's IEEE
+math implementation.  Either way, the module may not be well-behaved
+on Win32 operating systems.
+
 =head1 METHODS
 
 The only constructor for these two classes is the C<new()> method, as
