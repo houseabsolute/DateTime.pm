@@ -435,16 +435,28 @@ durations, please take a look a C<DateTime::Format::Duration>.
 =item * years, months, weeks, days, hours, minutes, seconds, nanoseconds
 
 These methods return numbers indicating how many of the given unit the
-object represents, after having taken away larger units.  These
-numbers are always positive.  So days is equivalent to C<abs(
-in_units( 'days', 'weeks' ) )>.
+object represents, after having done a conversion to any larger units.
+For example, days are first converted to weeks, and then the remainder
+is returned.  These numbers are always positive.
+
+Here's what each method returns:
+
+ $dur->year()    == abs( $dur->in_units('years') )
+ $dur->months()  == ( abs( $dur->in_units( 'months', 'years' ) ) )[0]
+ $dur->weeks()   == abs( $dur->in_units( 'weeks' ) )
+ $dur->days()    == ( abs( $dur->in_units( 'days', 'weeks' ) ) )[0]
+ $dur->hours()   == abs( $dur->in_units( 'hours' ) )
+ $dur->minutes   == ( abs( $dur->in_units( 'minutes', 'hours' ) ) )[0]
+ $dur->seconds   == abs( $dur->in_units( 'seconds' ) )
+ $dur->nanoseconds() == abs( $dur->in_units( 'nanoseconds', 'seconds' ) )
+
+If this seems confusing, remember that you can always use the
+C<in_units()> method to specify exactly what you want.
 
 =item * delta_months, delta_days, delta_minutes, delta_seconds, delta_nanoseconds
 
-These methods provide the same information as those above, but in a
-way suitable for doing date math.  The numbers returned may be
-positive or negative.  So delta_days is equivalent to
-C<in_units('days')>.
+These methods provide the information C<DateTime.pm> needs for doing
+date math.  The numbers returned may be positive or negative.
 
 =item * deltas
 
