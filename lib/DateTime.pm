@@ -11,19 +11,24 @@ BEGIN
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
     {
-#        if ( $] >= 5.006 )
-#        {
-#            require XSLoader;
-#            XSLoader::load( 'DateTime', $DateTime::VERSION );
-#        }
-#        else
-#        {
-            require DynaLoader;
-            @DateTime::ISA = 'DynaLoader';
-            DateTime->bootstrap( $DateTime::VERSION );
-#        }
+	eval
+	{
+	    if ( $] >= 5.006 )
+	    {
+		require XSLoader;
+		XSLoader::load( 'DateTime', $DateTime::VERSION );
+	    }
+	    else
+	    {
+		require DynaLoader;
+		@DateTime::ISA = 'DynaLoader';
+		DateTime->bootstrap( $DateTime::VERSION );
+	    }
+	};
 
-        $loaded = 1;
+	die $@ if $@ && $@ !~ /object version/;
+
+        $loaded = 1 unless $@;
     }
 
     if ($loaded)
