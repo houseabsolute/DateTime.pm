@@ -1145,6 +1145,27 @@ returns -1 if $a < $b, 0 if $a == $b, 1 if $a > $b.
 
 =back
 
+=head2 OVERLOADING
+
+This module explicitly overloads the addition (+), subtraction (-),
+and stringification operators.  This means that the following all do
+sensible things:
+
+  my $new_dt = $dt + $duration_obj;
+
+  my $new_dt = $dt - $duration_obj;
+
+  my $duration_obj = $dt - $new_dt;
+
+  foreach my $dt ( sort @dts ) { ... }
+
+Additionally, the fallback parameter is set to true, so other
+derivable operators (+=, -=, etc.) will work properly.  Do not expect
+increment (++) or decrement (--) to do anything useful, however.
+
+The stringification is equivalent to that produced by C<scalar
+localtime()>.
+
 =head2 strftime Specifiers
 
 The following specifiers are allowed in the format string:
