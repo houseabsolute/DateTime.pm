@@ -36,5 +36,7 @@ t/20infinite.t
 t/21bad_params.t
 t/22from_doy.t
 t/23storable.t
+t/24from_object.t
+t/25add_subtract.t
 t/testlib.pl
 TODO
