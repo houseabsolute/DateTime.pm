@@ -1,4 +1,4 @@
-0.18  2003-10-26
+0.18  2003-10-26  (the "delta, delta, delta, can I help ya, help ya, help ya?" release)
 
 [ IMPROVEMENTS ]
 
@@ -91,7 +91,7 @@ the following code:
 
  print DateTime->new( year => 2003, month => 5, day => 31 )->subtract( months => 1 )->ymd;
 
-printed "2003-05-01" as opposd to "2003-04-30".  Thanks to Thomas
+printed "2003-05-01" as opposed to "2003-04-30".  Thanks to Thomas
 Klausner for starting a discussion on this problem.
 
 - The subtract_datetime method now returns different results, as does
