@@ -81,10 +81,47 @@ DateTime::Infinite - Infinite past and future DateTime objects
 
 =head1 DESCRIPTION
 
-???
+This module provides two L<DateTime.pm|DateTime> subclasses,
+C<DateTime::Infinite::Future> and C<DateTime::Infinite::Past>.
+
+The objects are in the "floating" timezone, and this cannot be
+changed.
 
 =head1 METHODS
 
-???
+The only constructor for these two classes is the C<new()> method, as
+shown in the L<SYNOPSIS|/SYNOPSIS>.  This method takes no parameters.
+
+All "get" methods in this module simply return infinity, positive or
+negative.  If the method is expected to return a string, it return the
+string representation of positive or negative infinity used by your
+system.  For example, on my system calling C<year()> returns a number
+which when printed appears either "inf" or "-inf".
+
+It is not legal to attempt to mutate the object, so the C<set()>,
+C<set_time_zone()>, and C<truncate()> methods all die if called.
+
+Obviously, the C<is_finite()> method returns false and the
+C<is_infinite()> method returns true.
+
+=head1 AUTHOR
+
+Dave Rolsky <autarch@ur...>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2003 David Rolsky.  All rights reserved.  This program
+is free software; you can redistribute it and/or modify it under the
+same terms as Perl itself.
+
+The full text of the license can be found in the LICENSE file included
+with this module.
+
+=head1 SEE ALSO
+
+datetime@pe... mailing list
+
+http://datetime.perl.org/
 
 =cut
+
