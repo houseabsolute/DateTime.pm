@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 80;
+use Test::More tests => 84;
 
 use DateTime;
 
@@ -23,15 +23,15 @@ require 'testlib.pl';
     my $diff = $date2 - $date1;
 
     is( $diff->delta_months, 1, 'delta_years should be 1' );
-    is( $diff->delta_days, 2, 'delta_days should be 2' );
+    is( $diff->delta_days, 33, 'delta_days should be 33' );
     is( $diff->delta_minutes, 64, 'delta_minutes should be 64' );
     is( $diff->delta_seconds, 20, 'delta_seconds should be 20' );
     is( $diff->delta_nanoseconds, 999_999_995, 'delta_nanoseconds should be 999,999,995' );
 
     is( $diff->years,   0,  'Years' );
     is( $diff->months,  1,  'Months' );
-    is( $diff->weeks,   0,  'Weeks' );
-    is( $diff->days,    2,  'Days' );
+    is( $diff->weeks,   4,  'Weeks' );
+    is( $diff->days,    5,  'Days' );
     is( $diff->hours,   1,  'Hours' );
     is( $diff->minutes, 4,  'Minutes' );
     is( $diff->seconds, 20, 'Seconds' );
@@ -50,15 +50,15 @@ require 'testlib.pl';
     my $diff = $date1 - $date2;
 
     is( $diff->delta_months, -1, 'delta_months should be -1' );
-    is( $diff->delta_days, -2, 'delta_days should be -2' );
+    is( $diff->delta_days, -33, 'delta_days should be -33' );
     is( $diff->delta_minutes, -64, 'delta_minutes should be 64' );
     is( $diff->delta_seconds, -21, 'delta_seconds should be 20' );
     is( $diff->delta_nanoseconds, 0, 'delta_nanoseconds should be 0' );
 
     is( $diff->years,   0,  'Years' );
     is( $diff->months,  1,  'Months' );
-    is( $diff->weeks,   0,  'Weeks' );
-    is( $diff->days,    2,  'Days' );
+    is( $diff->weeks,   4,  'Weeks' );
+    is( $diff->days,    5,  'Days' );
     is( $diff->hours,   1,  'Hours' );
     is( $diff->minutes, 4,  'Minutes' );
     is( $diff->seconds, 21, 'Seconds' );
@@ -302,3 +302,30 @@ require 'testlib.pl';
     is( $diff->delta_seconds, -2_855_061, 'delta_seconds is -2,855,061' );
     is( $diff->delta_nanoseconds, 0, 'delta_nanoseconds is 0' );
 }
+
+{
+    my $date1  = DateTime->new( year => 2003, month =>  9, day => 30 );
+    my $date2  = DateTime->new( year => 2003, month => 10, day =>  1 );
+
+    my $date3  = DateTime->new( year => 2003, month => 10, day => 31 );
+    my $date4  = DateTime->new( year => 2003, month => 11, day =>  1 );
+
+    my $date5  = DateTime->new( year => 2003, month => 2, day => 28 );
+    my $date6  = DateTime->new( year => 2003, month => 3, day =>  1 );
+
+    my $date7 = DateTime->new( year => 2003, month => 1, day => 31 );
+    my $date8 = DateTime->new( year => 2003, month => 2, day =>  1 );
+
+
+    foreach my $p ( [ $date1, $date2 ],
+                    [ $date3, $date4 ],
+                    [ $date5, $date6 ],
+                    [ $date7, $date8 ],
+                    )
+    {
+        my $diff = $p->[1]->subtract_datetime( $p->[0] );
+        my %d = $diff->deltas;
+        is( $diff->delta_days, 1, "1 day diff at end of month" );
+    }
+}
+
