@@ -10,7 +10,9 @@ lib/DateTime.pm
 lib/DateTime/Duration.pm
 lib/DateTime/Language.pm
 lib/DateTime/Language/Austrian.pm
+lib/DateTime/Language/Brazilian.pm
 lib/DateTime/Language/Czech.pm
+lib/DateTime/Language/Danish.pm
 lib/DateTime/Language/Dutch.pm
 lib/DateTime/Language/English.pm
 lib/DateTime/Language/French.pm
@@ -31,4 +33,5 @@ t/10subtract.t
 t/11duration.t
 t/12week.t
 t/13strftime.t
+t/14language.t
 t/testlib.pl
