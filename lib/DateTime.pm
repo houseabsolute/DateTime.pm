@@ -116,8 +116,10 @@ my $BasicValidate =
                 },
       day    => { type => SCALAR, default => 1,
                   callbacks =>
-                  { 'is between 1 and 31' =>
-                    sub { $_[0] >= 1 && $_[0] <= 31 },
+                  { 'is valid day of month' =>
+                    sub { $_[0] >= 1 &&
+                          $_[0] <= __PACKAGE__->_month_length
+                                       ( $_[1]->{year}, $_[1]->{month} ) },
                   },
                 },
       hour   => { type => SCALAR, default => 0,
@@ -162,9 +164,6 @@ sub new
     my %p = validate( @_, $NewValidate );
 
     my $last_day = $class->_month_length( $p{year}, $p{month} );
-
-    die "Invalid day of month (day = $p{day} - month = $p{month})\n"
-        if $p{day} > $last_day;
 
     my $self = {};
 

@@ -39,11 +39,11 @@ foreach my $p ( { year => 2000, month => 13 },
 
 {
     eval { DateTime->new( year => 2000, month => 4, day => 31 ) };
-    like( $@, qr/invalid day of month/i,
+    like( $@, qr/valid day of month/i,
           "Day past last day of month should fail" );
 
     eval { DateTime->new( year => 2001, month => 2, day => 29 ) };
-    like( $@, qr/invalid day of month/i,
+    like( $@, qr/valid day of month/i,
           "Day past last day of month should fail" );
 
     eval { DateTime->new( year => 2000, month => 2, day => 29 ) };
