@@ -1402,35 +1402,51 @@ sub STORABLE_freeze
     my $self = shift;
     my $cloning = shift;
 
-    my $data = '';
+    my $serialized = '';
     foreach my $key ( qw( utc_rd_days
                           utc_rd_secs
                           rd_nanosecs ) )
     {
-        $data .= "$key:$self->{$key}|";
+        $serialized .= "$key:$self->{$key}|";
     }
 
-    $data .= "locale:" . $self->{locale}->id;
-    $data .= "|tz:" . $self->{tz}->name;
-    $data .= "|version:$VERSION";
+    # not used yet, but may be handy in the future.
+    $serialized .= "version:$VERSION";
 
-    return $data;
+    return $serialized, $self->{locale}, $self->{tz};
 }
 
 sub STORABLE_thaw
 {
     my $self = shift;
     my $cloning = shift;
-    my $data = shift;
+    my $serialized = shift;
 
-    my %data = map { split /:/ } split /\|/, $data;
+    my %serialized = map { split /:/ } split /\|/, $serialized;
 
-    my $tz = DateTime::TimeZone->new( name => delete $data{tz} );
-    my $locale = exists $data{language} ? delete $data{language} : delete $data{locale};
+    my ( $locale, $tz );
 
-    %$self = %data;
+    # more recent code version
+    if (@_)
+    {
+        ( $locale, $tz ) = @_;
+    }
+    else
+    {
+        $tz = DateTime::TimeZone->new( name => delete $serialized{tz} );
+
+        $locale =
+            DateTime::Locale->load( exists $serialized{language}
+                                    ? delete $serialized{language}
+                                    : delete $serialized{locale}
+                                  );
+    }
+
+    delete $serialized{version};
+
+    %$self = %serialized;
     $self->{tz} = $tz;
-    $self->{locale} = DateTime::Locale->load($locale);
+    $self->{locale} = $locale;
 
     $self->_calc_local_rd;
 
