@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 100;
+use Test::More tests => 122;
 
 use DateTime;
 
@@ -31,6 +31,9 @@ is( $d->mday_0, 4, '->mday_0' );
 is( $d->mday, 5, '->mday' );
 is( $d->mday_0, 4, '->mday_0' );
 is( $d->hour, 2, '->hour' );
+is( $d->hour_1, 3, '->hour' );
+is( $d->hour_12, 3, '->hour' );
+is( $d->hour_12_0, 2, '->hour' );
 is( $d->minute, 12, '->minute' );
 is( $d->min, 12, '->min' );
 is( $d->second, 50, '->second' );
@@ -44,6 +47,8 @@ is( $d->day_of_quarter_0, 4, '->day_of_quarter_0' );
 is( $d->doq_0, 4, '->doq_0' );
 is( $d->day_of_week, 4, '->day_of_week' );
 is( $d->day_of_week_0, 3, '->day_of_week_0' );
+is( $d->week_of_month, 1, '->week_of_month' );
+is( $d->weekday_of_month, 1, '->weekday_of_month' );
 is( $d->wday, 4, '->wday' );
 is( $d->wday_0, 3, '->wday_0' );
 is( $d->dow, 4, '->dow' );
@@ -113,6 +118,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     is( $d->month, 7, '->month' );
     is( $d->day_of_month, 5, '->day_of_month' );
     is( $d->hour, 2, '->hour' );
+    is( $d->hour_1, 3, '->hour' );
     is( $d->minute, 12, '->minute' );
     is( $d->second, 50, '->second' );
 }
@@ -122,11 +128,15 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
     is( $dt0->year, 1, "year 1 is year 1" );
     is( $dt0->ce_year, 1, "ce_year 1 is year 1" );
+    is( $dt0->era, 'ACE', 'era is ACE' );
+    is( $dt0->extended_year, 'ACE', 'extended_year is 1ACE' );
 
     $dt0->subtract( years => 1 );
 
     is( $dt0->year, 0, "year 1 minus 1 is year 0" );
     is( $dt0->ce_year, -1, "ce_year 1 minus 1 is year -1" );
+    is( $dt0->era, 'BCE', 'era is BCE' );
+    is( $dt0->extended_year, '-1BCE', 'extended_year is -1BCE' );
 }
 
 {
@@ -241,4 +251,32 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     is( $dt->nanosecond, 450_500_000, 'nanosecond is 450,500,000' );
     is( $dt->microsecond, 450_500, 'microsecond is 450,500' );
     is( $dt->millisecond, 451, 'millisecond is 451' );
+}
+
+{
+    my $dt = DateTime->new( year => 2003, month => 5, day => 7 );
+    is( $dt->weekday_of_month, 1, '->weekday_of_month' );
+    is( $dt->week_of_month, 2, '->week_of_month' );
+}
+
+{
+    my $dt = DateTime->new( year => 2003, month => 5, day => 8 );
+    is( $dt->weekday_of_month, 2, '->weekday_of_month' );
+    is( $dt->week_of_month, 2, '->week_of_month' );
+}
+
+{
+    my $dt = DateTime->new( year => 1000, hour => 23 );
+    is( $dt->hour,      23, '->hour' );
+    is( $dt->hour_1,    24, '->hour_1' );
+    is( $dt->hour_12,   11, '->hour_12' );
+    is( $dt->hour_12_0, 11, '->hour_12_0' );
+}
+
+{
+    my $dt = DateTime->new( year => 1000, hour => 0 );
+    is( $dt->hour,       0, '->hour' );
+    is( $dt->hour_1,     1, '->hour_1' );
+    is( $dt->hour_12,   12, '->hour_12' );
+    is( $dt->hour_12_0,  0, '->hour_12_0' );
 }
