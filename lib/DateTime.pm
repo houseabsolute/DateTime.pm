@@ -100,55 +100,60 @@ BEGIN
 }
 __PACKAGE__->DefaultLanguage('English');
 
+my $BasicValidate =
+        { year   => { type => SCALAR },
+          month  => { type => SCALAR, default => 1,
+                      callbacks =>
+                      { 'is between 1 and 12' =>
+                        sub { $_[0] >= 1 && $_[0] <= 12 }
+                      },
+                    },
+          day    => { type => SCALAR, default => 1,
+                      callbacks =>
+                      { 'is between 1 and 31' =>
+                        sub { $_[0] >= 1 && $_[0] <= 31 },
+                      },
+                    },
+          hour   => { type => SCALAR, default => 0,
+                      callbacks =>
+                      { 'is between 0 and 23' =>
+                        sub { $_[0] >= 0 && $_[0] <= 23 },
+                      },
+                    },
+          minute => { type => SCALAR, default => 0,
+                      callbacks =>
+                      { 'is between 0 and 59' =>
+                        sub { $_[0] >= 0 && $_[0] <= 59 },
+                      },
+                    },
+          second => { type => SCALAR, default => 0,
+                      callbacks =>
+                      { 'is between 0 and 61' =>
+                        sub { $_[0] >= 0 && $_[0] <= 61 },
+                      },
+                    },
+          nanosecond => { type => SCALAR, default => 0,
+                          callbacks =>
+                          { 'cannot be negative' =>
+                            sub { $_[0] >= 0 },
+                          }
+                        },
+          language  => { type => SCALAR | OBJECT,
+                         default => __PACKAGE__->DefaultLanguage },
+        };
+
+my $NewValidate =
+    { %$BasicValidate,
+      fractional_second =>
+      { type => SCALAR, default => undef },
+      time_zone => { type => SCALAR | OBJECT,
+                     default => 'floating' },
+    };
+
 sub new
 {
     my $class = shift;
-    my %p = validate( @_,
-                      { year   => { type => SCALAR },
-                        month  => { type => SCALAR, default => 1,
-                                    callbacks =>
-                                    { 'is between 1 and 12' =>
-                                      sub { $_[0] >= 1 && $_[0] <= 12 }
-                                    },
-                                  },
-                        day    => { type => SCALAR, default => 1,
-                                    callbacks =>
-                                    { 'is between 1 and 31' =>
-                                      sub { $_[0] >= 1 && $_[0] <= 31 },
-                                    },
-                                  },
-                        hour   => { type => SCALAR, default => 0,
-                                    callbacks =>
-                                    { 'is between 0 and 23' =>
-                                      sub { $_[0] >= 0 && $_[0] <= 23 },
-                                    },
-                                  },
-                        minute => { type => SCALAR, default => 0,
-                                    callbacks =>
-                                    { 'is between 0 and 59' =>
-                                      sub { $_[0] >= 0 && $_[0] <= 59 },
-                                    },
-                                  },
-                        second => { type => SCALAR, default => 0,
-                                    callbacks =>
-                                    { 'is between 0 and 61' =>
-                                      sub { $_[0] >= 0 && $_[0] <= 61 },
-                                    },
-                                  },
-                        nanosecond => { type => SCALAR, default => 0,
-                                        callbacks =>
-                                        { 'cannot be negative' =>
-                                          sub { $_[0] >= 0 },
-                                        }
-                                      },
-                        fractional_second =>
-                        { type => SCALAR, default => undef },
-                        language  => { type => SCALAR | OBJECT,
-                                       default => $class->DefaultLanguage },
-                        time_zone => { type => SCALAR | OBJECT,
-                                       default => 'floating' },
-                      }
-                    );
+    my %p = validate( @_, $NewValidate );
 
     my $self = {};
 
@@ -1068,20 +1073,18 @@ sub _normalize_nanoseconds
     }
 }
 
-
+# Many of the same parameters as new() but all of them are optional,
+# and there are no defaults.
+my $SetValidate =
+    { map { my %copy = %{ $BasicValidate->{$_} };
+            delete $copy{default};
+            $copy{optional} = 1;
+            $_ => \%copy }
+      keys %$BasicValidate };
 sub set
 {
     my $self = shift;
-    my %p = validate( @_,
-                      { year     => { type => SCALAR, optional => 1 },
-                        month    => { type => SCALAR, optional => 1 },
-                        day      => { type => SCALAR, optional => 1 },
-                        hour     => { type => SCALAR, optional => 1 },
-                        minute   => { type => SCALAR, optional => 1 },
-                        second   => { type => SCALAR, optional => 1 },
-                        nanosecond => { type => SCALAR, optional => 1 },
-                        language => { type => SCALAR, optional => 1 },
-                      } );
+    my %p = validate( @_, $SetValidate );
 
     my %old_p =
         ( map { $_ => $self->$_() }
