@@ -429,8 +429,14 @@ sub from_object
 
     my $new = $class->new( %p, %args, time_zone => 'UTC' );
 
-    $new->set_time_zone( $object->time_zone )
-        if $object->can('time_zone');
+    if ( $object->can('time_zone') )
+    {
+        $new->set_time_zone( $object->time_zone );
+    }
+    else
+    {
+        $new->set_time_zone( 'floating' );
+    }
 
     return $new;
 }
