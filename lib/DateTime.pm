@@ -213,9 +213,12 @@ sub from_object {
     @p{ qw( year month day ) } = $class->_rd2greg($rd_days);
     @p{ qw( hour minute second ) } = $class->_seconds_as_components($rd_secs);
 
-    my $tz = $object->can('time_zone') ? $object->time_zone : 'UTC';
+    my $new = $class->new( %p, %args, time_zone => 'UTC' );
 
-    return $class->new( %p, %args, time_zone => 'UTC' );
+    $new->set_time_zone( $object->time_zone )
+        if $object->can('time_zone');
+
+    return
 }
 
 sub last_day_of_month {
