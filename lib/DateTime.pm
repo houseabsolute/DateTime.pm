@@ -146,6 +146,49 @@ sub new
     return $self;
 }
 
+
+sub _normalize_leapseconds
+{
+    # args: 0 => days, 1 => seconds
+    my $delta_days; 
+
+    # rough adjust - can adjust many days
+    if ($_[1] < 0)
+    {
+        $delta_days = int( ($_[1] - 86399) / 86400 );
+    }
+    else
+    {
+        $delta_days = int( $_[1] / 86400 );
+    }
+    my $new_day = $_[0] + $delta_days;
+    my $delta_seconds = 86400 * ( $new_day - $_[0] ) +
+                        DateTime::LeapSecond::leap_seconds( $new_day ) -
+                        DateTime::LeapSecond::leap_seconds( $_[0] );
+
+    # warn "day $_[0], $_[1] - $delta_days, $delta_seconds";
+    $_[1] -= $delta_seconds;
+    $_[0] = $new_day;
+    # warn "-> day $_[0], $_[1]";
+
+    # fine adjust - up to 1 day
+    my $day_length = DateTime::LeapSecond::day_length( $new_day );
+    if ( $_[1] >= $day_length ) 
+    {
+        $_[1] -= $day_length;
+        $_[0]++;
+    }
+    elsif ( $_[1] < 0 ) 
+    {
+        $day_length = DateTime::LeapSecond::day_length( $new_day - 1 );
+        $_[1] += $day_length;
+        $_[0]--;
+    }
+
+    ($_[0], $_[1]);
+}
+ 
+
 sub _calc_utc_rd
 {
     my $self = shift;
@@ -685,7 +728,7 @@ sub subtract_datetime
             $dt->{utc_rd_secs} < $self->{utc_rd_secs} )
     {
         my $days = $dt->{utc_rd_days} - 1;
-        my $secs = $dt->{utc_rd_secs} +  + DateTime::LeapSecond::day_length( $days );
+        my $secs = $dt->{utc_rd_secs} + DateTime::LeapSecond::day_length( $days );
 
         return DateTime::Duration->new
             ( days    => $self->{utc_rd_days} - $days,
@@ -747,43 +790,6 @@ sub add_duration
 
     my %deltas = $dur->deltas;
 
-    # We add seconds to the UTC time because if someone adds 24 hours,
-    # we want this to be _different_ from adding 1 day when crossing
-    # DST boundaries.
-    if ( $deltas{seconds} || $deltas{nanoseconds})
-    {
-        my $is_floating = $self->time_zone->is_floating;
-        my $old_leap_seconds =
-            DateTime::LeapSecond::leap_seconds( $self->{utc_rd_days} )
-                    unless $is_floating;
-
-        $self->{utc_rd_secs} += $deltas{seconds};
-
-        if ( $deltas{nanoseconds} )
-        {
-            $self->{rd_nanosecs} += $deltas{nanoseconds};
-            _normalize_nanoseconds( $self->{utc_rd_secs}, $self->{rd_nanosecs} );
-        }
-
-        _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} )
-            if $deltas{seconds};
-
-        unless ( $is_floating )
-        {
-            my $new_leap_seconds = DateTime::LeapSecond::leap_seconds( $self->{utc_rd_days} );
-            if ( $new_leap_seconds != $old_leap_seconds )
-            {
-                $self->{utc_rd_secs} += $old_leap_seconds - $new_leap_seconds;
-                _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} )
-            }
-        }
-
-        delete $self->{utc_c};
-        $self->_calc_local_rd;
-    }
-
-    $self->{local_rd_days} += $deltas{days} if $deltas{days};
-
     if ( $deltas{months} )
     {
         # For preserve mode, if it is the last day of the month, make
@@ -814,10 +820,42 @@ sub add_duration
         }
     }
 
+    $self->{local_rd_days} += $deltas{days} if $deltas{days};
+
     if ( $deltas{days} || $deltas{months} )
     {
         $self->_calc_utc_rd;
         $self->_calc_local_rd;
+    }
+
+    # warn "add months, days = ". $self->ymd.$self->hms;
+
+    # We add seconds to the UTC time because if someone adds 24 hours,
+    # we want this to be _different_ from adding 1 day when crossing
+    # DST boundaries.
+    if ( $deltas{seconds} || $deltas{nanoseconds})
+    {
+        $self->{utc_rd_secs} += $deltas{seconds};
+
+        if ( $deltas{nanoseconds} )
+        {
+            $self->{rd_nanosecs} += $deltas{nanoseconds};
+            _normalize_nanoseconds( $self->{utc_rd_secs}, $self->{rd_nanosecs} );
+        }
+
+        if ( $self->time_zone->is_floating ) {
+            _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} )
+                if $deltas{seconds};
+        }
+        else {
+            _normalize_leapseconds( $self->{utc_rd_days}, $self->{utc_rd_secs} )
+                if $deltas{seconds};
+        }
+
+        delete $self->{utc_c};
+        $self->_calc_local_rd;
+
+        # warn "add seconds $deltas{seconds} = ". $self->ymd.$self->hms;
     }
 
     return $self;

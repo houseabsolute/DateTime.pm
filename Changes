@@ -1,6 +1,6 @@
 
 - added some support for leap seconds (more to come).
-Implemented by Flavio Glock.
+  Implemented by Flavio Glock.
   Depends on DateTime::LeapSecond.
 
 - DateTime::Duration objects store nano_second information. Implemented
