@@ -133,8 +133,8 @@ sub new {
         $month++;
     }
 
-    $self->{julian} = greg2jd( $year, $month, $day );
-    $self->{julsec} = time_as_seconds( $hour, $min, $sec );
+    $self->{rd_days} = greg2jd( $year, $month, $day );
+    $self->{rd_secs} = time_as_seconds( $hour, $min, $sec );
     bless $self, $class;
 
     if ( exists( $args{offset} ) ) {
@@ -182,15 +182,15 @@ sub ical {
 
         # make output based on an arbitrary offset
         # No Z on the end!
-        my $julian = $self->{julian};
-        my $julsec = $self->{julsec};
+        my $rd_days = $self->{rd_days};
+        my $rd_secs = $self->{rd_secs};
         my $adjust = _offset_to_seconds( $args{offset} );
         $self->add( seconds => $adjust );
         $ical =
           sprintf( '%04d%02d%02dT%02d%02d%02d', $self->year, $self->month,
           $self->day, $self->hour, $self->minute, $self->second, );
-        $self->{julian} = $julian;
-        $self->{julsec} = $julsec;
+        $self->{rd_days} = $rd_days;
+        $self->{rd_secs} = $rd_secs;
       } else {
 
         # make output in UTC by default
@@ -216,8 +216,8 @@ sub epoch {
     if ( defined $epoch && $epoch ne '' ) {    # Passed in a new value
 
         my $newepoch = $class->new( epoch => $epoch );
-        $self->{julian} = $newepoch->{julian};
-        $self->{julsec} = $newepoch->{julsec};
+        $self->{rd_days} = $newepoch->{rd_days};
+        $self->{rd_secs} = $newepoch->{rd_secs};
 
     } else {    # Calculate epoch from components, if possible
 
@@ -323,8 +323,8 @@ sub offset {
 sub add {
     my $self = shift;
     carp "DateTime::add was called without an attribute arg" unless @_;
-    ( $self->{julian}, $self->{julsec}) =
-        _add($self->{julian}, $self->{julsec}, @_);
+    ( $self->{rd_days}, $self->{rd_secs}) =
+        _add($self->{rd_days}, $self->{rd_secs}, @_);
     return $self;
 }
 
@@ -514,8 +514,8 @@ sub subtract {
     # If $date2 is a DateTime object, or some class thereof, we should
     # subtract and get a duration
 
-            my $days = $date1->{julian} - $date2->{julian};
-            my $secs = $date1->{julsec} - $date2->{julsec};
+            my $days = $date1->{rd_days} - $date2->{rd_days};
+            my $secs = $date1->{rd_secs} - $date2->{rd_secs};
 
             return DateTime::Duration->new(
               days    => $days,
@@ -552,15 +552,15 @@ sub compare {
     return undef unless defined $dt2;
 
     # One or more days different
-    if ( $dt1->{julian} < $dt2->{julian} ) {
+    if ( $dt1->{rd_days} < $dt2->{rd_days} ) {
         return -1;
-    } elsif ( $dt1->{julian} > $dt2->{julian} ) {
+    } elsif ( $dt1->{rd_days} > $dt2->{rd_days} ) {
         return 1;
 
     # They are the same day
-    } elsif ( $dt1->{julsec} < $dt2->{julsec} ) {
+    } elsif ( $dt1->{rd_secs} < $dt2->{rd_secs} ) {
         return -1;
-    } elsif ( $dt1->{julsec} > $dt2->{julsec} ) {
+    } elsif ( $dt1->{rd_secs} > $dt2->{rd_secs} ) {
         return 1;
     }
 
@@ -574,7 +574,7 @@ Um, what the hell is this used for? - Dave
 
  @MonthLengths = months($year);
 
-Returns the Julian day at the end of a month, correct for that year.
+Returns the day of the year at the end of a month.
 
 =end internal
 
@@ -690,7 +690,7 @@ sub week {
 
      my $jan_four = greg2jd( $week_year, 1, 4 );
      my $first_week = $jan_four - ( $jan_four % 7 );
-     my $week_number = int( ($self->{julian} - $first_week) / 7 ) + 1;
+     my $week_number = int( ($self->{rd_days} - $first_week) / 7 ) + 1;
 
      return ( $week_year, $week_number );
 }
@@ -727,7 +727,7 @@ sub month_abbr {
 sub day_of_year {
     my $self = shift;
     my $janone = greg2jd( $self->year, 1, 1 );
-    return ($self->{julian} + 1) - $janone ;
+    return ($self->{rd_days} + 1) - $janone ;
 }
 
 
@@ -746,7 +746,7 @@ sub day_of_month_0 { $_[0]->day_of_month - 1 }
 
 sub day_of_week {
     my $self = shift;
-    return $self->{julian} % 7 + 1;
+    return $self->{rd_days} % 7 + 1;
 }
 *wday = \&day_of_week;
 *dow  = \&day_of_week;
@@ -817,7 +817,7 @@ sub iso8601 {
 
 sub is_leap_year { Date::Leapyear::isleap( $_[0]->year ) }
 
-sub _as_greg { jd2greg( $_[0]->{julian} ) }
+sub _as_greg { jd2greg( $_[0]->{rd_days} ) }
 
 =begin internal
 
@@ -832,7 +832,7 @@ minutes, and hours of the current time.
 
 sub parsetime {
     my $self = shift;
-    my $time = $self->{julsec};
+    my $time = $self->{rd_secs};
 
     my $hour = int( $time / 3600 );
     $time -= $hour * 3600;
@@ -842,17 +842,6 @@ sub parsetime {
 
     return ( int($time), $min, $hour );
 }
-
-sub julian {
-    my $self = shift;
-
-    if ( my $jd = shift ) {
-        ( $self->{julian}, $self->{julsec} ) = @$jd;
-    }
-
-    return [ $self->{julian}, $self->{julsec} ];
-}
-*jd = \&julian;
 
 # INTERNAL ONLY: figures out what the UTC offset (in HHMM) is
 # is for the current machine.
