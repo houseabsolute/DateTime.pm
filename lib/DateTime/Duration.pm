@@ -4,6 +4,12 @@ use strict;
 
 use Params::Validate qw( validate SCALAR );
 
+use overload ( fallback => 1,
+               '<=>' => 'compare',
+               '+'   => '_add_overload',
+               '-'   => '_subtract_overload',
+             );
+
 sub new
 {
     my $class = shift;
@@ -39,6 +45,8 @@ sub new
     return $self;
 }
 
+sub clone { bless { %{ $_[0] } }, ref $_[0] }
+
 sub years   { abs( int( $_[0]->{months} / 12 ) ) }
 sub months  { int( abs( $_[0]->{months} ) % 12 ) }
 sub weeks   { abs( int( $_[0]->{days} / 7 ) ) }
@@ -47,18 +55,18 @@ sub hours   { abs( int( $_[0]->{seconds} / 3600 ) ) }
 sub minutes { int( ( abs( $_[0]->{seconds} ) - ( $_[0]->hours * 3600 ) ) / 60 ) }
 sub seconds { abs( $_[0]->{seconds} ) % 60 }
 
-sub is_positive { $_[0]->{sign} eq '+' ? 1 : 0 }
-sub is_negative { $_[0]->{sign} eq '-' ? 1 : 0 }
+sub is_positive { $_[0]->{sign} == 1 ? 1 : 0 }
+sub is_negative { $_[0]->{sign} == -1 ? 1 : 0 }
 
 sub delta_months  { $_[0]->{months} }
 sub delta_days    { $_[0]->{days} }
 sub delta_seconds { $_[0]->{seconds} }
 
-sub delta_units   { map { $_ => $_[0]->{$_} } qw( months days seconds ) }
+sub deltas { map { $_ => $_[0]->{$_} } qw( months days seconds ) }
 
-sub is_preserve_mode { $_[0]->{eom_mode} eq 'preserve' ? 1 : 0 }
-sub is_limit_mode    { $_[0]->{eom_mode} eq 'limit'  ? 1 : 0 }
 sub is_wrap_mode     { $_[0]->{eom_mode} eq 'wrap'   ? 1 : 0 }
+sub is_limit_mode    { $_[0]->{eom_mode} eq 'limit'  ? 1 : 0 }
+sub is_preserve_mode { $_[0]->{eom_mode} eq 'preserve' ? 1 : 0 }
 
 sub inverse
 {
@@ -73,6 +81,76 @@ sub inverse
 
     return bless \%new, ref $self;
 }
+sub add_duration
+{
+    my ( $self, $dur ) = @_;
+
+    foreach ( qw( months days seconds ) )
+    {
+        $self->{$_} += $dur->{$_};
+    }
+
+}
+
+sub add { shift->add_duration( (ref $_[0])->new(@_) ) }
+
+sub subtract_duration { $_[0]->add_duration( $_[1]->inverse ) }
+
+sub subtract { shift->subtract_duration( (ref $_[0])->new(@_) ) }
+
+sub _add_overload
+{
+    my ( $d1, $d2, $rev ) = @_;
+
+    ($d1, $d2) = ($d2, $d1) if $rev;
+
+    if ( UNIVERSAL::isa( $d2, 'DateTime' ) )
+    {
+        $d2->add_duration($d1);
+        return;
+    }
+
+    # will also work if $d1 is a DateTime.pm object
+    my $new = $d1->clone;
+    $new->add_duration($d2);
+    return $new;
+}
+
+sub _subtract_overload
+{
+    my ( $d1, $d2, $rev ) = @_;
+
+    ($d1, $d2) = ($d2, $d1) if $rev;
+
+    die "Cannot subtract a DateTime object from a DateTime::Duration object"
+        if UNIVERSAL::isa( $d2, 'DateTime' );
+
+    my $new = $d1->clone;
+    $new->subtract_duration($d2);
+    return $new;
+}
+
+sub compare
+{
+    my ( $class, $dur1, $dur2 ) = ref $_[0] ? ( undef, @_ ) : @_;
+
+    my %deltas1 = $dur1->deltas;
+    my %deltas2 = $dur2->deltas;
+
+    foreach ( qw( months days seconds ) )
+    {
+        if ( $deltas1{$_} < $deltas2{$_} )
+        {
+            return -1;
+        }
+        elsif ( $deltas1{$_} > $deltas2{$_} )
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 
 1;
@@ -81,143 +159,145 @@ __END__
 
 =head1 NAME
 
-DateTime::Duration - datetime durations for date math
-
-=head1 VERSION
-
-$Revision$
+DateTime::Duration - Duration objects for date math
 
 =head1 SYNOPSIS
 
-    use DateTime::Duration;
+  use DateTime::Duration;
 
-    $d = DateTime::Duration->new( ical => '-P1W3DT2H3M45S' );
+  $d = DateTime::Duration->new( year    => 3,
+                                months  => 5,
+                                weeks   => 1,
+                                days    => 1,
+                                hours   => 6,
+                                minutes => 15,
+                                seconds => 45, );
 
-    $d = DateTime::Duration->new( weeks => 1,
-                                  days => 1,
-                                  hours => 6,
-                                  minutes => 15,
-                                  seconds => 45);
+  # Human-readable accessors, always positive
+  $d->years;
+  $d->months;
+  $d->weeks;
+  $d->days;
+  $d->hours;
+  $d->minutes;
+  $d->seconds;
+  $d->sign;
 
-    # a one hour duration, without other components
-    $d = DateTime::Duration->new( seconds => "3600");
+  if ( $d->is_positive ) { ... }
+  if ( $d->is_negative ) { ... }
 
-    # Read-only accessors:
-    $d->weeks;
-    $d->days;
-    $d->hours;
-    $d->minutes;
-    $d->seconds;
-    $d->sign;
+  # The important parts for date math
+  $d->delta_months
+  $d->delta_days
+  $d->delta_seconds
 
-    $d->as_seconds;   # returns just seconds
+  my %deltas = $d->deltas
+
+  $d->is_wrap_mode
+  $d->is_limit_mode
+  $d->is_preserve_mode
+
+  # Multiple all deltas by -1
+  my $opposite = $d->inverse;
+
+  my $bigger  = $dur1 + $dur2;
+  my $smaller = $dur1 - $dur2; # the result could be negative
 
 =head1 DESCRIPTION
 
-This is a trivial class for representing duration objects, for doing math
-in DateTime
+This is a simple class for representing duration objects.  These
+objects are used whenever you do date math with DateTime.pm.
 
 =head1 METHODS
 
-DateTime::Duration has the following methods available:
+DateTime::Duration has the following methods:
 
-=head2 new
+=over 4
 
-A new DateTime::Duration object can be created with an iCalendar string :
+=item * new( ... )
 
-    my $ical = DateTime::Duration->new ( ical => 'P3W2D' );
-    # 3 weeks, 2 days, positive direction
-    my $ical = DateTime::Duration->new ( ical => '-P6H3M30S' );
-    # 6 hours, 3 minutes, 30 seconds, negative direction
-    
-Or with a number of seconds:
+This method takes the parameters "years", "months", "weeks", "days",
+"hours", "minutes", "seconds", and "end_of_month".  All of these
+except "end_of_month" are numbers.  If any of the numbers are
+negative, the entire duration is negative.
 
-    my $ical = DateTime::Duration->new ( seconds => "3600" );
-    # one hour positive
+The "end_of_month" parameter must be either "wrap", "limit", or
+"preserve".  These specify how changes across the end of a month are
+handled.
 
-Or, better still, create it with components
+The default "end_of_month" mode, "wrap", means adding months or years
+that result in days beyond the end of the new month will roll over
+into the following month.  For instance, adding one year to Feb 29
+will result in Mar 1.
 
-    my $date = DateTime::Duration->new ( 
-                           weeks => 6, 
-                           days => 2, 
-                           hours => 7,
-                           minutes => 15,
-                           seconds => 47,
-                           sign => "+"
-                           );
+If you specify "end_of_month" mode as "limit", the end of the month
+is never crossed.  Thus, adding one year to Feb 29, 2000 will result
+in Feb 28, 2001.  However, adding three more years will result in Feb
+28, 2004, not Feb 29.
 
-The sign defaults to "+", but "+" and "-" are legal values. 
+If you specify "end_of_month" mode as "preserve", the same calculation
+is done as for "limit" except that if the original date is at the end
+of the month the new date will also be.  For instance, adding one
+month to Feb 29, 2000 will result in Mar 31, 2000.
 
-=head2 sign, weeks, days, hours, minutes, seconds
+=item * clone
 
-Read-only accessors for the elements of the object. 
+Returns a new object with the same properties as the object on which
+this method was called.
 
-=head2 as_seconds
+=item * years, months, weeks, days, hours, minutes, seconds
 
-Returns the duration in raw seconds. 
+These methods return numbers indicating how many of the given unit the
+object representations.  These numbers are always positive.
 
-WARNING -- this folds in the number of days, assuming that they are always 86400
-seconds long (which is not true twice a year in areas that honor daylight
-savings time).  If you're using this for date arithmetic, consider using the
-I<add()> method from a L<DateTime> object, as this will behave better.
-Otherwise, you might experience some error when working with times that are
-specified in a time zone that observes daylight savings time.
+Note that the numbers returned by this method may not match the values
+given to the constructor.  For example:
 
-=head2 as_days
+  my $dur = DateTime::Duration->new( years => 0, months => 15 );
 
-    $days = $duration->as_days;
+  print $dur->years;  # prints 1
+  print $dur->months; # prints 3
 
-Returns the duration as a number of days. Not to be confused with the
-C<days> method, this method returns the total number of days, rather
-than mod'ing out the complete weeks. Thus, if we have a duration of 33
-days, C<weeks> will return 4, C<days> will return 5, but C<as_days> will
-return 33.
+=item * delta_months, delta_days, delta_seconds
 
-Note that this is a lazy convenience function which is just weeks*7 +
-days.
+These methods provide the same information as those above, but in a
+way suitable for doing date math.  The numbers returned may be
+positive or negative.
 
-=head2 as_ical
+=item * deltas
 
-Return the duration in an iCalendar format value string (e.g., "PT2H0M0S")
+Returns a hash with the keys "months", "days", and "seconds",
+containing all the delta information for the object.
 
-=head2 as_elements
+=item * is_positive, is_negative
 
-Returns the duration as a hashref of elements. 
+Indicates whether or not the duration is positive or negative.
 
-=head1 INTERNALS
+=item * is_wrap_mode, is_limit_mode, is_preserve_mode
 
-=head2 GENERAL MODEL
+Indicates what mode is used for end of month wrapping.
 
-Internally, we store 3 data values: a number of days, a number of seconds (anything
-shorter than a day), and a sign (1 or -1). We are assuming that a day is 24 hours for
-purposes of this module; yes, we know that's not completely accurate because of
-daylight-savings-time switchovers, but it's mostly correct. Suggestions are welcome.
+=item * add_duration( $duration_object ), subtract_duration( $duration_object )
 
-NOTE: The methods below SHOULD NOT be relied on to stay the same in future versions.
+Adds or subtracts one duration from another.
 
-=head2 _set_from_ical ($self, $duration_string)
+=item * add( ... ), subtract( ... )
 
-Converts a RFC2445 DURATION format string to the internal storage format.
+Syntactic sugar for addition and subtraction.  The parameters given to
+these methods are used to create a new object, which is then passed to
+C<add_duration()> or C<subtract_duration()>, as appropriate.
 
-=head2 _parse_ical_string ($string)
+=head2 Overloading
 
-Regular expression for parsing iCalendar into usable values. 
-
-=head2 _set_from_components ($self, $hashref)
-
-Converts from a hashref to the internal storage format.
-The hashref can contain elements "sign", "weeks", "days", "hours", "minutes", "seconds".
-
-=head2 _set_from_ical ($self, $num_seconds)
-
-Sets internal data storage properly if we were only given seconds as a parameter.
+Addition, subtraction, and numeric comparison are overloaded for
+objects of this class.
 
 =head1 AUTHOR
 
-Rich Bowen (DrBacchus) <rbowen@rcbowen.com>
-
 Dave Rolsky <autarch@urth.org>
 
-And the Reefknot team.
+However, please see the CREDITS file for more details on who I really
+stole all the code from.
 
 =cut
+
