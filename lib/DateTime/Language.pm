@@ -17,6 +17,7 @@ my %ISOMap = ( 'cz'    => 'Czech',
                'no'    => 'Norwegian',
                'pt'    => 'Brazilian', # not quite right, but better than failing
                'pt-br' => 'Brazilian',
+               'sv'    => 'Swedish',
              );
 
 sub new

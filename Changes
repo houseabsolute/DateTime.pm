@@ -10,6 +10,8 @@ _rd2ymd, so as to make them look more normal when used in subclasses.
 
 - Added a truncate() method.  Suggested by Flavio Glock.
 
+- Added Swedish language module.  Contributed by Christian Hansen.
+
 [BUG FIXES]
 
 - The week() method was wrong for many dates.  Reported by Christian
