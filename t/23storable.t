@@ -52,7 +52,7 @@ else
 
  SKIP:
     {
-        skip 'This tests needs DateTime::Format::ICal', 1
+        skip 'This test needs DateTime::Format::ICal', 1
             unless $has_ical;
 
         my $dt = DateTime->new( year      => 2004,
