@@ -24,7 +24,7 @@ use overload ( 'fallback' => 1,
              );
 
 my( @MonthLengths, @LeapYearMonthLengths,
-    @EndofMonthDayOfYear, @EndofMonthDayOfLeapYear,
+    @BeginningOfMonthDayOfYear, @BeginningOfMonthDayOfLeapYear,
   );
 
 {
@@ -158,9 +158,10 @@ sub _calc_components {
     $self->{c}{day_of_week} = ( ( $self->{local_rd_days} + 6) % 7 ) + 1;
 
     {
-        my $d = $self->_end_of_month_day_of_year( $self->{c}{year},
-                                                  $self->{c}{month},
-                                                );
+        my $d = $self->_beginning_of_month_day_of_year( $self->{c}{year},
+                                                        $self->{c}{month},
+                                                      );
+        warn "EOM DOY = $d + $self->{c}{day}\n";
         $self->{c}{day_of_year} = $d + $self->{c}{day};
     }
 }
@@ -178,7 +179,7 @@ sub from_epoch {
     # Note, for very large negative values this may give a blatantly
     # wrong answer.
     @p{ qw( second minute hour day month year ) } =
-        ( gmtime( delete $args{epoch} ) )[ 0, 1, 2, 3, 4, 5 ];
+        ( gmtime( delete $args{epoch} ) )[ 0..5 ];
     $p{year} += 1900;
     $p{month}++;
 
@@ -284,8 +285,7 @@ sub _rd2greg {
         # avoid overflow if $d close to maxint
         $yadj = ( $d - 146097 + 306 ) / 146097 + 1;
         $d -= $yadj * 146097 - 306;
-      } elsif ( ( $d += 306 ) <= 0 )
-    {
+    } elsif ( ( $d += 306 ) <= 0 ) {
         $yadj =
           -( -$d / 146097 + 1 );    # avoid ambiguity in C division of negatives
         $d -= $yadj * 146097;
@@ -364,25 +364,23 @@ BEGIN {
     my $x = 0;
     foreach my $length ( @MonthLengths )
     {
-        push @EndofMonthDayOfYear, $x;
+        push @BeginningOfMonthDayOfYear, $x;
         $x += $length;
     }
 
-    @EndofMonthDayOfLeapYear = @EndofMonthDayOfYear;
+    @BeginningOfMonthDayOfLeapYear = @BeginningOfMonthDayOfYear;
 
-    for ( 1 .. 11 ) {
-        $EndofMonthDayOfLeapYear[$_] = $EndofMonthDayOfYear[$_] + 1;
-    }
+    $BeginningOfMonthDayOfLeapYear[$_]++ for 2..11;
 }
 
-sub _end_of_month_day_of_year {
+sub _beginning_of_month_day_of_year {
     shift;
     my ($y, $m) = @_;
     $m--;
     return
         ( Date::Leapyear::isleap($y) ?
-          $EndofMonthDayOfLeapYear[$m] :
-          $EndofMonthDayOfYear[$m]
+          $BeginningOfMonthDayOfLeapYear[$m] :
+          $BeginningOfMonthDayOfYear[$m]
         );
 }
 
