@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 10;
+use Test::More tests => 12;
 
 use DateTime;
 
@@ -19,11 +19,9 @@ my $nan = $pos->{utc_rd_days} - $pos->{utc_rd_days};
     ok( $pos > $far_future,
         'positive infinity is really positive' );
 
-    {
-        local $::D=1;
-        ok( 1,
-            'positive infinity is bigger than negative infinity' );
-    }
+    ok( $pos > $neg,
+        'positive infinity is bigger than negative infinity' );
+
     my $pos_dur = $pos - $far_future;
     is( $pos_dur->is_positive, 1,
         'infinity - normal = infinity' );
@@ -46,4 +44,12 @@ my $nan = $pos->{utc_rd_days} - $pos->{utc_rd_days};
     {
         is( $deltas{$_}, $nan, "infinity - infinity = nan ($_)" );
     }
+
+    my $new_pos = $pos->add( days => 10 );
+    ok( $new_pos == $pos,
+        "infinity + normal duration = infinity" );
+
+    my $new_pos2 = $pos->subtract( days => 10 );
+    ok( $new_pos2 == $pos,
+        "infinity - normal duration = infinity" );
 }
