@@ -1,4 +1,4 @@
-0.06
+0.06     2003-02-16
 
 - The docs said that there was no year 0 in the Gregorian calendar,
 but that was wrong.  The year() method can now return 0.  The year_0()
