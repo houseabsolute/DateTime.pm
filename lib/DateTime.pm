@@ -1038,21 +1038,24 @@ sub subtract_datetime
         }
     }
 
+    my @bigger  = ( $bigger->_utc_ymd, $bigger->_utc_hms );
+    my @smaller = ( $smaller->_utc_ymd, $smaller->_utc_hms );
+
     my ( $months, $days, $minutes, $seconds, $nanoseconds ) =
         $self->_adjust_for_positive_difference
-            ( $bigger->year * 12 + $bigger->month, $smaller->year * 12 + $smaller->month,
+            ( $bigger[0] * 12 + $bigger[1], $smaller[0] * 12 + $smaller[1],
 
-              $bigger->day, $smaller->day,
+              $bigger[2], $smaller[2],
 
-              $bigger->hour * 60 + $bigger->minute, $smaller->hour * 60 + $smaller->minute,
+              $bigger[3] * 60 + $bigger[4], $smaller[3] * 60 + $smaller[4],
 
-	      $bigger->second, $smaller->second,
+	      $bigger[5], $smaller[5],
 
 	      $bigger->nanosecond, $smaller->nanosecond,
 
 	      $minute_length,
 
-	      $self->_month_length( $smaller->year, $smaller->month ),
+	      $self->_month_length( $smaller[0], $smaller[1] ),
             );
 
     if ($negative)

@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 96;
+use Test::More tests => 100;
 
 use DateTime;
 
@@ -333,4 +333,29 @@ require 'testlib.pl';
         is( $neg_diff->delta_days, -1, "-1 day diff at end of month" );
         is( $neg_diff->delta_months, 0, "0 month diff at end of month" );
     }
+}
+
+{
+    my $date1 = DateTime->new( year      => 2003,
+                               month     => 4,
+                               day       => 6,
+                               hour      => 1,
+                               minute    => 58,
+                               time_zone => "America/Chicago",
+                             );
+
+    my $date2 = DateTime->new( year      => 2003,
+                               month     => 4,
+                               day       => 6,
+                               hour      => 3,
+                               minute    => 01,
+                               time_zone => "America/Chicago",
+                             );
+
+    my $dur = $date2->subtract_datetime($date1);
+
+    is( $dur->delta_months, 0, 'math of DST change - delta_months is 0' );
+    is( $dur->delta_days, 0, 'math of DST change - delta_days is 0' );
+    is( $dur->delta_minutes, 3, 'math of DST change - delta_minutes is 3' );
+    is( $dur->delta_seconds, 0, 'math of DST change - delta_seconds is 0' );
 }

@@ -1,9 +1,19 @@
 0.28
 
+[ ENHANCEMENTS ]
+
 - The era names for the era() method are now retrieved from the
 DateTime.pm object's associated locale.  The old era() method, which
 was hard-coded to use BCE and CE, is renamed secular_era().  The
 christian_era() method remains the same.
+
+[ BUG FIXES ]
+
+- Fixed an embarassing bug in the subtract_datetime() method.  It was
+subtracting local times, not UTC, which caused bugs when doing
+subtraction across a DST change.  This method is used to implement
+subtraction overloading, so that was affected as well.  Reported by
+Mike Schilli.
 
 
 0.27    2005-01-31
