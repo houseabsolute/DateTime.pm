@@ -30,6 +30,6 @@ use DateTime;
         my $new = eval { $dt->clone->add( $add->[0], $add->[1] ) };
 
         ok( ! $@,
-            "Make sure we can 50 years worth of $add->[0] in $add->[2] time zone" );
+            "Make sure we can add 50 years worth of $add->[0] in $add->[2] time zone" );
     }
 }
