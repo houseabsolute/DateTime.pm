@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 26;
+use Test::More tests => 28;
 
 use DateTime;
 
@@ -104,11 +104,11 @@ use DateTime;
                            time_zone => 'America/Sao_Paulo',
                          );
 
-    is( $t->second, 60, 'second' );
+    is( $t->second, 60, 'second set to 60 in constructor' );
 }
 
 # test that second is still 60 after various operations to change
-# object
+# object, starting with regular time zone
 {
     my $t = DateTime->new( year => 1971, month => 12, day => 31,
                            hour => 20, minute => 59, second => 60,
@@ -123,24 +123,7 @@ use DateTime;
     # are both called
     $t->add( days => 1 );
     $t->subtract( days => 1 );
-    is( $t->second, 60, 'second after add and subtract days' );
-}
 
-# test that second is still 60 after various operations to change
-# object
-{
-    my $t = DateTime->new( year => 1971, month => 12, day => 31,
-                           hour => 23, minute => 59, second => 60,
-                           time_zone => 'floating',
-                         );
-
-    $t->set_time_zone( 'UTC' );
-    is( $t->second, 60, 'second after setting time zone' );
-    is( $t->hour, 23, 'hour after setting time zone' );
-
-    # and and subtract days so that _calc_utc_rd and _calc_local_rd
-    # are both called
-    $t->add( days => 1 );
-    $t->subtract( days => 1 );
-    is( $t->second, 60, 'second after add and subtract days' );
+    is( $t->datetime, '1972-01-01T00:00:00',
+        'add and subtract 1 day starting on leap second' );
 }
