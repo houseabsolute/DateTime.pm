@@ -905,12 +905,12 @@ sub subtract_datetime
 
     if ($negative)
     {
-        # in Perl 5.6.1/Linux, $_=0; $_*-1 gives -0 !!!
-        # $_ *= -1 for $days, $seconds, $nanoseconds;
+        # in Perl 5.6.1 Linux (Red Hat only?), $_ = 0; $_ * -1 gives
+        # -0 !!!  $_ *= -1 for $days, $seconds, $nanoseconds;
 
-        for ($days, $seconds, $nanoseconds)
+        for ( $days, $seconds, $nanoseconds )
         {
-            $_ *= -1 if $_ ;
+            $_ *= -1 if $_;
         }
     }
 
@@ -935,7 +935,6 @@ sub _adjust_for_positive_difference
     if ( $sec1 < $sec2 )
     {
         $day1--;
-
         $sec1 += $is_floating ? 86400 : DateTime::LeapSecond::day_length($day1);
     }
 
