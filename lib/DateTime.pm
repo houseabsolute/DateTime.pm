@@ -161,7 +161,6 @@ sub _calc_components {
         my $d = $self->_beginning_of_month_day_of_year( $self->{c}{year},
                                                         $self->{c}{month},
                                                       );
-        warn "EOM DOY = $d + $self->{c}{day}\n";
         $self->{c}{day_of_year} = $d + $self->{c}{day};
     }
 }
