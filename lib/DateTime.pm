@@ -695,6 +695,30 @@ sub set {
     %$self = %$new_dt;
 }
 
+sub truncate {
+    my $self = shift;
+    my %p = validate( @_,
+                      { to =>
+                        { regex => qr/^(?:month|day|hour|minute|second)$/ },
+                      },
+                    );
+
+    my %new = ( language  => $self->{language},
+                time_zone => $self->{tz},
+              );
+
+    foreach my $f ( qw( year month day hour minute second ) ) {
+
+        last if $p{to} eq $f;
+
+        $new{$f} = $self->$f();
+    }
+
+    my $new_dt = (ref $self)->new(%new);
+
+    %$self = %$new_dt;
+}
+
 sub set_time_zone {
     my ( $self, $tz ) = @_;
 
@@ -1161,6 +1185,15 @@ This method can be used to change the local components of a date time,
 or its language.  This method accepts any parameter allowed by the
 C<new()> method except for "time_zone".  Time zones may be set using
 the C<set_time_zone()> method.
+
+=item * truncate( to => ... )
+
+This method allows you to reset some of the local time components in
+the object to their "zero" values.  The "to" parameter is used to
+specify which values to truncate, and it may be one of "month", "day",
+"hour", "minute", or "second".  For example, if "day" is specified,
+then the local hour, minute, and second all become 0, and the day
+becomes 1.
 
 =item * set_time_zone( $tz )
 
