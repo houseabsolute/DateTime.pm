@@ -74,11 +74,12 @@ sub write_makefile
                    CONFIGURE    => \&init,
 
                    PREREQ_PM    => { 'Class::Factory::Util' => 1.3,
-                                     'DateTime::TimeZone' => 0.21,
+                                     'DateTime::TimeZone' => 0.25,
                                      'Params::Validate' => 0.52,
                                      'Test::More'  => 0,
                                      'Time::Local' => 1.04,
                                      'DateTime::LeapSecond' => 0.02,
+                                     'DateTime::Locale' => 0.01,
                                    },
                  );
 }
