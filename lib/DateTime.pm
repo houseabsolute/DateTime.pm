@@ -134,6 +134,8 @@ sub from_epoch {
 
     my %p;
 
+    # Note, for very large negative values this may give a blatantly
+    # wrong answer.
     @p{ qw( second minute hour day month year ) } =
         ( gmtime( delete $args{epoch} ) )[ 0, 1, 2, 3, 4, 5 ];
     $p{year} += 1900;
@@ -161,11 +163,17 @@ sub epoch {
         $self->{rd_days} = $newepoch->{rd_days};
         $self->{rd_secs} = $newepoch->{rd_secs};
 
-    } else {    # Calculate epoch from components, if possible
-
+    } else {
+        # timegm may die if given components outside of the ranges it
+        # can handle.  In that case return undef.
         $epoch =
-            Time::Local::timegm( $self->sec, $self->min, $self->hour, $self->day,
-                                 ( $self->month ) - 1, ( $self->year ) - 1900 );
+            eval { Time::Local::timegm( $self->sec,
+                                        $self->min,
+                                        $self->hour,
+                                        $self->day,
+                                        $self->month_0,
+                                        $self->year_0 - 1900,
+                                      ) };
     }
 
     return $epoch;
@@ -673,7 +681,6 @@ sub day_of_year {
     my @m = months($self->year);
     return $m[$self->month_0] + $self->day;
 }
-
 
 sub day_of_year_0 { $_[0]->day_of_year - 1 }
 
