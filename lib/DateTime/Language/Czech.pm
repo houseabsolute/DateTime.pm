@@ -8,8 +8,7 @@ package DateTime::Language::Czech;
 use strict;
 
 use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @MonthNames2 @AMPM);
-@ISA = qw(DateTime::LanguageDateTime::Format::Generic);
-
+@ISA = qw(DateTime::Language);
 
 @MonthNames = qw(leden únor bøezen duben kvìten èerven èervenec srpen záøí
                  øíjen listopad prosinec);
