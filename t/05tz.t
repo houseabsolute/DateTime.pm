@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 67;
+use Test::More tests => 68;
 
 use DateTime;
 
@@ -98,6 +98,7 @@ use DateTime;
     eval { $dt->add( hours => 24 ) };
     ok( ! $@, 'add 24 hours should work even if add 1 day does not' );
 
+    is( $dt->hour, 3, "hour should no be 3" );
 }
 
 {
