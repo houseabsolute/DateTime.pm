@@ -1,8 +1,11 @@
-0.12     2003-05-05
+0.13
 
 [ IMPROVEMENTS ]
 
 - DateTime now does more validation of constructor parameters.
+
+
+0.12     2003-05-05
 
 [ BUG FIXES ]
 
