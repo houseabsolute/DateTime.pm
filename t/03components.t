@@ -128,8 +128,8 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
     is( $dt0->year, 1, "year 1 is year 1" );
     is( $dt0->ce_year, 1, "ce_year 1 is year 1" );
-    is( $dt0->era, 'ACE', 'era is ACE' );
-    is( $dt0->extended_year, 'ACE', 'extended_year is 1ACE' );
+    is( $dt0->era, 'CE', 'era is CE' );
+    is( $dt0->extended_year, 'CE', 'extended_year is 1CE' );
 
     $dt0->subtract( years => 1 );
 
