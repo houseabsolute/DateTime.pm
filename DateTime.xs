@@ -177,7 +177,8 @@ _seconds_as_components(self, secs)
         PUSHs(sv_2mortal(newSViv(m)));
         PUSHs(sv_2mortal(newSViv(s)));
 
-void _normalize_seconds(days, secs)
+void
+_normalize_seconds(days, secs)
      SV* days;
      SV* secs;
 
@@ -198,7 +199,8 @@ void _normalize_seconds(days, secs)
         sv_setiv(days, (IV) d);
         sv_setiv(secs, (IV) s);
 
-void _time_as_seconds(self, h, m, s)
+void
+_time_as_seconds(self, h, m, s)
      SV* self;
      IV h;
      IV m;
@@ -208,7 +210,8 @@ void _time_as_seconds(self, h, m, s)
         EXTEND(SP, 1);
         PUSHs(sv_2mortal(newSViv(h * 3600 + m * 60 + s)));
 
-void _is_leap_year(self, y)
+void
+_is_leap_year(self, y)
      SV* self;
      IV y;
 
