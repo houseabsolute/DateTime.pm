@@ -62,6 +62,11 @@ sub new
         $self->{nanoseconds} = 0;
     }
 
+    unless ( grep { $self->{$_} } qw( months days minutes seconds nanoseconds ) )
+    {
+        $self->{sign} = 0;
+    }
+
     return $self;
 }
 
@@ -329,7 +334,8 @@ object.
 
 =item * is_positive, is_negative
 
-Indicates whether or not the duration is positive or negative.
+Indicates whether or not the duration is positive or negative.  A
+duration of zero length is neither positive or negative.
 
 =item * is_wrap_mode, is_limit_mode, is_preserve_mode
 
