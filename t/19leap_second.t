@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 127;
+use Test::More tests => 141;
 use DateTime;
 
 
@@ -786,4 +786,89 @@ use DateTime;
     $dt->set_time_zone('UTC');
 
     is( $dt->datetime, '1997-07-01T00:00:00', 'UTC time leap second T+1' );
+}
+
+{
+    my $dt = DateTime->new(year => 1997, month => 6, day => 30,
+                           hour => 23, minute => 59, second => 59,
+                           time_zone => 'UTC');
+
+    is( $dt->datetime, '1997-06-30T23:59:59', 'UTC time leap second T-1' );
+
+    $dt->set_time_zone('+0100');
+
+    is( $dt->datetime, '1997-07-01T00:59:59', '+0100 time leap second T-1' );
+}
+
+{
+    my $dt = DateTime->new(year => 1997, month => 6, day => 30,
+                           hour => 23, minute => 59, second => 60,
+                           time_zone => 'UTC');
+
+    is( $dt->datetime, '1997-06-30T23:59:60', 'UTC time leap second T-0' );
+
+    $dt->set_time_zone('+0100');
+
+    is( $dt->datetime, '1997-07-01T00:59:60', '+0100 time leap second T-0' );
+}
+
+{
+    my $dt = DateTime->new(year => 1997, month => 7, day => 1,
+                           hour => 0, minute => 0, second => 0,
+                           time_zone => 'UTC');
+
+    is( $dt->datetime, '1997-07-01T00:00:00', 'UTC time leap second T+1' );
+
+    $dt->set_time_zone('+0100');
+
+    is( $dt->datetime, '1997-07-01T01:00:00', '+0100 time leap second T+1' );
+}
+
+{
+    my $dt = DateTime->new(year => 1997, month => 6, day => 30,
+                           hour => 23, minute => 59, second => 59,
+                           time_zone => 'UTC');
+
+    is( $dt->datetime, '1997-06-30T23:59:59', 'UTC time end of leap second day' );
+
+    $dt->set_time_zone('+0100');
+
+    is( $dt->datetime, '1997-07-01T00:59:59', '+0100 time end of leap second day' );
+}
+
+
+{
+    my $dt = DateTime->new(year => 1997, month => 6, day => 30,
+                           hour => 23, minute => 59, second => 59,
+                           time_zone => 'UTC');
+
+    is( $dt->datetime, '1997-06-30T23:59:59', 'UTC time leap second T-1' );
+
+    $dt->set_time_zone('-0100');
+
+    is( $dt->datetime, '1997-06-30T22:59:59', '-0100 time leap second T-1' );
+}
+
+{
+    my $dt = DateTime->new(year => 1997, month => 6, day => 30,
+                           hour => 23, minute => 59, second => 60,
+                           time_zone => 'UTC');
+
+    is( $dt->datetime, '1997-06-30T23:59:60', 'UTC time leap second T-0' );
+
+    $dt->set_time_zone('-0100');
+
+    is( $dt->datetime, '1997-06-30T22:59:60', '-0100 time leap second T-0' );
+}
+
+{
+    my $dt = DateTime->new(year => 1997, month => 7, day => 1,
+                           hour => 0, minute => 0, second => 0,
+                           time_zone => 'UTC');
+
+    is( $dt->datetime, '1997-07-01T00:00:00', 'UTC time leap second T+1' );
+
+    $dt->set_time_zone('-0100');
+
+    is( $dt->datetime, '1997-06-30T23:00:00', '-0100 time leap second T+1' );
 }
