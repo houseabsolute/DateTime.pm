@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 56;
+use Test::More tests => 68;
 
 use DateTime;
 
@@ -216,4 +216,72 @@ use DateTime;
                           time_zone => 'floating',
                         ) };
     ok( $@, "Cannot give second of 60 with floating time zone" );
+}
+
+
+{
+    my $dt1 = DateTime->new( year => 1998, month => 12, day => 31,
+                             hour => 23,  minute => 59, second => 60,
+                             time_zone => 'UTC',
+                           );
+
+    my $dt2 = DateTime->new( year => 1998, month => 12, day => 31,
+                             hour => 23,  minute => 58, second => 50,
+                             time_zone => 'UTC',
+                           );
+
+    my $pos_dur = $dt1 - $dt2;
+
+    is( $pos_dur->delta_minutes, 1, 'delta_minutes is 1' );
+    is( $pos_dur->delta_seconds, 10, 'delta_seconds is 10' );
+
+    my $neg_dur = $dt2 - $dt1;
+
+    is( $neg_dur->delta_minutes, -1, 'delta_minutes is -1' );
+    is( $neg_dur->delta_seconds, -10, 'delta_seconds is -10' );
+}
+
+
+{
+    my $dt1 = DateTime->new( year => 1998, month => 12, day => 31,
+                             hour => 23,  minute => 59, second => 55,
+                             time_zone => 'UTC',
+                           );
+
+    my $dt2 = DateTime->new( year => 1998, month => 12, day => 31,
+                             hour => 23,  minute => 58, second => 50,
+                             time_zone => 'UTC',
+                           );
+
+    my $pos_dur = $dt1 - $dt2;
+
+    is( $pos_dur->delta_minutes, 1, 'delta_minutes is 1' );
+    is( $pos_dur->delta_seconds, 5, 'delta_seconds is 5' );
+
+    my $neg_dur = $dt2 - $dt1;
+
+    is( $neg_dur->delta_minutes, -1, 'delta_minutes is -1' );
+    is( $neg_dur->delta_seconds, -5, 'delta_seconds is -5' );
+}
+
+{
+    my $dt1 = DateTime->new( year => 1998, month => 12, day => 31,
+                             hour => 23,  minute => 59, second => 55,
+                             time_zone => 'UTC',
+                           );
+
+    my $dt2 = DateTime->new( year => 1999, month => 1, day => 1,
+                             hour => 0,  minute => 0, second => 30,
+                             time_zone => 'UTC',
+                           );
+
+    my $pos_dur = $dt2 - $dt1;
+
+    is( $pos_dur->delta_minutes, 0, 'delta_minutes is 0' );
+    is( $pos_dur->delta_seconds, 36, 'delta_seconds is 36' );
+
+    my $neg_dur = $dt1 - $dt2;
+
+    is( $neg_dur->delta_minutes, 0, 'delta_minutes is 0' );
+    is( $neg_dur->delta_seconds, -36, 'delta_seconds is -36' );
 }
