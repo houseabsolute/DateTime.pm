@@ -31,8 +31,8 @@ doubt)
 - sub-second resolution - at least microseconds (cooperate with
 Time::HiRes), but is micro small enough?
 
-- overloading for DateTime::Duration, addition, subtraction,
-multiplication (duration * int), division? (duration / int).
+- overloading for DateTime::Duration: multiplication (duration * int),
+division? (duration / int).
 
 - document RD days/seconds(/nanosecs?) in a separate document that
 will be the reference for DateTime.pm internals, as well as being
