@@ -1328,8 +1328,8 @@ Returns the minute of the hour, from 0..59.
 
 =item * second, sec
 
-Returns the second, from 0..61.  
-The values 60 and 61 are used for leap seconds.
+Returns the second, from 0..61.  The values 60 and 61 are used for
+leap seconds.
 
 =item * fractional_second
 
@@ -1339,19 +1339,19 @@ The values 60 and 61 are used for leap seconds.
 
 =item * millisecond
 
-Returns the fractional part of the second, as milliseconds (1E-3 seconds).
+Returns the fractional part of the second as milliseconds (1E-3 seconds).
 
 Half a second is 500 milliseconds.
 
 =item * microsecond
 
-Returns the fractional part of the second, as microseconds (1E-6 seconds).
+Returns the fractional part of the second as microseconds (1E-6 seconds).
 
 Half a second is 500_000 microseconds.
 
 =item * nanosecond
 
-Returns the fractional part of the second, as nanoseconds (1E-9 seconds).
+Returns the fractional part of the second as nanoseconds (1E-9 seconds).
 
 Half a second is 500_000_000 nanoseconds.
 
