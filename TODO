@@ -2,17 +2,10 @@ TODO list for Perl module DateTime
 
 * strftime method
 
-- either remove "preferred format" parts from strftime or add
-preferered_{date,time,datetime}_format methods for each language
-(which then has the US-en vs. UK-en mess to deal with, plus others no
-doubt)
-
 - more tests for other languages
 
 
 * More methods
-
-- last day of month (of week?).  first day of month (week?)
 
 - add gmtime and localtime methods, perhaps?
 
@@ -35,3 +28,11 @@ useful for other calendar implementors.
 version that works best is in 5.8.0, and not otherwise available.
 
 - thorough tests for subtraction & addition overloading
+
+- handle leap seconds
+
+- by default, reject out of bounds datetime values (minute 75) but
+offer a "normalize" parameter that will wrap these.
+
+- make languages available via ISO codes as well as English name.
+Eric Cholet.
