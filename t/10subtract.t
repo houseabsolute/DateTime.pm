@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 25;
+use Test::More tests => 26;
 
 use DateTime;
 
@@ -97,3 +97,12 @@ is( fake_ical($X), '20011011T040000Z', 'Subtract and get the right thing' );
     is( DateTime->compare($dt2, $dt4), 0,
         'adding difference back to dt2 should give same datetime' );
 }
+
+{
+    my $dt = DateTime->new( year => 2001, month => 6, day => 12,
+                            hour => 5, minute => 7, second => 23,
+                            time_zone => 'UTC' );
+    $dt->subtract( nanoseconds => 1 );
+    is ( $dt->nanosecond, 999999999, 'negative nanoseconds normalize ok' );
+}
+

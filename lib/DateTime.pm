@@ -980,7 +980,7 @@ sub _normalize_nanoseconds
     # seconds, nanoseconds
     if ( $_[1] < 0 )
     {
-        my $overflow = int( $_[1] / MAX_NANOSECONDS );
+        my $overflow = 1 + int( $_[1] / MAX_NANOSECONDS );
         $_[1] += $overflow * MAX_NANOSECONDS;
         $_[0] -= $overflow;
     }
