@@ -70,6 +70,12 @@ sub _normalize_nanoseconds
 {
     my $self = shift;
 
+    return if
+        ( $self->{nanoseconds} == DateTime::INFINITY()
+          || $self->{nanoseconds} == DateTime::NEG_INFINITY()
+          || $self->{nanoseconds} eq DateTime::NAN()
+        );
+
     my $seconds = $self->{seconds} + $self->{nanoseconds} / MAX_NANOSECONDS;
     $self->{seconds} = int( $seconds );
     $self->{nanoseconds} = $self->{nanoseconds} % MAX_NANOSECONDS;
