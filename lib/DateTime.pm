@@ -341,7 +341,8 @@ sub from_epoch
                         locale     => { type => SCALAR | OBJECT, optional => 1 },
                         language   => { type => SCALAR | OBJECT, optional => 1 },
                         time_zone  => { type => SCALAR | OBJECT, optional => 1 },
-                        formatter  => { type => SCALAR | OBJECT, optional => 1 },
+                        formatter  => { type => SCALAR | OBJECT, can => 'parse_datetime',
+                                        optional => 1 },
                       }
                     );
 
@@ -380,7 +381,8 @@ sub from_object
                                   },
                         locale     => { type => SCALAR | OBJECT, optional => 1 },
                         language   => { type => SCALAR | OBJECT, optional => 1 },
-                        formatter  => { type => SCALAR | OBJECT, can => 'parse_datetime', optional => 1 },
+                        formatter  => { type => SCALAR | OBJECT, can => 'parse_datetime',
+                                        optional => 1 },
                       },
                     );
 
@@ -620,12 +622,9 @@ sub leap_seconds
 sub format_datetime
 {
     my $self = shift;
-    if (!$self->{formatter} || ! UNIVERSAL::can($self->{formatter}, 'format_datetime')) {
-        # XXX - could warn()
-        return $self->iso8601;
-    } else {
-        return $self->{formatter}->format_datetime($self);
-    }
+
+    return $self->iso8601 unless $self->{formatter};
+    return $self->{formatter}->format_datetime($self);
 }
 
 sub hms
@@ -2543,11 +2542,10 @@ method.
 =head2 Formatters And Stringification
 
 You can optionally specify a "formatter", which is usually a
-DateTime::Format::* object/class, to control how the stringification of
-the DateTime object. 
+DateTime::Format::* object/class, to control how the stringification
+of the DateTime object.
 
-Any of the constructor methods new(), from_object(), from_epoch() can
-accept a formatter argument:
+Any of the constructor methods can accept a formatter argument:
 
   my $formatter = DateTime::Format::Strptime->new(...);
   my $dt = DateTime->new(year => 2004, formatter => $formatter);
@@ -2557,12 +2555,12 @@ Or, you can set it afterwards:
   $dt->set_formatter($formatter);
   $formatter = $dt->formatter();
 
-Once you set the formatter, the overloaded stringification method will use
-the formatter. If unspecified, the iso8601() method is used
+Once you set the formatter, the overloaded stringification method will
+use the formatter. If unspecified, the C<iso8601()> method is used.
 
-A formatter can be handy when you know that in your application you want to 
-stringify your DateTime objects into a special format all the time, for example
-to a different language.
+A formatter can be handy when you know that in your application you
+want to stringify your DateTime objects into a special format all the
+time, for example to a different language.
 
 =head2 strftime Specifiers
 
