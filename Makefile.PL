@@ -12,6 +12,5 @@ WriteMakefile( NAME         => 'DateTime',
                                  'Test::More'  => 0,
                                  'Class::Factory::Util' => 1.2,
                                  'Params::Validate' => 0,
-                                 'Exception::Class' => 0,
                                },
              );
