@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 59;
+use Test::More tests => 60;
 
 use DateTime;
 use DateTime::Duration;
@@ -175,4 +175,9 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
     ok( ! $dur->is_positive, 'not positive' );
     ok( $dur->is_zero, 'is zero' );
     ok( ! $dur->is_negative, 'not negative' );
+}
+
+{
+    eval { DateTime::Duration->new( months => 3 )->add( hours => -3 )->add( minutes => 1 ) };
+    ok( ! $@, 'method chaining should work' );
 }
