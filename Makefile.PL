@@ -40,6 +40,8 @@ EOF
 
         foreach my $file ( grep { /^\d.+\.t$/ } readdir DIR )
         {
+            next if $file eq '26dt-leapsecond-pm.t';
+
             my $real_file = File::Spec->catfile( 't', $file );
 
             local *F;
