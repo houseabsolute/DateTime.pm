@@ -94,7 +94,7 @@ sub new {
         );
 
     $self->{local_rd_days} =
-        $class->_greg2rd( @args{ qw( year month day ) } );
+        $class->_ymd2rd( @args{ qw( year month day ) } );
 
     $self->{local_rd_secs} =
         $class->_time_as_seconds( @args{ qw( hour minute second ) } );
@@ -150,7 +150,7 @@ sub _calc_local_components {
     my $self = shift;
 
     @{ $self->{local_c} }{ qw( year month day day_of_week day_of_year ) } =
-        $self->_rd2greg( $self->{local_rd_days}, 1 );
+        $self->_rd2ymd( $self->{local_rd_days}, 1 );
 
     @{ $self->{local_c} }{ qw( hour minute second ) } =
         $self->_seconds_as_components( $self->{local_rd_secs} );
@@ -160,7 +160,7 @@ sub _calc_utc_components {
     my $self = shift;
 
     @{ $self->{utc_c} }{ qw( year month day ) } =
-        $self->_rd2greg( $self->{utc_rd_days} );
+        $self->_rd2ymd( $self->{utc_rd_days} );
 
     @{ $self->{utc_c} }{ qw( hour minute second ) } =
         $self->_seconds_as_components( $self->{utc_rd_secs} );
@@ -220,7 +220,7 @@ sub from_object {
     my ( $rd_days, $rd_secs ) = $object->utc_rd_values;
 
     my %p;
-    @p{ qw( year month day ) } = $class->_rd2greg($rd_days);
+    @p{ qw( year month day ) } = $class->_rd2ymd($rd_days);
     @p{ qw( hour minute second ) } = $class->_seconds_as_components($rd_secs);
 
     my $new = $class->new( %p, %args, time_zone => 'UTC' );
@@ -244,7 +244,7 @@ sub last_day_of_month {
                       }
                     );
 
-    my $day = ( DateTime->_is_leap_year( $p{year} ) ?
+    my $day = ( $class->_is_leap_year( $p{year} ) ?
                 $LeapYearMonthLengths[ $p{month} - 1 ] :
                 $MonthLengths[ $p{month} - 1 ]
               );
@@ -383,7 +383,7 @@ sub week
         $mid_week->add( days => 4 - ( ( $self->{local_rd_days} % 7 ) + 1 ) );
         $self->{local_c}{week_year} = $mid_week->year;
 
-        my $jan_four = $self->_greg2rd( $self->{local_c}{week_year}, 1, 4 );
+        my $jan_four = $self->_ymd2rd( $self->{local_c}{week_year}, 1, 4 );
         my $first_week = $jan_four - ( $jan_four % 7 );
         $self->{local_c}{week_number} =
             int( ( $self->{local_rd_days} - $first_week ) / 7 ) + 1;
@@ -415,7 +415,9 @@ sub local_rd_as_seconds { ( $_[0]->{local_rd_days} * 86400 ) + $_[0]->{local_rd_
 sub jd {
     my $self = shift;
 
-    my $jd = $self->{utc_rd_days} + 1_721_424.5;
+    my $jd = $self->{utc_rd_days} + 1_721_424;
+    $jd = ($jd + 1) % 2_914_695 - 1;
+    $jd += .5;
 
     return $jd + ( $self->{utc_rd_secs} / 86400 );
 }
@@ -624,18 +626,18 @@ sub add_duration {
         # it the 0th day of the following month (which then will
         # normalize back to the last day of the new month).
         my ($y, $m, $d) = ( $dur->is_preserve_mode ?
-                            $self->_rd2greg( $self->{utc_rd_days} + 1 ) :
-                            $self->_rd2greg( $self->{utc_rd_days} )
+                            $self->_rd2ymd( $self->{utc_rd_days} + 1 ) :
+                            $self->_rd2ymd( $self->{utc_rd_days} )
                           );
         $d -= 1 if $dur->is_preserve_mode;
 
         if ( ! $dur->is_wrap_mode && $d > 28 )
         {
             # find the rd for the last day of our target month
-            $self->{utc_rd_days} = $self->_greg2rd( $y, $m + $deltas{months} + 1, 0 );
+            $self->{utc_rd_days} = $self->_ymd2rd( $y, $m + $deltas{months} + 1, 0 );
 
             # what day of the month is it? (discard year and month)
-            my $last_day = ($self->_rd2greg( $self->{utc_rd_days} ))[2];
+            my $last_day = ($self->_rd2ymd( $self->{utc_rd_days} ))[2];
 
             # if our original day was less than the last day,
             # use that instead
@@ -643,7 +645,7 @@ sub add_duration {
         }
         else
         {
-            $self->{utc_rd_days} = $self->_greg2rd( $y, $m + $deltas{months}, $d );
+            $self->{utc_rd_days} = $self->_ymd2rd( $y, $m + $deltas{months}, $d );
         }
     }
 
