@@ -659,7 +659,8 @@ sub week {
      my $self = shift;
 
      my $mid_week = $self->clone;
-     $mid_week->add( days => 4 - $self->day_of_week );
+     # mid week if Sunday is the first day of the week
+     $mid_week->add( days => 4 - ( ( $self->{rd_days} % 7 ) + 1 ) );
      my $week_year = $mid_week->year;
 
      my $jan_four = greg2rd( $week_year, 1, 4 );
