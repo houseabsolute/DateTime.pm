@@ -65,6 +65,10 @@ called.  Instead, these methods are now no-op methods that simply
 return the original object.  This makes these objects more usable when
 mixed with regular datetime objects.
 
+- Removed the fractional_second constructor parameter.  It was
+incorrectly documented anyway.  The fractional_second _accessor_ is
+still there.
+
 
 0.12     2003-05-05
 

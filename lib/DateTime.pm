@@ -144,8 +144,6 @@ my $BasicValidate =
 
 my $NewValidate =
     { %$BasicValidate,
-      fractional_second => { type => SCALAR,
-                             optional => 1 },
       time_zone => { type => SCALAR | OBJECT,
                      default => 'floating' },
     };
@@ -184,13 +182,6 @@ sub new
         $class->_time_as_seconds( @p{ qw( hour minute second ) } );
 
     $self->{rd_nanosecs} = $p{nanosecond};
-
-    if ( defined $p{fractional_second} )
-    {
-        my $int = int( $p{fractional_second} );
-        $self->{local_rd_secs} += $int;
-        $self->{rd_nanosecs} += ( $p{fractional_second} - $int ) * MAX_NANOSECONDS;
-    }
 
     bless $self, $class;
 
@@ -1386,8 +1377,7 @@ All constructors can die when invalid parameters are given.
 
 This class method accepts parameters for each date and time component:
 "year", "month", "day", "hour", "minute", "second", "nanosecond".
-Additionally, it accepts "fractional_second", "language",
-and "time_zone" parameters.
+Additionally, it "language", and "time_zone" parameters.
 
   my $dt = DateTime->new( year   => 1066,
                           month  => 10,
@@ -1398,9 +1388,6 @@ and "time_zone" parameters.
                           nanosecond => 500000000,
                           time_zone  => 'America/Chicago',
                         );
-
-If a "fractional_second" parameter is given, then the "nanosecond"
-parameter will be ignored.
 
 DateTime validates the "month", "day", "hour", "minute", and "second",
 and "nanosecond" parameters.  The valid values for these parameters are:

@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 74;
+use Test::More tests => 73;
 
 use DateTime;
 
@@ -38,8 +38,4 @@ foreach my $month (1..12)
     eval { DateTime->last_day_of_month( year => 2000, month => 1, nanosecond => 2000 ) };
     is( $@, '',
         "last_day_of_month should accept nanosecond" );
-
-    eval { DateTime->last_day_of_month( year => 2000, month => 1, fractional_second => 0.4 ) };
-    is( $@, '',
-        "last_day_of_month should accept fractional_second" );
 }

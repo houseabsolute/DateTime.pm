@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 21;
+use Test::More tests => 20;
 
 use DateTime;
 
@@ -32,12 +32,10 @@ use DateTime;
 
 {
     my $dt = DateTime->new( year => 1870, month => 10, day => 21,
-                            hour => 12, minute => 10,
-                            fractional_second => 45.000123456,
+                            hour => 12, minute => 10, second => 45,
                             time_zone => 'UTC' );
     is( $dt->minute, '10', "Minute accessor, outside the epoch" );
     is( $dt->second, '45', "Second accessor, outside the epoch" );
-    is( int( $dt->nanosecond + 0.5 ), '123456', "nanosecond accessor, outside the epoch" );
 }
 
 {
