@@ -2,7 +2,7 @@
 ## Brazilian tables, contributed by Christian Tosta (tosta@cce.ufmg.br)
 ##
 
-package Date::Language::Brazilian;
+package DateTime::Language::Brazilian;
 
 use strict;
 

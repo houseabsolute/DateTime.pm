@@ -2,7 +2,7 @@
 ## Danish tables
 ##
 
-package Date::Language::Danish;
+package DateTime::Language::Danish;
 
 use strict;
 
