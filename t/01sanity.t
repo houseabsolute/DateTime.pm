@@ -42,7 +42,7 @@ is( $t3->second, 20, "Second accessor" );
 
 my $t4 = new DateTime( year => 1870, month => 10, day => 21,
                        hour => 12, minute => 10, second => 45,
-                       time_zone => 0 );
+                       time_zone => 'UTC' );
 is( $t4->year, '1870', "Year accessor, outside of the epoch" );
 is( $t4->month, '10',  "Month accessor, outside the epoch" );
 is( $t4->day, '21',    "Day accessor, outside the epoch" );

@@ -46,7 +46,7 @@ require 'testlib.pl';
 }
 
 my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
-                              time_zone => 0,
+                              time_zone => 'UTC',
                             );
 
 {

@@ -9,10 +9,10 @@ require 'testlib.pl';
 
 my $date1 = DateTime->new( year => 2001, month => 5, day => 10,
                            hour => 4, minute => 3, second => 2,
-                           time_zone => 0 );
+                           time_zone => 'UTC' );
 my $date2 = DateTime->new( year => 2001, month => 6, day => 12,
                            hour => 5, minute => 7, second => 23,
-                           time_zone => 0 );
+                           time_zone => 'UTC' );
 
 my $diff = $date2 - $date1;
 
@@ -26,14 +26,14 @@ is( $diff->seconds, 21, 'Sec' );
 
 my $d = DateTime->new( year => 2001, month => 10, day => 19,
                        hour => 5, minute => 1, second => 1,
-                       time_zone => 0 );
+                       time_zone => 'UTC' );
 
 $date1 = DateTime->new( year => 2001, month => 5, day => 10,
                         hour => 4, minute => 3, second => 2,
-                        time_zone => 0 );
+                        time_zone => 'UTC' );
 $date2 = DateTime->new( year => 2001, month => 6, day => 12,
                         hour => 5, minute => 7, second => 23,
-                        time_zone => 0 );
+                        time_zone => 'UTC' );
 
 $diff = $date1 - $date2;
 

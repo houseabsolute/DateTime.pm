@@ -15,7 +15,7 @@ while (<DATA>)
     if (/^year =>/)
     {
         $params = $_;
-        $dt = eval "DateTime->new( $params, time_zone => 0 )";
+        $dt = eval "DateTime->new( $params, time_zone => 'UTC' )";
         next;
     }
     elsif (/^(\w+)/)
@@ -24,7 +24,7 @@ while (<DATA>)
         eval "use DateTime::Language::$1";
         die $@ if $@;
 
-        $dt = eval "DateTime->new( $params, time_zone => 0, language => '$lang' )";
+        $dt = eval "DateTime->new( $params, time_zone => 'UTC', language => '$lang' )";
         next;
     }
 

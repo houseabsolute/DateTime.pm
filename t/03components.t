@@ -10,7 +10,7 @@ my $d = DateTime->new( year => 2001,
                        hour => 2,
                        minute => 12,
                        second => 50,
-                       time_zone => 0,
+                       time_zone => 'UTC',
                      );
 
 is( $d->year, 2001, '->year' );
@@ -69,7 +69,7 @@ my $leap_d = DateTime->new( year => 2004,
                             hour => 2,
                             minute => 12,
                             second => 50,
-                            time_zone => 0,
+                            time_zone => 'UTC',
                           );
 
 is( $leap_d->is_leap_year, 1, '->is_leap_year' );
@@ -77,7 +77,7 @@ is( $leap_d->is_leap_year, 1, '->is_leap_year' );
 my $sunday = DateTime->new( year   => 2003,
                             month  => 1,
                             day    => 26,
-                            time_zone => 0,
+                            time_zone => 'UTC',
                           );
 
 is( $sunday->day_of_week, 7, "Sunday is day 7" );
@@ -85,7 +85,7 @@ is( $sunday->day_of_week, 7, "Sunday is day 7" );
 my $monday = DateTime->new( year   => 2003,
                             month  => 1,
                             day    => 27,
-                            time_zone => 0,
+                            time_zone => 'UTC',
                           );
 
 is( $monday->day_of_week, 1, "Monday is day 1" );
