@@ -5,6 +5,12 @@
 - Documented the behavior of strftime() when given an invalid format.
 
 
+[ BUG FIXES ]
+
+- The DateTime::Duration synopsis showed a sign() method that doesn't
+exist.  Reported by Flavio Glock.
+
+
 0.1703  2003-09-22
 
 
