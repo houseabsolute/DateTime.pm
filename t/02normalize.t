@@ -5,7 +5,14 @@ plan tests => 5;
 
 use DateTime;
 
-my $t = DateTime->new( ical => '19961122T183020Z' );
+my $t = DateTime->new( year   => 1996,
+                       month  => 11,
+                       day    => 22,
+                       hour   => 18,
+                       minute => 30,
+                       second => 20,
+                       offset => 0,
+                     );
 
 # Add 2 months
 # $t->add( month => 2);
@@ -27,16 +34,16 @@ my $t = DateTime->new( ical => '19961122T183020Z' );
 # ok($t->year,1997);
 # ok($t->month,10);
 
-$t->add( day => 1 );
+$t->add( days => 1 );
 is($t->day, 23, 'Add one day');
 
-$t->add( week => 1 );
+$t->add( weeks => 1 );
 is($t->day, 30, 'Add a week' );
 
-$t->add( hour => 3 );
+$t->add( hours => 3 );
 is($t->hour, 21, 'Add 3 hours' );
 
-$t->add( day => 15 );
+$t->add( days => 15 );
 is( $t->month, 12, "2 weeks later, it is December" );
 is( $t->day, 15, "December 15th to be precise" );
 

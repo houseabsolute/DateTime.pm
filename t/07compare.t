@@ -5,50 +5,78 @@ plan tests => 13;
 
 use DateTime;
 
-my $date1 = DateTime->new( ical => '19971024T120000');
-my $date2 = DateTime->new( ical => '19971024T120000');
+my $date1 = DateTime->new( year => 1997, month => 10, day => 24,
+                           hour => 12, minute => 0, second => 0,
+                           offset => 0 );
+my $date2 = DateTime->new( year => 1997, month => 10, day => 24,
+                           hour => 12, minute => 0, second => 0,
+                           offset => 0 );
 
 
 # make sure that comparing to itself eq 0
 my $identity = $date1->compare($date2);
 ok($identity == 0, "Identity comparison");
 
-$date2 = DateTime->new( ical => '19971024T120001');
+$date2 = DateTime->new( year => 1997, month => 10, day => 24,
+                        hour => 12, minute => 0, second => 1,
+                        offset => 0 );
 ok($date1->compare($date2) == -1, 'Comparison $a < $b, 1 second diff');
 
-$date2 = DateTime->new( ical => '19971024T120100');
+$date2 = DateTime->new( year => 1997, month => 10, day => 24,
+                        hour => 12, minute => 1, second => 0,
+                        offset => 0 );
 ok($date1->compare($date2) == -1, 'Comparison $a < $b, 1 minute diff');
 
-$date2 = DateTime->new( ical => '19971024T130000');
+$date2 = DateTime->new( year => 1997, month => 10, day => 24,
+                        hour => 13, minute => 0, second => 0,
+                        offset => 0 );
 ok($date1->compare($date2) == -1, 'Comparison $a < $b, 1 hour diff');
 
-$date2 = DateTime->new( ical => '19971025T120000');
+$date2 = DateTime->new( year => 1997, month => 10, day => 25,
+                        hour => 12, minute => 0, second => 0,
+                        offset => 0 );
 ok($date1->compare($date2) == -1, 'Comparison $a < $b, 1 day diff');
 
-$date2 = DateTime->new( ical => '19971124T120000');
+$date2 = DateTime->new( year => 1997, month => 11, day => 24,
+                        hour => 12, minute => 0, second => 0,
+                        offset => 0 );
 ok($date1->compare($date2) == -1, 'Comparison $a < $b, 1 month diff');
 
-$date2 = DateTime->new( ical => '19981024T120000');
+$date2 = DateTime->new( year => 1998, month => 10, day => 24,
+                        hour => 12, minute => 0, second => 0,
+                        offset => 0 );
 ok($date1->compare($date2) == -1, 'Comparison $a < $b, 1 year diff');
 
 # $a > $b tests
 
-$date2 = DateTime->new( ical => '19971024T115959');
+$date2 = DateTime->new( year => 1997, month => 10, day => 24,
+                        hour => 11, minute => 59, second => 59,
+                        offset => 0 );
 ok($date1->compare($date2) == 1, 'Comparison $a > $b, 1 second diff');
 
-$date2 = DateTime->new( ical => '19971024T115900');
+$date2 = DateTime->new( year => 1997, month => 10, day => 24,
+                        hour => 11, minute => 59, second => 0,
+                        offset => 0 );
 ok($date1->compare($date2) == 1, 'Comparison $a > $b, 1 minute diff');
 
-$date2 = DateTime->new( ical => '19971024T110000');
+$date2 = DateTime->new( year => 1997, month => 10, day => 24,
+                        hour => 11, minute => 0, second => 0,
+                        offset => 0 );
 ok($date1->compare($date2) == 1, 'Comparison $a > $b, 1 hour diff');
 
-$date2 = DateTime->new( ical => '19971023T120000');
+$date2 = DateTime->new( year => 1997, month => 10, day => 23,
+                        hour => 12, minute => 0, second => 0,
+                        offset => 0 );
 ok($date1->compare($date2) == 1, 'Comparison $a > $b, 1 day diff');
 
-$date2 = DateTime->new( ical => '19970924T120000');
+$date2 = DateTime->new( year => 1997, month => 9, day => 24,
+                        hour => 12, minute => 0, second => 0,
+                        offset => 0 );
 ok($date1->compare($date2) == 1, 'Comparison $a > $b, 1 month diff');
 
-$date2 = DateTime->new( ical => '19961024T120000');
+$date2 = DateTime->new( year => 1996, month => 10, day => 24,
+                        hour => 12, minute => 0, second => 0,
+                        offset => 0 );
 ok($date1->compare($date2) == 1, 'Comparison $a > $b, 1 year diff');
 
 

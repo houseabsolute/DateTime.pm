@@ -9,14 +9,14 @@ use DateTime;
 
 my $lang = 'English';
 my $dt;
-my $ical;
+my $params;
 while (<DATA>)
 {
     chomp;
-    if (/^(\d+T\d+Z)/)
+    if (/^year =>/)
     {
-        $ical = $1;
-        $dt = DateTime->new( ical => $1, language => $lang );
+        $params = $_;
+        $dt = eval "DateTime->new( $params, offset => 0 )";
         next;
     }
     elsif (/^(\w+)/)
@@ -25,7 +25,7 @@ while (<DATA>)
         eval "use DateTime::Language::$1";
         die $@ if $@;
 
-        $dt = DateTime->new( ical => $dt->ical, language => $lang );
+        $dt = eval "DateTime->new( $params, offset => 0, language => '$lang' )";
         next;
     }
 
@@ -73,7 +73,7 @@ while (<DATA>)
 # %Oy	XCIX
 
 __DATA__
-19990907T130242Z # Tue Sep  7 11:22:42 1999 GMT
+year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42
 %y	99
 %Y	1999
 %%	%
