@@ -19,7 +19,6 @@ t/02last_day.t
 t/03components.t
 t/04epoch.t
 t/05set.t
-t/05tz.t
 t/06add.t
 t/07compare.t
 t/09greg.t
