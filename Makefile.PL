@@ -33,28 +33,31 @@ EOF
     my $make = $^O =~ /win32/i ? 'nmake' : 'make';
     system("$make test$Config{obj_ext}") and no_cc();
 
-    local *DIR;
-    opendir DIR, "t" or die "Cannot read t: $!";
-
-    foreach my $file ( grep { /^\d.+\.t$/ } readdir DIR )
+    if ( -d 'CVS' )
     {
-        my $real_file = File::Spec->catfile( 't', $file );
+        local *DIR;
+        opendir DIR, "t" or die "Cannot read t: $!";
 
-        local *F;
-        open F, "<$real_file" or die "Cannot read $real_file: $!";
+        foreach my $file ( grep { /^\d.+\.t$/ } readdir DIR )
+        {
+            my $real_file = File::Spec->catfile( 't', $file );
 
-        my $test = do { local $/; <F> };
+            local *F;
+            open F, "<$real_file" or die "Cannot read $real_file: $!";
 
-        close F;
+            my $test = do { local $/; <F> };
 
-        $test = "BEGIN { \$ENV{PERL_DATETIME_PP} = 1 }\n\n$test";
+            close F;
 
-        my $new_file = File::Spec->catfile( 't', "zz_$file" );
-        open F, ">$new_file" or die "Cannot write $new_file: $!";
+            $test = "BEGIN { \$ENV{PERL_DATETIME_PP} = 1 }\n\n$test";
 
-        print F $test;
+            my $new_file = File::Spec->catfile( 't', "zz_$file" );
+            open F, ">$new_file" or die "Cannot write $new_file: $!";
 
-        close F;
+            print F $test;
+
+            close F;
+        }
     }
 }
 
