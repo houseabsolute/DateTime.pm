@@ -166,12 +166,9 @@ sub _seconds_as_components
     return ( $hour, $minute, $second );
 }
 
-use constant INFINITY     =>       100 ** 100 ** 100 ;
-use constant NEG_INFINITY => -1 * (100 ** 100 ** 100);
-
 sub _normalize_seconds
 {
-    return if grep { $_ == INFINITY || $_ == NEG_INFINITY } @_[1,2];
+    return if grep { $_ == INFINITY() || $_ == NEG_INFINITY() } @_[1,2];
 
     my $adj;
 
