@@ -16,6 +16,9 @@ use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AM
 @DayAbbreviations = map { substr($_,0,3) } @DayNames;
 @MonthAbbreviations = map { substr($_,0,3) } @MonthNames;
 
+# 'Maio' has no abbreviation   (fglock)
+$MonthAbbreviations[4] = $MonthNames[4];
+
 require DateTime::Language::English;
 @AMPM = @DateTime::Language::English::AMPM;
 
