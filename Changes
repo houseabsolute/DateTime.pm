@@ -17,6 +17,8 @@ overloading.
 
 - Added a leap_seconds method.
 
+- Added a section to the docs about floating datetimes.
+
 
 0.18  2003-10-26  (the "delta, delta, delta, can I help ya, help ya, help ya?" release)
 
