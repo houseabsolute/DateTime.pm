@@ -713,6 +713,7 @@ sub _offset_from_local_time { $_[0]->{tz}->offset_for_local_datetime( $_[0] ) }
 
 sub is_dst { $_[0]->{tz}->is_dst_for_datetime( $_[0] ) }
 
+sub time_zone_long_name  { $_[0]->{tz}->name }
 sub time_zone_short_name { $_[0]->{tz}->short_name_for_datetime( $_[0] ) }
 
 sub language { $_[0]->{language} }
@@ -1836,6 +1837,12 @@ to the time zone.
 
 Returns a boolean indicating whether or not the datetime object is
 currently in Daylight Saving Time or not.
+
+=item * time_zone_long_name
+
+This is a shortcut for C<< $dt->tz->name >>.  It's provided so that
+one can use "%{time_zone_long_name}" inside as a strftime format
+specifier.
 
 =item * time_zone_short_name
 
