@@ -5,6 +5,7 @@ use strict;
 use Params::Validate qw( validate SCALAR );
 
 use overload ( fallback => 1,
+               'cmp' => 'compare',
                '<=>' => 'compare',
                '+'   => '_add_overload',
                '-'   => '_subtract_overload',
@@ -289,8 +290,8 @@ C<add_duration()> or C<subtract_duration()>, as appropriate.
 
 =head2 Overloading
 
-Addition, subtraction, and numeric comparison are overloaded for
-objects of this class.
+Addition, subtraction, and comparison are overloaded for objects of
+this class.
 
 =head1 AUTHOR
 
