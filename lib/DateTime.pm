@@ -435,23 +435,29 @@ sub day_of_year_0 { $_[0]->{c}{day_of_year} - 1 }
 sub ymd {
     my ( $self, $sep ) = @_;
     $sep = '-' unless defined $sep;
-    return sprintf( "%04d$sep%02d$sep%02d",
-                    $self->{c}{year}, $self->{c}{month}, $self->{c}{day} );
+    return sprintf( "%04d%s%02d%s%02d",
+                    $self->{c}{year}, $sep,
+                    $self->{c}{month}, $sep,
+                    $self->{c}{day} );
 }
 *date = \&ymd;
 
 sub mdy {
     my ( $self, $sep ) = @_;
     $sep = '-' unless defined $sep;
-    return sprintf( "%02d$sep%02d$sep%04d",
-                    $self->{c}{month}, $self->{c}{day}, $self->{c}{year} );
+    return sprintf( "%02d%s%02d%s%04d",
+                    $self->{c}{month}, $sep,
+                    $self->{c}{day}, $sep,
+                    $self->{c}{year} );
 }
 
 sub dmy {
     my ( $self, $sep ) = @_;
     $sep = '-' unless defined $sep;
-    return sprintf( "%02d$sep%02d$sep%04d",
-                    $self->{c}{day}, $self->{c}{month}, $self->{c}{year} );
+    return sprintf( "%02d%s%02d%s%04d",
+                    $self->{c}{day}, $sep,
+                    $self->{c}{month}, $sep,
+                    $self->{c}{year} );
 }
 
 sub hour   { $_[0]->{c}{hour} }
@@ -465,8 +471,10 @@ sub second { $_[0]->{c}{second} }
 sub hms {
     my ( $self, $sep ) = @_;
     $sep = ':' unless defined $sep;
-    return sprintf( "%02d$sep%02d$sep%02d",
-                    $self->{c}{hour}, $self->{c}{minute}, $self->{c}{second} );
+    return sprintf( "%02d%s%02d%s%02d",
+                    $self->{c}{hour}, $sep,
+                    $self->{c}{minute}, $sep,
+                    $self->{c}{second} );
 }
 # don't want to override CORE::time()
 *DateTime::time = \&hms;
