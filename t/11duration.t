@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 52;
+use Test::More tests => 54;
 
 use DateTime;
 use DateTime::Duration;
@@ -27,7 +27,8 @@ require 'testlib.pl';
 
     is( $dur->delta_months, 14, "delta_months" );
     is( $dur->delta_days, 25, "delta_days" );
-    is( $dur->delta_seconds, 22028, "delta_seconds" );
+    is( $dur->delta_minutes, 367, "delta_minutes" );
+    is( $dur->delta_seconds, 8, "delta_seconds" );
 
     ok( $dur->is_positive, "should be positive" );
     ok( ! $dur->is_negative, "should not be negative" );
@@ -95,7 +96,8 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
 
     is( $inverse->delta_months, -13, 'inverse delta months should be negative' );
     is( $inverse->delta_days, -8, 'inverse delta months should be negative' );
-    is( $inverse->delta_seconds, -3723, 'inverse delta seconds should be negative' );
+    is( $inverse->delta_minutes, -62, 'inverse delta minutes should be negative' );
+    is( $inverse->delta_seconds, -3, 'inverse delta seconds should be negative' );
 
     ok( $inverse->is_negative, "should be negative" );
     ok( ! $inverse->is_positive, "should not be positivea" );

@@ -43,10 +43,15 @@ sub new
         $self->{sign} = 1;
     }
 
-    $self->{months} = ( abs( $p{years} * 12 ) + abs( $p{months} ) ) * $self->{sign};
-    $self->{days}   = ( abs( ( $p{weeks} * 7 ) ) + abs( $p{days} ) ) * $self->{sign};
-    $self->{seconds} =
-        abs( ( $p{hours} * 3600 ) + ( $p{minutes} * 60 ) + $p{seconds} ) * $self->{sign};
+    $self->{months} =
+        ( abs( $p{years} * 12 ) + abs( $p{months} ) ) * $self->{sign};
+
+    $self->{days} =
+        ( abs( ( $p{weeks} * 7 ) ) + abs( $p{days} ) ) * $self->{sign};
+
+    $self->{minutes} = abs( ( $p{hours} * 60 ) + $p{minutes}  ) * $self->{sign};
+
+    $self->{seconds} = abs( $p{seconds} ) * $self->{sign};
 
     if ( $p{nanoseconds} )
     {
@@ -86,9 +91,9 @@ sub years   { abs( int( $_[0]->{months} / 12 ) ) }
 sub months  { int( abs( $_[0]->{months} ) % 12 ) }
 sub weeks   { abs( int( $_[0]->{days} / 7 ) ) }
 sub days    { abs( $_[0]->{days} ) % 7 }
-sub hours   { abs( int( $_[0]->{seconds} / 3600 ) ) }
-sub minutes { int( ( abs( $_[0]->{seconds} ) - ( $_[0]->hours * 3600 ) ) / 60 ) }
-sub seconds { abs( $_[0]->{seconds} ) % 60 }
+sub hours   { abs( int( $_[0]->{minutes} / 60 ) ) }
+sub minutes { int( ( abs( $_[0]->{minutes} ) - ( $_[0]->hours * 60 ) ) ) }
+sub seconds { abs( $_[0]->{seconds} ) }
 sub nanoseconds { abs( $_[0]->{nanoseconds} ) }
 
 sub is_positive { $_[0]->{sign} == 1 ? 1 : 0 }
@@ -96,12 +101,13 @@ sub is_negative { $_[0]->{sign} == -1 ? 1 : 0 }
 
 sub delta_months  { $_[0]->{months} }
 sub delta_days    { $_[0]->{days} }
+sub delta_minutes { $_[0]->{minutes} }
 sub delta_seconds { $_[0]->{seconds} }
 sub delta_nanoseconds { $_[0]->{nanoseconds} }
 
 sub deltas
 {
-    map { $_ => $_[0]->{$_} } qw( months days seconds nanoseconds );
+    map { $_ => $_[0]->{$_} } qw( months days minutes seconds nanoseconds );
 }
 
 sub is_wrap_mode     { $_[0]->{eom_mode} eq 'wrap'   ? 1 : 0 }
@@ -114,7 +120,7 @@ sub inverse
 
     my %new = %$self;
 
-    foreach ( qw( months days seconds nanoseconds sign ) )
+    foreach ( qw( months days minutes seconds nanoseconds sign ) )
     {
         $new{$_} *= -1;
     }
@@ -125,7 +131,7 @@ sub add_duration
 {
     my ( $self, $dur ) = @_;
 
-    foreach ( qw( months days seconds nanoseconds ) )
+    foreach ( qw( months days minutes seconds nanoseconds ) )
     {
         $self->{$_} += $dur->{$_};
     }
@@ -186,7 +192,7 @@ sub _multiply_overload
 
     my $new = $self->clone;
 
-    foreach ( qw( months days seconds nanoseconds ) )
+    foreach ( qw( months days minutes seconds nanoseconds ) )
     {
         $new->{$_} *= $times;
     }
@@ -201,7 +207,7 @@ sub compare
     my %deltas1 = $dur1->deltas;
     my %deltas2 = $dur2->deltas;
 
-    foreach ( qw( months days seconds nanoseconds ) )
+    foreach ( qw( months days minutes seconds nanoseconds ) )
     {
         if ( $deltas1{$_} < $deltas2{$_} )
         {
@@ -265,6 +271,7 @@ DateTime::Duration - Duration objects for date math
   # The important parts for date math
   $d->delta_months
   $d->delta_days
+  $d->delta_minutes
   $d->delta_seconds
   $d->delta_nanoseconds
 
@@ -297,8 +304,8 @@ DateTime::Duration has the following methods:
 =item * new( ... )
 
 This method takes the parameters "years", "months", "weeks", "days",
-"hours", "minutes", "seconds", "nanoseconds", and "end_of_month".  All of these
-except "end_of_month" are numbers.  If any of the numbers are
+"hours", "minutes", "seconds", "nanoseconds", and "end_of_month".  All
+of these except "end_of_month" are numbers.  If any of the numbers are
 negative, the entire duration is negative.
 
 Internally, years as just treated as 12 months.  Similarly, weeks are
@@ -342,7 +349,7 @@ given to the constructor.  For example:
   print $dur->years;  # prints 1
   print $dur->months; # prints 3
 
-=item * delta_months, delta_days, delta_seconds, delta_nanoseconds
+=item * delta_months, delta_days, delta_minutes, delta_seconds, delta_nanoseconds
 
 These methods provide the same information as those above, but in a
 way suitable for doing date math.  The numbers returned may be
@@ -350,8 +357,9 @@ positive or negative.
 
 =item * deltas
 
-Returns a hash with the keys "months", "days", "seconds", and
-"nanoseconds", containing all the delta information for the object.
+Returns a hash with the keys "months", "days", "minutes", "seconds",
+and "nanoseconds", containing all the delta information for the
+object.
 
 =item * is_positive, is_negative
 
@@ -375,8 +383,8 @@ C<add_duration()> or C<subtract_duration()>, as appropriate.
 
 =head2 Overloading
 
-Addition, subtraction, mutiplication and comparison 
-are overloaded for objects of this class.
+This class overload addition, subtraction, mutiplication and
+comparison.
 
 =head1 SUPPORT
 

@@ -881,6 +881,13 @@ sub add_duration
         $self->_calc_local_rd;
     }
 
+    if ( $deltas{minutes} )
+    {
+        $self->{utc_rd_secs} += $deltas{minutes} * 60;
+
+        _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+    }
+
     # We add seconds to the UTC time because if someone adds 24 hours,
     # we want this to be _different_ from adding 1 day when crossing
     # DST boundaries.
@@ -905,7 +912,10 @@ sub add_duration
         {
             _normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
         }
+    }
 
+    if ( $deltas{minutes} || $deltas{seconds} || $deltas{nanoseconds})
+    {
         delete $self->{utc_c};
         $self->_calc_local_rd;
     }

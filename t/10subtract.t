@@ -22,9 +22,9 @@ is( $diff->delta_days, 33, 'delta_days should be 33' );
 is( $diff->delta_seconds, 3861, 'delta_seconds should be 3861' );
 is( $diff->weeks,   4,  'Weeks' );
 is( $diff->days,    5,  'Days' );
-is( $diff->hours,   1,  'Hours' );
-is( $diff->minutes, 4,  'Min' );
-is( $diff->seconds, 21, 'Sec' );
+is( $diff->hours,   0,  'Hours' );
+is( $diff->minutes, 0,  'Min' );
+is( $diff->seconds, 3861, 'Sec' );
 is( $diff->nanoseconds, 5, 'ns' );
 
 my $d = DateTime->new( year => 2001, month => 10, day => 19,
@@ -43,9 +43,9 @@ $diff = $date1 - $date2;
 is( $diff->delta_days, -33, 'Negative duration, days' );
 is( $diff->weeks,   4,  'Weeks' );
 is( $diff->days,    5,  'Days' );
-is( $diff->hours,   1,  'Hours' );
-is( $diff->minutes, 4,  'Min' );
-is( $diff->seconds, 21, 'Sec' );
+is( $diff->hours,   0,  'Hours' );
+is( $diff->minutes, 0,  'Min' );
+is( $diff->seconds, 3861, 'Sec' );
 
 $diff = $date1 - $date1;
 is( $diff->delta_days, 0, 'date minus itself should have no delta days' );

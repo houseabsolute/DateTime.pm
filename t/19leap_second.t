@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 32;
+use Test::More tests => 48;
 
 use DateTime;
 
@@ -37,8 +37,7 @@ use DateTime;
                             time_zone => 'UTC',
                           );
     my $dt = $t2 - $t1;
-    is( $dt->minutes, 2, "min duration");
-    is( $dt->seconds, 1, "sec duration");
+    is( $dt->seconds, 121, "sec duration");
 }
 
 {
@@ -66,8 +65,7 @@ use DateTime;
                             time_zone => 'floating',
                           );
     my $dt = $t2 - $t1;
-    is( $dt->minutes, 2, "min duration");
-    is( $dt->seconds, 0, "sec duration");
+    is( $dt->seconds, 120, "sec duration");
 }
 
 {
@@ -107,8 +105,6 @@ use DateTime;
     is( $t->second, 60, 'second set to 60 in constructor' );
 }
 
-# test that second is still 60 after various operations to change
-# object, starting with regular time zone
 {
     my $t = DateTime->new( year => 1971, month => 12, day => 31,
                            hour => 20, minute => 59, second => 60,
@@ -143,4 +139,50 @@ use DateTime;
     $t->add( seconds => 1 );
 
     is( $t->epoch, 63072000, 'epoch of first second after first leap second is 63072000' );
+}
+
+# date math across leap seconds distinguishes between minutes and second
+{
+    my $t = DateTime->new( year => 1971, month => 12, day => 31,
+                           hour => 23, minute => 59, second => 30,
+                           time_zone => 'UTC' );
+
+    $t->add( minutes => 1 );
+
+    is( $t->year, 1972, '+1 minute, year == 1972' );
+    is( $t->month, 1, '+1 minute, month == 1' );
+    is( $t->day, 1, '+1 minute, day == 1' );
+    is( $t->hour, 0, '+1 minute, hour == 0' );
+    is( $t->minute, 0, '+1 minute, minute == 0' );
+    is( $t->second, 30, '+1 minute, second == 30' );
+}
+
+{
+    my $t = DateTime->new( year => 1971, month => 12, day => 31,
+                           hour => 23, minute => 59, second => 30,
+                           time_zone => 'UTC' );
+
+    $t->add( seconds => 60 );
+
+    is( $t->year, 1972, '+60 seconds, year == 1972' );
+    is( $t->month, 1, '+60 seconds, month == 1' );
+    is( $t->day, 1, '+60 seconds, day == 1' );
+    is( $t->hour, 0, '+60 seconds, hour == 0' );
+    is( $t->minute, 0, '+60 seconds, minute == 0' );
+    is( $t->second, 29, '+60 seconds, second == 29' );
+}
+
+{
+    my $t = DateTime->new( year => 1971, month => 12, day => 31,
+                           hour => 23, minute => 59, second => 30,
+                           time_zone => 'UTC' );
+
+    $t->add( minutes => 1, seconds => 1 );
+
+    is( $t->year, 1972, '+1 minute & 1 second, year == 1972' );
+    is( $t->month, 1, '+1 minute & 1 second, month == 1' );
+    is( $t->day, 1, '+1 minute & 1 second, day == 1' );
+    is( $t->hour, 0, '+1 minute & 1 second, hour == 0' );
+    is( $t->minute, 0, '+1 minute & 1 second, minute == 0' );
+    is( $t->second, 31, '+1 minute & 1 second, second == 31' );
 }
