@@ -918,6 +918,11 @@ then the "default default" language is English.
 Additional language subclasses are welcome.  See the Perl DateTime
 project page at http://perl-date-time.sf.net/ for more details.
 
+Some languages may return names as Unicode.  When using Perl 5.8.0 or
+greater, this will be a native Perl Unicode string.  When using older
+Perls, this will be a sequence of bytes representing the Unicode
+character.
+
 =head1 ERROR HANDLING
 
 Some errors may cause this module to die with an error string.  This
