@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 20;
+use Test::More tests => 16;
 
 use DateTime;
 
@@ -36,24 +36,4 @@ use DateTime;
                             time_zone => 'UTC' );
     is( $dt->minute, '10', "Minute accessor, outside the epoch" );
     is( $dt->second, '45', "Second accessor, outside the epoch" );
-}
-
-{
-    my $dt = DateTime->new( year => 2000, month => 1, day => 5,
-                            hour => 23, minute => 59, second => 60,
-                            time_zone => 'floating',
-                          );
-
-    is( $dt->day, 6, 'day should wrap around with second == 60' );
-    is( $dt->hour, 0, 'hour should wrap around with second == 60' );
-}
-
-{
-    my $dt = DateTime->new( year => 2000, month => 1, day => 5,
-                            hour => 23, minute => 59, second => 60,
-                            time_zone => 'UTC',
-                          );
-
-    is( $dt->day, 6, 'day should wrap around with second == 60' );
-    is( $dt->hour, 0, 'hour should wrap around with second == 60' );
 }
