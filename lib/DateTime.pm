@@ -11,7 +11,7 @@ BEGIN
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
     {
-        if ( $] >= 5.6.0 )
+        if ( $] >= 5.006 )
         {
             require XSLoader;
             XSLoader::load( 'DateTime', $DateTime::VERSION );
