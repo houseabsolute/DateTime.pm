@@ -788,65 +788,51 @@ sub subtract_datetime
     my $is_floating = $self->time_zone->is_floating &&
                       $dt->time_zone->is_floating;
 
-    # We only want a negative duration if $dt > $self.  If just the
-    # seconds are greater (but the days are equal or less), then
-    # returning a negative duration is wrong.
+    # We only want a negative duration if $dt > $self.
+    my ( $bigger, $smaller, $sign ) =
+        ( $self >= $dt ?
+          ( $self, $dt, 1 ) :
+          ( $dt, $self, -1 )
+        );
 
-    if ( $self->{utc_rd_days} == $dt->{utc_rd_days} )
-    {
-        return
-            DateTime::Duration->new
-                ( days        => $self->{utc_rd_days} - $dt->{utc_rd_days},
-                  seconds     => $self->{utc_rd_secs} - $dt->{utc_rd_secs},
-                  nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs},
-                );
-    }
-    elsif ( $self->{utc_rd_days} > $dt->{utc_rd_days} &&
-            $self->{utc_rd_secs} < $dt->{utc_rd_secs} )
-    {
-        my $days = $self->{utc_rd_days} - 1;
-        my $secs;
-        if ( $is_floating )
-        {
-            $secs = $self->{utc_rd_secs} + 86400;
-        }
-        else
-        {
-            $secs = $self->{utc_rd_secs} + DateTime::LeapSecond::day_length( $days );
-        }
-        return DateTime::Duration->new
-            ( days        => $days - $dt->{utc_rd_days},
-              seconds     => $secs - $dt->{utc_rd_secs},
-              nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs},
+    my ( $days, $seconds, $nanoseconds ) =
+        _adjust_for_positive_difference
+            ( $bigger->{utc_rd_days}, $smaller->{utc_rd_days},
+              $bigger->{utc_rd_secs}, $smaller->{utc_rd_secs},
+              $bigger->{rd_nanosecs}, $smaller->{rd_nanosecs},
             );
-    }
-    elsif ( $dt->{utc_rd_days} > $self->{utc_rd_days} &&
-            $dt->{utc_rd_secs} < $self->{utc_rd_secs} )
-    {
-        my $days = $dt->{utc_rd_days} - 1;
-        my $secs;
-        if ( $is_floating )
-        {
-            $secs = $self->{utc_rd_secs} + 86400;
-        }
-        else
-        {
-            $secs = $dt->{utc_rd_secs} + DateTime::LeapSecond::day_length( $days );
-        }
-        return DateTime::Duration->new
-            ( days    => $self->{utc_rd_days} - $days,
-              seconds => $self->{utc_rd_secs} - $secs,
-              nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs},
+
+    $_ *= $sign for $days, $seconds, $nanoseconds;
+
+    return
+        DateTime::Duration->new
+            ( days        => $days,
+              seconds     => $seconds,
+              nanoseconds => $nanoseconds,
             );
-    }
-    else
+}
+
+sub _adjust_for_positive_difference
+{
+    my ( $day1, $day2, $sec1, $sec2, $nano1, $nano2 ) = @_;
+
+    if ( $nano1 < $nano2 )
     {
-        return DateTime::Duration->new
-            ( days    => $self->{utc_rd_days} - $dt->{utc_rd_days},
-              seconds => $self->{utc_rd_secs} - $dt->{utc_rd_secs},
-              nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs},
-            );
+        $sec1--;
+        $nano1 += MAX_NANOSECONDS;
     }
+
+    if ( $sec1 < $sec2 )
+    {
+        $sec1 += DateTime::LeapSecond::day_length($day1);
+
+        $day1--;
+    }
+
+    return ( $day1 - $day2,
+             $sec1 - $sec2,
+             $nano1 - $nano2,
+           );
 }
 
 sub _add_overload
@@ -1048,14 +1034,13 @@ sub _compare
         }
     }
 
-    my ($days1, $secs1) = $dt1->utc_rd_values;
-    my ($days2, $secs2) = $dt2->utc_rd_values;
+    foreach my $component ( qw( utc_rd_days utc_rd_secs rd_nanosecs ) )
+    {
+        return $dt1->{$component} <=> $dt2->{$component}
+            if $dt1->{$component} != $dt2->{$component};
+    }
 
-    return $days1 <=> $days2 if $days1 != $days2;
-
-    return $secs1 <=> $secs2 if $secs1 != $secs2;
-
-    return $dt1->nanosecond <=> $dt2->nanosecond;
+    return 0;
 }
 
 sub _normalize_nanoseconds
