@@ -29,7 +29,7 @@ value for epoch, also for compatibility with Time::HiRes.
 serialized DateTime objects.  In particular, the contained time zone
 object is not serialized along with the DateTime object.
 
-- It is not possible to create arbitrary DateTime::Language subclasses
+- It is now possible to create arbitrary DateTime::Language subclasses
 in any namespace.
 
 [ BUG FIXES ]
