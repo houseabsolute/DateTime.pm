@@ -599,6 +599,15 @@ sub _round
     return $val - $int >= 0.5 ? $int + 1 : $int;
 }
 
+sub leap_seconds
+{
+    my $self = shift;
+
+    return 0 if $self->{tz}->is_floating;
+
+    return DateTime->_leap_seconds( $self->{utc_rd_days} ) - 9;
+}
+
 sub hms
 {
     my ( $self, $sep ) = @_;
@@ -1001,11 +1010,11 @@ sub subtract_datetime_absolute
     my $dt = shift;
 
     my $utc_rd_secs1 = $self->utc_rd_as_seconds;
-    $utc_rd_secs1 += $self->_leap_seconds( $self->{utc_rd_days} )
+    $utc_rd_secs1 += DateTime->_leap_seconds( $self->{utc_rd_days} )
 	if ! $self->time_zone->is_floating;
 
     my $utc_rd_secs2 = $dt->utc_rd_as_seconds;
-    $utc_rd_secs2 += $dt->_leap_seconds( $dt->{utc_rd_days} )
+    $utc_rd_secs2 += DateTime->_leap_seconds( $dt->{utc_rd_days} )
 	if ! $dt->time_zone->is_floating;
 
     my $seconds = $utc_rd_secs1 - $utc_rd_secs2;
@@ -2028,6 +2037,12 @@ L<DateTime::Infinite|DateTime::Infinite>.
 Returns the current UTC Rata Die days, seconds, and nanoseconds as a
 three element list.  This exists primarily to allow other calendar
 modules to create objects based on the values provided by this object.
+
+=item * leap_seconds
+
+Returns the number of leap seconds that have happened up to the
+datetime represented by the object.  For floating datetimes, this
+always returns 0.
 
 =item * utc_rd_as_seconds
 

@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 68;
+use Test::More tests => 71;
 
 use DateTime;
 
@@ -133,6 +133,8 @@ use DateTime;
 
     is( $t->datetime, '1972-01-01T00:00:00',
         'add and subtract 1 day starting on leap second' );
+
+    is( $t->leap_seconds, 1, 'datetime has 1 leap second' );
 }
 
 {
@@ -150,6 +152,18 @@ use DateTime;
     $t->add( seconds => 1 );
 
     is( $t->epoch, 63072000, 'epoch of first second after first leap second is 63072000' );
+}
+
+{
+    my $dt = DateTime->new( year => 2003, time_zone => 'UTC' );
+
+    is( $dt->leap_seconds, 23, 'datetime has 23 leap seconds' );
+}
+
+{
+    my $dt = DateTime->new( year => 2003, time_zone => 'floating' );
+
+    is( $dt->leap_seconds, 0, 'floating datetime has 0 leap seconds' );
 }
 
 # date math across leap seconds distinguishes between minutes and second
