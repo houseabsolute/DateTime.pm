@@ -9,7 +9,6 @@ $VERSION = '0.05';
 use Date::Leapyear ();
 use DateTime::Duration;
 use DateTime::TimeZone;
-use DateTime::TimeZone::UTC;
 use Params::Validate qw( validate SCALAR BOOLEAN OBJECT );
 use Time::Local ();
 
@@ -191,7 +190,7 @@ sub from_epoch {
     my $class = shift;
     my %args = validate( @_,
                          { epoch => { type => SCALAR },
-                           language  => { type => SCALAR | OBJECT, optional => 1 },
+                           language => { type => SCALAR | OBJECT, optional => 1 },
                          }
                        );
 
