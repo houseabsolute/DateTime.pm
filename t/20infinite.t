@@ -42,7 +42,7 @@ my $nan = abs( $posinf - $posinf );
         'infinity - normal = infinity' );
 
     my $pos2 = $long_ago + $pos_dur;
-    ok( $pos2 == $pos,
+    is( $pos2, $pos,
         'normal + infinite duration = infinity' );
 
     my $neg_dur = $far_future - $pos;
@@ -50,7 +50,7 @@ my $nan = abs( $posinf - $posinf );
         'normal - infinity = neg infinity' );
 
     my $neg2 = $long_ago + $neg_dur;
-    ok( $neg2 == $neg,
+    is( $neg2, $neg,
         'normal + neg infinite duration = neg infinity' );
 
     my $dur = $pos - $pos;
@@ -62,17 +62,17 @@ my $nan = abs( $posinf - $posinf );
     }
 
     my $new_pos = $pos->clone->add( days => 10 );
-    ok( $new_pos == $pos,
+    is( $new_pos, $pos,
         "infinity + normal duration = infinity" );
 
     my $new_pos2 = $pos->clone->subtract( days => 10 );
-    ok( $new_pos2 == $pos,
+    is( $new_pos2, $pos,
         "infinity - normal duration = infinity" );
 
-    ok( $pos == $posinf,
+    is( $pos, $posinf,
         "infinity (datetime) == infinity (number)" );
 
-    ok( $neg == $neginf,
+    is( $neg, $neginf,
         "neg infinity (datetime) == neg infinity (number)" );
 }
 
