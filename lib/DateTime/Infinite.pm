@@ -11,7 +11,7 @@ foreach my $m ( qw( set set_time_zone truncate ) )
 {
     no strict 'refs';
     *{"DateTime::Infinite::$m"} =
-        sub { die "Infinite datetime objects are not mutable" };
+        sub { return $_[0] };
 }
 
 sub is_finite { 0 }
@@ -98,8 +98,9 @@ string representation of positive or negative infinity used by your
 system.  For example, on my system calling C<year()> returns a number
 which when printed appears either "inf" or "-inf".
 
-It is not legal to attempt to mutate the object, so the C<set()>,
-C<set_time_zone()>, and C<truncate()> methods all die if called.
+The object is not mutable, so the C<set()>, C<set_time_zone()>, and
+C<truncate()> methods are all do-nothing methods that simply return
+the object they are called with.
 
 Obviously, the C<is_finite()> method returns false and the
 C<is_infinite()> method returns true.
