@@ -11,8 +11,6 @@ flushed on changes (add, etc.)
 
 - add gmtime and localtime methods, perhaps?
 
-- write INTERNALS document? (I say not needed, just comment the module appropriately - dave)
-
 - reasonable stringification.  numification?
 
 - more tests for setting offset via offset() method
@@ -27,8 +25,6 @@ Time::HiRes), but is micro small enough?
 - print_error, raise_error, & error_handler options ala DBI.  Default
 to Exception::Class throwing.
 
-- make mjd method to return real mjd days/seconds and sub-seconds.
-
 - Offset should be specified as DateTime::TimeZone object (or
 something like that) as well as, or instead of, a string/number.
 
@@ -37,3 +33,11 @@ http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/reefknot/Date-ICal-Timezone/)
 
 - overloading for DateTime::Duration, addition, subtraction,
 multiplication (duration * int), division? (duration / int).
+
+- add warnings about naughtiness of epoch to docs.
+
+- jd/mjd methods?
+
+- document RD days/seconds(/nanosecs?) in a separate document that
+will be the reference for DateTime.pm internals, as well as being
+useful for other calendar implementors.
