@@ -398,19 +398,21 @@ sub from_object
     return $new;
 }
 
+my $LastDayOfMonthValidate = { %$NewValidate };
+foreach ( keys %$LastDayOfMonthValidate )
+{
+    my %copy = %{ $LastDayOfMonthValidate->{$_} };
+
+    delete $copy{default};
+    $copy{optional} = 1 unless $_ eq 'year' || $_ eq 'month';
+
+    $LastDayOfMonthValidate->{$_} = \%copy;
+}
+
 sub last_day_of_month
 {
     my $class = shift;
-    my %p = validate( @_,
-                      { year   => { type => SCALAR },
-                        month  => { type => SCALAR },
-                        hour   => { type => SCALAR, optional => 1 },
-                        minute => { type => SCALAR, optional => 1 },
-                        second => { type => SCALAR, optional => 1 },
-                        language   => { type => SCALAR | OBJECT, optional => 1 },
-                        time_zone  => { type => SCALAR | OBJECT, optional => 1 },
-                      }
-                    );
+    my %p = validate( @_, $LastDayOfMonthValidate );
 
     my $day = ( $class->_is_leap_year( $p{year} ) ?
                 $LeapYearMonthLengths[ $p{month} - 1 ] :
@@ -1727,6 +1729,9 @@ This method can be used to change the local components of a date time,
 or its language.  This method accepts any parameter allowed by the
 C<new()> method except for "time_zone".  Time zones may be set using
 the C<set_time_zone()> method.
+
+This method performs parameters validation just as is done in the
+C<new()> method.
 
 =item * truncate( to => ... )
 
