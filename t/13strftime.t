@@ -4,7 +4,7 @@
 
 use strict;
 
-use Test::More tests => 117;
+use Test::More tests => 123;
 
 use DateTime;
 
@@ -30,9 +30,9 @@ while (<DATA>)
         next;
     }
 
-    my ($fmt, $res) = split /\t+/,$_;
+    my ($fmt, $res) = split /\t/, $_;
 
-    is( $dt->strftime($fmt), $res );
+    is( $dt->strftime($fmt), $res, "$fmt" );
 }
 
 # test use of strftime with multiple params - in list and scalar
@@ -139,6 +139,8 @@ year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42, nanos
 %Y	1999
 %Z	UTC
 %z	+0000
+%{month}	9
+%{year}	1999
 German
 %y	99
 %Y	1999
@@ -172,6 +174,8 @@ German
 %Y	1999
 %Z	UTC
 %z	+0000
+%{month}	9
+%{year}	1999
 Italian
 %y	99
 %Y	1999
@@ -205,3 +209,5 @@ Italian
 %Y	1999
 %Z	UTC
 %z	+0000
+%{month}	9
+%{year}	1999
