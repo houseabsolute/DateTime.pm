@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 59;
+use Test::More tests => 62;
 
 use DateTime;
 
@@ -129,4 +129,11 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     my $dt1 = $dt_neg + DateTime::Duration->new( years => 10 );
     is( $dt1->year,   1, "year is 1 after adding ten years to year -10" );
     is( $dt1->year_0, 0, "year_0 is 0 after adding ten years to year -10" );
+}
+
+{
+    my $dt = DateTime->new( year => 50, month => 2 );
+    is( $dt->ymd('%s'), '0050%s02%s01', 'use %s as separator in ymd' );
+    is( $dt->mdy('%s'), '02%s01%s0050', 'use %s as separator in ymd' );
+    is( $dt->dmy('%s'), '01%s02%s0050', 'use %s as separator in ymd' );
 }
