@@ -687,14 +687,14 @@ sub week {
      my $self = shift;
 
      my $mid_week = $self->clone;
-     $mid_week->add( day => 4 - $week_day );
+     $mid_week->add( day => 4 - $self->day_of_week );
      my $week_year = $mid_week->year;
 
      my $jan_four = greg2jd( $week_year, 1, 4 );
      my $first_week = $jan_four - ( $jan_four % 7 );
      my $week_number = int( ($self->{julian} - $first_week) / 7 ) + 1;
 
-     return( $week_year, $week_number, $week_day );
+     return ( $week_year, $week_number );
 }
 
 sub week_year   { ($_[0]->week)[0] }
