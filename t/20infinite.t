@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 36;
+use Test::More tests => 38;
 
 use DateTime;
 
@@ -85,4 +85,11 @@ my $neg_as_string = $neginf . '';
         is( $neg->$m(), $neg_as_string,
             "neg $m is $pos_as_string" );
     }
+}
+
+{
+    my $now  = DateTime->now;
+
+    is( DateTime->compare($pos, $now),  1, 'positive infinite is greater than now' );
+    is( DateTime->compare($neg, $now), -1, 'negative infinite is less than now' );
 }
