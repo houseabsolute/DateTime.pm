@@ -1,5 +1,5 @@
-Changes
 CREDITS
+Changes
 LICENSE
 MANIFEST			This list of files
 MANIFEST.SKIP
@@ -19,10 +19,11 @@ lib/DateTime/Language/Italian.pm
 lib/DateTime/Language/Norwegian.pm
 t/00load.t
 t/01sanity.t
-t/02normalize.t
+t/02last_day.t
 t/03components.t
 t/04epoch.t
 t/05set.t
+t/05tz.t
 t/06add.t
 t/07compare.t
 t/09greg.t
@@ -30,5 +31,4 @@ t/10subtract.t
 t/11duration.t
 t/12week.t
 t/13strftime.t
-t/14errors.t
 t/testlib.pl
