@@ -39,3 +39,6 @@ something like that) as well as, or instead of, a string/number.
 
 - Implement DateTime::TimeZone (see
 http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/reefknot/Date-ICal-Timezone/)
+
+- overloading for DateTime::Duration, addition, subtraction,
+multiplication (duration * int), division? (duration / int).
