@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 62;
+use Test::More tests => 63;
 
 use DateTime;
 
@@ -132,8 +132,12 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 }
 
 {
-    my $dt = DateTime->new( year => 50, month => 2 );
+    my $dt = DateTime->new( year => 50, month => 2,
+                            hour => 3, minute => 20, second => 5 );
+
     is( $dt->ymd('%s'), '0050%s02%s01', 'use %s as separator in ymd' );
-    is( $dt->mdy('%s'), '02%s01%s0050', 'use %s as separator in ymd' );
-    is( $dt->dmy('%s'), '01%s02%s0050', 'use %s as separator in ymd' );
+    is( $dt->mdy('%s'), '02%s01%s0050', 'use %s as separator in mdy' );
+    is( $dt->dmy('%s'), '01%s02%s0050', 'use %s as separator in dmy' );
+
+    is( $dt->hms('%s'), '03%s20%s05', 'use %s as separator in hms' );
 }
