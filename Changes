@@ -4,7 +4,8 @@
 
 - The docs for the from_object constructor said that by default, new
 objects were in the UTC time zone, but in reality the default was the
-floating time zone.  The docs were changed to match the code.
+floating time zone.  The docs were changed to match the code.  Ticket
+9278 on rt.cpan.org.
 
 
 0.24    2004-12-10 (the "have I mentioned I hate leap seconds" release)
