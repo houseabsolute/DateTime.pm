@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use DateTime;
 use DateTime::Locale;
@@ -32,3 +32,6 @@ ok( ! $@, 'make sure constructor accepts locale parameter' );
 
 eval { DateTime->new( year => 100, locale => DateTime::Locale->load('en_US') ) };
 ok( ! $@, 'make sure constructor accepts locale parameter as object' );
+
+DateTime->DefaultLocale('it');
+is( DateTime->now->locale->id, 'it', 'default locale should now be "it"' );
