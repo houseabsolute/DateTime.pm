@@ -1,3 +1,13 @@
+0.06
+
+- The docs said that there was no year 0 in the Gregorian calendar,
+but that was wrong.  The year() method can now return 0.  The year_0()
+method has been removed.
+
+- Added jd() and mjd() methods.
+
+- Re-implemented some of the core code in XS for speed.
+
 0.05     2003-02-13
 
 - Fix handling and reporting of epoch times.  Epoch times are, by
