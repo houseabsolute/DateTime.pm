@@ -656,6 +656,9 @@ sub epoch {
     return $self->{utc_c}{epoch};
 }
 
+# added for benefit of DateTime::TimeZone
+sub utc_year { ($_[0]->_utc_ymd)[0] }
+
 sub add { shift->add_duration( DateTime::Duration->new(@_) ) }
 
 sub subtract { shift->subtract_duration( DateTime::Duration->new(@_) ) }
