@@ -688,11 +688,16 @@ sub year {
     return ( $self->_as_greg )[0];
 }
 
+sub year_0 { $_[0]->year - 1 }
+
 sub month {
     my $self = shift;
     return ( $self->_as_greg )[1];
 }
 *mon = \&month;
+
+sub month_0 { $_[0]->month - 1 };
+*mon_0 = \&month_0;
 
 sub month_name {
     my $self = shift;
@@ -707,8 +712,11 @@ sub month_abbr {
 sub day_of_year {
     my $self = shift;
     my $janone = greg2jd( $self->year, 1, 1 );
-    return $self->{julian} - $janone;
+    return ($self->{julian} + 1) - $janone ;
 }
+
+
+sub day_of_year_0 { $_[0]->day_of_year - 1 }
 
 sub day_of_month {
     my $self = shift;
@@ -717,12 +725,20 @@ sub day_of_month {
 *day  = \&day_of_month;
 *mday = \&day_of_month;
 
+sub day_of_month_0 { $_[0]->day_of_month - 1 }
+*day_0  = \&day_of_month_0;
+*mday_0 = \&day_of_month_0;
+
 sub day_of_week {
     my $self = shift;
     return $self->{julian} % 7 + 1;
 }
 *wday = \&day_of_week;
 *dow  = \&day_of_week;
+
+sub day_of_week_0 { $_[0]->day_of_week - 1 }
+*wday_0 = \&day_of_week_0;
+*dow_0  = \&day_of_week_0;
 
 sub day_name {
     my $self = shift;
@@ -860,12 +876,12 @@ DateTime - Reference implement for Perl DateTime objects
 
   $dt = DateTime->new( epoch => time );
 
-  $year   = $dt->year;          # ??
+  $year   = $dt->year;          # ?-neg 1, 1-..
   $month  = $dt->month;         # 1-12
   # also $dt->mon
   $day    = $dt->day;           # 1-31
   # also $dt->day_of_month, $dt->mday
-  $dow    = $dt->day_of_week;   # 0-6
+  $dow    = $dt->day_of_week;   # 1-7
   # also $dt->dow, $dt->wday
   $hour   = $dt->hour;          # 0-23
   $minute = $dt->minute;        # 0-59
@@ -874,6 +890,9 @@ DateTime - Reference implement for Perl DateTime objects
   # also $dt->sec
 
   $doy    = $dt->day_of_year    # 1-366 (leap years)
+
+  # all of the start-at-1 methods above have correponding start-at-0
+  # methods, such as $dt->day_of_month_0 and so on
 
   $ymd    = $dt->ymd            # 2002-12-06
   $ymd    = $dt->ymd('/')       # 2002/12/06
