@@ -606,15 +606,17 @@ sub subtract_datetime {
 }
 
 sub _add_overload {
-    my ( $date1, $dur, $reversed ) = @_;
+    my ( $dt, $dur, $reversed ) = @_;
 
     if ($reversed) {
-        ( $dur, $date1 ) = ( $date1, $dur );
+        ( $dur, $dt ) = ( $dt, $dur );
     }
 
     # how to handle non duration objects?
 
-    return $date1->clone->add_duration($dur);
+    my $new = $dt->clone;
+    $new->add_duration($dur);
+    return $new;
 }
 
 sub _subtract_overload {
@@ -625,7 +627,9 @@ sub _subtract_overload {
     }
 
     if ( UNIVERSAL::isa( $date2, 'DateTime::Duration' ) ) {
-        return $date1->clone->add_duration( $date2->inverse );
+        my $new = $date1->clone;
+        $new->add_duration( $date2->inverse );
+        return $new;
     } else {
         return $date1->subtract_datetime($date2);
     }
