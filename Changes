@@ -12,6 +12,9 @@ _rd2ymd, so as to make them look more normal when used in subclasses.
 
 [BUG FIXES]
 
+- The week() method was wrong for many dates.  Reported by Christian
+Hansen.
+
 - The last_day_of_month() method had the DateTime class hard-coded in
 it.  Reported by Eugene van der Pijll.
 
