@@ -5,7 +5,8 @@
 - The leap second table we were using mistakenly included a leap
 second on December 31, 1971.  This will break all versions of the
 DateTime::Format::Epoch::TAI64 module up to and including version
-0.06.  Most users of DateTime.pm will not be affected.
+0.06.  Most users of DateTime.pm will not be affected.  Patch by
+Joshua Hoblitt.
 
 
 0.2101  2004-06-10
