@@ -45,7 +45,7 @@ BEGIN
 use DateTime::Duration;
 use DateTime::Locale;
 use DateTime::TimeZone;
-use Params::Validate qw( validate SCALAR BOOLEAN HASHREF OBJECT );
+use Params::Validate qw( validate validate_pos SCALAR BOOLEAN HASHREF OBJECT );
 use Time::Local ();
 
 # for some reason, overloading doesn't work unless fallback is listed
@@ -1111,7 +1111,11 @@ sub _subtract_overload
 
 sub add_duration
 {
-    my ( $self, $dur ) = @_;
+    my $self = shift;
+    my ($dur) = validate_pos( @_, { isa => 'DateTime::Duration' } );
+
+    # simple optimization
+    return $self if $dur->is_zero;
 
     my %deltas = $dur->deltas;
 
@@ -2350,7 +2354,8 @@ Here are the results we get:
 
 When doing date math, you are changing the I<local> datetime.  This is
 generally the same as changing the UTC datetime, except when a change
-crosses a daylight saving boundary.  The net effect of this is that a single day may have more or less than 24.
+crosses a daylight saving boundary.  The net effect of this is that a
+single day may have more or less than 24.
 
 Specifically, if you do this:
 
