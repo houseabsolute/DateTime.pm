@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 54;
+use Test::More tests => 50;
 
 use DateTime;
 use DateTime::Duration;
@@ -119,15 +119,6 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
     my $new3 = $dur2 - $dur1;
     is( $new3->delta_months, -3, 'test - overloading' );
     is( $new3->delta_days, -3, 'test - overloading' );
-
-    is( DateTime::Duration->compare( $dur1, $dur2 ),  1, 'compare two deltas - first is larger' );
-    is( DateTime::Duration->compare( $dur2, $dur1 ), -1, 'compare two deltas - second is larger' );
-    is( DateTime::Duration->compare( $dur1, $dur1 ),  0, 'compare two deltas - same' );
-
-    my @d = sort ($dur1, $dur2);
-
-    is( $d[0]->delta_months, $dur2->delta_months,
-        "smaller delta should come first in sorted list" );
 }
 
 {

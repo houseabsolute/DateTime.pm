@@ -5,8 +5,6 @@ use strict;
 use Params::Validate qw( validate SCALAR );
 
 use overload ( fallback => 1,
-               'cmp' => '_compare_overload',
-               '<=>' => '_compare_overload',
                '+'   => '_add_overload',
                '-'   => '_subtract_overload',
                '*'   => '_multiply_overload',
@@ -200,38 +198,6 @@ sub _multiply_overload
     return $new;
 }
 
-sub compare
-{
-    my ( $class, $dur1, $dur2 ) = ref $_[0] ? ( undef, @_ ) : @_;
-
-    my %deltas1 = $dur1->deltas;
-    my %deltas2 = $dur2->deltas;
-
-    foreach ( qw( months days minutes seconds nanoseconds ) )
-    {
-        if ( $deltas1{$_} < $deltas2{$_} )
-        {
-            return -1;
-        }
-        elsif ( $deltas1{$_} > $deltas2{$_} )
-        {
-            return 1;
-        }
-    }
-
-    return 0;
-}
-
-
-sub _compare_overload
-{
-    my ( $d1, $d2, $rev ) = @_;
-
-    ($d1, $d2) = ($d2, $d1) if $rev;
-
-    return $d1->compare($d2);
-}
-
 
 1;
 
@@ -383,8 +349,7 @@ C<add_duration()> or C<subtract_duration()>, as appropriate.
 
 =head2 Overloading
 
-This class overload addition, subtraction, mutiplication and
-comparison.
+This class overload addition, subtraction, and mutiplication.
 
 =head1 SUPPORT
 
