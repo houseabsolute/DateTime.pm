@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 55;
+use Test::More tests => 59;
 
 use DateTime;
 
@@ -119,4 +119,14 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
     is( $dt0->year,   -1, "Year -1 is year -1" );
     is( $dt0->year_0, -1, "Year -1 is -1 in 0-index terms" );
+}
+
+{
+    my $dt_neg = DateTime->new( year => -10 );
+    is( $dt_neg->year,   -10, "Year -10 is -10" );
+    is( $dt_neg->year_0, -10, "Year -10 is -10 with 0-index" );
+
+    my $dt1 = $dt_neg + DateTime::Duration->new( years => 10 );
+    is( $dt1->year,   1, "year is 1 after adding ten years to year -10" );
+    is( $dt1->year_0, 0, "year_0 is 0 after adding ten years to year -10" );
 }
