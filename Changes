@@ -10,7 +10,7 @@ constructors and to the set() method, so bogus values like a month of
 
 - Added a number of new "get" methods, including era, year_with_era,
 hour_1, hour_12, hour_12_0, weekday_of_month, and week_of_month.
-Based in part of a patch from Rick Measham.
+Based in part on a patch from Rick Measham.
 
 - Now any object method can be called in strftime format by using
 "%{method}" as a format specifier.  Patch from Rick Measham
