@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 8;
+use Test::More tests => 10;
 
 use DateTime;
 
@@ -39,6 +39,18 @@ is( $dt1->nanosecond, 100, 'nanosecond is 100' );
 
     isa_ok( $t2, 'DateTime' );
     is( $t2->time_zone->name, 'America/Chicago', 'time_zone is preserved');
+}
+
+{
+    my $tz = DateTime::TimeZone->new( name => 'UTC' );
+    my $t1 =
+	DateTime::Calendar::_Test::WithTZ->new
+	    ( rd_days => 720258, rd_secs => 86400, time_zone => $tz );
+
+    my $t2 = DateTime->from_object( object => $t1 );
+
+    isa_ok( $t2, 'DateTime' );
+    is( $t2->second, 60, 'new DateTime from_object with TZ which is a leap second' );
 }
 
 
