@@ -1,3 +1,14 @@
+0.15
+
+[ IMPROVEMENTS ]
+
+- The utc_rd_values() method now returns nanoseconds in addition, Rata
+Die days and minutes.  Based on a patch by Joshua Hoblitt.
+
+- The from_object() method expects objects to return the same values
+from their utc_rd_values() methods.  Based on a patch by Joshua Hoblitt.
+
+
 0.1402   2003-07-24
 
 [ BUG FIXES ]
