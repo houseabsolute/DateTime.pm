@@ -29,10 +29,10 @@ is( $d->sec, 50, '->sec' );
 is( $d->ical, '20010705T021250Z', '->ical' );
 
 is( $d->day_of_year, 185, '->day_of_year' );
-is( $d->day_of_week, 4, '->day_of_week' );
+is( $d->day_of_week, 5, '->day_of_week' );
 is( $d->day_name, 'Thursday', '->day_of_week' );
 is( $d->day_abbr, 'Thu', '->day_of_week' );
-is( $d->wday, 4, '->wday' );
+is( $d->wday, 5, '->wday' );
 
 is( $d->ymd, '2001-07-05', '->ymd' );
 is( $d->ymd('!'), '2001!07!05', "->ymd('!')" );
