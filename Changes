@@ -1,5 +1,9 @@
 0.12     2003-05-05
 
+[ IMPROVEMENTS ]
+
+- DateTime now does more validation of constructor parameters.
+
 [ BUG FIXES ]
 
 - Make sure tests always run with warnings on.
