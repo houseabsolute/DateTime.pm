@@ -81,8 +81,6 @@ sub new {
         $self->{language} = $lang_class->new;
     }
 
-    $args{time_zone} = 'local' unless exists $args{time_zone};
-
     $self->{tz} =
         ( ref $args{time_zone} ?
           $args{time_zone} :
@@ -982,9 +980,8 @@ The time_zone parameter can be either a scalar or a
 C<DateTime::TimeZone> object.  A string will simply be passed to the
 C<< DateTime::TimeZone->new >> method as its "name" parameter.  This
 string may be an Olson DB time zone name ("America/Chicago"), an
-offset string ("+0630"), an offset in seconds (-21600), or the words
-"floating" or "local".  See the C<DateTime::TimeZone> documentation
-for more details.
+offset string ("+0630"), or the words "floating" or "local".  See the
+C<DateTime::TimeZone> documentation for more details.
 
 =item * from_epoch( epoch => $epoch, ... )
 
