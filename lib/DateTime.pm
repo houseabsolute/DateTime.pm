@@ -168,7 +168,6 @@ sub from_epoch {
     my %args = validate( @_,
                          { epoch => { type => SCALAR },
                            language  => { type => SCALAR | OBJECT, optional => 1 },
-                           time_zone => { type => SCALAR | OBJECT, optional => 1 },
                          }
                        );
 
@@ -181,7 +180,7 @@ sub from_epoch {
     $p{month}++;
 
     # pass other args like time_zone to constructor
-    return $class->new( %args, %p );
+    return $class->new( %args, %p, time_zone => 'UTC' );
 }
 
 # use scalar time in case someone's loaded Time::Piece
@@ -613,13 +612,14 @@ sub epoch {
 
     return $self->{c}{epoch} if exists $self->{c}{epoch};
 
+    my ( $year, $month, $day )  = $self->_rd2greg( $self->{utc_rd_days} );
+    my @hms = $self->_seconds_as_components( $self->{utc_rd_secs} );
+
     $self->{c}{epoch} =
-        eval { Time::Local::timegm( $self->second,
-                                    $self->minute,
-                                    $self->hour,
-                                    $self->day,
-                                    $self->month_0,
-                                    $self->year - 1900,
+        eval { Time::Local::timegm( ( reverse @hms ),
+                                    $day,
+                                    $month - 1,
+                                    $year - 1900,
                                   ) };
 
     return $self->{c}{epoch};
@@ -994,7 +994,9 @@ C<DateTime::TimeZone> documentation for more details.
 
 This class method can be used to construct a new DateTime object from
 an epoch time instead of components.  Just as with the C<new()>
-method, it accepts "language" and "time_zone" parameters.
+method, it accepts a "language" parameter.  The time zone will always
+be "UTC" for any object created from an epoch.  This can be changed
+once the object is created.
 
 Because C<Time::Local> is used internally, all machines are treated as
 if they had the UNIX epoch of January 1, 1970 GMT.
