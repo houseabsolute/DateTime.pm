@@ -6,7 +6,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.12';
+    $VERSION = '0.13';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -1238,6 +1238,49 @@ sub set_time_zone
     return $self;
 }
 
+sub STORABLE_freeze
+{
+    my $self = shift;
+    my $cloning = shift;
+
+    my $data = '';
+    foreach my $key ( qw( utc_rd_days
+                          utc_rd_secs
+                          rd_nanosecs ) )
+    {
+        $data .= "$key:$self->{$key}|";
+    }
+
+    my $lang = ref $self->{language};
+    $lang =~ s/^DateTime::Language:://;
+
+    $data .= "language:$lang";
+    $data .= "|tz:" . $self->{tz}->name;
+    $data .= "|version:$VERSION";
+
+    return $data;
+}
+
+sub STORABLE_thaw
+{
+    my $self = shift;
+    my $cloning = shift;
+    my $data = shift;
+
+    my %data = map { split /:/ } split /\|/, $data;
+
+    my $tz = DateTime::TimeZone->new( name => delete $data{tz} );
+    my $lang = delete $data{language};
+
+    %$self = %data;
+    $self->{tz} = $tz;
+    $self->{language} = DateTime::Language->new( language => $lang );
+
+    $self->_calc_local_rd;
+
+    return $self;
+}
+
 
 1;
 
@@ -2291,6 +2334,11 @@ Any method name may be specified using the format C<%{method}> name
 where "method" is a valid C<DateTime.pm> object method.
 
 =back
+
+=head1 DateTime.pm and Storable
+
+As of version 0.13, DateTime implements Storable hooks in order to
+reduce the size of a serialized DateTime object.
 
 =head1 SUPPORT
 
