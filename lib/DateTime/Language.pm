@@ -3,12 +3,77 @@ package DateTime::Language;
 use strict;
 
 use Class::Factory::Util;
+use Params::Validate qw( validate SCALAR );
+
+my %ISOMap = ( 'cz'    => 'Czech',
+               'de'    => 'German',
+               'de-at' => 'Austrian',
+               'dk'    => 'Danish',
+               'en'    => 'English',
+               'es'    => 'Spanish',
+               'fr'    => 'French',
+               'it'    => 'Italian',
+               'nl'    => 'Dutch',
+               'no'    => 'Norwegian',
+               'pt'    => 'Brazilian', # not quite right, but better than failing
+               'pt-br' => 'Brazilian',
+             );
 
 sub new
 {
     my $class = shift;
+    my %p = validate( @_,
+                      { language => { type => SCALAR } },
+                    );
 
-    my $self;
+    my $real_class = $class->load( $p{language} );
+
+    my $obj = bless {}, $real_class;
+
+    $obj->_init;
+
+    return $obj;
+}
+
+sub languages { $_[0]->subclasses }
+sub iso_codes { keys %ISOMap }
+
+sub load
+{
+    my $class = shift;
+    my $lang = shift;
+
+    my $real_lang;
+    if ( $lang =~ /^\w\w$/ || $lang =~ /^(\w\w)-\w\w/ )
+    {
+        $real_lang =
+            ( exists $ISOMap{$lang} ?
+              $ISOMap{$lang} :
+              $1 ?
+              $ISOMap{$1} :
+              undef
+            );
+
+        die "Unsupported or invalid ISO language code, $lang"
+            unless defined $real_lang;
+    }
+    else
+    {
+        $real_lang = $lang;
+    }
+
+    my $real_class = "DateTime::Language::$real_lang";
+    eval "use $real_class";
+    die $@ if $@;
+
+    return $real_class;
+}
+
+sub _init
+{
+    my $self = shift;
+    my $class = ref $self;
+
     foreach my $key ( qw( day_names day_abbreviations month_names
                           month_abbreviations am_pm ordinal_suffixes
                           month_numbers day_numbers
@@ -28,8 +93,6 @@ sub new
             $self->{$key} = \@{"$class\::$var_name"};
         }
     }
-
-    return bless $self, $class;
 }
 
 sub month_names { $_[0]->{month_names} }
@@ -72,12 +135,47 @@ DateTime::Language - base class for DateTime.pm-related language localization
 
 This class provides most of the methods needed to implement language
 localization for DateTime.pm.  A subclass of this language simply
+provides a set of data structures containing things like day and
+months names.
+
+This module is a factory for language subclasses, and can load a class
+either based on the language portion of its name, such as "English",
+or based on its ISO code, such as "en".
 
 =head1 USAGE
 
-This module provides one somewhat interesting function,
-C<subclasses()>.  Calling this method returns a list of subclass
-names, minus the leading "DateTime::Language::" portion.
+This module provides the following methods:
+
+=over 4
+
+=item * new( language => $language )
+
+This method loads the requested language and returns an object of the
+appropriate class.  The "language" parameter may be the name of the
+language subclass to be used, such as "English", as returned by the
+C<languages()> method.  It can also be an ISO 639 two-letter language
+code.  The language code may include an ISO 3166 two-letter country
+after a dash, so things like "en" or "en-us" are both legal.  If a
+country code is given, then the most specific match is used.  For
+example, if "en-au" (English, Australian) is given, then the nearest
+match will be "en", which will be used instead.
+
+=item * load( $language )
+
+This tells the module to load the specified language without creating
+an object.  The language given can be anything accepted by the
+C<new()> method.
+
+=item * languages
+
+Returns a list of supported language names.
+
+=item * iso_codes
+
+Returns a list of supported ISO language names.  See the C<new()>
+method documentation for details.
+
+=back
 
 =head1 SUBCLASSING
 
