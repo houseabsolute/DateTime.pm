@@ -238,21 +238,12 @@ sub _calc_local_components
                                day_of_year quarter day_of_quarter) } =
         $self->_rd2ymd( $self->{local_rd_days}, 1 );
 
-    if ( $self->time_zone->is_floating ) 
-    {
-        @{ $self->{local_c} }{ qw( hour minute second ) } =
-            $self->_seconds_as_components( $self->{local_rd_secs} );
-    }
-    else 
-    {
-        # TODO - this only works for timezone == UTC !!!
-        @{ $self->{local_c} }{ qw( hour minute second ) } =
-            $self->_seconds_as_components( $self->{local_rd_secs} );
-        if ( $self->{local_rd_secs} >= 86400 ) 
-        {
-            $self->{local_c}{second} += $self->{local_rd_secs} - 86400 + 60;
-        }
-    }
+    @{ $self->{local_c} }{ qw( hour minute second ) } =
+        $self->_seconds_as_components( $self->{local_rd_secs} );
+
+    return if ( $self->time_zone->is_floating );
+
+    $self->_calc_utc_components unless exists $self->{utc_c}{year};
 }
 
 sub _calc_utc_components
@@ -264,6 +255,16 @@ sub _calc_utc_components
 
     @{ $self->{utc_c} }{ qw( hour minute second ) } =
         $self->_seconds_as_components( $self->{utc_rd_secs} );
+
+    # we don't have to check 'is_floating' here, 
+    # because floating times will never have 86400 seconds.
+    if ( $self->{utc_rd_secs} >= 86400 )
+    {
+        $self->{local_c}{second} += $self->{utc_rd_secs} - 86400 + 60;
+        $self->{local_c}{minute}  = 59;
+        $self->{local_c}{hour}--;
+        $self->{local_c}{hour} = 23 if $self->{local_c}{hour} < 0;
+    }
 }
 
 sub _utc_ymd
