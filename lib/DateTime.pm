@@ -10,6 +10,7 @@ use Carp;
 use Class::Data::Inheritable;
 use Date::Leapyear ();
 use DateTime::Duration;
+use DateTime::TimeZone;
 use DateTime::TimeZone::UTC;
 use Params::Validate qw( validate validate_with SCALAR BOOLEAN OBJECT );
 use Time::Local ();
@@ -31,9 +32,6 @@ use overload ( 'fallback' => 1,
 my( @MonthLengths, @LeapYearMonthLengths,
     @EndofMonthDayOfYear, @EndofMonthDayOfLeapYear,
     %AddUnits );
-
-my $LocalZone   = $ENV{TZ} || 0;
-my $LocalOffset = _calc_local_offset();
 
 {
     # I'd rather use Class::Data::Inheritable for this, but there's no
@@ -80,10 +78,7 @@ sub new {
                            minute => { type => SCALAR, default => 0 },
                            second => { type => SCALAR, default => 0 },
                            language  => { type => SCALAR, optional => 1 },
-                           time_zone => { type => OBJECT, optional => 1 }, # isa ?
-                           # will go away eventually
-                           floating  => { type => BOOLEAN, optional => 1 },
-                           offset    => { type => SCALAR, optional => 1 },
+                           time_zone => { type => SCALAR | OBJECT, optional => 1 }, # isa ?
                          }
                        ) };
     return $class->_error($@) if $@;
@@ -97,42 +92,68 @@ sub new {
         $self->{language} = $class->DefaultLanguageClass->new;
     }
 
-    $self->{rd_days} = greg2rd( @args{ qw( year month day ) } );
-    $self->{rd_secs} = time_as_seconds( @args{ qw( hour minute second ) } );
+    $args{time_zone} = 'UTC' unless exists $args{time_zone};
+
+    $self->{tz} =
+        ( ref $args{time_zone} ?
+          $args{time_zone} :
+          DateTime::TimeZone->new( name => $args{time_zone} )
+        );
+
+    $self->{local_rd_days} = greg2rd( @args{ qw( year month day ) } );
+    $self->{local_rd_secs} = time_as_seconds( @args{ qw( hour minute second ) } );
 
     bless $self, $class;
 
-    # a floating datetime is always in the current time zone, even if that
-    # time zone changes later
-    if ( $args{floating} ) {
-        # Check if the timezone has changed since the last time we checked.
-        # Apparently this happens on some systems. Patch from Mike
-        # Heins. Ask him.
-        my $tz  = $ENV{TZ} || '0';
-        my $loc = $tz eq $LocalZone ? $LocalOffset : _calc_local_offset();
-        $self->offset($loc) if defined $self;
-    } elsif ( exists( $args{offset} ) ) {
-        # We should complain if they're trying to set a non-UTC
-        # offset on a time that's inherently UTC.  -jv
-        if ($args{floating} && ($args{offset} != 0)) {
-            warn "Time had conflicting offset and UTC info. Using UTC";
-        } else {
-
-            # Set up the offset for this datetime.
-            $self->offset( $args{offset} || 0 );
-        }
-    }
+    $self->_calc_utc_rd;
 
     return $self;
+}
+
+sub _calc_utc_rd {
+    my $self = shift;
+
+    # We must short circuit for UTC times or else we could end up with
+    # loops between DateTime.pm and DateTime::TimeZone
+    if ( $self->{tz}->is_utc ) {
+        $self->{utc_rd_days} = $self->{local_rd_days};
+        $self->{utc_rd_secs} = $self->{local_rd_secs};
+
+        return;
+    }
+
+    $self->{utc_rd_days} = $self->{local_rd_days};
+    $self->{utc_rd_secs} = $self->{local_rd_secs} + $self->offset;
+
+    _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+}
+
+sub _calc_local_rd {
+    my $self = shift;
+
+    # We must short circuit for UTC times or else we could end up with
+    # loops between DateTime.pm and DateTime::TimeZone
+    if ( $self->{tz}->is_utc ) {
+        $self->{local_rd_days} = $self->{utc_rd_days};
+        $self->{local_rd_secs} = $self->{utc_rd_secs};
+
+        return;
+    }
+
+    $self->{local_rd_days} = $self->{utc_rd_days};
+    $self->{local_rd_secs} = $self->{utc_rd_secs} - $self->offset;
+
+    _normalize_seconds( $self->{local_rd_days}, $self->{local_rd_secs} );
 }
 
 sub from_epoch {
     my $class = shift;
     my %args =
-        eval { validate_with( params => \@_,
-                              spec   => { epoch => { type => SCALAR } },
-                              allow_extra => 1,
-                            ) };
+        eval { validate( @_,
+                         { epoch => { type => SCALAR },
+                           language  => { type => SCALAR, optional => 1 },
+                           time_zone => { type => SCALAR | OBJECT, optional => 1 },
+                         } ) };
     return $class->_error($@) if $@;
 
     my %p;
@@ -144,140 +165,35 @@ sub from_epoch {
     $p{year} += 1900;
     $p{month}++;
 
-    unless ( exists $args{time_zone} ) {
-        #$args{time_zone} = DateTime::TimeZone->new( name => 'UTC' );
-    }
-    unless ( exists $args{offset} ) {
-        $args{offset} = 0;
-    }
-
     # pass other args like time_zone to constructor
     return $class->new( %args, %p );
 }
 
-sub now { shift->from_epoch( epoch => time, @_ ) }
+# use scalar time in case someone's loaded Time::Piece
+sub now { shift->from_epoch( epoch => (scalar time), @_ ) }
 
-sub epoch {
-    my ( $self, $epoch )  = @_;
-    my $class = ref($self);
-
-    if ( defined $epoch && $epoch ne '' ) {    # Passed in a new value
-        my $newepoch = $class->from_epoch( epoch => $epoch, offset => $self->{offset} );
-        $self->{rd_days} = $newepoch->{rd_days};
-        $self->{rd_secs} = $newepoch->{rd_secs};
-
-    } else {
-        # timegm may die if given components outside of the ranges it
-        # can handle.  In that case return undef.
-        $epoch =
-            eval { Time::Local::timegm( $self->sec,
-                                        $self->min,
-                                        $self->hour,
-                                        $self->day,
-                                        $self->month_0,
-                                        $self->year - 1900,
-                                      ) };
-    }
-
-    return $epoch;
+sub clone {
+    return bless { %{ $_[0] } }, ref $_[0];
 }
 
-sub _offset_to_seconds {
-    my $offset = shift;
+sub utc_datetime {
+    my $self = shift;
 
-    # Relocated from offset for re-use
-    my $newoffset;
+    my $dt = $self->clone;
 
-    if ( $offset eq '0' ) {
-        $newoffset = 0;
-      } elsif ( $offset =~ /^([+-])(\d\d)(\d\d)\z/ )
-    {
-        my ( $sign, $hours, $minutes ) = ( $1, $2, $3 );
+    $dt->{tz} = DateTime::TimeZone->new( name => 'UTC' );
 
-        # convert to seconds, ignoring the possibility of leap seconds
-        # or daylight-savings-time shifts
-        $newoffset = $hours * 60 * 60 + $minutes * 60;
-        $newoffset *= -1 if $sign eq '-';
-    } else {
-        carp("You gave an offset, $offset, that makes no sense");
-        return undef;
-    }
-    return $newoffset;
-}
-
-sub _offset_from_seconds {
-    my $secoffset  = shift;
-    my $hhmmoffset = 0;
-
-    if ( $secoffset ne '0' ) {
-        my ( $sign, $secs ) = ( "", "" );
-        ( $sign, $secs ) = $secoffset =~ /([+-])?(\d+)/;
-
-        # throw in a + to make this look like an offset if positive
-        $sign = "+" unless $sign;
-
-        # NOTE: the following code will return "+0000" if you give it a number
-        # of seconds that are a multiple of a day. However, for speed reasons
-        # I'm not going to write in a comparison to reformat that back to 0.
-        # 
-        my $hours = $secs / ( 60 * 60 );
-        $hours = $hours % 24;
-        my $mins = ( $secs % ( 60 * 60 ) ) / 60;
-        $hhmmoffset = sprintf( '%s%02d%02d', $sign, $hours, $mins );
-
-    }
-
-    return $hhmmoffset;
-}
-
-sub offset {
-    my ( $self, $offset ) = @_;
-    my $newoffset = undef;
-
-    if ( defined($offset) ) {    # Passed in a new value
-        $newoffset = _offset_to_seconds($offset);
-
-        unless ( defined $newoffset ) { return undef; }
-
-        # since we're internally storing in GMT, we need to
-        # adjust the time we were given by the offset so that
-        # the internal date/time will be right.
-
-        if ( $self->{offset} ) {
-
-            # figure out whether there's a difference between
-            # the existing offset and the offset we were given.
-            # If so, adjust appropriately.
-            my $offsetdiff = $self->{offset} - $newoffset;
-
-            if ($offsetdiff) {
-                $self->{offset} = $newoffset;
-                $self->add( seconds => $offsetdiff );
-            } else {
-
-                # leave the offset the way it is
-            }
-        } else {
-            $self->add( seconds => -$newoffset );
-            $self->{offset} = $newoffset;
-        }
-
-    } else {
-        if ( $self->{offset} ) {
-            $offset = _offset_from_seconds( $self->{offset} );
-        } else {
-            $offset = 0;
-        }
-    }
-
-    return $offset;
+    return $dt;
 }
 
 sub add {
     my $self = shift;
     carp "DateTime::add was called without an attribute arg" unless @_;
-    ( $self->{rd_days}, $self->{rd_secs}) =
-        _add($self->{rd_days}, $self->{rd_secs}, @_);
+    ( $self->{utc_rd_days}, $self->{utc_rd_secs} ) =
+        _add($self->{utc_rd_days}, $self->{utc_rd_secs}, @_);
+
+    $self->_calc_local_rd;
+
     return $self;
 }
 
@@ -374,6 +290,40 @@ sub _add {
     _normalize_seconds( $rd, $secs );
 }
 
+sub duration_value {
+    my $str = shift;
+
+    my @temp = $str =~ m{
+            ([\+\-])?   (?# Sign)
+            (P)     (?# 'P' for period? This is our magic character)
+            (?:
+                (?:(\d+)Y)? (?# Years)
+                (?:(\d+)M)? (?# Months)
+                (?:(\d+)W)? (?# Weeks)
+                (?:(\d+)D)? (?# Days)
+            )?
+            (?:T        (?# Time prefix)
+                (?:(\d+)H)? (?# Hours)
+                (?:(\d+)M)? (?# Minutes)
+                (?:(\d+)S)? (?# Seconds)
+            )?
+                }x;
+    my ( $sign, $magic ) = @temp[ 0 .. 1 ];
+    my ( $years, $months, $weeks, $days, $hours, $mins, $secs ) =
+      map { defined($_) ? $_ : 0 } @temp[ 2 .. $#temp ];
+
+    unless ( defined($magic) ) {
+        carp "Invalid duration: $str";
+        return undef;
+    }
+    $sign = ( ( defined($sign) && $sign eq '-' ) ? -1 : 1 );
+
+    my $s = $sign * ( $secs + ( $mins * 60 ) + ( $hours * 3600 ) );
+    my $d = $sign * ( $days + ( $weeks * 7 ) );
+    my $m = $sign * ( $months + ( $years * 12 ) );
+    return ( $d, $s, $m );
+}
+
 sub _add_overload {
     my $one = shift;
     my $two = shift;
@@ -411,40 +361,6 @@ sub _normalize_seconds {
     ($_[0] += $adj), ($_[1] -= $adj*86400);
 }
 
-sub duration_value {
-    my $str = shift;
-
-    my @temp = $str =~ m{
-            ([\+\-])?   (?# Sign)
-            (P)     (?# 'P' for period? This is our magic character)
-            (?:
-                (?:(\d+)Y)? (?# Years)
-                (?:(\d+)M)? (?# Months)
-                (?:(\d+)W)? (?# Weeks)
-                (?:(\d+)D)? (?# Days)
-            )?
-            (?:T        (?# Time prefix)
-                (?:(\d+)H)? (?# Hours)
-                (?:(\d+)M)? (?# Minutes)
-                (?:(\d+)S)? (?# Seconds)
-            )?
-                }x;
-    my ( $sign, $magic ) = @temp[ 0 .. 1 ];
-    my ( $years, $months, $weeks, $days, $hours, $mins, $secs ) =
-      map { defined($_) ? $_ : 0 } @temp[ 2 .. $#temp ];
-
-    unless ( defined($magic) ) {
-        carp "Invalid duration: $str";
-        return undef;
-    }
-    $sign = ( ( defined($sign) && $sign eq '-' ) ? -1 : 1 );
-
-    my $s = $sign * ( $secs + ( $mins * 60 ) + ( $hours * 3600 ) );
-    my $d = $sign * ( $days + ( $weeks * 7 ) );
-    my $m = $sign * ( $months + ( $years * 12 ) );
-    return ( $d, $s, $m );
-}
-
 sub subtract {
     my ( $date1, $date2, $reversed ) = @_;
     my $dur;
@@ -468,8 +384,8 @@ sub subtract {
     # If $date2 is a DateTime object, or some class thereof, we should
     # subtract and get a duration
 
-            my $days = $date1->{rd_days} - $date2->{rd_days};
-            my $secs = $date1->{rd_secs} - $date2->{rd_secs};
+            my $days = $date1->{utc_rd_days} - $date2->{utc_rd_days};
+            my $secs = $date1->{utc_rd_secs} - $date2->{utc_rd_secs};
 
             return DateTime::Duration->new(
               days    => $days,
@@ -492,35 +408,21 @@ sub subtract {
 
 }
 
-sub clone {
-    return bless { %{ $_[0] } }, ref $_[0];
-}
-
-sub utc_datetime {
-    my $self = shift;
-
-    my $dt = $self->clone;
-
-    $dt->{time_zone} = DateTime::TimeZone::UTC->new;
-
-    return $dt;
-}
-
 sub compare {
     my ( $class, $dt1, $dt2 ) = ref $_[0] ? ( undef, @_ ) : @_;
 
     return undef unless defined $dt2;
 
     # One or more days different
-    if ( $dt1->{rd_days} < $dt2->{rd_days} ) {
+    if ( $dt1->{utc_rd_days} < $dt2->{utc_rd_days} ) {
         return -1;
-    } elsif ( $dt1->{rd_days} > $dt2->{rd_days} ) {
+    } elsif ( $dt1->{utc_rd_days} > $dt2->{utc_rd_days} ) {
         return 1;
 
     # They are the same day
-    } elsif ( $dt1->{rd_secs} < $dt2->{rd_secs} ) {
+    } elsif ( $dt1->{utc_rd_secs} < $dt2->{utc_rd_secs} ) {
         return -1;
-    } elsif ( $dt1->{rd_secs} > $dt2->{rd_secs} ) {
+    } elsif ( $dt1->{utc_rd_secs} > $dt2->{utc_rd_secs} ) {
         return 1;
     }
 
@@ -528,52 +430,22 @@ sub compare {
     return 0;
 }
 
-=begin internal
+sub epoch {
+    my $self = shift;
 
-Calculates the day of the year at the end of a month.
-
-=end internal
-
-=cut
-
-BEGIN {
-
-    @MonthLengths =
-        ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
-
-    @LeapYearMonthLengths = @MonthLengths;
-    $LeapYearMonthLengths[1]++;
-
-    my $x = 0;
-    foreach my $length ( @MonthLengths )
-    {
-        push @EndofMonthDayOfYear, $x;
-        $x += $length;
-    }
-
-    @EndofMonthDayOfLeapYear = @EndofMonthDayOfYear;
-
-    for ( 1 .. 11 ) {
-        $EndofMonthDayOfLeapYear[$_] = $EndofMonthDayOfYear[$_] + 1;
-    }
-}
-
-sub end_of_month_day_of_year {
-    return Date::Leapyear::isleap(shift) ? @EndofMonthDayOfLeapYear : @EndofMonthDayOfYear;
-}
-
-sub last_day_of_month {
-    shift;
-    my %p = validate( @_, { year  => { type => SCALAR },
-                            month => { type => SCALAR },
-                          } );
-
+    # timegm may die if given components outside of the ranges it
+    # can handle.  In that case return undef.
     return
-        ( Date::Leapyear::isleap( $p{year} ) ?
-          $MonthLengths[ $p{month} - 1 ] :
-          $LeapYearMonthLengths[ $p{month} - 1 ]
-        );
+        eval { Time::Local::timegm( $self->sec,
+                                    $self->min,
+                                    $self->hour,
+                                    $self->day,
+                                    $self->month_0,
+                                    $self->year - 1900,
+                                  ) };
 }
+
+sub offset { $_[0]->{tz}->offset_for_datetime( $_[0] ) }
 
 =begin internal
 
@@ -661,17 +533,64 @@ sub greg2rd {
       ( $y / 100 * 36524 + $y / 400 ) - 306;
 }
 
+=begin internal
+
+Calculates the day of the year at the end of a month.
+
+=end internal
+
+=cut
+
+BEGIN {
+
+    @MonthLengths =
+        ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
+
+    @LeapYearMonthLengths = @MonthLengths;
+    $LeapYearMonthLengths[1]++;
+
+    my $x = 0;
+    foreach my $length ( @MonthLengths )
+    {
+        push @EndofMonthDayOfYear, $x;
+        $x += $length;
+    }
+
+    @EndofMonthDayOfLeapYear = @EndofMonthDayOfYear;
+
+    for ( 1 .. 11 ) {
+        $EndofMonthDayOfLeapYear[$_] = $EndofMonthDayOfYear[$_] + 1;
+    }
+}
+
+sub end_of_month_day_of_year {
+    return Date::Leapyear::isleap(shift) ? @EndofMonthDayOfLeapYear : @EndofMonthDayOfYear;
+}
+
+sub last_day_of_month {
+    shift;
+    my %p = validate( @_, { year  => { type => SCALAR },
+                            month => { type => SCALAR },
+                          } );
+
+    return
+        ( Date::Leapyear::isleap( $p{year} ) ?
+          $MonthLengths[ $p{month} - 1 ] :
+          $LeapYearMonthLengths[ $p{month} - 1 ]
+        );
+}
+
 sub week {
      my $self = shift;
 
      my $mid_week = $self->clone;
      # mid week if Sunday is the first day of the week
-     $mid_week->add( days => 4 - ( ( $self->{rd_days} % 7 ) + 1 ) );
+     $mid_week->add( days => 4 - ( ( $self->{local_rd_days} % 7 ) + 1 ) );
      my $week_year = $mid_week->year;
 
      my $jan_four = greg2rd( $week_year, 1, 4 );
      my $first_week = $jan_four - ( $jan_four % 7 );
-     my $week_number = int( ($self->{rd_days} - $first_week) / 7 ) + 1;
+     my $week_number = int( ($self->{local_rd_days} - $first_week) / 7 ) + 1;
 
      return ( $week_year, $week_number );
 }
@@ -726,7 +645,7 @@ sub day_of_month_0 { $_[0]->day_of_month - 1 }
 
 sub day_of_week {
     my $self = shift;
-    return ($self->{rd_days} + 6) % 7 + 1;
+    return ($self->{local_rd_days} + 6) % 7 + 1;
 }
 *wday = \&day_of_week;
 *dow  = \&day_of_week;
@@ -797,7 +716,7 @@ sub iso8601 {
 
 sub is_leap_year { Date::Leapyear::isleap( $_[0]->year ) }
 
-sub _as_greg { rd2greg( $_[0]->{rd_days} ) }
+sub _as_greg { rd2greg( $_[0]->{local_rd_days} ) }
 
 my %formats =
     ( 'a' => sub { $_[0]->day_abbr },
@@ -846,8 +765,8 @@ my %formats =
       'X' => sub { $_[0]->strftime( $_[0]->{language}->preferred_time_format ) },
       'y' => sub { sprintf( '%02d', substr( $_[0]->year, -2 ) ) },
       'Y' => sub { return $_[0]->year },
-      'z' => sub { return 'TZ abbr'; $_[0]->{timezone}->abbreviation },
-      'Z' => sub { return $_[0]->offset; $_[0]->{timezone}->offset_string },
+      'z' => sub { $_[0]->{tz}->short_name_for_datetime( $_[0] ) },
+      'Z' => sub { DateTime::TimeZone::offset_as_string( $_[0]->offset ) },
       '%' => sub { '%' },
     );
 
@@ -892,7 +811,7 @@ minutes, and hours of the current time.
 
 sub parsetime {
     my $self = shift;
-    my $time = $self->{rd_secs};
+    my $time = $self->{local_rd_secs};
 
     my $hour = int( $time / 3600 );
     $time -= $hour * 3600;
@@ -901,19 +820,6 @@ sub parsetime {
     $time -= $min * 60;
 
     return ( int($time), $min, $hour );
-}
-
-# INTERNAL ONLY: figures out what the UTC offset (in HHMM) is
-# is for the current machine.
-sub _calc_local_offset {
-
-    my @t = gmtime;
-
-    my $local = Time::Local::timelocal(@t);
-    my $gm    = Time::Local::timegm(@t);
-
-    my $secdiff = $gm - $local;
-    return _offset_from_seconds($secdiff);
 }
 
 sub _error {
