@@ -7,9 +7,6 @@ _rd2ymd, so as to make them look more normal when used in subclasses.
 
 [BUG FIXES]
 
-- Fix jd() method for datetimes before year -4712 and after year 3267.
-Reported by Eugene van der Pijll.
-
 - The last_day_of_month() method had the DateTime class hard-coded in
 it.  Reported by Eugene van der Pijll.
 
