@@ -17,23 +17,13 @@ TODO list for Perl module DateTime
       DateTime new/truncate/accessors
       DateTime::Duration new/accessors
 
-- jd, mjd should return nanosecond precision?
-
 * Other
-
-- overloading for DateTime::Duration: division? (duration / int).
 
 - document RD days/seconds(/nanosecs?) in a separate document that
 will be the reference for DateTime.pm internals, as well as being
 useful for other calendar implementors.
 
-- Time::Local is now a core module, with no CPAN existence.  But the
-version that works best is in 5.8.0, and not otherwise available.
-
 - thorough tests for subtraction & addition overloading
-
-- by default, reject out of bounds datetime values (minute 75) but
-offer a "normalize" parameter that will wrap these.
 
 
 NOTE TO FUTURE DEVELOPERS:
