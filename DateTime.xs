@@ -15,20 +15,66 @@
 #define DAYS_PER_4_YEARS    1461
 #define MARCH_1             306
 
+const int PREVIOUS_MONTH_DOY[12] =  { 0,
+                                      31,
+                                      59,
+                                      90,
+                                      120,
+                                      151,
+                                      181,
+                                      212,
+                                      243,
+                                      273,
+                                      304,
+                                      334 };
+
+const int PREVIOUS_MONTH_DOLY[12] = { 0,
+                                      31,
+                                      60,
+                                      91,
+                                      121,
+                                      152,
+                                      182,
+                                      213,
+                                      244,
+                                      274,
+                                      305,
+                                      335 };
+
+IV
+_real_is_leap(IV y)
+{
+  IV r = 0;
+
+  if (y % 400 == 0) {
+    r = 1;
+  } else if (y % 100 == 0) {
+    r = 0;
+  } else if (y % 4 == 0) {
+    r = 1;
+  }
+
+  return r;
+}
 
 MODULE = DateTime       PACKAGE = DateTime
 
 void
-_rd2greg(self, d)
+_rd2greg(self, d, extra = 0)
      SV* self;
      IV d;
+     IV extra;
 
      PREINIT:
         IV y, m;
         IV c;
         IV yadj = 0;
+        IV dow, doy;
+        IV rd_days;
 
      PPCODE:
+        rd_days = d;
+
         if (d > RANGE_CUTOFF) {
           yadj = (d - DAYS_PER_400_YEARS + MARCH_1 ) / DAYS_PER_400_YEARS + 1;
           d -= (yadj * DAYS_PER_400_YEARS) - MARCH_1;
@@ -54,10 +100,23 @@ _rd2greg(self, d)
           m -= 12;
         }
 
-        EXTEND(SP, 3);
+        EXTEND(SP, extra ? 5 : 3);
         PUSHs(sv_2mortal(newSViv(y)));
         PUSHs(sv_2mortal(newSViv(m)));
         PUSHs(sv_2mortal(newSViv(d)));
+
+        if (extra) {
+          dow = ((rd_days + 6) % 7) + 1;
+          PUSHs(sv_2mortal(newSViv(dow)));
+
+          if (_real_is_leap(y)) {
+            doy = PREVIOUS_MONTH_DOLY[m - 1] + d;
+          } else {
+            doy = PREVIOUS_MONTH_DOY[m - 1] + d;
+          }
+
+          PUSHs(sv_2mortal(newSViv(doy)));
+        }
 
 void
 _greg2rd(self, y, m, d)
@@ -96,10 +155,10 @@ _greg2rd(self, y, m, d)
 void
 _seconds_as_components(self, secs)
      SV* self;
-     int secs;
+     IV secs;
 
      PREINIT:
-        int h, m, s;
+        IV h, m, s;
 
      PPCODE:
         h = secs / 3600;
@@ -119,9 +178,9 @@ void _normalize_seconds(days, secs)
      SV* secs;
 
      PPCODE:
-        int d = SvIV(days);
-        int s = SvIV(secs);
-        int adj;
+        IV d = SvIV(days);
+        IV s = SvIV(secs);
+        IV adj;
 
         if (s < 0) {
           adj = (s - 86399) / 86400;
@@ -144,3 +203,11 @@ void _time_as_seconds(self, h, m, s)
      PPCODE:
         EXTEND(SP, 1);
         PUSHs(sv_2mortal(newSViv(h * 3600 + m * 60 + s)));
+
+void _is_leap(self, y)
+     SV* self;
+     IV y;
+
+     PPCODE:
+        EXTEND(SP, 1);
+        PUSHs(sv_2mortal(newSViv(_real_is_leap(y))));
