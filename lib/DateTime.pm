@@ -648,7 +648,9 @@ use constant INFINITY     =>       100 ** 100 ** 100 ;
 use constant NEG_INFINITY => -1 * (100 ** 100 ** 100);
 
 sub _compare_overload {
-    return $_[2] ? $_[1]->compare( $_[0] ) : $_[0]->compare( $_[1] );
+    # note: $_[1]->compare( $_[0] ) is an error 
+    #    when $_[1] is not a DateTime (such as the INFINITY value)
+    return $_[2] ? - $_[0]->compare( $_[1] ) : $_[0]->compare( $_[1] );
 }
 
 sub compare {
