@@ -11,7 +11,7 @@ by Flavio Glock.
 Implemented by Flavio Glock.
 
 - Added complete support for leap seconds (through use of
-DateTime::LeapSecond).  Most implemented by Flavio Glock.
+DateTime::LeapSecond).  Mostly implemented by Flavio Glock.
 
 
 0.09     2003-04-05 (the "liberation through violence" release)
