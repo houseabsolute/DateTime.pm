@@ -33,7 +33,7 @@ use Time::Local ();
 # early.
 #
 # 3rd parameter ( $_[2] ) means the parameters are 'reversed'.
-# see: "Calling conventions for bynary operations" in overload docs.
+# see: "Calling conventions for binary operations" in overload docs.
 #
 use overload ( 'fallback' => 1,
                '<=>' => '_compare_overload',
@@ -43,6 +43,15 @@ use overload ( 'fallback' => 1,
              );
 
 my( @MonthLengths, @LeapYearMonthLengths );
+
+BEGIN
+{
+    @MonthLengths =
+        ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
+
+    @LeapYearMonthLengths = @MonthLengths;
+    $LeapYearMonthLengths[1]++;
+}
 
 {
     # I'd rather use Class::Data::Inheritable for this, but there's no
@@ -281,15 +290,6 @@ sub last_day_of_month
 }
 
 sub clone { bless { %{ $_[0] } }, ref $_[0] }
-
-BEGIN
-{
-    @MonthLengths =
-        ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
-
-    @LeapYearMonthLengths = @MonthLengths;
-    $LeapYearMonthLengths[1]++;
-}
 
 sub year    { $_[0]->{local_c}{year} }
 
