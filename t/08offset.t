@@ -73,8 +73,6 @@ is( fake_ical($t1), '19700101Z', 'offset can be reset to zero seconds' );
 # offset-valued time
 
 {
-    my $loctime = '20020405T120000';
-    my $utctime = '20020405T200000Z';
     my $t2 = DateTime->new( year => 2002, month => 4, day => 5,
                             hour => 12,
                             offset => '-0800' );
