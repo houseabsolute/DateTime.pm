@@ -879,6 +879,42 @@ string may be an Olson DB time zone name ("America/Chicago"), an
 offset string ("+0630"), or the words "floating" or "local".  See the
 C<DateTime::TimeZone> documentation for more details.
 
+=head3 Ambiguous Local Times
+
+Because of Daylight Saving Time, it is possible to specify a local
+time that is ambiguous.  For example, in the US in 2003, the
+transition from to saving to standard time will occur on October 26,
+at 02:00:00 local time.  The local clock changes from 01:59:59 (saving
+time) to 01:00:00 (standard time).  This means that the hour from
+01:00:00 through 01:59:59 actually occurs twice, though the UTC time
+continues to move forward.
+
+If you specify an ambiguous time, then the earliest UTC time is always
+used, in effect always choosing saving time.  In this case, you can
+simply add an hour to the object in order to move to standard time,
+for example:
+
+  # This object represent 01:30:00 saving time
+  my $dt = DateTime->new( year   => 2003,
+                          month  => 4,
+                          day    => 6,
+                          hour   => 1,
+                          minute => 30,
+                          second => 0,
+                          time_zone => 'America/Chicago',
+                        );
+
+  print $dt->hms;  # prints 01:30:00
+
+  # Now the object represent 01:30:00 standard time
+  $dt->add( hours => 1 );
+
+  print $dt->hms;  # still prints 01:30:00
+
+Alternately, you could create the object with the UTC time zone, and
+then call the C<set_time_zone()> method to change the time zone.  This
+would allow you to unambiguously specify the datetime.
+
 =item * from_epoch( epoch => $epoch, ... )
 
 This class method can be used to construct a new DateTime object from
