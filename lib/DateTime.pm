@@ -24,7 +24,6 @@ use overload ( 'fallback' => 1,
                'cmp' => 'compare',
                '-' => '_subtract_overload',
                '+' => '_add_overload',
-               '""' => '_stringify',
              );
 
 my( @MonthLengths, @LeapYearMonthLengths );
@@ -194,7 +193,7 @@ sub from_epoch {
     $p{year} += 1900;
     $p{month}++;
 
-    # pass other args like time_zone to constructor
+    # should tz be floating in some cases
     return $class->new( %args, %p, time_zone => 'UTC' );
 }
 
@@ -699,9 +698,6 @@ sub set_time_zone {
         $self->_calc_local_rd;
     }
 }
-
-# like "scalar localtime()" in Perl
-sub _stringify { $_[0]->strftime( '%a, %d %b %Y %H:%M:%S %Z' ) }
 
 
 1;
@@ -1259,8 +1255,8 @@ produce the date April 1, 2003, not March 29, 2003.
 =head2 Overloading
 
 This module explicitly overloads the addition (+), subtraction (-),
-string and numbercomparison, and stringification operators.  This
-means that the following all do sensible things:
+string and numberic comparison operators.  This means that the
+following all do sensible things:
 
   my $new_dt = $dt + $duration_obj;
 
@@ -1273,9 +1269,6 @@ means that the following all do sensible things:
 Additionally, the fallback parameter is set to true, so other
 derivable operators (+=, -=, etc.) will work properly.  Do not expect
 increment (++) or decrement (--) to do anything useful.
-
-The stringification is equivalent to that produced by C<scalar
-localtime()>.
 
 =head2 strftime Specifiers
 
