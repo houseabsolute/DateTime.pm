@@ -4,13 +4,24 @@ use strict;
 
 use vars qw($VERSION);
 
-$VERSION = '0.08';
+BEGIN
+{
+    $VERSION = '0.08';
 
-use DynaLoader;
+    my $loaded = 0;
+    unless ( $ENV{PERL_DATETIME_PP} )
+    {
+        require DynaLoader;
 
-@DateTime::ISA = 'DynaLoader';
+        @DateTime::ISA = 'DynaLoader';
 
-bootstrap DateTime $DateTime::VERSION;
+        bootstrap DateTime $DateTime::VERSION;
+
+        $loaded = 1;
+    }
+
+    require DateTimePP unless $loaded;
+}
 
 use DateTime::Duration;
 use DateTime::Language;

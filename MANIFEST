@@ -8,6 +8,7 @@ Makefile.PL
 README
 TODO
 lib/DateTime.pm
+lib/DateTimePP.pm
 lib/DateTime/Duration.pm
 lib/DateTime/Language.pm
 lib/DateTime/Language/Afar.pm
