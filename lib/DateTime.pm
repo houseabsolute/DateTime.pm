@@ -785,9 +785,6 @@ sub subtract_datetime
     my $self = shift;
     my $dt = shift;
 
-    my $is_floating = $self->time_zone->is_floating &&
-                      $dt->time_zone->is_floating;
-
     # We only want a negative duration if $dt > $self.
     my ( $bigger, $smaller, $sign ) =
         ( $self >= $dt ?
@@ -795,11 +792,15 @@ sub subtract_datetime
           ( $dt, $self, -1 )
         );
 
+    my $is_floating = $self->time_zone->is_floating &&
+                      $dt->time_zone->is_floating;
+
     my ( $days, $seconds, $nanoseconds ) =
         _adjust_for_positive_difference
             ( $bigger->{utc_rd_days}, $smaller->{utc_rd_days},
               $bigger->{utc_rd_secs}, $smaller->{utc_rd_secs},
               $bigger->{rd_nanosecs}, $smaller->{rd_nanosecs},
+              $is_floating,
             );
 
     $_ *= $sign for $days, $seconds, $nanoseconds;
@@ -814,7 +815,7 @@ sub subtract_datetime
 
 sub _adjust_for_positive_difference
 {
-    my ( $day1, $day2, $sec1, $sec2, $nano1, $nano2 ) = @_;
+    my ( $day1, $day2, $sec1, $sec2, $nano1, $nano2, $is_floating ) = @_;
 
     if ( $nano1 < $nano2 )
     {
@@ -824,9 +825,9 @@ sub _adjust_for_positive_difference
 
     if ( $sec1 < $sec2 )
     {
-        $sec1 += DateTime::LeapSecond::day_length($day1);
-
         $day1--;
+
+        $sec1 += $is_floating ? 86400 : DateTime::LeapSecond::day_length($day1);
     }
 
     return ( $day1 - $day2,
