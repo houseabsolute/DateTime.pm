@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 21;
+use Test::More tests => 24;
 
 use DateTime;
 
@@ -92,16 +92,34 @@ ok( ($date1 <=> $infinity) == -1, 'Comparison overload $a <=> inf');
 ok( ($infinity <=> $date1) == 1, 'Comparison overload $inf <=> $a');
 
 # comparison with floating time
+{
+    my $date1 = DateTime->new( year => 1997, month => 10, day => 24,
+                               hour => 12, minute => 0, second => 0,
+                               time_zone => 'America/Chicago' );
+    my $date2 = DateTime->new( year => 1997, month => 10, day => 24,
+                               hour => 12, minute => 0, second => 0,
+                               time_zone => 'floating' );
 
-$date1 = DateTime->new( year => 1997, month => 10, day => 24,
-                        hour => 12, minute => 0, second => 0,
-                        time_zone => 'America/Chicago' );
-$date2 = DateTime->new( year => 1997, month => 10, day => 24,
-                        hour => 12, minute => 0, second => 0,
-                        time_zone => 'floating' );
+    is( DateTime->compare( $date1, $date2 ), 0, 'Comparison with floating time (cmp)' );
+    is( ($date1 <=> $date2), 0, 'Comparison with floating time (<=>)' );
+    is( ($date1 cmp $date2), 0, 'Comparison with floating time (cmp)' );
+    is( DateTime->compare_ignore_floating( $date1, $date2 ), 1,
+        'Comparison with floating time (cmp)' );
+}
 
-is( DateTime->compare( $date1, $date2 ), 0, 'Comparison with floating time (cmp)' );
-is( ($date1 <=> $date2), 0, 'Comparison with floating time (<=>)' );
-is( ($date1 cmp $date2), 0, 'Comparison with floating time (cmp)' );
-is( DateTime->compare_ignore_floating( $date1, $date2 ), 1,
-    'Comparison with floating time (cmp)' );
+# sub-second
+{
+    my $date1 = DateTime->new( year => 1997, month => 10, day => 24,
+                               hour => 12, minute => 0, second => 0,
+                               nanosecond => 100,
+                             );
+
+    my $date2 = DateTime->new( year => 1997, month => 10, day => 24,
+                               hour => 12, minute => 0, second => 0,
+                               nanosecond => 200,
+                             );
+
+    is( DateTime->compare( $date1, $date2 ), -1, 'Comparison with floating time (cmp)' );
+    is( ($date1 <=> $date2), -1, 'Comparison with floating time (<=>)' );
+    is( ($date1 cmp $date2), -1, 'Comparison with floating time (cmp)' );
+}
