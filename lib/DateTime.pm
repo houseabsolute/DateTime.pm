@@ -28,7 +28,7 @@ BEGIN
 
     if ($loaded)
     {
-        require DateTimeWin32
+        require DateTimePPExtra
             unless defined &DateTime::_normalize_seconds;
     }
     else

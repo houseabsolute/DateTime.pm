@@ -27,7 +27,7 @@ lib/DateTime/Language/Tigre.pm
 lib/DateTime/Language/TigrinyaEritrean.pm
 lib/DateTime/Language/TigrinyaEthiopian.pm
 lib/DateTimePP.pm
-lib/DateTimeWin32.pm
+lib/DateTimePPExtra.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
