@@ -265,7 +265,7 @@ _normalize_leap_seconds(self, days, secs)
           SET_LEAP_SECONDS(d, leap_seconds1);
           SET_LEAP_SECONDS(new_day, leap_seconds2);
 
-          delta_seconds = ( 86400 * delta_days ) + (leap_seconds2 - leap_seconds1);
+          delta_seconds = (SECONDS_PER_DAY * delta_days) + (leap_seconds2 - leap_seconds1);
 
           s -= delta_seconds;
 
