@@ -51,9 +51,9 @@ sub day_abbreviation  { $_[0]->{day_abbreviations}[ $_[1]->day_of_week_0 ] }
 
 sub am_pm { $_[0]->{am_pm}[ $_[1]->hour < 12 ? 0 : 1 ] }
 
-sub preferred_datetime_format { '%m/%d/%y %H:%M:%S' }
-sub preferred_date_format { '%m/%d/%y' }
-sub preferred_time_format { '%H:%M:%S' }
+#sub preferred_datetime_format { '%m/%d/%y %H:%M:%S' }
+#sub preferred_date_format { '%m/%d/%y' }
+#sub preferred_time_format { '%H:%M:%S' }
 
 1;
 
@@ -159,21 +159,6 @@ abbreviation.
 =item * am_pm( $dt )
 
 Given a C<DateTime> object, returns the correct AM or PM abbreviation.
-
-=item * preferred_datetime_format
-
-Returns a C<strftime()> format string.  This is used to implement the
-"%c" format specifier.
-
-=item * preferred_date_format
-
-Returns a C<strftime()> format string.  This is used to implement the
-"%x" format specifier.
-
-=item * preferred_time_format
-
-Returns a C<strftime()> format string.  This is used to implement the
-"%X" format specifier.
 
 =back
 
