@@ -880,12 +880,6 @@ sub is_infinite { 0 }
 # added for benefit of DateTime::TimeZone
 sub utc_year { $_[0]->{utc_year} }
 
-sub add { return shift->add_duration( DateTime::Duration->new(@_) ) }
-
-sub subtract { return shift->subtract_duration( DateTime::Duration->new(@_) ) }
-
-sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
-
 # returns a result that is relative to the first datetime
 sub subtract_datetime
 {
@@ -1108,6 +1102,12 @@ sub _subtract_overload
     }
     # handle other cases?
 }
+
+sub add { return shift->add_duration( DateTime::Duration->new(@_) ) }
+
+sub subtract { return shift->subtract_duration( DateTime::Duration->new(@_) ) }
+
+sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
 sub add_duration
 {
