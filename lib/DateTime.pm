@@ -4,7 +4,7 @@ use strict;
 
 use vars qw($VERSION);
 
-$VERSION = '0.01_00';
+$VERSION = '0.02';
 
 use Date::Leapyear ();
 use DateTime::Duration;
