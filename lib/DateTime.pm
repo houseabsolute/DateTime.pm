@@ -845,6 +845,19 @@ sub epoch
     return $self->{utc_c}{epoch};
 }
 
+sub hires_epoch
+{
+    my $self = shift;
+
+    my $epoch = $self->epoch;
+
+    return undef unless defined $epoch;
+
+    my $nano = $self->{rd_nanosecs} / MAX_NANOSECONDS;
+
+    return $epoch + $nano;
+}
+
 sub is_finite { 1 }
 sub is_infinite { 0 }
 
@@ -1784,17 +1797,26 @@ is implemented using C<Time::Local>, which uses the Unix epoch even on
 machines with a different epoch (such as MacOS).  Datetimes before the
 start of the epoch will be returned as a negative number.
 
+This return value from this method is always an integer.
+
 Since the epoch does not account for leap seconds, the epoch time for
 1971-12-31T23:59:60 (UTC) is exactly the same as that for
 1972-01-01T00:00:00.
 
-Since epoch times cannot represent many dates on most platforms, this
+Epoch times cannot represent many dates on most platforms, and this
 method may simply return undef in some cases.
 
 Using your system's epoch time may be error-prone, since epoch times
 have such a limited range on 32-bit machines.  Additionally, the fact
 that different operating systems have different epoch beginnings is
 another source of possible bugs.
+
+=item * hires_epoch
+
+Returns the epoch as a floating point number.  The floating point
+portion of the value represents the nanosecond value of the object.
+This method is provided for compatibility with the C<Time::HiRes>
+module.
 
 =item * is_finite, is_infinite
 

@@ -22,6 +22,9 @@ length.
 the post-decimal portion into nanoseconds.  This was done in order to
 interface more accurately with Time::HiRes.
 
+- Added a DateTime->hires_epoch method that returns a floating point
+value for epoch, also for compatibility with Time::HiRes.
+
 [ BUG FIXES ]
 
 - Fix epoch() method to work properly with dates greater than 50 years
@@ -61,6 +64,9 @@ Patch by Flavio Glock.
 
 - Comparing a DateTime::Infinite object to a regular datetime could
 cause a fatal error.  Reported by John Peacock.
+
+- Fixed a failure in the 04epoch.t tests on Win32.  Negative epoch
+values don't work on Win32.
 
 [ BACKWARDS INCOMPATIBILITIES ]
 

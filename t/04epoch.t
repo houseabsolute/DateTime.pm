@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 29;
+use Test::More tests => 31;
 
 use DateTime;
 
@@ -92,10 +92,12 @@ use DateTime;
 
 }
 
+my $negative_epoch_ok = defined( (localtime(-1))[0] ) ? 1 : 0;
+
 SKIP:
 {
-    skip 1, 'Negative epoch times do not work on some operating systems, including Win32'
-        if grep { ! defined } localtime(-1);
+    skip 'Negative epoch times do not work on some operating systems, including Win32', 1
+        unless $negative_epoch_ok;
 
     is( DateTime->new( year => 1904 )->epoch, -2082844800,
         "epoch should work back to at least 1904" );
@@ -103,8 +105,8 @@ SKIP:
 
 SKIP:
 {
-    skip 3, 'Negative epoch times do not work on some operating systems, including Win32'
-        if grep { ! defined } localtime(-1);
+    skip 'Negative epoch times do not work on some operating systems, including Win32', 3
+        unless $negative_epoch_ok;
 
     my $dt = DateTime->from_epoch( epoch => -2082844800 );
     is( $dt->year, 1904, 'year should be 1904' );
@@ -115,4 +117,7 @@ SKIP:
 {
     my $dt = DateTime->from_epoch( epoch => 0.5 );
     is( $dt->nanosecond, 500_000_000, 'nanosecond should be 500,000,000 with 0.5 as epoch' );
+
+    is( $dt->epoch, 0, 'epoch should be 0' );
+    is( $dt->hires_epoch, 0.5, 'hires_epoch should be 0.5' );
 }
