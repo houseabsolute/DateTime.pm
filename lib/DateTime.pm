@@ -186,6 +186,19 @@ sub utc_datetime {
     return $dt;
 }
 
+sub set {
+    my $self = shift;
+
+    my %p =
+        ( map { $_ => $self->$_() }
+          qw( year month day hour minute second time_zone )
+        );
+
+    my $new_dt = (ref $self)->new( %p, @_ );
+
+    %$self = %$new_dt;
+}
+
 sub add {
     my $self = shift;
     carp "DateTime::add was called without an attribute arg" unless @_;
@@ -430,23 +443,6 @@ sub compare {
     return 0;
 }
 
-sub epoch {
-    my $self = shift;
-
-    # timegm may die if given components outside of the ranges it
-    # can handle.  In that case return undef.
-    return
-        eval { Time::Local::timegm( $self->sec,
-                                    $self->min,
-                                    $self->hour,
-                                    $self->day,
-                                    $self->month_0,
-                                    $self->year - 1900,
-                                  ) };
-}
-
-sub offset { $_[0]->{tz}->offset_for_datetime( $_[0] ) }
-
 =begin internal
 
     time_as_seconds( $args{hour}, $args{min}, $args{sec} );
@@ -532,6 +528,25 @@ sub greg2rd {
     $d += ( $m * 367 - 1094 ) / 12 + $y % 100 * 1461 / 4 +
       ( $y / 100 * 36524 + $y / 400 ) - 306;
 }
+
+sub epoch {
+    my $self = shift;
+
+    # timegm may die if given components outside of the ranges it
+    # can handle.  In that case return undef.
+    return
+        eval { Time::Local::timegm( $self->sec,
+                                    $self->min,
+                                    $self->hour,
+                                    $self->day,
+                                    $self->month_0,
+                                    $self->year - 1900,
+                                  ) };
+}
+
+sub time_zone { $_[0]->{tz} }
+
+sub offset { $_[0]->{tz}->offset_for_datetime( $_[0] ) }
 
 =begin internal
 
