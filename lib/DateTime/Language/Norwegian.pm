@@ -7,7 +7,7 @@ package DateTime::Language::Norwegian;
 use strict;
 
 use DateTime::Language;
-use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AMPM @OrdinalSuffixes %MonthNames %DayNames $VERSION);
+use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AMPM $VERSION);
 @ISA = qw(DateTime::Language);
 
 
@@ -18,12 +18,6 @@ use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @AM
 @DayAbbreviations = qw(Søn Man Tir Ons Tor Fre Lør Søn);
 
 require DateTime::Language::English;
-@AMPM =   @{DateTime::Language::English::AMPM};
-@OrdinalSuffixes =   @{DateTime::Language::English::OrdinalSuffixes};
-
-@MonthNames{@MonthNames}  = (1 .. scalar(@MonthNames));
-@MonthNames{@MonthAbbreviations} = (1 .. scalar(@MonthAbbreviations));
-@DayNames{@DayNames}  = (0 .. scalar(@DayNames));
-@DayNames{@DayAbbreviations} = (0 .. scalar(@DayAbbreviations));
+@AMPM = @{DateTime::Language::English::AMPM};
 
 1;

@@ -7,7 +7,7 @@ package DateTime::Language::Czech;
 
 use strict;
 
-use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @MonthNames2 @AMPM %MonthNames %DayNames $VERSION);
+use vars qw(@ISA @DayNames @DayAbbreviations @MonthNames @MonthAbbreviations @MonthNames2 @AMPM $VERSION);
 @ISA = qw(DateTime::LanguageDateTime::Format::Generic);
 
 
@@ -22,11 +22,6 @@ for (@MonthNames2)
 @DayAbbreviations = qw(Po Út St Èt Pá So Ne);
 
 @AMPM = qw(dop. odp.);
-
-@MonthNames{@MonthNames}  = (1 .. scalar(@MonthNames));
-@MonthNames{@MonthAbbreviations} = (1 .. scalar(@MonthAbbreviations));
-@DayNames{@DayNames}  = (0 .. scalar(@DayNames));
-@DayNames{@DayAbbreviations} = (0 .. scalar(@DayAbbreviations));
 
 # contact Honza to make sense of this before deleting! - dave
 
