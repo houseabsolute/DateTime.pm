@@ -1370,7 +1370,7 @@ DateTime - A date and time object
 
   $is_leap  = $dt->is_leap_year;
 
-  # these are localizable, see LOCALES section
+  # these are localizable, see Locales section
   $month_name  = $dt->month_name # January, February, ...
   $month_abbr  = $dt->month_abbr # Jan, Feb, ...
   $day_name    = $dt->day_name   # Monday, Tuesday, ...
@@ -1667,12 +1667,12 @@ Returns the month of the year, from 1..12.
 =item * month_name
 
 Returns the name of the current month.  See the
-L<LOCALES|/LOCALES> section for more details.
+L<Locales|/Locales> section for more details.
 
 =item * month_abbr
 
 Returns the abbreviated name of the current month.  See the
-L<LOCALES|/LOCALES> section for more details.
+L<Locales|/Locales> section for more details.
 
 =item * day_of_month, day, mday
 
@@ -1686,12 +1686,12 @@ Monday and 7 being Sunday.
 =item * day_name
 
 Returns the name of the current day of the week.  See the
-L<LOCALES|/LOCALES> section for more details.
+L<Locales|/Locales> section for more details.
 
 =item * day_abbr
 
 Returns the abbreviated name of the current day of the week.  See the
-L<LOCALES|/LOCALES> section for more details.
+L<Locales|/Locales> section for more details.
 
 =item * day_of_year, doy
 
