@@ -64,7 +64,7 @@ MODULE = DateTime       PACKAGE = DateTime
 PROTOTYPES: ENABLE
 
 void
-_rd2greg(self, d, extra = 0)
+_rd2ymd(self, d, extra = 0)
      SV* self;
      IV d;
      IV extra;
@@ -123,7 +123,7 @@ _rd2greg(self, d, extra = 0)
         }
 
 void
-_greg2rd(self, y, m, d)
+_ymd2rd(self, y, m, d)
      SV* self;
      IV y;
      IV m;
