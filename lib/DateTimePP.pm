@@ -153,8 +153,11 @@ sub _seconds_as_components
     shift;
     my $secs = shift;
     my $utc_secs = shift;
+    my $modifier = shift || 0;
 
     use integer;
+
+    $secs -= $modifier;
 
     my $hour = $secs / 3600;
     $secs -= $hour * 3600;
@@ -216,7 +219,7 @@ sub _is_leap_year
 
 sub _day_length { DateTime::LeapSecond::day_length($_[1]) }
 
-sub _leap_seconds { DateTime::LeapSecond::leap_seconds($_[1]) }
+sub _accumulated_leap_seconds { DateTime::LeapSecond::leap_seconds($_[1]) }
 
 
 1;

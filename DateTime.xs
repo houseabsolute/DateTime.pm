@@ -196,15 +196,18 @@ _ymd2rd(self, y, m, d)
         PUSHs(sv_2mortal(newSViv(d)));
 
 void
-_seconds_as_components(self, secs, utc_secs = 0)
+_seconds_as_components(self, secs, utc_secs = 0, secs_modifier = 0)
      SV* self;
      IV secs;
      IV utc_secs;
+     IV secs_modifier;
 
      PREINIT:
         IV h, m, s;
 
      PPCODE:
+        secs -= secs_modifier;
+
         h = secs / 3600;
         secs -= h * 3600;
 
@@ -266,40 +269,24 @@ _normalize_leap_seconds(self, days, secs)
         if (isfinite(SvNV(days)) && isfinite(SvNV(secs))) {
           IV d = SvIV(days);
           IV s = SvIV(secs);
-          IV delta_days;
-          IV new_day;
-          IV delta_seconds;
-          IV leap_seconds1, leap_seconds2;
           IV day_length;          
 
-          if (s < 0) {
-            delta_days = (s - (SECONDS_PER_DAY - 1)) / SECONDS_PER_DAY;
-          } else {
-            delta_days = s / SECONDS_PER_DAY;
-          }
-
-          new_day = d + delta_days;
-
-          SET_LEAP_SECONDS(d, leap_seconds1);
-          SET_LEAP_SECONDS(new_day, leap_seconds2);
-
-          delta_seconds = (SECONDS_PER_DAY * delta_days) + (leap_seconds2 - leap_seconds1);
-
-          s -= delta_seconds;
-
-          SET_DAY_LENGTH(new_day, day_length);
-
-          if (s >= day_length) {
-            s -= day_length;
-            new_day++;
-          } else if (s < 0) {
-            SET_DAY_LENGTH(new_day - 1, day_length);
+          while (s < 0) {
+            SET_DAY_LENGTH(d - 1, day_length);
 
             s += day_length;
-            new_day--;
+            d--;
           }
 
-          sv_setiv(days, (IV) new_day);
+          SET_DAY_LENGTH(d, day_length);
+
+          while (s > day_length - 1) {
+            s -= day_length;
+            d++;
+            SET_DAY_LENGTH(d, day_length);
+          }
+
+          sv_setiv(days, (IV) d);
           sv_setiv(secs, (IV) s);
         }
 
@@ -338,7 +325,19 @@ _day_length(self, utc_rd)
         PUSHs(sv_2mortal(newSViv(day_length)));
 
 void
-_leap_seconds(self, utc_rd)
+_day_has_leap_second(self, utc_rd)
+     SV* self;
+     IV utc_rd;
+
+     PPCODE:
+        IV day_length;
+        SET_DAY_LENGTH(utc_rd, day_length);
+
+        EXTEND(SP, 1);
+        PUSHs(sv_2mortal(newSViv(day_length > 86400 ? 1 : 0)));
+
+void
+_accumulated_leap_seconds(self, utc_rd)
      SV* self;
      IV utc_rd;
 
