@@ -27,7 +27,9 @@ use overload ( 'fallback' => 1,
                '""' => '_stringify',
              );
 
-my( @MonthLengths, @LeapMonthLengths, %AddUnits );
+my( @MonthLengths, @LeapYearMonthLengths,
+    @EndofMonthDayOfYear, @EndofMonthDayOfLeapYear,
+    %AddUnits );
 
 my $LocalZone   = $ENV{TZ} || 0;
 my $LocalOffset = _calc_local_offset();
@@ -522,11 +524,7 @@ sub compare {
 
 =begin internal
 
-Returns the day of the year at the end of a month.
-
-    @MonthLengths  = month_lengths($self->year);
-    $end_march     = $MonthsLengths[3];        # Days at the end of march
-    $start_nov     = $MonthsLengths[ 11 - 1 ]; # Days at the start of nov
+Calculates the day of the year at the end of a month.
 
 =end internal
 
@@ -534,17 +532,28 @@ Returns the day of the year at the end of a month.
 
 BEGIN {
 
-    #                 +  31, 28, 31, 30,  31,  30,  31,  31,  30,  31,  30,  31
-    @MonthLengths = ( 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 );
-    @LeapMonthLengths = @MonthLengths;
+    @MonthLengths =
+        ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
+
+    @LeapYearMonthLengths = @MonthLengths;
+    $LeapYearMonthLengths[1]++;
+
+    my $x = 0;
+    foreach my $length ( @MonthLengths )
+    {
+        push @EndofMonthDayOfYear, $x;
+        $x += $length;
+    }
+
+    @EndofMonthDayOfLeapYear = @EndofMonthDayOfYear;
 
     for ( 2 .. 12 ) {
-        $LeapMonthLengths[$_] = $MonthLengths[$_] + 1;
+        $EndofMonthDayOfLeapYear[$_] = $EndofMonthDayOfYear[$_] + 1;
     }
 }
 
-sub month_lengths {
-    return Date::Leapyear::isleap(shift) ? @LeapMonthLengths : @MonthLengths;
+sub end_of_month_day_of_year {
+    return Date::Leapyear::isleap(shift) ? @EndofMonthDayOfLeapYear : @EndofMonthDayOfYear;
 }
 
 sub last_day_of_month {
@@ -553,7 +562,11 @@ sub last_day_of_month {
                             month => { type => SCALAR },
                           } );
 
-    return (month_lengths( $p{year} ))[ $p{month} - 1 ];
+    return
+        ( Date::Leapyear::isleap( $p{year} ) ?
+          $MonthLengths[ $p{month} - 1 ] :
+          $LeapYearMonthLengths[ $p{month} - 1 ]
+        );
 }
 
 =begin internal
@@ -687,7 +700,7 @@ sub month_abbr {
 
 sub day_of_year {
     my $self = shift;
-    my @m = month_lengths($self->year);
+    my @m = end_of_month_day_of_year($self->year);
     return $m[$self->month_0] + $self->day;
 }
 
