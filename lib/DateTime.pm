@@ -726,9 +726,18 @@ sub set {
 sub set_time_zone {
     my ( $self, $tz ) = @_;
 
+    my $was_floating = $self->{tz}->is_floating;
+
     $self->{tz} = ref $tz ? $tz : DateTime::TimeZone->new( name => $tz );
 
-    $self->_calc_local_rd;
+    if ( $self->{tz}->is_floating && ! $was_floating )
+    {
+        $self->_calc_utc_rd;
+    }
+    elsif ( ! $was_floating )
+    {
+        $self->_calc_local_rd;
+    }
 }
 
 # like "scalar localtime()" in Perl
@@ -1143,6 +1152,10 @@ For example:
   $dt->set_time_zone( '-0400' );
 
   print $dt->hour; # prints 17
+
+If the old time zone was a floating time zone, then no adjustments are
+made.  If the new time zone is floating, then the I<UTC> time is
+adjusted in order to leave the local time untouched.
 
 Fans of Tsai Ming-Liang's films will be happy to know that this does
 work:
