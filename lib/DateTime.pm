@@ -38,10 +38,12 @@ my( @MonthLengths, @LeapYearMonthLengths );
     # way to add the module-loading behavior to an accessor it
     # creates, despite what its docs say!
     my $DefaultLanguage;
-    sub DefaultLanguage {
+    sub DefaultLanguage
+    {
         my $class = shift;
 
-        if (@_) {
+        if (@_)
+        {
             my $lang = shift;
 
             DateTime::Language->load($lang);
@@ -54,7 +56,8 @@ my( @MonthLengths, @LeapYearMonthLengths );
 }
 __PACKAGE__->DefaultLanguage('English');
 
-sub new {
+sub new
+{
     my $class = shift;
     my %args = validate( @_,
                          { year   => { type => SCALAR },
@@ -101,7 +104,8 @@ sub new {
     return $self;
 }
 
-sub _calc_utc_rd {
+sub _calc_utc_rd
+{
     my $self = shift;
 
     delete $self->{utc_c};
@@ -120,17 +124,21 @@ sub _calc_utc_rd {
     _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
 }
 
-sub _calc_local_rd {
+sub _calc_local_rd
+{
     my $self = shift;
 
     delete $self->{local_c};
 
     # We must short circuit for UTC times or else we could end up with
     # loops between DateTime.pm and DateTime::TimeZone
-    if ( $self->{tz}->is_utc ) {
+    if ( $self->{tz}->is_utc )
+    {
         $self->{local_rd_days} = $self->{utc_rd_days};
         $self->{local_rd_secs} = $self->{utc_rd_secs};
-    } else {
+    }
+    else
+    {
         $self->{local_rd_days} = $self->{utc_rd_days};
         $self->{local_rd_secs} = $self->{utc_rd_secs} + $self->offset;
 
@@ -140,7 +148,8 @@ sub _calc_local_rd {
     $self->_calc_local_components;
 }
 
-sub _calc_local_components {
+sub _calc_local_components
+{
     my $self = shift;
 
     @{ $self->{local_c} }{ qw( year month day day_of_week day_of_year ) } =
@@ -150,7 +159,8 @@ sub _calc_local_components {
         $self->_seconds_as_components( $self->{local_rd_secs} );
 }
 
-sub _calc_utc_components {
+sub _calc_utc_components
+{
     my $self = shift;
 
     @{ $self->{utc_c} }{ qw( year month day ) } =
@@ -160,7 +170,8 @@ sub _calc_utc_components {
         $self->_seconds_as_components( $self->{utc_rd_secs} );
 }
 
-sub _utc_ymd {
+sub _utc_ymd
+{
     my $self = shift;
 
     $self->_calc_utc_components unless exists $self->{utc_c}{year};
@@ -168,7 +179,8 @@ sub _utc_ymd {
     return @{ $self->{utc_c} }{ qw( year month day ) };
 }
 
-sub _utc_hms {
+sub _utc_hms
+{
     my $self = shift;
 
     $self->_calc_utc_components unless exists $self->{utc_c}{hour};
@@ -176,7 +188,8 @@ sub _utc_hms {
     return @{ $self->{utc_c} }{ qw( hour minute second ) };
 }
 
-sub from_epoch {
+sub from_epoch
+{
     my $class = shift;
     my %args = validate( @_,
                          { epoch => { type => SCALAR },
@@ -198,7 +211,8 @@ sub from_epoch {
 # use scalar time in case someone's loaded Time::Piece
 sub now { shift->from_epoch( epoch => (scalar time), @_ ) }
 
-sub from_object {
+sub from_object
+{
     my $class = shift;
     my %args = validate( @_,
                          { object => { type => OBJECT,
@@ -224,7 +238,8 @@ sub from_object {
     return $new;
 }
 
-sub last_day_of_month {
+sub last_day_of_month
+{
     my $class = shift;
     my %p = validate( @_,
                       { year   => { type => SCALAR },
@@ -247,8 +262,8 @@ sub last_day_of_month {
 
 sub clone { bless { %{ $_[0] } }, ref $_[0] }
 
-BEGIN {
-
+BEGIN
+{
     @MonthLengths =
         ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
 
@@ -257,6 +272,7 @@ BEGIN {
 }
 
 sub year    { $_[0]->{local_c}{year} }
+
 sub ce_year { $_[0]->{local_c}{year} <= 0 ?
               $_[0]->{local_c}{year} - 1 :
               $_[0]->{local_c}{year} }
@@ -267,15 +283,9 @@ sub month   { $_[0]->{local_c}{month} }
 sub month_0 { $_[0]->{local_c}{month} - 1 };
 *mon_0 = \&month_0;
 
-sub month_name {
-    my $self = shift;
-    return $self->{language}->month_name($self);
-}
+sub month_name { $_[0]->{language}->month_name( $_[0] ) }
 
-sub month_abbr {
-    my $self = shift;
-    return $self->{language}->month_abbreviation($self);
-}
+sub month_abbr { $_[0]->{language}->month_abbreviation( $_[0] ) }
 
 sub day_of_month { $_[0]->{local_c}{day} }
 *day  = \&day_of_month;
@@ -293,15 +303,9 @@ sub day_of_week_0 { $_[0]->{local_c}{day_of_week} - 1 }
 *wday_0 = \&day_of_week_0;
 *dow_0  = \&day_of_week_0;
 
-sub day_name {
-    my $self = shift;
-    return $self->{language}->day_name($self);
-}
+sub day_name { $_[0]->{language}->day_name( $_[0] ) }
 
-sub day_abbr {
-    my $self = shift;
-    return $self->{language}->day_abbreviation($self);
-}
+sub day_abbr { $_[0]->{language}->day_abbreviation( $_[0] ) }
 
 sub day_of_year { $_[0]->{local_c}{day_of_year} }
 *doy = \&day_of_year;
@@ -309,9 +313,11 @@ sub day_of_year { $_[0]->{local_c}{day_of_year} }
 sub day_of_year_0 { $_[0]->{local_c}{day_of_year} - 1 }
 *doy_0 = \&day_of_year_0;
 
-sub ymd {
+sub ymd
+{
     my ( $self, $sep ) = @_;
     $sep = '-' unless defined $sep;
+
     return sprintf( "%0.4d%s%0.2d%s%0.2d",
                     $self->year, $sep,
                     $self->{local_c}{month}, $sep,
@@ -319,18 +325,22 @@ sub ymd {
 }
 *date = \&ymd;
 
-sub mdy {
+sub mdy
+{
     my ( $self, $sep ) = @_;
     $sep = '-' unless defined $sep;
+
     return sprintf( "%0.2d%s%0.2d%s%0.4d",
                     $self->{local_c}{month}, $sep,
                     $self->{local_c}{day}, $sep,
                     $self->year );
 }
 
-sub dmy {
+sub dmy
+{
     my ( $self, $sep ) = @_;
     $sep = '-' unless defined $sep;
+
     return sprintf( "%0.2d%s%0.2d%s%0.4d",
                     $self->{local_c}{day}, $sep,
                     $self->{local_c}{month}, $sep,
@@ -345,9 +355,11 @@ sub minute { $_[0]->{local_c}{minute} }
 sub second { $_[0]->{local_c}{second} }
 *sec = \&second;
 
-sub hms {
+sub hms
+{
     my ( $self, $sep ) = @_;
     $sep = ':' unless defined $sep;
+
     return sprintf( "%0.2d%s%0.2d%s%0.2d",
                     $self->{local_c}{hour}, $sep,
                     $self->{local_c}{minute}, $sep,
@@ -356,12 +368,7 @@ sub hms {
 # don't want to override CORE::time()
 *DateTime::time = \&hms;
 
-sub iso8601 {
-    my $self = shift;
-
-    return join 'T', $self->ymd, $self->hms(':');
-}
-*datetime = \&iso8601;
+sub iso8601 { join 'T', $_[0]->ymd('-'), $_[0]->hms(':') }
 
 sub is_leap_year { $_[0]->_is_leap_year( $_[0]->year ) }
 
@@ -434,7 +441,8 @@ sub utc_rd_as_seconds   { ( $_[0]->{utc_rd_days} * 86400 )   + $_[0]->{utc_rd_se
 sub local_rd_as_seconds { ( $_[0]->{local_rd_days} * 86400 ) + $_[0]->{local_rd_secs} }
 
 # RD 1 is JD 1,721,424.5 - a simple offset
-sub jd {
+sub jd
+{
     my $self = shift;
 
     my $jd = $self->{utc_rd_days} + 1_721_424.5;
@@ -498,7 +506,8 @@ my %formats =
 
 $formats{h} = $formats{b};
 
-sub strftime {
+sub strftime
+{
     my $self = shift;
     # make a copy or caller's scalars get munged
     my @formats = @_;
@@ -521,7 +530,8 @@ sub strftime {
     return @r;
 }
 
-sub epoch {
+sub epoch
+{
     my $self = shift;
 
     return $self->{utc_c}{epoch}
@@ -549,7 +559,8 @@ sub subtract { return shift->subtract_duration( DateTime::Duration->new(@_) ) }
 
 sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
-sub subtract_datetime {
+sub subtract_datetime
+{
     my $self = shift;
     my $dt = shift;
 
@@ -594,10 +605,12 @@ sub subtract_datetime {
     }
 }
 
-sub _add_overload {
+sub _add_overload
+{
     my ( $dt, $dur, $reversed ) = @_;
 
-    if ($reversed) {
+    if ($reversed)
+    {
         ( $dur, $dt ) = ( $dt, $dur );
     }
 
@@ -608,24 +621,30 @@ sub _add_overload {
     return $new;
 }
 
-sub _subtract_overload {
+sub _subtract_overload
+{
     my ( $date1, $date2, $reversed ) = @_;
 
-    if ($reversed) {
+    if ($reversed)
+    {
         ( $date2, $date1 ) = ( $date1, $date2 );
     }
 
-    if ( UNIVERSAL::isa( $date2, 'DateTime::Duration' ) ) {
+    if ( UNIVERSAL::isa( $date2, 'DateTime::Duration' ) )
+    {
         my $new = $date1->clone;
         $new->add_duration( $date2->inverse );
         return $new;
-    } else {
+    }
+    else
+    {
         return $date1->subtract_datetime($date2);
     }
     # handle other cases?
 }
 
-sub add_duration {
+sub add_duration
+{
     my ( $self, $dur ) = @_;
 
     my %deltas = $dur->deltas;
@@ -684,13 +703,15 @@ sub add_duration {
 use constant INFINITY     =>       100 ** 100 ** 100 ;
 use constant NEG_INFINITY => -1 * (100 ** 100 ** 100);
 
-sub _compare_overload {
+sub _compare_overload
+{
     # note: $_[1]->compare( $_[0] ) is an error when $_[1] is not a
     # DateTime (such as the INFINITY value)
     return $_[2] ? - $_[0]->compare( $_[1] ) : $_[0]->compare( $_[1] );
 }
 
-sub compare {
+sub compare
+{
     my ( $class, $dt1, $dt2 ) = ref $_[0] ? ( undef, @_ ) : @_;
 
     return undef unless defined $dt2;
@@ -710,7 +731,8 @@ sub compare {
     return $secs1 <=> $secs2;
 }
 
-sub set {
+sub set
+{
     my $self = shift;
     my %p = validate( @_,
                       { year     => { type => SCALAR, optional => 1 },
@@ -734,7 +756,8 @@ sub set {
     return $self;
 }
 
-sub truncate {
+sub truncate
+{
     my $self = shift;
     my %p = validate( @_,
                       { to =>
@@ -746,8 +769,8 @@ sub truncate {
                 time_zone => $self->{tz},
               );
 
-    foreach my $f ( qw( year month day hour minute second ) ) {
-
+    foreach my $f ( qw( year month day hour minute second ) )
+    {
         last if $p{to} eq $f;
 
         $new{$f} = $self->$f();
@@ -760,7 +783,8 @@ sub truncate {
     return $self;
 }
 
-sub set_time_zone {
+sub set_time_zone
+{
     my ( $self, $tz ) = @_;
 
     my $was_floating = $self->{tz}->is_floating;
