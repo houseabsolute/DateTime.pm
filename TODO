@@ -7,8 +7,6 @@ preferered_{date,time,datetime}_format methods for each language
 (which then has the US-en vs. UK-en mess to deal with, plus others no
 doubt)
 
-- needs docs
-
 - figure out what %O* and %E* modifiers should do, if anything
 
 - more tests for other languages
@@ -20,15 +18,12 @@ doubt)
 
 - add gmtime and localtime methods, perhaps?
 
-- reasonable stringification.  numification?
-
 - jd/mjd methods?
 
 
 * Optimization
 
-- memo-ization for all the little component methods, with cache
-flushed on changes (add, etc.)
+- optimize methods like week and day_of_year
 
 
 * Other
@@ -36,22 +31,14 @@ flushed on changes (add, etc.)
 - sub-second resolution - at least microseconds (cooperate with
 Time::HiRes), but is micro small enough?
 
-- wrapping mode bits in _add need to become class/object attribute
-
 - overloading for DateTime::Duration, addition, subtraction,
 multiplication (duration * int), division? (duration / int).
-
-- add warnings about naughtiness of epoch to docs.
 
 - document RD days/seconds(/nanosecs?) in a separate document that
 will be the reference for DateTime.pm internals, as well as being
 useful for other calendar implementors.
 
-- document DefaultLanguageClass method and language param to new
-
 - document stringification
-
-- make add & subtract class methods
 
 - document error handling features
 
@@ -60,4 +47,4 @@ version that works best is in 5.8.0, and not otherwise available.
 
 - tests for end_of_month_day_of_year (rename?) and month_lengths
 
-- support years in durations
+- thorough tests for subtraction & addition overloading
