@@ -110,7 +110,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 }
 
 {
-    my $dt0 = DateTime->new( year => 1 );
+    my $dt0 = DateTime->new( year => 1, time_zone => 'UTC' );
 
     is( $dt0->year,   1, "Year 1 is year 1" );
     is( $dt0->year_0, 0, "Year 1 is 0 in 0-index terms" );
@@ -122,7 +122,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 }
 
 {
-    my $dt_neg = DateTime->new( year => -10 );
+    my $dt_neg = DateTime->new( year => -10, time_zone => 'UTC', );
     is( $dt_neg->year,   -10, "Year -10 is -10" );
     is( $dt_neg->year_0, -10, "Year -10 is -10 with 0-index" );
 
@@ -133,7 +133,9 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
 {
     my $dt = DateTime->new( year => 50, month => 2,
-                            hour => 3, minute => 20, second => 5 );
+                            hour => 3, minute => 20, second => 5,
+                            time_zone => 'UTC',
+                          );
 
     is( $dt->ymd('%s'), '0050%s02%s01', 'use %s as separator in ymd' );
     is( $dt->mdy('%s'), '02%s01%s0050', 'use %s as separator in mdy' );
@@ -144,14 +146,18 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
 # test doy in leap year
 {
-    my $dt = DateTime->new( year => 2000, month => 1, day => 5, );
+    my $dt = DateTime->new( year => 2000, month => 1, day => 5,
+                            time_zone => 'UTC',
+                          );
 
     is( $dt->day_of_year,   5, 'doy for 2000-01-05 should be 5' );
     is( $dt->day_of_year_0, 4, 'doy_0 for 2000-01-05 should be 4' );
 }
 
 {
-    my $dt = DateTime->new( year => 2000, month => 2, day => 29, );
+    my $dt = DateTime->new( year => 2000, month => 2, day => 29,
+                            time_zone => 'UTC',
+                          );
 
     is( $dt->day_of_year,   60, 'doy for 2000-02-29 should be 60' );
     is( $dt->day_of_year_0, 59, 'doy_0 for 2000-02-29 should be 59' );

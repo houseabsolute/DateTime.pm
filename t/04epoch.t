@@ -17,12 +17,12 @@ is( $t1->month, 1, "months are correct on epoch 0" );
 is( $t1->year, 1970, "year is correct on epoch 0" );
 
 
-$t1 = DateTime->from_epoch(epoch => '3600');
+$t1 = DateTime->from_epoch(epoch => '3600', time_zone => 'UTC');
 is( $t1->epoch, 3600, 'creation test from epoch = 3600 (compare to epoch)');
 
 # these tests could break if the time changed during the next three lines
 my $now = time;
-my $nowtest = DateTime->now();
+my $nowtest = DateTime->now( time_zone => 'UTC' );
 my $nowtest2 = DateTime->from_epoch( epoch => $now, time_zone => 0 );
 is( $nowtest->hour, $nowtest2->hour, "Hour: Create without args" );
 is( $nowtest->month, $nowtest2->month, "Month : Create without args" );

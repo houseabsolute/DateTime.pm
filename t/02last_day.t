@@ -12,6 +12,7 @@ foreach my $month (1..12)
 {
     my $dt = DateTime->last_day_of_month( year  => 2001,
                                           month => $month,
+                                          time_zone => 'UTC',
                                         );
 
     is( $dt->year, 2001, 'check year' );
@@ -23,6 +24,7 @@ foreach my $month (1..12)
 {
     my $dt = DateTime->last_day_of_month( year  => 2004,
                                           month => $month,
+                                          time_zone => 'UTC',
                                         );
 
     is( $dt->year, 2004, 'check year' );

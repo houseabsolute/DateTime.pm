@@ -39,6 +39,7 @@ while (<DATA>)
     my $dt = DateTime->new( year => 1800,
                             month => 1,
                             day => 10,
+                            time_zone => 'UTC',
                           );
 
     my ($y, $d) = $dt->strftime( '%Y', '%d' );

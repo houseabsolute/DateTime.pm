@@ -35,6 +35,7 @@ foreach my $test ( @tests )
     my $dt = DateTime->new( year  => $args[0],
                             month => $args[1],
                             day   => $args[2],
+                            time_zone => 'UTC',
                           );
 
     my ($year, $week) = $dt->week();
