@@ -4,9 +4,6 @@ use Test::More tests => 8;
 
 use DateTime;
 
-use lib './t';
-require 'testlib.pl';
-
 my $t = DateTime->new( year => 1971, month => 12, day => 31,
                        hour => 23, minute => 58, second => 20,
                        time_zone => 'UTC',
