@@ -1,3 +1,11 @@
+0.07
+
+- Added a small hack to the compare() method so that this module can
+be used with Set::Infinite.
+
+- Changed compare so that it can be used to compare two objects from
+different calendars that conform to the DateTime::Calendar interface.
+
 0.06     2003-02-16
 
 - The docs said that there was no year 0 in the Gregorian calendar,
