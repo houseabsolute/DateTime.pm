@@ -7,7 +7,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.24';
+    $VERSION = '0.25';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -238,14 +238,16 @@ sub _handle_offset_modifier
 {
     my $self = shift;
 
-    return if $self->{tz}->is_floating;
-
     $self->{offset_modifier} = 0;
 
+    return if $self->{tz}->is_floating;
+
     my $second = shift;
+    my $utc_is_valid = shift;
+
     my $utc_rd_days = $self->{utc_rd_days};
 
-    my $offset = $self->_offset_for_local_datetime;
+    my $offset = $utc_is_valid ? $self->offset : $self->_offset_for_local_datetime;
 
     if ( $offset >= 0
          && $self->{local_rd_secs} >= $offset
@@ -1302,11 +1304,9 @@ sub add_duration
 
     if ( $deltas{days} || $deltas{months} )
     {
-        my $previous_utc_rd_days = $self->{utc_rd_days};
-
         $self->_calc_utc_rd;
 
-        $self->_handle_offset_modifier( $self->second, $previous_utc_rd_days );
+        $self->_handle_offset_modifier( $self->second );
     }
 
     if ( $deltas{minutes} )
@@ -1517,7 +1517,7 @@ sub set_time_zone
 
     $self->{tz} = ref $tz ? $tz : DateTime::TimeZone->new( name => $tz );
 
-    $self->_handle_offset_modifier( $self->second );
+    $self->_handle_offset_modifier( $self->second, 1 );
 
     # if it either was or now is floating (but not both)
     if ( $self->{tz}->is_floating xor $was_floating )

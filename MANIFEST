@@ -49,6 +49,7 @@ t/30future_tz.t
 t/31formatter.t
 t/32leap_second2.t
 t/33seconds_offset.t
+t/34set_tz.t
 t/99-pod.t
 t/testlib.pl
 TODO

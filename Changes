@@ -2,6 +2,9 @@
 
 [ BUG FIXES ]
 
+- Calling set_time_zone() for a datetime very close to a time zone
+change died for many of the Olson time zones.
+
 - The docs for the from_object constructor said that by default, new
 objects were in the UTC time zone, but in reality the default was the
 floating time zone.  The docs were changed to match the code.  Ticket
