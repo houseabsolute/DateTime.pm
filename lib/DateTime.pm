@@ -1519,7 +1519,8 @@ an epoch time instead of components.  Just as with the C<new()>
 method, it accepts "time_zone" and "language" parameters.
 
 If the epoch value is not an integer, the part after the decimal will
-be converted to nanoseconds.
+be converted to nanoseconds.  This is done in order to be compatible
+with C<Time::HiRes>.
 
 =item * now( ... )
 
