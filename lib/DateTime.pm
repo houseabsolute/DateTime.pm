@@ -912,10 +912,10 @@ sub subtract_datetime
         {
             # If the smaller of the two datetimes occurs in the last
             # UTC minute of the UTC day, then that minute may not be
-            # 60 seconds long.  If we need to add a minute to the
-            # larger datetime's minutes count in order to adjust the
-            # seconds difference to be positive, we need to know how
-            # long that minute was.  If one of the datetimes is
+            # 60 seconds long.  If we need to subtract a minute from
+            # the larger datetime's minutes count in order to adjust
+            # the seconds difference to be positive, we need to know
+            # how long that minute was.  If one of the datetimes is
             # floating, we just assume a minute is 60 seconds.
 
             $minute_length = $self->_day_length($utc_rd_days) - 86340;
