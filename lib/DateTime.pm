@@ -1094,27 +1094,20 @@ DateTime - Reference implementation for Perl DateTime objects
   $dt = DateTime->now; # same as ( epoch => time() )
 
   $year   = $dt->year;
-  $month  = $dt->month;         # 1-12
-  # also $dt->mon
+  $month  = $dt->month;         # 1-12 - also mon
 
-  $day    = $dt->day;           # 1-31
-  # also $dt->day_of_month, $dt->mday
+  $day    = $dt->day;           # 1-31 - also day_of_month, mday
 
-  $dow    = $dt->day_of_week;   # 1-7 (Monday is 1)
-  # also $dt->dow, $dt->wday
+  $dow    = $dt->day_of_week;   # 1-7 (Monday is 1) - also dow, wday
 
   $hour   = $dt->hour;          # 0-23
-  $minute = $dt->minute;        # 0-59
-  # also $dt->min
+  $minute = $dt->minute;        # 0-59 - also min
 
-  $second = $dt->second;        # 0-60 (leap seconds!)
-  # also $dt->sec
+  $second = $dt->second;        # 0-61 (leap seconds!) - also sec
 
-  $doy    = $dt->day_of_year    # 1-366 (leap years)
-  # also $dt->doy
+  $doy    = $dt->day_of_year    # 1-366 (leap years) - also doy
   
-  $doq    = $dt->day_of_quarter # 1-(number of days)
-  # also $dt->doq
+  $doq    = $dt->day_of_quarter # 1.. - also doq
 
   $qtr    = $dt->quarter        # 1-4
 
@@ -1122,8 +1115,7 @@ DateTime - Reference implementation for Perl DateTime objects
   # methods, such as $dt->day_of_month_0, $dt->month_0 and so on
 
   $ymd    = $dt->ymd            # 2002-12-06
-  $ymd    = $dt->ymd('/')       # 2002/12/06
-  # also $dt->date
+  $ymd    = $dt->ymd('/')       # 2002/12/06 - also date
 
   $mdy    = $dt->mdy            # 12-06-2002
   $mdy    = $dt->mdy('/')       # 12/06/2002
@@ -1132,8 +1124,7 @@ DateTime - Reference implementation for Perl DateTime objects
   $dmy    = $dt->dmy('/')       # 06/12/2002
 
   $hms    = $dt->hms            # 14:02:29
-  $hms    = $dt->hms('!')       # 14!02!29
-  # also $dt->time
+  $hms    = $dt->hms('!')       # 14!02!29 - also time
 
   $is_leap  = $dt->is_leap_year;
 
@@ -1161,7 +1152,7 @@ DateTime - Reference implementation for Perl DateTime objects
 
 DateTime is a class for the representation of date/time combinations,
 and is part of the Perl DateTime project.  For details on this project
-please see L<http://perl-date-time.sf.net/>.
+please see L<http://datetime.perl.org/>.
 
 It represents the Gregorian calendar, extended backwards in time
 before its creation (in 1582).  This is sometimes known as the
@@ -1357,19 +1348,6 @@ C<new()> method, except for "day".  Additionally, both "year" and
 =item * clone
 
 This object method returns a replica of the given object.
-
-=back
-
-=head3 Class Methods
-
-Currently there is just one class method.
-
-=over 4
-
-=item * DefaultLanguage( $language )
-
-This can be used to specify the default language to be used when
-creating DateTime objects.  If unset, then "English" is used.
 
 =back
 
@@ -1693,6 +1671,17 @@ method.
 
 This method returns a new C<DateTime::Duration> object representing
 the difference between the two dates.
+
+=back
+
+=head3 Class Methods
+
+=over 4
+
+=item * DefaultLanguage( $language )
+
+This can be used to specify the default language to be used when
+creating DateTime objects.  If unset, then "English" is used.
 
 =item * compare
 
