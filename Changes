@@ -6,6 +6,8 @@
 constructors and to the set() method, so bogus values like a month of
 13 are a fatal error.
 
+- Added a new constructor, from_day_of_year().
+
 [ BUG FIXES ]
 
 - Fix epoch() method to work properly with dates greater than 50 years
