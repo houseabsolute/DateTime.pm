@@ -1,3 +1,9 @@
+
+- In Perl 5.6.1/Red Hat Linux 7.2, multiplying a variable with value zero by -1 
+  gives negative-zero, which breaks tests.  Patch by Flavio Glock.
+    perl -e ' $x=0; $x*=-1; print $x '
+    -0
+
 0.13
 
 [ IMPROVEMENTS ]

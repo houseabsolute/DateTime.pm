@@ -44,12 +44,14 @@ sub new
     $self->{months} =
         ( abs( $p{years} * 12 ) + abs( $p{months} ) ) * $self->{sign};
 
-    $self->{days} =
+    # in Perl 5.6.1/Linux, $_=0; $_*-1 gives -0 !!! adding 0 fixes the result...
+
+    $self->{days} = 0 +
         ( abs( $p{weeks} * 7 ) + abs( $p{days} ) ) * $self->{sign};
 
     $self->{minutes} = abs( ( $p{hours} * 60 ) + $p{minutes}  ) * $self->{sign};
 
-    $self->{seconds} = abs( $p{seconds} ) * $self->{sign};
+    $self->{seconds} = 0 + abs( $p{seconds} ) * $self->{sign};
 
     if ( $p{nanoseconds} )
     {

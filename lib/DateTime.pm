@@ -860,7 +860,13 @@ sub subtract_datetime
 
     if ($negative)
     {
-        $_ *= -1 for $days, $seconds, $nanoseconds;
+        # in Perl 5.6.1/Linux, $_=0; $_*-1 gives -0 !!!
+        # $_ *= -1 for $days, $seconds, $nanoseconds;
+
+        for ($days, $seconds, $nanoseconds)
+        {
+            $_ *= -1 if $_ ;
+        }
     }
 
     return
