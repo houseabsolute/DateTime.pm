@@ -15,6 +15,8 @@
 #define DAYS_PER_4_YEARS    1461
 #define MARCH_1             306
 
+#define SECONDS_PER_DAY     86400
+
 const int PREVIOUS_MONTH_DOY[12] =  { 0,
                                       31,
                                       59,
@@ -183,13 +185,13 @@ void _normalize_seconds(days, secs)
         IV adj;
 
         if (s < 0) {
-          adj = (s - 86399) / 86400;
+          adj = (s - 86399) / SECONDS_PER_DAY;
         } else {
-          adj = s / 86400;
+          adj = s / SECONDS_PER_DAY;
         }
 
         d += adj;
-        s -= adj * 86400;
+        s -= adj * SECONDS_PER_DAY;
 
         sv_setiv(days, (IV) d);
         sv_setiv(secs, (IV) s);
