@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 533;
+use Test::More tests => 534;
 
 use DateTime;
 
@@ -290,14 +290,23 @@ is( fake_ical($new), '19981201Z', 'test + overloading' );
 
 # test nanoseconds
 
-$t = DateTime->new( year => 1997, month => 1, day => 1,
-                    hour => 1, minute => 1, second => 59, 
-                    nanosecond => 500000000,
-                    time_zone => 'UTC',
-                  );
+{
+    my $t = DateTime->new( year => 1997, month => 1, day => 1,
+                           hour => 1, minute => 1, second => 59,
+                           nanosecond => 500000000,
+                           time_zone => 'UTC',
+                         );
 
-$t->add( nanoseconds => 500000000 );
-is( $t->second, 0, 'fractional second rollover' );
-$t->add( nanoseconds => 123000000 );
-is( $t->fractional_second, 0.123, 'as fractional_second' );
+    $t->add( nanoseconds => 500000000 );
+    is( $t->second, 0, 'fractional second rollover' );
+    $t->add( nanoseconds => 123000000 );
+    is( $t->fractional_second, 0.123, 'as fractional_second' );
+}
+
+{
+    my $dt = DateTime->new( year => 2003, month => 2, day => 28 );
+    $dt->add( months => 1, days => 1 );
+
+    is( $dt->ymd, '2003-04-01', 'order of units in date math' );
+}
 
