@@ -295,6 +295,9 @@ sub rd2greg {
     $y += $c * 100 + $yadj * 400;   # get the real year, which is off by
     ++$y, $m -= 12 if $m > 12;      # one if month is January or February
 
+    # no year 0
+    --$y unless $y;
+
     return ( $y, $m, $d );
 }
 
