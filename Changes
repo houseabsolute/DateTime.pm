@@ -31,6 +31,9 @@ object is not serialized along with the DateTime object.  If you have
 serialized objects stored from earlier versions, there is a hack in
 the code that should load these properly as well.
 
+- It is not possible to create arbitrary DateTime::Language subclasses
+in any namespace.
+
 [ BUG FIXES ]
 
 - Fix epoch() method to work properly with dates greater than 50 years
@@ -71,6 +74,9 @@ cause a fatal error.  Reported by John Peacock.
 values don't work on Win32.
 
 [ BACKWARDS INCOMPATIBILITIES ]
+
+- The "Portugese" language module has been renamed to "Portuguese".
+I'm so embarassed!  Reported by Richard Evans.
 
 - DateTime::Infinite objects no longer die if "set" methods are
 called.  Instead, these methods are now no-op methods that simply

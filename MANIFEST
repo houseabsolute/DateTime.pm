@@ -18,7 +18,7 @@ lib/DateTime/Language/German.pm
 lib/DateTime/Language/Italian.pm
 lib/DateTime/Language/Norwegian.pm
 lib/DateTime/Language/Oromo.pm
-lib/DateTime/Language/Portugese.pm
+lib/DateTime/Language/Portuguese.pm
 lib/DateTime/Language/Sidama.pm
 lib/DateTime/Language/Somali.pm
 lib/DateTime/Language/Spanish.pm
