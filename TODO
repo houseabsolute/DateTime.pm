@@ -5,13 +5,6 @@ TODO list for Perl module DateTime
 - more tests for other languages
 
 
-* More methods
-
-- add gmtime and localtime methods, perhaps?
-
-- jd/mjd methods?
-
-
 * Other
 
 - sub-second resolution - at least microseconds (cooperate with
