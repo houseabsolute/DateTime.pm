@@ -30,11 +30,6 @@ use DateTime::LeapSecond;
 use Params::Validate qw( validate SCALAR BOOLEAN OBJECT );
 use Time::Local ();
 
-# delay DateTime::LeapSecond initialization until after
-# DateTime BEGIN is done
-initialize DateTime::LeapSecond;
-
-
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
 #
@@ -140,8 +135,8 @@ sub new
 
     bless $self, $class;
 
-    $self->_calc_local_components;
     $self->_calc_utc_rd;
+    $self->_calc_local_rd;
 
     return $self;
 }
@@ -195,15 +190,22 @@ sub _calc_utc_rd
     {
         $self->{utc_rd_days} = $self->{local_rd_days};
         $self->{utc_rd_secs} = $self->{local_rd_secs};
-
-        return;
+    }
+    else
+    {
+        $self->{utc_rd_days} = $self->{local_rd_days};
+        $self->{utc_rd_secs} =
+            $self->{local_rd_secs} - $self->_offset_from_local_time;
     }
 
-    $self->{utc_rd_days} = $self->{local_rd_days};
-    $self->{utc_rd_secs} =
-        $self->{local_rd_secs} - $self->_offset_from_local_time;
-
-    _normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+    if ( $self->{tz}->is_floating )
+    {
+        _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+    }
+    else
+    {
+        _normalize_leap_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+    }
 }
 
 sub _calc_local_rd
@@ -241,9 +243,8 @@ sub _calc_local_components
     @{ $self->{local_c} }{ qw( hour minute second ) } =
         $self->_seconds_as_components( $self->{local_rd_secs} );
 
-    return if $self->time_zone->is_floating;
-
-    $self->_calc_utc_components unless exists $self->{utc_c}{year};
+    $self->_adjust_components_for_leap_seconds
+        if $self->{utc_rd_secs} >= 86400;
 }
 
 sub _calc_utc_components
@@ -257,11 +258,19 @@ sub _calc_utc_components
 
     @{ $self->{utc_c} }{ qw( hour minute second ) } =
         $self->_seconds_as_components( $self->{utc_rd_secs} );
+}
+
+sub _adjust_components_for_leap_seconds
+{
+    my $self = shift;
 
     # we don't have to check 'is_floating' here, because floating
     # times will never have 86400 seconds.
     if ( $self->{utc_rd_secs} >= 86400 )
     {
+        # there is no such thing as +3 or more leap seconds!
+        die "Incorrect UTC RD seconds" if $self->{utc_rd_secs} > 86401;
+
         $self->{local_c}{second} += $self->{utc_rd_secs} - 86400 + 60;
         $self->{local_c}{minute}  = 59;
         $self->{local_c}{hour}--;
@@ -689,11 +698,11 @@ sub epoch
     my @hms = $self->_utc_hms;
 
     $self->{utc_c}{epoch} =
-        eval { Time::Local::timegm( ( reverse @hms ),
-                                    $day,
-                                    $month - 1,
-                                    $year - 1900,
-                                  ) };
+        eval { Time::Local::timegm_nocheck( ( reverse @hms ),
+                                            $day,
+                                            $month - 1,
+                                            $year - 1900,
+                                          ) };
 
     return $self->{utc_c}{epoch};
 }
@@ -1549,6 +1558,10 @@ is implemented using C<Time::Local>, which uses the Unix epoch even on
 machines with a different epoch (such as MacOS).  Datetimes before the
 start of the epoch will be returned as a negative number.
 
+Since the epoch does not account for leap seconds, the epoch time for
+1971-12-31T23:59:60 (UTC) is exactly the same as that for
+1972-01-01T00:00:00.
+
 Since epoch times cannot represent many dates on most platforms, this
 method may simply return undef in some cases.
 
@@ -1607,9 +1620,10 @@ For example:
 
   print $dt->hour; # prints 17
 
-If the old time zone was a floating time zone, then no adjustments are
-made.  If the new time zone is floating, then the I<UTC> time is
-adjusted in order to leave the local time untouched.
+If the old time zone was a floating time zone, then no adjustments to
+the local time are made, except to account for leap seconds.  If the
+new time zone is floating, then the I<UTC> time is adjusted in order
+to leave the local time untouched.
 
 Fans of Tsai Ming-Liang's films will be happy to know that this does
 work:
