@@ -78,7 +78,7 @@ sub write_makefile
                                      'Params::Validate' => 0.52,
                                      'Test::More'  => 0,
                                      'Time::Local' => 0,
-                                     'DateTime::LeapSecond' => 0,
+                                     'DateTime::LeapSecond' => 0.02,
                                    },
                  );
 }
