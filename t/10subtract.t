@@ -20,22 +20,22 @@ require 'testlib.pl';
 			       nanosecond => 7,
 			       time_zone => 'UTC' );
 
-    my $diff = $date2 - $date1;
+    my $dur = $date2 - $date1;
 
-    is( $diff->delta_months, 1, 'delta_months should be 1' );
-    is( $diff->delta_days, 2, 'delta_days should be 33' );
-    is( $diff->delta_minutes, 64, 'delta_minutes should be 64' );
-    is( $diff->delta_seconds, 20, 'delta_seconds should be 20' );
-    is( $diff->delta_nanoseconds, 999_999_995, 'delta_nanoseconds should be 999,999,995' );
+    is( $dur->delta_months, 1, 'delta_months should be 1' );
+    is( $dur->delta_days, 2, 'delta_days should be 33' );
+    is( $dur->delta_minutes, 64, 'delta_minutes should be 64' );
+    is( $dur->delta_seconds, 20, 'delta_seconds should be 20' );
+    is( $dur->delta_nanoseconds, 999_999_995, 'delta_nanoseconds should be 999,999,995' );
 
-    is( $diff->years,   0,  'Years' );
-    is( $diff->months,  1,  'Months' );
-    is( $diff->weeks,   0,  'Weeks' );
-    is( $diff->days,    2,  'Days' );
-    is( $diff->hours,   1,  'Hours' );
-    is( $diff->minutes, 4,  'Minutes' );
-    is( $diff->seconds, 20, 'Seconds' );
-    is( $diff->nanoseconds, 999_999_995, 'Nanoseconds' );
+    is( $dur->years,   0,  'Years' );
+    is( $dur->months,  1,  'Months' );
+    is( $dur->weeks,   0,  'Weeks' );
+    is( $dur->days,    2,  'Days' );
+    is( $dur->hours,   1,  'Hours' );
+    is( $dur->minutes, 4,  'Minutes' );
+    is( $dur->seconds, 20, 'Seconds' );
+    is( $dur->nanoseconds, 999_999_995, 'Nanoseconds' );
 }
 
 {
@@ -47,26 +47,26 @@ require 'testlib.pl';
 			       hour => 5, minute => 7, second => 23,
 			       time_zone => 'UTC' );
 
-    my $diff = $date1 - $date2;
+    my $dur = $date1 - $date2;
 
-    is( $diff->delta_months, -1, 'delta_months should be -1' );
-    is( $diff->delta_days, -2, 'delta_days should be -2' );
-    is( $diff->delta_minutes, -64, 'delta_minutes should be 64' );
-    is( $diff->delta_seconds, -21, 'delta_seconds should be 20' );
-    is( $diff->delta_nanoseconds, 0, 'delta_nanoseconds should be 0' );
+    is( $dur->delta_months, -1, 'delta_months should be -1' );
+    is( $dur->delta_days, -2, 'delta_days should be -2' );
+    is( $dur->delta_minutes, -64, 'delta_minutes should be 64' );
+    is( $dur->delta_seconds, -21, 'delta_seconds should be 20' );
+    is( $dur->delta_nanoseconds, 0, 'delta_nanoseconds should be 0' );
 
-    is( $diff->years,   0,  'Years' );
-    is( $diff->months,  1,  'Months' );
-    is( $diff->weeks,   0,  'Weeks' );
-    is( $diff->days,    2,  'Days' );
-    is( $diff->hours,   1,  'Hours' );
-    is( $diff->minutes, 4,  'Minutes' );
-    is( $diff->seconds, 21, 'Seconds' );
-    is( $diff->nanoseconds, 0, 'Nanoseconds' );
+    is( $dur->years,   0,  'Years' );
+    is( $dur->months,  1,  'Months' );
+    is( $dur->weeks,   0,  'Weeks' );
+    is( $dur->days,    2,  'Days' );
+    is( $dur->hours,   1,  'Hours' );
+    is( $dur->minutes, 4,  'Minutes' );
+    is( $dur->seconds, 21, 'Seconds' );
+    is( $dur->nanoseconds, 0, 'Nanoseconds' );
 
-    $diff = $date1 - $date1;
-    is( $diff->delta_days, 0, 'date minus itself should have no delta days' );
-    is( $diff->delta_seconds, 0, 'date minus itself should have no delta seconds' );
+    $dur = $date1 - $date1;
+    is( $dur->delta_days, 0, 'date minus itself should have no delta days' );
+    is( $dur->delta_seconds, 0, 'date minus itself should have no delta seconds' );
 
     my $new = $date1 - DateTime::Duration->new( years => 2 );
     is( fake_ical($new), '19990510T040302Z', 'test - overloading' );
@@ -101,22 +101,22 @@ require 'testlib.pl';
                              time_zone => 'UTC',
                            );
 
-    my $diff1 = $dt1->subtract_datetime($dt2);
+    my $dur1 = $dt1->subtract_datetime($dt2);
 
-    is( $diff1->delta_days,    1, 'delta_days should be 1' );
-    is( $diff1->delta_seconds, 2, 'delta_seconds should be 2' );
+    is( $dur1->delta_days,    1, 'delta_days should be 1' );
+    is( $dur1->delta_seconds, 2, 'delta_seconds should be 2' );
 
-    my $dt3 = $dt2 + $diff1;
+    my $dt3 = $dt2 + $dur1;
 
     is( DateTime->compare($dt1, $dt3), 0,
         'adding difference back to dt1 should give same datetime' );
 
-    my $diff2 = $dt2->subtract_datetime($dt1);
+    my $dur2 = $dt2->subtract_datetime($dt1);
 
-    is( $diff2->delta_days,    -1, 'delta_days should be -1' );
-    is( $diff2->delta_seconds, -2, 'delta_seconds should be -2' );
+    is( $dur2->delta_days,    -1, 'delta_days should be -1' );
+    is( $dur2->delta_seconds, -2, 'delta_seconds should be -2' );
 
-    my $dt4 = $dt1 + $diff2;
+    my $dt4 = $dt1 + $dur2;
 
     is( DateTime->compare($dt2, $dt4), 0,
         'adding difference back to dt2 should give same datetime' );
@@ -278,12 +278,12 @@ require 'testlib.pl';
 			       nanosecond => 7,
 			       time_zone => 'UTC' );
 
-    my $diff = $date2->subtract_datetime_absolute($date1);
+    my $dur = $date2->subtract_datetime_absolute($date1);
 
-    is( $diff->delta_months, 0, 'delta_months is 0' );
-    is( $diff->delta_minutes, 0, 'delta_minutes is 0' );
-    is( $diff->delta_seconds, 2_855_060, 'delta_seconds is 2,855,060' );
-    is( $diff->delta_nanoseconds, 999_999_995, 'delta_seconds is 999,999,995' );
+    is( $dur->delta_months, 0, 'delta_months is 0' );
+    is( $dur->delta_minutes, 0, 'delta_minutes is 0' );
+    is( $dur->delta_seconds, 2_855_060, 'delta_seconds is 2,855,060' );
+    is( $dur->delta_nanoseconds, 999_999_995, 'delta_seconds is 999,999,995' );
 }
 
 {
@@ -295,12 +295,12 @@ require 'testlib.pl';
 			       hour => 5, minute => 7, second => 23,
 			       time_zone => 'UTC' );
 
-    my $diff = $date1->subtract_datetime_absolute($date2);
+    my $dur = $date1->subtract_datetime_absolute($date2);
 
-    is( $diff->delta_months, 0, 'delta_months is 0' );
-    is( $diff->delta_minutes, 0, 'delta_minutes is 0' );
-    is( $diff->delta_seconds, -2_855_061, 'delta_seconds is -2,855,061' );
-    is( $diff->delta_nanoseconds, 0, 'delta_nanoseconds is 0' );
+    is( $dur->delta_months, 0, 'delta_months is 0' );
+    is( $dur->delta_minutes, 0, 'delta_minutes is 0' );
+    is( $dur->delta_seconds, -2_855_061, 'delta_seconds is -2,855,061' );
+    is( $dur->delta_nanoseconds, 0, 'delta_nanoseconds is 0' );
 }
 
 {
