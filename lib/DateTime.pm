@@ -2044,6 +2044,9 @@ is equivalent to this:
 
   @dates = sort { DateTime->compare($a, $b) } @dates;
 
+DateTime objects can be compared to any other calendar class that
+implements the C<utc_rd_values()> method.
+
 =back
 
 =head2 How Date Math is Done
