@@ -210,12 +210,10 @@ sub ical {
 }
 
 sub epoch {
-    my $self  = shift;
+    my ( $self, $epoch )  = @_;
     my $class = ref($self);
 
-    my $epoch;
-
-    if ( $epoch = shift ) {    # Passed in a new value
+    if ( defined $epoch && $epoch ne '' ) {    # Passed in a new value
 
         my $newepoch = $class->new( epoch => $epoch );
         $self->{julian} = $newepoch->{julian};
