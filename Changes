@@ -1,4 +1,14 @@
+0.1xxx
+
+[ IMPROVEMENTS ]
+
+- Documented the behavior of strftime() when given an invalid format.
+
+
 0.1703  2003-09-22
+
+
+[ BUG FIXES ]
 
 - truncate( to => 'week' ) caused a fatal error when the beginning of
 the week was in the previous month.  Reported by R. Mathews
@@ -6,6 +16,8 @@ the week was in the previous month.  Reported by R. Mathews
 
 
 0.1702  2003-09-18
+
+[ IMPROVEMENTS ]
 
 - Added truncate( to => 'week' ).  Suggested by Flavio Glock.
 
