@@ -27,9 +27,7 @@ value for epoch, also for compatibility with Time::HiRes.
 
 - DateTime.pm now implements Storable hooks to reduce the size of
 serialized DateTime objects.  In particular, the contained time zone
-object is not serialized along with the DateTime object.  If you have
-serialized objects stored from earlier versions, there is a hack in
-the code that should load these properly as well.
+object is not serialized along with the DateTime object.
 
 - It is not possible to create arbitrary DateTime::Language subclasses
 in any namespace.
