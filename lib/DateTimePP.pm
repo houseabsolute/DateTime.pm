@@ -206,5 +206,7 @@ sub _is_leap_year
 
 sub _day_length { DateTime::LeapSecond::day_length($_[1]) }
 
+sub _leap_seconds { DateTime::LeapSecond::leap_seconds($_[1]) }
+
 
 1;
