@@ -6,6 +6,9 @@ starting in February).  Reported by Matt Sergeant.
 - Subtracting one datetime from another was broken in most cases.
 Improved the tests for this quite a bit.  Reported by Eric Cholet.
 
+- Made the version number a non-dev-release so it's visible when
+CPAN.pm tries to install it as a prereq for something else.
+
 0.01_00  2003-02-04
 
 - The first alpha release.  This module draws on Date::ICal for much
