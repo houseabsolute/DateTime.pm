@@ -218,7 +218,7 @@ sub from_object {
     $new->set_time_zone( $object->time_zone )
         if $object->can('time_zone');
 
-    return
+    return $new;
 }
 
 sub last_day_of_month {
