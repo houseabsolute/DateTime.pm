@@ -639,7 +639,7 @@ sub _subtract_overload {
 sub add_duration {
     my ( $self, $dur ) = @_;
 
-    my %deltas = $dur->delta_units;
+    my %deltas = $dur->deltas;
 
     $self->{utc_rd_days} += $deltas{days} if $deltas{days};
 
@@ -860,7 +860,7 @@ Suite project page at http://perl-date-time.sf.net/ for more details.
 
 =over 4
 
-=item * new
+=item * new( ... )
 
 This class method accepts parameters for each date and time component,
 "year", "month", "day", "hour", "minute", "second".  Additionally, it
