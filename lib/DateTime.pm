@@ -12,7 +12,7 @@ use Date::Leapyear ();
 use DateTime::Duration;
 use DateTime::TimeZone;
 use DateTime::TimeZone::UTC;
-use Params::Validate qw( validate validate_with SCALAR BOOLEAN OBJECT );
+use Params::Validate qw( validate SCALAR BOOLEAN OBJECT );
 use Time::Local ();
 
 use base 'Class::Data::Inheritable';
@@ -24,8 +24,8 @@ DateTime::Exception->Trace(1);
 # early.
 use overload ( 'fallback' => 1,
                '<=>' => 'compare',
-               '-' => 'subtract',
-               '+' => \&_add_overload,
+               '-' => '_subtract_overload',
+               '+' => '_add_overload',
                '""' => '_stringify',
              );
 
@@ -201,155 +201,102 @@ sub set {
 
 sub add {
     my $self = shift;
-    carp "DateTime::add was called without an attribute arg" unless @_;
-    ( $self->{utc_rd_days}, $self->{utc_rd_secs} ) =
-        _add($self->{utc_rd_days}, $self->{utc_rd_secs}, @_);
 
-    $self->_calc_local_rd;
+    $self->add_duration( DateTime::Duration->new(@_) );
 
     return $self;
 }
 
-=begin internal
+sub _add_overload {
+    my ( $date1, $dur, $reversed ) = @_;
 
-    Add (or subtract) to a date/time.  First two parameters are
-    the jd and secs of the day.  For the rest, see the add method.
-    Returns the adjusted jd and secs.
+    if ($reversed) {
+        ( $dur, $date1 ) = ( $date1, $dur );
+    }
 
-=end internal
+    # how to handle non duration objects?
 
-# for each unit, specify what it changes by (0=day, 1=second, 2=month)
-# and by what factor
+    my $new = $date1->clone;
 
-=cut
+    $new->add_duration($dur);
 
-%AddUnits = ( years   => [2, 12],
-              months  => [2, 1],
-              weeks   => [0, 7],
-              days    => [0, 1],
-              hours   => [1, 3600],
-              minutes => [1, 60],
-              seconds => [1, 1],
-            );
+    return $new;
+}
 
-# redo this to just accept params like a normal freaking method!
-sub _add {
-    my ($rd, $secs) = splice(@_, 0, 2);
-    my $eom_mode = 0;
-    my ($add, $unit, $count);
+sub subtract {
+    my $self = shift;
+    my %p = @_;
 
-    # loop through unit=>count parameters
-    while (($unit, $count) = splice(@_, 0, 2)) {
+    foreach ( qw( years week months days hours minutes seconds ) )
+    {
+        $p{$_} *= -1 if $p{$_};
+    }
 
-        if ($unit eq 'duration') { # add a duration string
-            my %dur;
-            @dur{'days','seconds','months'} = duration_value($count);
+    return $self->add_duration( DateTime::Duration->new(%p) );
+}
 
-            # pretend these were passed to us as e.g. month=>1, day=>1, second=>1.
-            # since months/years come first in the duration string, we
-            # put them first.
-            unshift @_, map $dur{$_} ? ($_,$dur{$_}) : (),
-                            'months', 'days', 'seconds';
-            next;
-        } elsif ($unit eq 'eom_mode') {
-            if ($count eq 'wrap') { $eom_mode = 0 }
-            elsif ($count eq 'limit') { $eom_mode = 1 }
-            elsif ($count eq 'preserve') { $eom_mode = 2 }
-            else { carp "Unrecognized eom_mode, $count, ignored" }
-        } else {
-            unless ($add = $AddUnits{$unit}) {
-                carp "Unrecognized time unit, $unit, skipped";
-                next;
-            }
+sub _subtract_overload {
+    my ( $date1, $date2, $reversed ) = @_;
 
-            $count = 1 if !defined $count; # count defaults to 1
-            $count *= $add->[1]; # multiply by the factor for this unit
+    if ($reversed) {
+        ( $date2, $date1 ) = ( $date1, $date2 );
+    }
 
-            if ($add->[0] == 0) { # add to days
-                $rd += $count;
-            } elsif ($add->[0] == 1) { # add to seconds
-                $secs += $count;
-            } else {            # add to months
-                my ($y, $mo, $d);
+    if ( UNIVERSAL::isa( $date2, 'DateTime::Duration' ) ) {
+        return $date1->_add( $date2->inverse );
+    } else {
+        return
+            DateTime::Duration->new
+                ( days    => $date1->{utc_rd_days} - $date2->{utc_rd_days},
+                  seconds => $date1->{utc_rd_secs} - $date2->{utc_rd_secs},
+                );
+    }
+    # handle other cases?
+}
 
-                _normalize_seconds( $rd, $secs );
-                if ($eom_mode == 2) { # sticky eom mode
-                    # if it is the last day of the month, make it the 0th
-                    # day of the following month (which then will normalize
-                    # back to the last day of the new month).
-                    ($y, $mo, $d) = rd2greg( $rd+1 );
-                    --$d;
-                } else {
-                    ($y, $mo, $d) = rd2greg( $rd );
-                }
+sub add_duration {
+    my ( $self, $dur ) = @_;
 
-                if ($eom_mode && $d > 28) { # limit day to last of new month
-                    # find the jd of the last day of our target month
-                    $rd = greg2rd( $y, $mo+$count+1, 0 );
+    my %deltas = $dur->delta_units;
 
-                    # what day of the month is it? (discard year and month)
-                    my $lastday = scalar rd2greg( $rd );
+    $self->{utc_rd_days} += $deltas{days} if $deltas{days};
 
-                    # if our original day was less than the last day,
-                    # use that instead
-                    $rd -= $lastday - $d if $lastday > $d;
-                } else {
-                    $rd = greg2rd( $y, $mo+$count, $d );
-                }
-            }
+    if ( $deltas{seconds} )
+    {
+        $self->{utc_rd_secs} += $deltas{seconds};
+        _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
+    }
+
+    if ( $deltas{months} )
+    {
+        # For preserve mode, if it is the last day of the month, make
+        # it the 0th day of the following month (which then will
+        # normalize back to the last day of the new month).
+        my ($y, $m, $d) = ( $dur->is_preserve_mode ?
+                            rd2greg( $self->{utc_rd_days} + 1 ) :
+                            rd2greg( $self->{utc_rd_days} )
+                          );
+        $d -= 1 if $dur->is_preserve_mode;
+
+        if ( ! $dur->is_wrap_mode && $d > 28 )
+        {
+            # find the rd for the last day of our target month
+            $self->{utc_rd_days} = greg2rd( $y, $m + $deltas{months} + 1, 0 );
+
+            # what day of the month is it? (discard year and month)
+            my $last_day = (rd2greg( $self->{utc_rd_days} ))[2];
+
+            # if our original day was less than the last day,
+            # use that instead
+            $self->{utc_rd_days} -= $last_day - $d if $last_day > $d;
+        }
+        else
+        {
+            $self->{utc_rd_days} = greg2rd( $y, $m + $deltas{months}, $d );
         }
     }
 
-    _normalize_seconds( $rd, $secs );
-}
-
-sub duration_value {
-    my $str = shift;
-
-    my @temp = $str =~ m{
-            ([\+\-])?   (?# Sign)
-            (P)     (?# 'P' for period? This is our magic character)
-            (?:
-                (?:(\d+)Y)? (?# Years)
-                (?:(\d+)M)? (?# Months)
-                (?:(\d+)W)? (?# Weeks)
-                (?:(\d+)D)? (?# Days)
-            )?
-            (?:T        (?# Time prefix)
-                (?:(\d+)H)? (?# Hours)
-                (?:(\d+)M)? (?# Minutes)
-                (?:(\d+)S)? (?# Seconds)
-            )?
-                }x;
-    my ( $sign, $magic ) = @temp[ 0 .. 1 ];
-    my ( $years, $months, $weeks, $days, $hours, $mins, $secs ) =
-      map { defined($_) ? $_ : 0 } @temp[ 2 .. $#temp ];
-
-    unless ( defined($magic) ) {
-        carp "Invalid duration: $str";
-        return undef;
-    }
-    $sign = ( ( defined($sign) && $sign eq '-' ) ? -1 : 1 );
-
-    my $s = $sign * ( $secs + ( $mins * 60 ) + ( $hours * 3600 ) );
-    my $d = $sign * ( $days + ( $weeks * 7 ) );
-    my $m = $sign * ( $months + ( $years * 12 ) );
-    return ( $d, $s, $m );
-}
-
-sub _add_overload {
-    my $one = shift;
-    my $two = shift;
-
-    my $ret = $one->clone;
-
-    if ( ref $two ) {
-        $ret->add( duration => $two->as_ical );
-    } else {
-        $ret->add( duration => $two );
-    }
-
-    return $ret;
+    $self->_calc_local_rd;
 }
 
 =begin internal
@@ -372,53 +319,6 @@ sub _normalize_seconds {
         $adj = int( $_[1]/86400 );
     }
     ($_[0] += $adj), ($_[1] -= $adj*86400);
-}
-
-sub subtract {
-    my ( $date1, $date2, $reversed ) = @_;
-    my $dur;
-
-    # If the order of the arguments was reversed, overload tells us
-    # about it in the third argument.
-    if ($reversed) {
-        ( $date2, $date1 ) = ( $date1, $date2 );
-    }
-
-    if (ref $date1 && ref $date2) {
-    # If $date1 is a DateTime object, and $date2 is a Duration object,
-    # then we should subtract and get a date.
-        if ((ref $date2) eq 'DateTime::Duration') {
-            my $seconds = $date2->as_seconds;
-            my $ret = $date1->clone;
-            $ret->add( seconds => -1 * $seconds );
-            return $ret;
-
-        } else {
-    # If $date2 is a DateTime object, or some class thereof, we should
-    # subtract and get a duration
-
-            my $days = $date1->{utc_rd_days} - $date2->{utc_rd_days};
-            my $secs = $date1->{utc_rd_secs} - $date2->{utc_rd_secs};
-
-            return DateTime::Duration->new(
-              days    => $days,
-              seconds => $secs
-            );
-        }
-    } elsif ( ref $date1 &&
-              ( $dur = DateTime::Duration->new( ical => $date2 ) )
-            ) {
-    # If $date1 is a DateTime object, and $date2 is a duration string,
-    # we should subtract and get a date
-        return $date1 - $dur; # Is that cheating?
-
-    # Otherwise, we should call them nasty names and return undef
-    } else {
-        # this must go - dave
-        warn "Moron";
-        return;
-    }
-
 }
 
 sub compare {
@@ -682,20 +582,20 @@ sub day_abbr {
 sub ymd {
     my ( $self, $sep ) = @_;
     $sep = '-' unless defined $sep;
-    return sprintf( "%02d$sep%02d$sep%02d", $self->_as_greg );
+    return sprintf( "%04d$sep%02d$sep%02d", $self->_as_greg );
 }
 *date = \&ymd;
 
 sub mdy {
     my ( $self, $sep ) = @_;
     $sep = '-' unless defined $sep;
-    return sprintf( "%02d$sep%02d$sep%02d", ($self->_as_greg)[1,2,0] );
+    return sprintf( "%02d$sep%02d$sep%04d", ($self->_as_greg)[1,2,0] );
 }
 
 sub dmy {
     my ( $self, $sep ) = @_;
     $sep = '-' unless defined $sep;
-    return sprintf( "%02d$sep%02d$sep%02d", reverse $self->_as_greg );
+    return sprintf( "%02d$sep%02d$sep%04d", reverse $self->_as_greg );
 }
 
 sub hour {
