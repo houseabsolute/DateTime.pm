@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 24;
+use Test::More tests => 25;
 
 use DateTime;
 
@@ -9,9 +9,11 @@ require 'testlib.pl';
 
 my $date1 = DateTime->new( year => 2001, month => 5, day => 10,
                            hour => 4, minute => 3, second => 2,
+                           nanosecond => 12,
                            time_zone => 'UTC' );
 my $date2 = DateTime->new( year => 2001, month => 6, day => 12,
                            hour => 5, minute => 7, second => 23,
+                           nanosecond => 7,
                            time_zone => 'UTC' );
 
 my $diff = $date2 - $date1;
@@ -23,6 +25,7 @@ is( $diff->days,    5,  'Days' );
 is( $diff->hours,   1,  'Hours' );
 is( $diff->minutes, 4,  'Min' );
 is( $diff->seconds, 21, 'Sec' );
+is( $diff->nanoseconds, 5, 'ns' );
 
 my $d = DateTime->new( year => 2001, month => 10, day => 19,
                        hour => 5, minute => 1, second => 1,

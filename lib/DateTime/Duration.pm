@@ -67,7 +67,7 @@ sub _normalize_nanoseconds {
         $self->{nanoseconds} += $overflow * MAX_NANOSECONDS;
         $self->{seconds} -= $overflow;
     }
-    elsif ( $self->{nanoseconds} > MAX_NANOSECONDS ) {
+    elsif ( $self->{nanoseconds} >= MAX_NANOSECONDS ) {
         my $overflow = int( $self->{nanoseconds} / MAX_NANOSECONDS );   
         $self->{nanoseconds} -= $overflow * MAX_NANOSECONDS;
         $self->{seconds} += $overflow;

@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 531;
+use Test::More tests => 532;
 
 use DateTime;
 
@@ -287,3 +287,15 @@ is( fake_ical($t), '19961201Z', 'Subtracting months--rollover year' );
 
 my $new = $t + DateTime::Duration->new( years => 2 );
 is( fake_ical($new), '19981201Z', 'test + overloading' );
+
+# test nanoseconds
+
+$t = DateTime->new( year => 1997, month => 1, day => 1,
+                    hour => 1, minute => 1, second => 59, 
+                    nanosecond => 500000000,
+                    time_zone => 'UTC',
+                  );
+
+$t->add( nanoseconds => 500000000 );
+is( $t->second, 0, 'fractional second rollover' );
+

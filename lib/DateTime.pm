@@ -117,7 +117,8 @@ sub new
     $self->{local_rd_secs} =
         $class->_time_as_seconds( @args{ qw( hour minute second ) } );
 
-    $self->{local_rd_nanosecs} = $args{nanosecond};
+    $self->{rd_nanosecs} = $args{nanosecond};
+    _normalize_nanoseconds( $self->{local_rd_secs}, $self->{rd_nanosecs} );
 
     bless $self, $class;
 
@@ -389,7 +390,7 @@ sub minute { $_[0]->{local_c}{minute} }
 sub second { $_[0]->{local_c}{second} }
 *sec = \&second;
 
-sub nanosecond { $_[0]->{local_rd_nanosecs} }
+sub nanosecond { $_[0]->{rd_nanosecs} }
 
 sub hms
 {
@@ -607,9 +608,9 @@ sub subtract_datetime
 
     if ( $self->{utc_rd_days} == $dt->{utc_rd_days} )
     {
-        return
-            DateTime::Duration->new
-                ( seconds => $self->{utc_rd_secs} - $dt->{utc_rd_secs} );
+        return DateTime::Duration->new( 
+            seconds     => $self->{utc_rd_secs} - $dt->{utc_rd_secs},
+            nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs} );
     }
     elsif ( $self->{utc_rd_days} > $dt->{utc_rd_days} &&
             $self->{utc_rd_secs} < $dt->{utc_rd_secs} )
@@ -617,10 +618,10 @@ sub subtract_datetime
         my $days = $self->{utc_rd_days} - 1;
         my $secs = $self->{utc_rd_secs} + 86400;
 
-        return
-            DateTime::Duration->new
-                ( days    => $days - $dt->{utc_rd_days},
-                  seconds => $secs - $dt->{utc_rd_secs} );
+        return DateTime::Duration->new( 
+            days        => $days - $dt->{utc_rd_days},
+            seconds     => $secs - $dt->{utc_rd_secs}, 
+            nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs} );
     }
     elsif ( $dt->{utc_rd_days} > $self->{utc_rd_days} &&
             $dt->{utc_rd_secs} < $self->{utc_rd_secs} )
@@ -628,17 +629,17 @@ sub subtract_datetime
         my $days = $dt->{utc_rd_days} - 1;
         my $secs = $dt->{utc_rd_secs} + 86400;
 
-        return
-            DateTime::Duration->new
-                ( days    => $self->{utc_rd_days} - $days,
-                  seconds => $self->{utc_rd_secs} - $secs );
+        return DateTime::Duration->new( 
+            days    => $self->{utc_rd_days} - $days,
+            seconds => $self->{utc_rd_secs} - $secs,
+            nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs} );
     }
     else
     {
-        return
-            DateTime::Duration->new
-                ( days    => $self->{utc_rd_days} - $dt->{utc_rd_days},
-                  seconds => $self->{utc_rd_secs} - $dt->{utc_rd_secs} );
+        return DateTime::Duration->new( 
+            days    => $self->{utc_rd_days} - $dt->{utc_rd_days},
+            seconds => $self->{utc_rd_secs} - $dt->{utc_rd_secs},
+            nanoseconds => $self->{rd_nanosecs} - $dt->{rd_nanosecs} );
     }
 }
 
@@ -689,9 +690,11 @@ sub add_duration
     # We add seconds to the UTC time because if someone adds 24 hours,
     # we want this to be _different_ from adding 1 day when crossing
     # DST boundaries.
-    if ( $deltas{seconds} )
+    if ( $deltas{seconds} || $deltas{nanoseconds})
     {
         $self->{utc_rd_secs} += $deltas{seconds};
+        $self->{rd_nanosecs} += $deltas{nanoseconds};
+        _normalize_nanoseconds( $self->{utc_rd_secs}, $self->{rd_nanosecs} );
         _normalize_seconds( $self->{utc_rd_days}, $self->{utc_rd_secs} );
 
         delete $self->{utc_c};
@@ -795,7 +798,27 @@ sub _compare
     return $days1 <=> $days2 if $days1 != $days2;
 
     return $secs1 <=> $secs2;
+
+    return $dt1->nanosecond <=> $dt2->nanosecond;
 }
+
+
+use constant MAX_NANOSECONDS => 1000000000;  # 1E9 = almost 32 bits
+
+sub _normalize_nanoseconds {
+    # seconds, nanoseconds 
+    if ( $_[1] < 0 ) {
+        my $overflow = int( $_[1] / MAX_NANOSECONDS );
+        $_[1] += $overflow * MAX_NANOSECONDS;
+        $_[0] -= $overflow;
+    }
+    elsif ( $_[1] >= MAX_NANOSECONDS ) {
+        my $overflow = int( $_[1] / MAX_NANOSECONDS );
+        $_[1] -= $overflow * MAX_NANOSECONDS;
+        $_[0] += $overflow;
+    }
+}
+
 
 sub set
 {
