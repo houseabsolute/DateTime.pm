@@ -126,6 +126,8 @@ sub day_abbreviations { $_[0]->{day_abbreviations} }
 
 sub day_abbreviation  { $_[0]->{day_abbreviations}[ $_[1]->day_of_week_0 ] }
 
+sub am_pm_list { $_[0]->{am_pm} }
+
 sub am_pm { $_[0]->{am_pm}[ $_[1]->hour < 12 ? 0 : 1 ] }
 
 #sub preferred_datetime_format { '%m/%d/%y %H:%M:%S' }
@@ -269,6 +271,11 @@ Returns a list of day abbreviations.
 
 Given a C<DateTime> object, this method should return the correct day
 abbreviation.
+
+=item * am_pm_list
+
+Returns a list of the AM/PM texts. First item should be the AM, the
+second should be the PM.
 
 =item * am_pm( $dt )
 

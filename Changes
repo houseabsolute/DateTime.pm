@@ -14,6 +14,8 @@ van der Pijll.
 - Allow from_epoch(), now(), and today() to accept a time_zone
 parameter.  Based on suggestions from Tim Bunce and Joshua Hoblitt.
 
+- Allow extraction of AM/PM string list from DateTime::Language classes.
+
 [BUG FIXES]
 
 - If a datetime had the floating timezone and then set_time_zone was
