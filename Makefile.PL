@@ -14,7 +14,7 @@ for (@ARGV)
     /^--xs/ and $no_xs = 0;
 }
 
-unless ($no_xs)
+unless (defined $no_xs)
 {
     print "Testing if you have a C compiler\n";
 
