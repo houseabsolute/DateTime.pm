@@ -1,9 +1,21 @@
-0.xx
+0.18  2003-10-26
+
+[ IMPROVEMENTS ]
+
+- Added several new methods for calculating the difference between two
+datetime objects.  These are delta_md(), delta_days(), and delta_ms().
+Each of these methods returns the difference as a duration containing
+just certain units.
 
 [ BUG FIXES ]
 
 - Require Pod::Man 1.14+, so that head3/head4 markup doesn't cause
 installation to die.
+
+[ BACKWARDS INCOMPATIBILITIES ]
+
+- The local_rd_as_seconds method is deprecated, as it doesn't really
+serve much purpose.
 
 
 0.1705  2003-10-07
