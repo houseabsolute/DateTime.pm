@@ -6,17 +6,16 @@ use vars qw($VERSION);
 
 $VERSION = '0.06';
 
-use Date::Leapyear ();
-use DateTime::Duration;
-use DateTime::TimeZone;
-use Params::Validate qw( validate SCALAR BOOLEAN OBJECT );
-use Time::Local ();
-
 use DynaLoader;
 
 @DateTime::ISA = 'DynaLoader';
 
 bootstrap DateTime $DateTime::VERSION;
+
+use DateTime::Duration;
+use DateTime::TimeZone;
+use Params::Validate qw( validate SCALAR BOOLEAN OBJECT );
+use Time::Local ();
 
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
@@ -28,9 +27,7 @@ use overload ( 'fallback' => 1,
                '""' => '_stringify',
              );
 
-my( @MonthLengths, @LeapYearMonthLengths,
-    @BeginningOfMonthDayOfYear, @BeginningOfMonthDayOfLeapYear,
-  );
+my( @MonthLengths, @LeapYearMonthLengths );
 
 {
     # I'd rather use Class::Data::Inheritable for this, but there's no
@@ -148,23 +145,11 @@ sub _calc_local_rd {
 sub _calc_local_components {
     my $self = shift;
 
-    @{ $self->{local_c} }{ qw( year month day ) } =
-        $self->_rd2greg( $self->{local_rd_days} );
+    @{ $self->{local_c} }{ qw( year month day day_of_week day_of_year ) } =
+        $self->_rd2greg( $self->{local_rd_days}, 1 );
 
     @{ $self->{local_c} }{ qw( hour minute second ) } =
         $self->_seconds_as_components( $self->{local_rd_secs} );
-
-    $self->{local_c}{day_of_week} =
-        ( ( $self->{local_rd_days} + 6 ) % 7 ) + 1;
-
-    {
-        my $d =
-            $self->_beginning_of_month_day_of_year
-                ( $self->{local_c}{year},
-                  $self->{local_c}{month},
-                );
-        $self->{local_c}{day_of_year} = $d + $self->{local_c}{day};
-    }
 }
 
 sub _calc_utc_components {
@@ -251,7 +236,7 @@ sub last_day_of_month {
                       }
                     );
 
-    my $day = ( Date::Leapyear::isleap( $p{year} ) ?
+    my $day = ( DateTime->_is_leap( $p{year} ) ?
                 $LeapYearMonthLengths[ $p{month} - 1 ] :
                 $MonthLengths[ $p{month} - 1 ]
               );
@@ -268,28 +253,6 @@ BEGIN {
 
     @LeapYearMonthLengths = @MonthLengths;
     $LeapYearMonthLengths[1]++;
-
-    my $x = 0;
-    foreach my $length ( @MonthLengths )
-    {
-        push @BeginningOfMonthDayOfYear, $x;
-        $x += $length;
-    }
-
-    @BeginningOfMonthDayOfLeapYear = @BeginningOfMonthDayOfYear;
-
-    $BeginningOfMonthDayOfLeapYear[$_]++ for 2..11;
-}
-
-sub _beginning_of_month_day_of_year {
-    shift;
-    my ($y, $m) = @_;
-    $m--;
-    return
-        ( Date::Leapyear::isleap($y) ?
-          $BeginningOfMonthDayOfLeapYear[$m] :
-          $BeginningOfMonthDayOfYear[$m]
-        );
 }
 
 sub year    { $_[0]->{local_c}{year} }
@@ -396,7 +359,7 @@ sub iso8601 {
 }
 *datetime = \&iso8601;
 
-sub is_leap_year { Date::Leapyear::isleap( $_[0]->year ) ? 1 : 0 }
+sub is_leap_year { $_[0]->_is_leap( $_[0]->year ) }
 
 sub week
 {
