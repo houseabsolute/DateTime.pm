@@ -994,8 +994,8 @@ for example:
 
   # This object represent 01:30:00 saving time
   my $dt = DateTime->new( year   => 2003,
-                          month  => 4,
-                          day    => 6,
+                          month  => 10,
+                          day    => 26,
                           hour   => 1,
                           minute => 30,
                           second => 0,
@@ -1012,6 +1012,18 @@ for example:
 Alternately, you could create the object with the UTC time zone, and
 then call the C<set_time_zone()> method to change the time zone.  This
 would allow you to unambiguously specify the datetime.
+
+=head3 Invalid Local Times
+
+Another problem introduced by Daylight Saving Time is that certain
+local times just do not exist.  For example, in the US in 2003, the
+transition from standard to saving time occurs on April 6, at the
+change to 2:00:00 local time.  The local clock changes from 01:59:59
+(standard time) to 03:00:00 (saving time).  This means that there is
+no 02:00:00 through 02:59:59 on April 6!
+
+Attempting to create an invalid time currently causes a fatal error.
+This may change in future version of this module.
 
 =item * from_epoch( epoch => $epoch, ... )
 
@@ -1372,8 +1384,8 @@ C<DateTime::Duration>.
 
 The parts of a duration can be broken into three parts.  These are
 months, days, and seconds.  Adding one month to a date is different
-than adding 4 weeks or 28, 30, or 31 days.  Similarly, due to DST and
-leap seconds, adding a day can be different than adding 86,400
+than adding 4 weeks or 28, 29, 30, or 31 days.  Similarly, due to DST
+and leap seconds, adding a day can be different than adding 86,400
 seconds.
 
 C<DateTime.pm> always adds (or subtracts) days and seconds first.
@@ -1383,7 +1395,7 @@ greater than 86,400 (or 86,401).  Then it adds months.
 This means that adding one month and one day to February 28, 2003 will
 produce the date April 1, 2003, not March 29, 2003.
 
-=head3 Local/UTC and 24 hours/1 day
+=head3 Local vs. UTC and 24 hours vs. 1 day
 
 When doing date math, you are changing the I<local> datetime.  This is
 generally the same as changing the UTC datetime, except when a change
@@ -1415,16 +1427,17 @@ Another way of thinking of this is that when doing date math, each of
 the seconds, days, and months components is added separately to the
 local time.
 
-So when we add 1 day to "2003-02-22 12:00:00" we are incrementing
-adding one to the day component, to produce 23.  If we add 24 hours,
-however, we're adding "24 * 60 * 60" sceonds to the time component,
+So when we add 1 day to "2003-02-22 12:00:00" we are incrementing day
+component, 22, by one in order to produce 23.  If we add 24 hours,
+however, we're adding "24 * 60 * 60" seconds to the time component,
 and then normalizing the result (because there is no "36:00:00").
 
-If all this makes your head hurt, there is a simple workaround.  Just
+If all this makes your head hurt, there is a simple alternative.  Just
 convert your datetime object to the "UTC" time zone before doing date
 math on it, and switch it back to the local time zone afterwards.
 This avoids the possibility of having date math throw an exception,
-and makes sure that 1 day equals 24 hours.
+and makes sure that 1 day equals 24 hours.  Of course, this may not
+always be desirable, so caveat user!
 
 =head2 Overloading
 
