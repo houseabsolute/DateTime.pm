@@ -48,6 +48,7 @@ _real_is_leap_year(IV y)
 {
   IV r = 0;
 
+  /* We need to have this first so that year 0 is a leap year */
   if (y % 400 == 0) {
     r = 1;
   } else if (y % 100 == 0) {
