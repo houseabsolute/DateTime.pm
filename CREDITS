@@ -13,3 +13,6 @@ borrow heavily from Graham's implementation.
 
 Dave Rolsky <autarch@urth.org> jammed all the round pegs in the square
 holes until they fit.
+
+Matthew Simon Cavalleto implemented the week_{year,number}
+functionality.
