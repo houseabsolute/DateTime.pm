@@ -175,6 +175,8 @@ sub is_wrap_mode     { $_[0]->{end_of_month} eq 'wrap'   ? 1 : 0 }
 sub is_limit_mode    { $_[0]->{end_of_month} eq 'limit'  ? 1 : 0 }
 sub is_preserve_mode { $_[0]->{end_of_month} eq 'preserve' ? 1 : 0 }
 
+sub end_of_month_mode { $_[0]->{end_of_month} }
+
 sub inverse
 {
     my $self = shift;
@@ -339,6 +341,8 @@ DateTime::Duration - Duration objects for date math
   $d->is_limit_mode
   $d->is_preserve_mode
 
+  print $d->end_of_month_mode;
+
   # Multiple all deltas by -1
   my $opposite = $d->inverse;
 
@@ -383,17 +387,17 @@ treated as 7 days, and hours are converted to minutes.  Seconds and
 nanoseconds are both treated separately.
 
 The "end_of_month" parameter must be either "wrap", "limit", or
-"preserve".  These specify how changes across the end of a month are
-handled.
+"preserve".  This parameter specifies how date math that crosses the
+end of a month is handled.
 
 In "wrap" mode, adding months or years that result in days beyond the
 end of the new month will roll over into the following month.  For
 instance, adding one year to Feb 29 will result in Mar 1.
 
-If you specify "end_of_month" mode as "limit", the end of the month
-is never crossed.  Thus, adding one year to Feb 29, 2000 will result
-in Feb 28, 2001.  However, adding three more years will result in Feb
-28, 2004, not Feb 29.
+If you specify "end_of_month" mode as "limit", the end of the month is
+never crossed.  Thus, adding one year to Feb 29, 2000 will result in
+Feb 28, 2001.  If you were to then add three more years this will
+result in Feb 28, 2004.
 
 If you specify "end_of_month" mode as "preserve", the same calculation
 is done as for "limit" except that if the original date is at the end
@@ -474,6 +478,10 @@ will return false for B<all> of these methods.
 =item * is_wrap_mode, is_limit_mode, is_preserve_mode
 
 Indicates what mode is used for end of month wrapping.
+
+=item * end_of_month_mode
+
+Returns one of "wrap", "limit", or "preserve".
 
 =item * inverse
 
