@@ -422,6 +422,51 @@ sub last_day_of_month
     return $class->new( %p, day => $day );
 }
 
+my $FromDayOfYearValidate = { %$NewValidate };
+foreach ( keys %$FromDayOfYearValidate )
+{
+    next if $_ eq 'month' || $_ eq 'day';
+
+    my %copy = %{ $FromDayOfYearValidate->{$_} };
+
+    delete $copy{default};
+    $copy{optional} = 1 unless $_ eq 'year' || $_ eq 'month';
+
+    $FromDayOfYearValidate->{$_} = \%copy;
+}
+$FromDayOfYearValidate->{day_of_year} =
+    { type => SCALAR,
+      callbacks =>
+      { 'is between 1 and 366' =>
+        sub { $_[0] >= 1 && $_[0] <= 366 }
+      }
+    };
+sub from_day_of_year
+{
+    my $class = shift;
+    my %p = validate( @_, $FromDayOfYearValidate );
+
+    my $is_leap_year = $class->_is_leap_year( $p{year} );
+
+    die "$p{year} is not a leap year.\n"
+        if $p{day_of_year} == 366 && ! $is_leap_year;
+
+    my $month_lengths = $is_leap_year ? \@LeapYearMonthLengths : \@MonthLengths;
+
+    my $month = 0;
+    my $day = delete $p{day_of_year};
+    while ( $month <= 11 && $day > $month_lengths->[$month] )
+    {
+        $day -= $month_lengths->[$month];
+        $month++;
+    }
+
+    return DateTime->new( %p,
+                          month => $month + 1,
+                          day   => $day,
+                        );
+}
+
 sub clone { bless { %{ $_[0] } }, ref $_[0] }
 
 sub year    { $_[0]->{local_c}{year} }
