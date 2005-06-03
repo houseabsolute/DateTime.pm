@@ -7,7 +7,7 @@ use vars qw($VERSION);
 
 BEGIN
 {
-    $VERSION = '0.28';
+    $VERSION = '0.29';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -1275,7 +1275,7 @@ sub add_duration
 
     if ( $deltas{days} )
     {
-        $self->{local_rd_days} += $deltas{days};
+        $self->{utc_rd_days} += $deltas{days};
 
         $self->{utc_year} += int( $deltas{days} / 365 ) + 1;
     }
@@ -1286,8 +1286,8 @@ sub add_duration
         # it the 0th day of the following month (which then will
         # normalize back to the last day of the new month).
         my ($y, $m, $d) = ( $dur->is_preserve_mode ?
-                            $self->_rd2ymd( $self->{local_rd_days} + 1 ) :
-                            $self->_rd2ymd( $self->{local_rd_days} )
+                            $self->_rd2ymd( $self->{utc_rd_days} + 1 ) :
+                            $self->_rd2ymd( $self->{utc_rd_days} )
                           );
 
         $d -= 1 if $dur->is_preserve_mode;
@@ -1295,18 +1295,18 @@ sub add_duration
         if ( ! $dur->is_wrap_mode && $d > 28 )
         {
             # find the rd for the last day of our target month
-            $self->{local_rd_days} = $self->_ymd2rd( $y, $m + $deltas{months} + 1, 0 );
+            $self->{utc_rd_days} = $self->_ymd2rd( $y, $m + $deltas{months} + 1, 0 );
 
             # what day of the month is it? (discard year and month)
-            my $last_day = ($self->_rd2ymd( $self->{local_rd_days} ))[2];
+            my $last_day = ($self->_rd2ymd( $self->{utc_rd_days} ))[2];
 
             # if our original day was less than the last day,
             # use that instead
-            $self->{local_rd_days} -= $last_day - $d if $last_day > $d;
+            $self->{utc_rd_days} -= $last_day - $d if $last_day > $d;
         }
         else
         {
-            $self->{local_rd_days} = $self->_ymd2rd( $y, $m + $deltas{months}, $d );
+            $self->{utc_rd_days} = $self->_ymd2rd( $y, $m + $deltas{months}, $d );
         }
 
         $self->{utc_year} += int( $deltas{months} / 12 ) + 1;
@@ -1314,7 +1314,17 @@ sub add_duration
 
     if ( $deltas{days} || $deltas{months} )
     {
-        $self->_calc_utc_rd;
+        # before the addition, there were 1+ leap seconds.  add that
+        # back in as "normal" seconds.  this preserves the behavior of
+        # DateTime 0.28, but I'm not sure it's really correct.
+        if ( $self->{utc_rd_secs} >= $self->_day_length( $self->{utc_rd_days} ) )
+        {
+            $self->{utc_rd_days}++;
+
+            $self->{utc_rd_secs} -= $self->_day_length( $self->{utc_rd_days} );
+        }
+
+        $self->_calc_local_rd;
 
         $self->_handle_offset_modifier( $self->second );
     }

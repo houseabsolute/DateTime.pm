@@ -1,3 +1,13 @@
+0.29    2005-06-03
+
+[ *** BACKWARDS INCOMPATIBILITIES *** ]
+
+- When adding/subtraction a duration with months or days that crossed
+a DST change, the result was based on the local time, not the UTC
+time.  For consistent results, it is necessary to use the UTC time for
+all date math.  Reported by J. Alexander Docauer.
+
+
 0.28    2005-02-27
 
 [ ENHANCEMENTS ]
