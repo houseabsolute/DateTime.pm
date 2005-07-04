@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 141;
+use Test::More tests => 142;
 use DateTime;
 
 
@@ -871,4 +871,12 @@ use DateTime;
     $dt->set_time_zone('-0100');
 
     is( $dt->datetime, '1997-06-30T23:00:00', '-0100 time leap second T+1' );
+}
+
+{
+    my $dt = DateTime->new(year => 2005, month => 12, day => 31,
+                           hour => 23, minute => 59, second => 60,
+                           time_zone => 'UTC');
+
+    is( $dt->second, 60, 'leap second at end of 2005 is allowed' );
 }
