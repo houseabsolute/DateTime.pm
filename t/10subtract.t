@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 100;
+use Test::More tests => 108;
 
 use DateTime;
 
@@ -358,4 +358,56 @@ require 'testlib.pl';
     is( $dur->delta_days, 0, 'math of DST change - delta_days is 0' );
     is( $dur->delta_minutes, 3, 'math of DST change - delta_minutes is 3' );
     is( $dur->delta_seconds, 0, 'math of DST change - delta_seconds is 0' );
+}
+
+{
+    my $dt1 = DateTime->new( year => 2005, month => 3,
+                             time_zone => "America/Chicago",
+                           );
+
+    my $dt2 = DateTime->new( year => 2005, month => 6,
+                             time_zone => "America/Chicago",
+                           );
+
+    my $dur = $dt2->subtract_datetime($dt1);
+
+    is( $dur->delta_months, 2, '2 months between two local times over DST change' );
+    is( $dur->delta_days, 30, '30 days between two local times over DST change' );
+    is( $dur->delta_minutes, 1380, '1380 minutes between two local times over DST change' );
+
+ TODO:
+    {
+        local $TODO = 'clarify or fix $dt2 + ($dt1 - $dt2) != $dt1';
+
+        $dur = DateTime::Duration->new( $dur->deltas, end_of_month => 'limit' );
+
+        my $dt3 = $dt1->clone->add_duration($dur);
+        is( $dt3, $dt2, 'begin date + duration = end - over DST change' );
+    }
+}
+
+{
+    my $dt1 = DateTime->new( year => 2005, month => 8,
+                             time_zone => 'Europe/London',
+                           );
+
+    my $dt2 = DateTime->new( year => 2005, month => 11,
+                             time_zone => 'Europe/London',
+                           );
+    local $::D = 1;
+    my $dur = $dt2->subtract_datetime($dt1);
+
+    is( $dur->delta_months, 3, '3 months between two local times over DST change' );
+    is( $dur->delta_days, 0, '0 days between two local times over DST change' );
+    is( $dur->delta_minutes, 60, '60 minutes between two local times over DST change' );
+
+ TODO:
+    {
+        local $TODO = 'clarify or fix $dt2 + ($dt1 - $dt2) != $dt1';
+
+        $dur = DateTime::Duration->new( $dur->deltas, end_of_month => 'limit' );
+
+        my $dt3 = $dt1->clone->add_duration($dur);
+        is( $dt3, $dt2, 'begin date + duration = end - over DST change' );
+    }
 }
