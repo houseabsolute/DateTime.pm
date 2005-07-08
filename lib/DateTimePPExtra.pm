@@ -2,7 +2,8 @@ package DateTime;
 
 use strict;
 
-require DateTime::LeapSecond;
+use DateTime::LeapSecond;
+
 
 sub _normalize_tai_seconds
 {

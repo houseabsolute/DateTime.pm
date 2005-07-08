@@ -2,7 +2,7 @@ package DateTime;
 
 use strict;
 
-require DateTimePPExtra;
+use DateTimePPExtra;
 
 my @MonthLengths =
     ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
