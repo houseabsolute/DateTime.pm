@@ -6,6 +6,8 @@ use Test::More tests => 10;
 
 use DateTime;
 
+# exercises a bug found in Perl version of _normalize_tai_seconds -
+# fixed in 0.15
 {
     my $dt = DateTime->new( year => 2000, month => 12 );
 
