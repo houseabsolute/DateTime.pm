@@ -180,6 +180,22 @@ sub is_preserve_mode { $_[0]->{end_of_month} eq 'preserve' ? 1 : 0 }
 
 sub end_of_month_mode { $_[0]->{end_of_month} }
 
+sub date_duration
+{
+    my $self = shift;
+
+    return
+        (ref $self)->new( map { $_ => $self->{$_} } qw( months days end_of_month ) )
+}
+
+sub time_duration
+{
+    my $self = shift;
+
+    return
+        (ref $self)->new( map { $_ => $self->{$_} } qw( minutes seconds nanoseconds end_of_month ) )
+}
+
 sub inverse
 {
     my $self = shift;
@@ -489,6 +505,16 @@ Indicates what mode is used for end of month wrapping.
 =item * end_of_month_mode
 
 Returns one of "wrap", "limit", or "preserve".
+
+=item * date_duration
+
+Returns a new object with the same I<date> (months only) delta and end
+of month mode as the current object.
+
+=item * time_duration
+
+Returns a new object with the same I<time> (minutes, seconds, and
+nanoseconds) deltas and end of month mode as the current object.
 
 =item * inverse
 

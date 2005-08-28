@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 118;
+use Test::More tests => 128;
 
 use DateTime;
 use DateTime::Duration;
@@ -65,6 +65,33 @@ use DateTime::Duration;
     ok( ! $dur->is_negative, "should not be negative" );
 
     ok( $dur->is_wrap_mode, "wrap mode" );
+}
+{
+    my %pairs = ( years   => 1,
+                  months  => 2,
+                  weeks   => 3,
+                  days    => 4,
+                  hours   => 6,
+                  minutes => 7,
+                  seconds => 8,
+                  nanoseconds => 9,
+                );
+
+    my $dur = DateTime::Duration->new( %pairs, end_of_month => 'limit' );
+
+    my $date_dur = $dur->date_duration;
+    is( $date_dur->delta_months, 14, "date - delta_months is 14" );
+    is( $date_dur->delta_minutes, 0, "date - delta_minutes is 0" );
+    is( $date_dur->delta_seconds, 0, "date - delta_seconds is 0" );
+    is( $date_dur->delta_nanoseconds, 0, "date - delta_nanoseconds is 0" );
+    ok( $date_dur->is_limit_mode, "limit mode" );
+
+    my $time_dur = $dur->time_duration;
+    is( $time_dur->delta_months, 0, "time  - delta_months is 0" );
+    is( $time_dur->delta_minutes, 367, "time  - delta_minutes is 367" );
+    is( $time_dur->delta_seconds, 8, "time  - delta_seconds is 8" );
+    is( $time_dur->delta_nanoseconds, 9, "time  - delta_nanoseconds is 9" );
+    ok( $time_dur->is_limit_mode, "limit mode" );
 }
 
 {

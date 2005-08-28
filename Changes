@@ -1,21 +1,10 @@
 0.30
 
-[ *** BACKWARDS INCOMPATIBILITIES *** ]
+[ ENHANCEMENTS ]
 
-- At the risk of much wrath, this release reverses the date math
-change made in 0.29.  It breaks a lot of expectations to do month/day
-math on the UTC time, not the local time.  For example, if you add 6
-months and cross DST bounday, 0.29 would seemingly add or subtract an
-hour from the local time, which confused people.
+- Added date_duration() and time_duration() methods to
+DateTime::Duraiton
 
-The upshot of this is that if you want perfectly consistent date math
-(ignoring times), you should use the floating time zone.
-
-- Also partially revert the change in 0.28 for subtract_datetime().
-To be consistent, the subtraction uses the local portions for year,
-month, & day, and UTC for hour, minute, and second.
-
-All the tests still pass, so I'm calling it good.
 
 
 0.2901  2005-07-04
