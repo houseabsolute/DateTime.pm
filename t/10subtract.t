@@ -6,9 +6,6 @@ use Test::More tests => 108;
 
 use DateTime;
 
-use lib './t';
-require 'testlib.pl';
-
 {
     my $date1 = DateTime->new( year => 2001, month => 5, day => 10,
 			       hour => 4, minute => 3, second => 2,
@@ -69,7 +66,7 @@ require 'testlib.pl';
     is( $dur->delta_seconds, 0, 'date minus itself should have no delta seconds' );
 
     my $new = $date1 - DateTime::Duration->new( years => 2 );
-    is( fake_ical($new), '19990510T040302Z', 'test - overloading' );
+    is( $new->datetime, '1999-05-10T04:03:02', 'test - overloading' );
 }
 
 {
@@ -77,16 +74,16 @@ require 'testlib.pl';
 			   hour => 5, minute => 1, second => 1,
 			   time_zone => 'UTC' );
 
-    my $X = $d->clone;
-    $X->subtract( weeks   => 1,
-		  days    => 1,
-		  hours   => 1,
-		  minutes => 1,
-		  seconds => 1,
-		);
+    my $d2 = $d->clone;
+    $d2->subtract( weeks   => 1,
+                   days    => 1,
+                   hours   => 1,
+                   minutes => 1,
+                   seconds => 1,
+                 );
 
-    ok( defined $X, 'Defined' );
-    is( fake_ical($X), '20011011T040000Z', 'Subtract and get the right thing' );
+    ok( defined $d2, 'Defined' );
+    is( $d2->datetime, '2001-10-11T04:00:00', 'Subtract and get the right thing' );
 }
 
 # based on bug report from Eric Cholet

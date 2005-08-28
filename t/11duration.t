@@ -7,9 +7,6 @@ use Test::More tests => 118;
 use DateTime;
 use DateTime::Duration;
 
-use lib './t';
-require 'testlib.pl';
-
 {
     my %pairs = ( years   => 1,
                   months  => 2,
@@ -89,7 +86,7 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
         $leap_day + DateTime::Duration->new( years => 1,
                                              end_of_month => 'wrap' );
 
-    is( fake_ical($new), '20050301Z', "new date should be 2005-03-01" );
+    is( $new->date, '2005-03-01', "new date should be 2005-03-01" );
 }
 
 {
@@ -97,7 +94,7 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
         $leap_day + DateTime::Duration->new( years => 1,
                                              end_of_month => 'limit' );
 
-    is( fake_ical($new), '20050228Z', "new date should be 2005-02-28" );
+    is( $new->date, '2005-02-28', "new date should be 2005-02-28" );
 }
 
 
@@ -106,12 +103,12 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
         $leap_day + DateTime::Duration->new( years => 1,
                                              end_of_month => 'preserve' );
 
-    is( fake_ical($new), '20050228Z', "new date should be 2005-02-28" );
+    is( $new->date, '2005-02-28', "new date should be 2005-02-28" );
 
     my $new2 =
         $leap_day + DateTime::Duration->new( months => 1,
                                              end_of_month => 'preserve' );
-    is( fake_ical($new2), '20040331Z', "new date should be 2004-03-31" );
+    is( $new2->date, '2004-03-31', "new date should be 2004-03-31" );
 }
 
 {

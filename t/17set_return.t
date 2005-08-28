@@ -7,9 +7,6 @@ use Test::More tests => 7;
 use DateTime;
 use DateTime::Duration;
 
-use lib './t';
-require 'testlib.pl';
-
 {
     my $dt = DateTime->now();
     my $du = DateTime::Duration->new( years => 1 );

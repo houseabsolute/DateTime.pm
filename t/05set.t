@@ -6,9 +6,6 @@ use Test::More tests => 35;
 
 use DateTime;
 
-use lib './t';
-require 'testlib.pl';
-
 {
     my $dt = DateTime->new( year => 1996, month => 11, day => 22,
                             hour => 18, minute => 30, second => 20,
