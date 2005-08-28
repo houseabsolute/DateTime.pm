@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 22;
+use Test::More tests => 25;
 
 use DateTime;
 
@@ -109,4 +109,19 @@ use DateTime;
     # is reversible this way - also needs docs
     my $dt2 = $dt->clone->subtract( hours => 2 )->subtract( days => 1 );
     is( $dt2->datetime, '2003-04-05T00:00:00', 'subtract 2 hours and then one day from 3 am, get midnight' );
+}
+
+{
+    my $dt = DateTime->new( year => 2003, month => 10, day => 25,
+                            time_zone => 'America/Chicago',
+                          );
+
+    $dt->add( days => 1, hours => 2 );
+    is( $dt->datetime, '2003-10-26T01:00:00', 'add one day & 2 hours from midnight, get 1 am' );
+
+    my $dt1 = $dt->clone->subtract( days => 1, hours => 2 );
+    is( $dt1->datetime, '2003-10-24T23:00:00', 'add one day & 2 hours from midnight, get 11 pm' );
+
+    my $dt2 = $dt->clone->subtract( hours => 2 )->subtract( days => 1 );
+    is( $dt2->datetime, '2003-10-25T00:00:00', 'subtract 2 hours and then one day from 3 am, get midnight' );
 }
