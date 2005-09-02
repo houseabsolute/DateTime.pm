@@ -2,8 +2,6 @@ package DateTime;
 
 use strict;
 
-use DateTimePPExtra;
-
 my @MonthLengths =
     ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
 
@@ -220,6 +218,11 @@ sub _is_leap_year
 sub _day_length { DateTime::LeapSecond::day_length($_[1]) }
 
 sub _accumulated_leap_seconds { DateTime::LeapSecond::leap_seconds($_[1]) }
+
+# This is down here so that _ymd2rd is available when it loads,
+# because it will load DateTime::LeapSecond, which needs
+# DateTime->_ymd2rd to be available when it is loading
+use DateTimePPExtra;
 
 
 1;
