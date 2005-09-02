@@ -79,19 +79,19 @@ use DateTime::Duration;
 
     my $dur = DateTime::Duration->new( %pairs, end_of_month => 'limit' );
 
-    my $date_dur = $dur->date_duration;
-    is( $date_dur->delta_months, 14, "date - delta_months is 14" );
-    is( $date_dur->delta_minutes, 0, "date - delta_minutes is 0" );
-    is( $date_dur->delta_seconds, 0, "date - delta_seconds is 0" );
-    is( $date_dur->delta_nanoseconds, 0, "date - delta_nanoseconds is 0" );
-    ok( $date_dur->is_limit_mode, "limit mode" );
+    my $calendar_dur = $dur->calendar_duration;
+    is( $calendar_dur->delta_months, 14, "date - delta_months is 14" );
+    is( $calendar_dur->delta_minutes, 0, "date - delta_minutes is 0" );
+    is( $calendar_dur->delta_seconds, 0, "date - delta_seconds is 0" );
+    is( $calendar_dur->delta_nanoseconds, 0, "date - delta_nanoseconds is 0" );
+    ok( $calendar_dur->is_limit_mode, "limit mode" );
 
-    my $time_dur = $dur->time_duration;
-    is( $time_dur->delta_months, 0, "time  - delta_months is 0" );
-    is( $time_dur->delta_minutes, 367, "time  - delta_minutes is 367" );
-    is( $time_dur->delta_seconds, 8, "time  - delta_seconds is 8" );
-    is( $time_dur->delta_nanoseconds, 9, "time  - delta_nanoseconds is 9" );
-    ok( $time_dur->is_limit_mode, "limit mode" );
+    my $clock_dur = $dur->clock_duration;
+    is( $clock_dur->delta_months, 0, "time  - delta_months is 0" );
+    is( $clock_dur->delta_minutes, 367, "time  - delta_minutes is 367" );
+    is( $clock_dur->delta_seconds, 8, "time  - delta_seconds is 8" );
+    is( $clock_dur->delta_nanoseconds, 9, "time  - delta_nanoseconds is 9" );
+    ok( $clock_dur->is_limit_mode, "limit mode" );
 }
 
 {
