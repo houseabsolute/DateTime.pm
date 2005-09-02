@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 52;
+use Test::More tests => 65;
 
 use DateTime;
 
@@ -47,6 +47,48 @@ use DateTime;
 
     is( $dt2->clone->subtract_duration($dur3), $dt1,
         'delta_md is doubly reversible from end point' );
+}
+
+# same as above, but now the UTC hour of the earlier datetime is
+# _greater_ than that of the later one.  this checks that overflows
+# are handled correctly.
+{
+    my $dt1 = DateTime->new( year => 2003, month => 5, day => 6, hour => 18,
+                             time_zone => 'America/Chicago',
+                           );
+
+    my $dt2 = DateTime->new( year => 2003, month => 11, day => 6, hour => 18,
+                             time_zone => 'America/Chicago',
+                           );
+
+    my $dur1 = $dt2->subtract_datetime($dt1);
+    my %deltas1 = $dur1->deltas;
+    is( $deltas1{months}, 6, 'delta_months is 6' );
+    is( $deltas1{days}, 0, 'delta_days is 0' );
+    is( $deltas1{minutes}, 60, 'delta_minutes is 60' );
+    is( $deltas1{seconds}, 0, 'delta_seconds is 0' );
+    is( $deltas1{nanoseconds}, 0, 'delta_nanoseconds is 0' );
+}
+
+# the docs say use UTC to guarantee reversibility
+{
+    my $dt1 = DateTime->new( year => 2003, month => 5, day => 6,
+                             time_zone => 'America/Chicago',
+                           );
+
+    my $dt2 = DateTime->new( year => 2003, month => 11, day => 6,
+                             time_zone => 'America/Chicago',
+                           );
+
+    $dt1->set_time_zone('UTC');
+    $dt2->set_time_zone('UTC');
+
+    my $dur = $dt2->subtract_datetime($dt1);
+
+    is( $dt1->add_duration($dur), $dt2,
+        'subtraction is reversible from start point with UTC' );
+    is( $dt2->subtract_duration($dur), $dt2,
+        'subtraction is reversible from start point with UTC' );
 }
 
 # The important thing here is that after a subtraction, we can use the
@@ -160,4 +202,37 @@ use DateTime;
 
     is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible from start point' );
     is( $dt2->clone->subtract_duration($dur), $dt1, 'subtraction is reversible from end point' );
+}
+
+{
+    my $dt1 = DateTime->new( year => 2005, month => 8,
+                             time_zone => 'Europe/London',
+                           );
+
+    my $dt2 = DateTime->new( year => 2005, month => 11,
+                             time_zone => 'Europe/London',
+                           );
+
+    my $dur = $dt2->subtract_datetime($dt1);
+    my %deltas = $dur->deltas;
+    is( $deltas{months}, 3, '3 months between two local times over DST change' );
+    is( $deltas{days}, 0, '0 days between two local times over DST change' );
+    is( $deltas{minutes}, 60, '60 minutes between two local times over DST change' );
+}
+
+# same as previous but without hours overflow
+{
+    my $dt1 = DateTime->new( year => 2005, month => 8, hour => 12,
+                             time_zone => 'Europe/London',
+                           );
+
+    my $dt2 = DateTime->new( year => 2005, month => 11, hour => 12,
+                             time_zone => 'Europe/London',
+                           );
+
+    my $dur = $dt2->subtract_datetime($dt1);
+    my %deltas = $dur->deltas;
+    is( $deltas{months}, 3, '3 months between two local times over DST change' );
+    is( $deltas{days}, 0, '0 days between two local times over DST change' );
+    is( $deltas{minutes}, 60, '60 minutes between two local times over DST change' );
 }
