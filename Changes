@@ -15,6 +15,10 @@ from datetime math.
 - delta_md() and delta_days() did not always return correct values
 when crossing a DST change.
 
+- The pure Perl version of the code had a dependency ordering problem
+where DateTime::LeapSecond depended on other pure Perl code that
+wasn't yet available.  I'm not sure how this ever worked.
+
 [ *** BACKWARDS INCOMPATIBILITIES *** ]
 
 - The subtract_datetime() method now operates exclusively on the UTC
