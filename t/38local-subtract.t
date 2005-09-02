@@ -44,9 +44,21 @@ use DateTime;
 
     is( $dt1->clone->add_duration($dur3), $dt2,
         'delta_md is reversible from start point' );
-
     is( $dt2->clone->subtract_duration($dur3), $dt1,
-        'delta_md is doubly reversible from end point' );
+        'delta_md is reversible from end point' );
+
+    my $dur4 = $dt2->delta_days($dt1);
+    my %deltas4 = $dur4->deltas;
+    is( $deltas4{months}, 0, 'delta_months is 0' );
+    is( $deltas4{days}, 184, 'delta_days is 184' );
+    is( $deltas4{minutes}, 0, 'delta_minutes is 0' );
+    is( $deltas4{seconds}, 0, 'delta_seconds is 0' );
+    is( $deltas4{nanoseconds}, 0, 'delta_nanoseconds is 0' );
+
+    is( $dt1->clone->add_duration($dur3), $dt2,
+        'delta_days is reversible from start point' );
+    is( $dt2->clone->subtract_duration($dur4), $dt1,
+        'delta_days is reversible from end point' );
 }
 
 # same as above, but now the UTC hour of the earlier datetime is
