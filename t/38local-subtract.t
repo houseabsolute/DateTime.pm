@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 65;
+use Test::More tests => 82;
 
 use DateTime;
 
@@ -80,6 +80,35 @@ use DateTime;
     is( $deltas1{minutes}, 60, 'delta_minutes is 60' );
     is( $deltas1{seconds}, 0, 'delta_seconds is 0' );
     is( $deltas1{nanoseconds}, 0, 'delta_nanoseconds is 0' );
+}
+
+# make sure delta_md and delta_days work in the face of DST change
+# where we lose an hour
+{
+    my $dt1 = DateTime->new( year => 2003, month => 11, day => 6,
+                             time_zone => 'America/Chicago',
+                           );
+
+    my $dt2 = DateTime->new( year => 2004, month => 5, day => 6,
+                             time_zone => 'America/Chicago',
+                           );
+
+    my $dur1 = $dt2->delta_md($dt1);
+    my %deltas1 = $dur1->deltas;
+    is( $deltas1{months}, 6, 'delta_months is 6' );
+    is( $deltas1{days}, 0, 'delta_days is 0' );
+    is( $deltas1{minutes}, 0, 'delta_minutes is 0' );
+    is( $deltas1{seconds}, 0, 'delta_seconds is 0' );
+    is( $deltas1{nanoseconds}, 0, 'delta_nanoseconds is 0' );
+
+    my $dur2 = $dt2->delta_days($dt1);
+    my %deltas2 = $dur2->deltas;
+    is( $deltas2{months}, 0, 'delta_months is 0' );
+    is( $deltas2{days}, 182, 'delta_days is 182' );
+    is( $deltas2{minutes}, 0, 'delta_minutes is 0' );
+    is( $deltas2{seconds}, 0, 'delta_seconds is 0' );
+    is( $deltas2{nanoseconds}, 0, 'delta_nanoseconds is 0' );
+
 }
 
 # the docs say use UTC to guarantee reversibility
