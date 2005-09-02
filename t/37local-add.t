@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 25;
+use Test::More tests => 26;
 
 use DateTime;
 
@@ -124,4 +124,17 @@ use DateTime;
 
     my $dt2 = $dt->clone->subtract( hours => 2 )->subtract( days => 1 );
     is( $dt2->datetime, '2003-10-25T00:00:00', 'subtract 2 hours and then one day from 3 am, get midnight' );
+}
+
+# an example from the docs
+{
+    my $dt = DateTime->new( year => 2003, month => 4, day => 5,
+                            hour => 2,
+                            time_zone => 'America/Chicago',
+                          );
+
+    $dt->add( hours => 24 );
+
+    is( $dt->datetime, '2003-04-06T03:00:00',
+        'datetime after adding 24 hours is 2003-04-06T03:00:00' );
 }
