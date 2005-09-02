@@ -131,7 +131,9 @@ use DateTime;
     is( $deltas{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
     is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible' );
-    is( $dt2->clone->subtract_duration($dur->time_duration)->subtract_duration($dur->date_duration),
+    # this is an example in the docs
+    is( $dt2->clone->subtract_duration( $dur->clock_duration )
+                   ->subtract_duration( $dur->calendar_duration ),
         $dt1, 'subtraction is doubly reversible (using time & date portions separately)' );
 }
 
