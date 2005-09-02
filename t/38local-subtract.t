@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 45;
+use Test::More tests => 52;
 
 use DateTime;
 
@@ -42,13 +42,11 @@ use DateTime;
     is( $deltas3{seconds}, 0, 'delta_seconds is 0' );
     is( $deltas3{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
-    is( $dt1->clone->truncate( to => 'month' )->add_duration($dur3),
-        $dt2->clone->truncate( to => 'month' ),
-        'delta_md is reversible' );
+    is( $dt1->clone->add_duration($dur3), $dt2,
+        'delta_md is reversible from start point' );
 
-    is( $dt2->clone->truncate( to => 'month' )->subtract_duration($dur3),
-        $dt1->clone->truncate( to => 'month' ),
-        'delta_md is doubly reversible' );
+    is( $dt2->clone->subtract_duration($dur3), $dt1,
+        'delta_md is doubly reversible from end point' );
 }
 
 # The important thing here is that after a subtraction, we can use the
@@ -135,4 +133,29 @@ use DateTime;
     is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible' );
     is( $dt2->clone->subtract_duration($dur->time_duration)->subtract_duration($dur->date_duration),
         $dt1, 'subtraction is doubly reversible (using time & date portions separately)' );
+}
+
+# from example in docs
+{
+    my $dt1 = DateTime->new( year => 2003, month => 5, day => 6,
+                             time_zone => 'America/Chicago',
+                           );
+
+    my $dt2 = DateTime->new( year => 2003, month => 11, day => 6,
+                             time_zone => 'America/Chicago',
+                           );
+
+    $dt1->set_time_zone('floating');
+    $dt2->set_time_zone('floating');
+
+    my $dur = $dt2->subtract_datetime($dt1);
+    my %deltas = $dur->deltas;
+    is( $deltas{months}, 6, 'delta_months is 6' );
+    is( $deltas{days}, 0, 'delta_days is 0' );
+    is( $deltas{minutes}, 0, 'delta_minutes is 0' );
+    is( $deltas{seconds}, 0, 'delta_seconds is 0' );
+    is( $deltas{nanoseconds}, 0, 'delta_nanoseconds is 0' );
+
+    is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible from start point' );
+    is( $dt2->clone->subtract_duration($dur), $dt1, 'subtraction is reversible from end point' );
 }
