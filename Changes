@@ -18,7 +18,7 @@ when crossing a DST change.
 [ *** BACKWARDS INCOMPATIBILITIES *** ]
 
 - The subtract_datetime() method now operates exclusively on the UTC
-representation of the datetime, which makes for much saner and
+representation of the datetime, which makes for saner and more
 predictable results.
 
 
