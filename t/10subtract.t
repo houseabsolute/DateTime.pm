@@ -391,7 +391,6 @@ use DateTime;
     my $dt2 = DateTime->new( year => 2005, month => 11,
                              time_zone => 'Europe/London',
                            );
-    local $::D = 1;
     my $dur = $dt2->subtract_datetime($dt1);
 
     is( $dur->delta_months, 3, '3 months between two local times over DST change' );
