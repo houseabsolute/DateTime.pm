@@ -2,9 +2,24 @@
 
 [ ENHANCEMENTS ]
 
-- Added date_duration() and time_duration() methods to
-DateTime::Duraiton
+- Added calendar_duration() and clock_duration() methods to
+DateTime::Duration
 
+- Expand and rewrite the docs on date math to try to explain the
+problems DST introduces to various types of date math.  The docs now
+also include some specific recommendations on getting sane results
+from datetime math.
+
+[ BUG FIXES ]
+
+- delta_md() and delta_days() did not always return correct values
+when crossing a DST change.
+
+[ *** BACKWARDS INCOMPATIBILITIES *** ]
+
+- The subtract_datetime() method now operates exclusively on the UTC
+representation of the datetime, which makes for much saner and
+predictable results.
 
 
 0.2901  2005-07-04
@@ -16,10 +31,10 @@ DateTime::Duraiton
 
 [ *** BACKWARDS INCOMPATIBILITIES *** ]
 
-- When adding/subtraction a duration with months or days that crossed
+- When adding/subtracting a duration with months or days that crossed
 a DST change, the result was based on the local time, not the UTC
-time.  For consistent results, it is necessary to use the UTC time for
-all date math.  Reported by J. Alexander Docauer.
+time.  For consistent results, it is necessary to use the UTC time
+(but local date) for all date math.  Reported by J. Alexander Docauer.
 
 
 0.28    2005-02-27
