@@ -1158,12 +1158,27 @@ sub delta_md
     my $self = shift;
     my $dt = shift;
 
-    my ( $smaller, $greater ) = sort $self, $dt;
+    my ( $smaller, $bigger ) = sort $self, $dt;
 
-    my $dur = $greater->subtract_datetime($smaller);
+    my ( $months, $days, undef, undef, undef ) =
+        $dt->_adjust_for_positive_difference
+            ( $bigger->year * 12 + $bigger->month, $smaller->year * 12 + $smaller->month,
 
-    return DateTime::Duration->new( months => $dur->delta_months,
-                                    days   => $dur->delta_days );
+              $bigger->day, $smaller->day,
+
+              0, 0,
+
+              0, 0,
+
+              0, 0,
+
+	      60,
+
+	      $smaller->_month_length( $smaller->year, $smaller->month ),
+            );
+
+    return DateTime::Duration->new( months => $months,
+                                    days   => $days );
 }
 
 sub delta_days
@@ -1171,9 +1186,9 @@ sub delta_days
     my $self = shift;
     my $dt = shift;
 
-    my ( $smaller, $greater ) = sort $self, $dt;
+    my ( $smaller, $bigger ) = sort( ($self->local_rd_values)[0], ($dt->local_rd_values)[0] );
 
-    DateTime::Duration->new( days => int( $greater->jd - $smaller->jd ) );
+    DateTime::Duration->new( days => $bigger - $smaller );
 }
 
 sub delta_ms
@@ -2788,8 +2803,9 @@ calculations, and then using local time zones for presentation.
 =item * calendar vs calendar/clock math
 
 If you only care about the calendar portion of a datetime, you should
-use the C<delta_md()> method instead of C<subtract_datetime()>.  This
-will give predictable, unsurprising results.
+use either C<delta_md()> or C<delta_days()>, not
+C<subtract_datetime()>.  This will give predictable, unsurprising
+results.
 
 =item * subtract_datetime() and add_duration()
 
@@ -2801,7 +2817,8 @@ are always true:
   $dt1 + $dur = $dt2
   $dt2 - $dur = $dt1
 
-Note that using C<delta_md()> also ensures that this formula works.
+Note that using C<delta_md()> or C<delta_days> also ensures that this
+formula always works, regardless of DST changes.
 
 =back
 
