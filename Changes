@@ -2,11 +2,12 @@
 
 [ ENHANCEMENTS ]
 
-- Expanded and rewrote the docs on date math to try to explain the
-problems DST introduces to various types of date math.  The docs now
-also include some specific recommendations on getting sane results
-from datetime math, specifically don't do date math with datetime
-objects that are not UTC or floating.
+- Expanded and rewrote the docs on date math to try to explain exactly
+how DateTime.pm works, and in particular cover the problems DST
+introduces to various types of date math.  The docs now also include
+some specific recommendations on getting sane results from datetime
+math, specifically don't do date math with datetime objects that are
+not UTC or floating.
 
 - Added calendar_duration() and clock_duration() methods to
 DateTime::Duration
