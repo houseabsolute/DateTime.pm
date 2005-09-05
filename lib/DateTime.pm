@@ -2532,6 +2532,67 @@ It's important to have some understanding of how datetime math is
 implemented in order to effectively use this module and
 C<DateTime::Duration>.
 
+=head3 Making Things Simple
+
+If you want to simplify your life and not have to think too hard about
+the nitty-gritty of datetime math, I have several recommendations:
+
+=over 4
+
+=item * use the floating time zone
+
+If you do not care about time zones or leap seconds, use the
+"floating" timezone:
+
+  my $dt = DateTime->now( time_zone => 'floating' );
+
+Math done on two objects in the floating time zone produces very
+predictable results.
+
+=item * use UTC for all calculations
+
+If you do care about time zones (particularly DST) or leap seconds,
+try to use non-UTC time zones for presentation and user input only.
+Convert to UTC immediately and convert back to the local time zone for
+presentation:
+
+  my $dt = DateTime->new( %user_input, time_zone => $user_tz );
+  $dt->set_time_zone('UTC');
+
+  # do various operations - store it, retrieve it, etc.
+
+  $dt->set_time_zone($user_tz);
+  print $dt->datetime;
+
+=item * math on non-UTC time zones
+
+If you need to do date math on objects with non-UTC time zones, please
+read all of the caveats below carefully.  The results C<DateTime.pm>
+are predictable and correct, but may sometimes be surprising to some
+people.
+
+=item * calendar vs calendar/clock math
+
+If you only care about the calendar portion of a datetime, you should
+use either C<delta_md()> or C<delta_days()>, not
+C<subtract_datetime()>.  This will give predictable, unsurprising
+results.
+
+=item * subtract_datetime() and add_duration()
+
+You must convert your datetime objects to the UTC time zone before
+doing date math if you want to make sure that the following formulas
+are always true:
+
+  $dt2 - $dt1 = $dur
+  $dt1 + $dur = $dt2
+  $dt2 - $dur = $dt1
+
+Note that using C<delta_md()> or C<delta_days> also ensures that this
+formula always works, regardless of DST changes.
+
+=back
+
 =head3 Adding a Duration to a Datetime
 
 The parts of a duration can be broken down into five parts.  These are
@@ -2540,6 +2601,10 @@ a date is different than adding 4 weeks or 28, 29, 30, or 31 days.
 Similarly, due to DST and leap seconds, adding a day can be different
 than adding 86,400 seconds, and adding a minute is not exactly the
 same as 60 seconds.
+
+We cannot convert between these units, except for seconds and
+nanoseconds, because there is no fixed conversion between the two
+units, because of things like leap seconds, DST changes, etc.
 
 C<DateTime.pm> always adds (or subtracts) days, then months, minutes,
 and then seconds and nanoseconds.  If there are any boundary
@@ -2576,6 +2641,31 @@ We see similar strangeness when math crosses a DST boundary:
   $dt->add( minutes => 3 )->( days => 1 );
   # 2003-04-06 03:01:00
 
+Note that if you converted the datetime object to UTC first you would
+get predictable results.
+
+If you want to know how many seconds a duration object represents, you
+have to add it to a datetime to find out, so you could do:
+
+ my $now = DateTime->now( time_zone => 'UTC' );
+ my $later = $now->clone->add_duration($duration);
+
+ my $seconds_dur = $later->subtract_datetime_absolute($now);
+
+This returns a duration which only contains seconds and nanoseconds.
+
+If we were add the duration to a different datetime object we might
+get a different number of seconds.
+
+If you need to do lots of work with durations, take a look at Rick
+Measham's C<DateTime::Format::Duration> module, which lets you present
+information from durations in many useful ways.
+
+There are other subtract/delta methods in DateTime.pm to generate
+different types of durations.  These methods are
+C<subtract_datetime()>, C<subtract_datetime_absolute()>,
+C<delta_md()>, C<delta_days()>, and C<delta_ms()>.
+
 =head3 Datetime Subtraction
 
 Date subtraction is done solely based on the two object's datetimes in
@@ -2594,19 +2684,12 @@ For example:
     my $dur = $dt2->subtract_datetime($dt1);
     # 6 months _and_ 60 minutes!
 
-If this seems wrong to you, you probably want to just do I<date> math
-(as opposed to C<datetime> math).  In that case you should make sure
-that you set both objects to the floating time zone before calling
-C<subtract_datetime()>:
+If this seems wrong to you, you probably wan I<date-only> math (as
+opposed to I<datetime> math).  In that case, use the C<delta_md()>
+method:
 
-    $dt1->set_time_zone('floating');
-    $dt2->set_time_zone('floating');
-
-    my $dur = $dt2->subtract_datetime($dt1);
+    my $dur = $dt2->delta_md($dt1);
     # 6 months, no minutes
-
-    $dt1->add_duration($dur)      == $dt2;  # true
-    $dt2->subtract_duration($dur) == $dt1;  # true
 
 =head3 Reversibility
 
@@ -2617,7 +2700,7 @@ adding 3 minutes and 1 day in two separate calls.
 
 If we take a duration returned from C<subtract_datetime()> and then
 try to add or subtract that duration from one of the datetimes we just
-used, we get strange results:
+used, we get interesting results:
 
   my $dt1 = DateTime->new( year => 2003, month => 4, day => 5,
                            hour => 1, minute => 58,
@@ -2678,7 +2761,7 @@ exclusively, adding 6 months to C<$dt1> above would result in
 
 =head3 Leap Seconds and Date Math
 
-The presence of leap seconds can cause some strange anomalies in date
+The presence of leap seconds can cause even more anomalies in date
 math.  For example, the following is a legal datetime:
 
   my $dt = DateTime->new( year => 1971, month => 12, day => 31,
@@ -2748,79 +2831,6 @@ math on it, and switch it back to the local time zone afterwards.
 This avoids the possibility of having date math throw an exception,
 and makes sure that 1 day equals 24 hours.  Of course, this may not
 always be desirable, so caveat user!
-
-=head3 The Results of Date Math
-
-Because date math is done on each unit separately, the results of date
-math may not always be what you expect.
-
-As we mentioned earlier, internally a duration is made up internally
-of five different units: months, days, minutes, seconds, and
-nanoseconds.
-
-Given any pair of units, we cannot convert between them, except for
-seconds and nanoseconds, because there is no fixed conversion between
-the two units, because of things like leap seconds, DST changes, etc.
-
-Here's an example, based on a question from Mark Fowler to the
-datetime@perl.org list.
-
-If you want to know how many seconds a duration represents, you have
-to add it to a datetime to find out, so you could do:
-
- my $now = DateTime->now( time_zone => 'UTC' );
- my $later = $now->clone->add_duration($duration);
-
- my $seconds_dur = $later->subtract_datetime_absolute($now);
-
-This returns a duration which only contains seconds and nanoseconds.
-
-If we were add the duration to a different datetime object we might
-get a different number of seconds.
-
-There are other subtract/delta methods in DateTime.pm to generate
-different types of durations.  These methods are
-C<subtract_datetime()>, C<subtract_datetime_absolute()>,
-C<delta_md()>, C<delta_days()>, and C<delta_ms()>.
-
-=head3 Date Math Summary
-
-If you are dealing with local time zones (not floating or UTC), there
-are several things you should think about when writing your date math
-code:
-
-=over 4
-
-=item * don't assign a local time zone except for presentation
-
-Generally speaking, giving a datetime object a local time zone should
-be avoided except for presenting a datetime to an end user in that
-time zone.  Local time zones bring in DST changes, which greatly
-complicates date math, as we just saw.  This can all be avoided by
-consistently using only UTC or the floating time zone for all
-calculations, and then using local time zones for presentation.
-
-=item * calendar vs calendar/clock math
-
-If you only care about the calendar portion of a datetime, you should
-use either C<delta_md()> or C<delta_days()>, not
-C<subtract_datetime()>.  This will give predictable, unsurprising
-results.
-
-=item * subtract_datetime() and add_duration()
-
-You must convert your datetime objects to the UTC time zone before
-doing date math if you want to make sure that the following formulas
-are always true:
-
-  $dt2 - $dt1 = $dur
-  $dt1 + $dur = $dt2
-  $dt2 - $dur = $dt1
-
-Note that using C<delta_md()> or C<delta_days> also ensures that this
-formula always works, regardless of DST changes.
-
-=back
 
 =head2 Overloading
 
