@@ -2446,6 +2446,32 @@ as well as due to the presence of leap seconds.
 The returned duration may have deltas for months, days, minutes,
 seconds, and nanoseconds.
 
+=item * delta_md( $datetime )
+
+=item * delta_days( $datetime )
+
+Each of these methods returns a new C<DateTime::Duration> object
+representing some portion of the difference between two datetimes.
+The C<delta_md()> method returns a duration which contains only the
+month and day portions of the duration is represented.  The
+C<delta_days()> method returns a duration which contains only days,
+and the C<delta_ms()> method 
+
+The C<delta_md> and C<delta_days> methods truncate the duration so
+that any fractional portion of a day is ignored.  Both of these
+methods operate on the date portion of a datetime only, and so
+effectively ignore the time zone.
+
+Unlike the subtraction methods, B<these methods always return a
+positive (or zero) duration>.
+
+=item * delta_ms( $datetime )
+
+Returns a duration which contains only minutes and seconds.  Any day
+and month differences to minutes are converted to minutes and seconds.
+
+B<Always return a positive (or zero) duration>.
+
 =item * subtract_datetime_absolute( $datetime )
 
 This method returns a new C<DateTime::Duration> object representing
@@ -2453,27 +2479,6 @@ the difference between the two dates in seconds and nanoseconds.  This
 is the only way to accurately measure the absolute amount of time
 between two datetimes, since units larger than a second do not
 represent a fixed number of seconds.
-
-=item * delta_md( $datetime )
-
-=item * delta_days( $datetime )
-
-=item * delta_ms( $datetime )
-
-Each of these methods returns a new C<DateTime::Duration> object
-representing some portion of the difference between two datetimes.
-The C<delta_md()> method returns a duration which contains only the
-month and day portions of the duration is represented.  The
-C<delta_days()> method returns a duration which contains only days,
-and the C<delta_ms()> method returns a duration which contains only
-minutes and seconds.
-
-The C<delta_md> and C<delta_days> methods truncate the duration so
-that any fractional portion of a day is ignored.  The C<delta_ms>
-method converts any day and month differences to minutes.
-
-Unlike the subtraction methods, B<these methods always return a
-positive (or zero) duration>.
 
 =back
 
@@ -2573,10 +2578,10 @@ people.
 
 =item * calendar vs calendar/clock math
 
-If you only care about the calendar portion of a datetime, you should
-use either C<delta_md()> or C<delta_days()>, not
+If you only care about the calendar (date) portion of a datetime, you
+should use either C<delta_md()> or C<delta_days()>, not
 C<subtract_datetime()>.  This will give predictable, unsurprising
-results.
+results, free from DST-related complications.
 
 =item * subtract_datetime() and add_duration()
 
