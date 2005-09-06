@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 96;
+use Test::More tests => 105;
 
 use DateTime;
 
@@ -330,4 +330,44 @@ use DateTime;
         is( $neg_diff->delta_days, -1, "-1 day diff at end of month" );
         is( $neg_diff->delta_months, 0, "0 month diff at end of month" );
     }
+}
+
+{
+    my $dt1 = DateTime->new( year => 2005, month => 6, day => 11,
+                             time_zone => 'UTC',
+                           );
+
+    my $dt2 = DateTime->new( year => 2005, month => 11, day => 10,
+                             time_zone => 'UTC',
+                           );
+
+    my $dur = $dt2->subtract_datetime($dt1);
+    my %deltas = $dur->deltas;
+    is( $deltas{months}, 4, '4 months - smaller day > bigger day' );
+    is( $deltas{days}, 29, '29 days - smaller day > bigger day' );
+    is( $deltas{minutes}, 0, '0 minutes - smaller day > bigger day' );
+
+    is( $dt1->clone->add_duration($dur), $dt2, '$dt1 + $dur == $dt2' );
+    # XXX - this does not work, nor will it ever work
+#    is( $dt2->clone->subtract_duration($dur), $dt1, '$dt2 - $dur == $dt1' );
+}
+
+
+{
+    my $dt1 = DateTime->new( year => 2005, month => 6, day => 11,
+                             time_zone => 'UTC',
+                           );
+
+    my $dt2 = DateTime->new( year => 2005, month => 11, day => 10,
+                             time_zone => 'UTC',
+                           );
+
+    my $dur = $dt2->delta_days($dt1);
+    my %deltas = $dur->deltas;
+    is( $deltas{months}, 0, '30 months - smaller day > bigger day' );
+    is( $deltas{days}, 152, '152 days - smaller day > bigger day' );
+    is( $deltas{minutes}, 0, '0 minutes - smaller day > bigger day' );
+
+    is( $dt1->clone->add_duration($dur), $dt2, '$dt1 + $dur == $dt2' );
+    is( $dt2->clone->subtract_duration($dur), $dt1, '$dt2 - $dur == $dt1' );
 }
