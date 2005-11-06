@@ -1056,6 +1056,9 @@ sub subtract_datetime
 
 	      $minute_length,
 
+              # XXX - using the smaller as the month length is
+              # somewhat arbitrary, we could also use the bigger -
+              # either way we have reversibility problems
 	      $dt1->_month_length( $smaller->year, $smaller->month ),
             );
 
@@ -2268,8 +2271,8 @@ start of the epoch will be returned as a negative number.
 This return value from this method is always an integer.
 
 Since the epoch does not account for leap seconds, the epoch time for
-1971-12-31T23:59:60 (UTC) is exactly the same as that for
-1972-01-01T00:00:00.
+1972-12-31T23:59:60 (UTC) is exactly the same as that for
+1973-01-01T00:00:00.
 
 Epoch times cannot represent many dates on most platforms, and this
 method may simply return undef in some cases.
@@ -2769,7 +2772,7 @@ exclusively, adding 6 months to C<$dt1> above would result in
 The presence of leap seconds can cause even more anomalies in date
 math.  For example, the following is a legal datetime:
 
-  my $dt = DateTime->new( year => 1971, month => 12, day => 31,
+  my $dt = DateTime->new( year => 1972, month => 12, day => 31,
                           hour => 23, minute => 59, second => 60,
                           time_zone => 'UTC' );
 
@@ -2777,13 +2780,13 @@ If we do the following:
 
  $dt->add( months => 1 );
 
-Then the datetime is now "1972-02-01 00:00:00", because there is no
-23:59:60 on 1972-01-31.
+Then the datetime is now "1973-02-01 00:00:00", because there is no
+23:59:60 on 1973-01-31.
 
 Leap seconds also force us to distinguish between minutes and seconds
 during date math.  Given the following datetime:
 
-  my $dt = DateTime->new( year => 1971, month => 12, day => 31,
+  my $dt = DateTime->new( year => 1972, month => 12, day => 31,
                           hour => 23, minute => 59, second => 30,
                           time_zone => 'UTC' );
 
@@ -2793,16 +2796,16 @@ day, beginning at 23:59:00, actually contains 61 seconds.
 
 Here are the results we get:
 
-  # 1971-12-31 23:59:30 - our starting datetime
+  # 1972-12-31 23:59:30 - our starting datetime
 
   $dt->clone->add( minutes => 1 );
-  # 1972-01-01 00:00:30 - one minute later
+  # 1973-01-01 00:00:30 - one minute later
 
   $dt->clone->add( seconds => 60 );
-  # 1972-01-01 00:00:29 - 60 seconds later
+  # 1973-01-01 00:00:29 - 60 seconds later
 
   $dt->clone->add( seconds => 61 );
-  # 1972-01-01 00:00:30 - 61 seconds later
+  # 1973-01-01 00:00:30 - 61 seconds later
 
 =head3 Local vs. UTC and 24 hours vs. 1 day
 
