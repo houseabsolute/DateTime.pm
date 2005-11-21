@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 97;
+use Test::More tests => 102;
 
 use DateTime;
 
@@ -318,6 +318,26 @@ use DateTime;
                            );
 
     my $dt1 = $dt2->clone->subtract( hours => 1 );
+
+    my $dur = $dt2->subtract_datetime($dt1);
+
+    my %deltas = $dur->deltas;
+    is( $deltas{months}, 0, '0 months between two local times over DST change' );
+    is( $deltas{days}, 0, '0 days between two local times over DST change' );
+    is( $deltas{minutes}, 60, '60 minutes between two local times over DST change' );
+
+    is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible' );
+    is( $dt2->clone->subtract_duration($dur), $dt1, 'subtraction is doubly reversible' );
+}
+
+{
+    my $dt1 = DateTime->new( year => 2003, month => 5, day => 6,
+                             time_zone => 'America/New_York',
+                           );
+
+    my $dt2 = DateTime->new( year => 2003, month => 5, day => 6,
+                             time_zone => 'America/Chicago',
+                           );
 
     my $dur = $dt2->subtract_datetime($dt1);
 
