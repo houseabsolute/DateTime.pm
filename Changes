@@ -6,8 +6,7 @@
 how DateTime.pm works, and in particular cover the problems DST
 introduces to various types of date math.  The docs now also include
 some specific recommendations on getting sane results from datetime
-math, specifically don't do date math with datetime objects that are
-not UTC or floating.
+math.
 
 - Added calendar_duration() and clock_duration() methods to
 DateTime::Duration
@@ -24,11 +23,18 @@ wasn't yet available.  I'm not sure how this ever worked.
 - Remove mentions of leap second on 1971-12-31 from the docs, because
 there was no leap second that day.  Reported by Mike Schilli.
 
+- If you added a second to a datetime that was on a leap second (like
+2005-12-31T23:59:60) it got "stuck" and kept returning the same
+datetime.  Reported by Mike Schilli.
+
 [ *** BACKWARDS INCOMPATIBILITIES *** ]
 
-- The subtract_datetime() method now operates exclusively on the UTC
-representation of the datetime, which makes for saner and more
-predictable results.
+- The subtract_datetime() method switched back to using the local
+portion of the date _and_ time, but it now accounts for days with DST
+changes specially.  This produces results that fix the bugs that were
+fixed by previous subtraction changes in 0.28 and 0.29, but without
+introducing even more bugs.  The overall result should be sane, but
+please see the docs for details.
 
 
 0.2901  2005-07-04
