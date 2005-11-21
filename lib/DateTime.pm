@@ -2607,9 +2607,14 @@ presentation:
 =item * math on non-UTC time zones
 
 If you need to do date math on objects with non-UTC time zones, please
-read all of the caveats below carefully.  The results C<DateTime.pm>
-are predictable and correct, but may sometimes be surprising to some
-people.
+read the caveats below carefully.  The results C<DateTime.pm> are
+predictable and correct, and mostly intuitive, but datetime math gets
+very ugly when time zones are involved, and there are a few strange
+corner cases involving subtraction of two datetimes across a DST
+change.
+
+If you can always use the floating or UTC time zones, you can skip
+ahead to L<Leap Seconds and Date Math|Leap Seconds and Date Math>
 
 =item * date vs datetime math
 
@@ -2628,8 +2633,10 @@ are always true:
   $dt1 + $dur = $dt2
   $dt2 - $dur = $dt1
 
-Note that using C<delta_md()> or C<delta_days> also ensures that this
-formula always works, regardless of DST changes.
+Note that using C<delta_days> ensures that this formula always works,
+regardless of the timezone of the objects involved, as does using
+C<subtract_datetime_absolute()>.  Anything may sometimes be
+non-reversible.
 
 =back
 
