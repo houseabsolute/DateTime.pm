@@ -2,9 +2,8 @@
 
 use strict;
 
-use Test::More tests => 144;
+use Test::More tests => 148;
 use DateTime;
-
 
 # tests using UTC times
 {
@@ -894,3 +893,32 @@ use DateTime;
     is( $dt->datetime, '2006-01-01T00:00:00', 'dt is 2006-01-01T00:00:00' );
 }
 
+# bug reported by Mike Schilli - addition got "stuck" at 60 seconds
+# and never rolled over to the following day
+{
+    my $dt = DateTime->new( year => 2005, month => 12, day => 31,
+                            hour => 23, minute => 59, second => 59,
+                            time_zone => 'UTC',
+                          );
+
+    $dt->add( seconds => 1 );
+    is( $dt->datetime, '2005-12-31T23:59:60', 'dt is 2005-12-31T23:59:60' );
+
+    $dt->add( seconds => 1 );
+    is( $dt->datetime, '2006-01-01T00:00:00', 'dt is 2006-01-01T00:00:00' );
+}
+
+# and this makes sure that fix for the above bug didn't break
+# _non-leapsecond_ second addition
+{
+    my $dt = DateTime->new( year => 2005, month => 12, day => 30,
+                            hour => 23, minute => 59, second => 58,
+                            time_zone => 'UTC',
+                          );
+
+    $dt->add( seconds => 1 );
+    is( $dt->datetime, '2005-12-30T23:59:59', 'dt is 2005-12-30T23:59:59' );
+
+    $dt->add( seconds => 1 );
+    is( $dt->datetime, '2005-12-31T00:00:00', 'dt is 2005-12-31T00:00:00' );
+}

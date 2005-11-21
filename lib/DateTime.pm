@@ -1387,7 +1387,10 @@ sub add_duration
 
         $self->_normalize_seconds;
 
-        $self->_handle_offset_modifier( $self->second );
+        # This might be some big number much bigger than 60, but
+        # that's ok (there are tests in 19leap_second.t to confirm
+        # that)
+        $self->_handle_offset_modifier( $self->second + $deltas{seconds} );
     }
 
     my $new =
