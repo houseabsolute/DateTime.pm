@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 95;
+use Test::More tests => 97;
 
 use DateTime;
 
@@ -325,4 +325,7 @@ use DateTime;
     is( $deltas{months}, 0, '0 months between two local times over DST change' );
     is( $deltas{days}, 0, '0 days between two local times over DST change' );
     is( $deltas{minutes}, 60, '60 minutes between two local times over DST change' );
+
+    is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible' );
+    is( $dt2->clone->subtract_duration($dur), $dt1, 'subtraction is doubly reversible' );
 }
