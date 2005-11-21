@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 102;
+use Test::More tests => 110;
 
 use DateTime;
 
@@ -218,13 +218,27 @@ use DateTime;
     is( $deltas{seconds}, 0, 'delta_seconds is 0' );
     is( $deltas{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
-    is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible' );
+    is( $dt1->clone->add_duration($dur), $dt2, 'dt1 + dur = dt2' );
     # this are two examples from the docs
     is( $dt2->clone->subtract_duration($dur), $dt1->clone->add( hours => 1 ),
-        'just subtraction duration is not reversible' );
+        'dt2 - dur != dt1 (not reversible)' );
     is( $dt2->clone->subtract_duration( $dur->clock_duration )
                    ->subtract_duration( $dur->calendar_duration ),
-        $dt1, 'subtraction is doubly reversible (using time & date portions separately)' );
+        $dt1, 'dt2 - dur->clock - dur->cal = dt1 (reversible when componentized)' );
+
+    my $dur2 = $dt1->subtract_datetime($dt2);
+    my %deltas2 = $dur2->deltas;
+    is( $deltas2{months}, 0, 'delta_months is 0' );
+    is( $deltas2{days}, -1, 'delta_days is 1' );
+    is( $deltas2{minutes}, -3, 'delta_minutes is 3' );
+    is( $deltas2{seconds}, 0, 'delta_seconds is 0' );
+    is( $deltas2{nanoseconds}, 0, 'delta_nanoseconds is 0' );
+    is( $dt2->clone->add_duration($dur2)->datetime, '2003-04-05T02:58:00', 'dt2 + dur2 != dt1' );
+    is( $dt2->clone->add_duration( $dur2->clock_duration )
+                   ->add_duration( $dur2->calendar_duration ),
+        $dt1, 'dt2 + dur2->clock + dur2->cal = dt1' );
+    is( $dt1->clone->subtract_duration($dur2), $dt2, 'dt1 - dur2 = dt2' );
+
 }
 
 {
