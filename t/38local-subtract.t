@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 110;
+use Test::More tests => 120;
 
 use DateTime;
 
@@ -238,6 +238,39 @@ use DateTime;
                    ->add_duration( $dur2->calendar_duration ),
         $dt1, 'dt2 + dur2->clock + dur2->cal = dt1' );
     is( $dt1->clone->subtract_duration($dur2), $dt2, 'dt1 - dur2 = dt2' );
+
+}
+
+# These tests makes sure that days with DST changes are "normal" when
+# they're the smaller operand
+{
+    my $dt1 = DateTime->new( year => 2003, month => 4, day => 6,
+                             hour => 3, minute => 1,
+                             time_zone => "America/Chicago",
+                           );
+
+    my $dt2 = DateTime->new( year => 2003, month => 4, day => 7,
+                             hour => 3, minute => 2,
+                             time_zone => "America/Chicago",
+                           );
+
+    my $dur = $dt2->subtract_datetime($dt1);
+
+    my %deltas = $dur->deltas;
+    is( $deltas{months}, 0, 'delta_months is 0' );
+    is( $deltas{days}, 1, 'delta_days is 1' );
+    is( $deltas{minutes}, 1, 'delta_minutes is 1' );
+    is( $deltas{seconds}, 0, 'delta_seconds is 0' );
+    is( $deltas{nanoseconds}, 0, 'delta_nanoseconds is 0' );
+
+    my $dur2 = $dt1->subtract_datetime($dt2);
+
+    my %deltas2 = $dur2->deltas;
+    is( $deltas2{months}, 0, 'delta_months is 0' );
+    is( $deltas2{days}, -1, 'delta_days is -1' );
+    is( $deltas2{minutes}, -1, 'delta_minutes is -1' );
+    is( $deltas2{seconds}, 0, 'delta_seconds is 0' );
+    is( $deltas2{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
 }
 
