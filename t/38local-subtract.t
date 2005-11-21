@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 92;
+use Test::More tests => 95;
 
 use DateTime;
 
@@ -308,4 +308,21 @@ use DateTime;
     is( $deltas{months}, 3, '3 months between two local times over DST change' );
     is( $deltas{days}, 0, '0 days between two local times over DST change' );
     is( $deltas{minutes}, 0, '0 minutes between two local times over DST change' );
+}
+
+# another docs example
+{
+    my $dt2 = DateTime->new( year => 2003, month => 10, day => 26,
+                             hour => 1,
+                             time_zone => 'America/Chicago',
+                           );
+
+    my $dt1 = $dt2->clone->subtract( hours => 1 );
+
+    my $dur = $dt2->subtract_datetime($dt1);
+
+    my %deltas = $dur->deltas;
+    is( $deltas{months}, 0, '0 months between two local times over DST change' );
+    is( $deltas{days}, 0, '0 days between two local times over DST change' );
+    is( $deltas{minutes}, 60, '60 minutes between two local times over DST change' );
 }
