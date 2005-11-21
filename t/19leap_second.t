@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 142;
+use Test::More tests => 144;
 use DateTime;
 
 
@@ -880,3 +880,17 @@ use DateTime;
 
     is( $dt->second, 60, 'leap second at end of 2005 is allowed' );
 }
+
+{
+    my $dt = DateTime->new( year => 2005, month => 12, day => 31,
+                            hour => 23, minute => 59, second => 59,
+                            time_zone => 'UTC',
+                          );
+
+    $dt->add( seconds => 1 );
+    is( $dt->datetime, '2005-12-31T23:59:60', 'dt is 2005-12-31T23:59:60' );
+
+    $dt->add( seconds => 1 );
+    is( $dt->datetime, '2006-01-01T00:00:00', 'dt is 2006-01-01T00:00:00' );
+}
+
