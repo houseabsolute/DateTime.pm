@@ -45,7 +45,7 @@ BEGIN
 
 use DateTime::Duration;
 use DateTime::Locale;
-use DateTime::TimeZone;
+use DateTime::TimeZone 0.38;
 use Params::Validate qw( validate validate_pos SCALAR BOOLEAN HASHREF OBJECT );
 use Time::Local ();
 
@@ -1005,8 +1005,11 @@ sub utc_year { $_[0]->{utc_year} }
 # returns a result that is relative to the first datetime
 sub subtract_datetime
 {
-    my $dt1 = shift->clone;
-    my $dt2 = shift->clone;
+    my $dt1 = shift;
+    my $dt2 = shift;
+
+    $dt2 = $dt2->clone->set_time_zone( $dt1->time_zone )
+        unless $dt1->time_zone->name eq $dt2->time_zone->name;
 
     # We only want a negative duration if $dt2 > $dt1 ($self)
     my ( $bigger, $smaller, $negative ) =
@@ -1055,21 +1058,25 @@ reversibility problems with the resultant duration.
 =cut
 
     my $bigger_min = $bigger->hour * 60 + $bigger->minute;
-    $bigger_min -= 60
-        # it's a 23 hour (local) day
-        if ( $bigger->is_dst
-             &&
-             do { my $prev_day = eval { $bigger->clone->subtract( days => 1 ) };
-                  $prev_day && ! $prev_day->is_dst ? 1 : 0 }
-           );
+    if ( $bigger->time_zone->has_dst_changes )
+    {
 
-    $bigger_min += 60
-        # it's a 25 hour (local) day
-        if ( ! $bigger->is_dst
-             &&
-             do { my $prev_day = eval { $bigger->clone->subtract( days => 1 ) };
-                  $prev_day && $prev_day->is_dst ? 1 : 0 }
-           );
+        $bigger_min -= 60
+            # it's a 23 hour (local) day
+            if ( $bigger->is_dst
+                 &&
+                 do { my $prev_day = eval { $bigger->clone->subtract( days => 1 ) };
+                      $prev_day && ! $prev_day->is_dst ? 1 : 0 }
+               );
+
+        $bigger_min += 60
+            # it's a 25 hour (local) day
+            if ( ! $bigger->is_dst
+                 &&
+                 do { my $prev_day = eval { $bigger->clone->subtract( days => 1 ) };
+                      $prev_day && $prev_day->is_dst ? 1 : 0 }
+               );
+    }
 
     my ( $months, $days, $minutes, $seconds, $nanoseconds ) =
         $dt1->_adjust_for_positive_difference
@@ -2716,8 +2723,10 @@ C<delta_md()>, C<delta_days()>, and C<delta_ms()>.
 =head3 Datetime Subtraction
 
 Date subtraction is done solely based on the two object's local
-datetimes, with one exception when the bigger datetime is on the date
-of a DST change.  This is best explained through examples:
+datetimes, with one exception to handle DST changes.  Also, if the two
+datetime objects are in different time zones, one of them is converted
+to the other's time zone first before subtraction.  This is best
+explained through examples:
 
 The first of these probably makes the most sense:
 

@@ -82,7 +82,7 @@ sub write_makefile
                    CONFIGURE    => \&init,
 
                    PREREQ_PM    => { 'DateTime::Locale' => 0.21,
-                                     'DateTime::TimeZone' => 0.26,
+                                     'DateTime::TimeZone' => 0.38,
                                      'Params::Validate' => 0.76,
                                      'Pod::Man'    => 1.14,
                                      'Test::More'  => 0.34,
