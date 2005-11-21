@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 91;
+use Test::More tests => 92;
 
 use DateTime;
 
@@ -219,7 +219,9 @@ use DateTime;
     is( $deltas{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
     is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible' );
-    # this is an example in the docs
+    # this are two examples from the docs
+    is( $dt2->clone->subtract_duration($dur), $dt1->clone->add( hours => 1 ),
+        'just subtraction duration is not reversible' );
     is( $dt2->clone->subtract_duration( $dur->clock_duration )
                    ->subtract_duration( $dur->calendar_duration ),
         $dt1, 'subtraction is doubly reversible (using time & date portions separately)' );
