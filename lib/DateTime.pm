@@ -1041,22 +1041,14 @@ sub subtract_datetime
         }
     }
 
-=pod
-
-=begin comment
-
-This is a gross hack that basically figures out if the bigger of the
-two datetimes is the day of a DST change.  If it's a 23 hour day
-(switching _to_ DST) then we subtract 60 minutes from the local time.
-If it's a 25 hour day then we add 60 minutes to the local time.
-
-This produces the most "intuitive" results, though there are still
-reversibility problems with the resultant duration.
-
-=end comment
-
-=cut
-
+    # This is a gross hack that basically figures out if the bigger of
+    # the two datetimes is the day of a DST change.  If it's a 23 hour
+    # day (switching _to_ DST) then we subtract 60 minutes from the
+    # local time.  If it's a 25 hour day then we add 60 minutes to the
+    # local time.
+    #
+    # This produces the most "intuitive" results, though there are
+    # still reversibility problems with the resultant duration.
     my $bigger_min = $bigger->hour * 60 + $bigger->minute;
     if ( $bigger->time_zone->has_dst_changes )
     {
