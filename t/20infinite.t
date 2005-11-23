@@ -2,11 +2,7 @@
 
 use strict;
 
-use Test::More;
-
-# XXX - hack alert - still need to really fix this
-my $is_win32 = $^O =~ /win32/i ? 1 : 0;
-plan tests => $is_win32 ? 39 : 40;
+use Test::More tests => 40;
 
 use DateTime;
 
@@ -14,8 +10,9 @@ my $pos = DateTime::Infinite::Future->new;
 my $neg = DateTime::Infinite::Past->new;
 my $posinf = 100 ** 100 ** 100;
 my $neginf = -1 * $posinf;
-# for some reason, Windows only gets NaN if abs() is used
-my $nan = abs( $posinf - $posinf );
+# used to use abs() which broke some Win32 platforms but may have
+# fixed others
+my $nan = $posinf - $posinf;
 
 # infinite date math
 {
@@ -42,7 +39,7 @@ my $nan = abs( $posinf - $posinf );
         'infinity - normal = infinity' );
 
     my $pos2 = $long_ago + $pos_dur;
-    is( $pos2, $pos,
+    ok( $pos2 == $pos,
         'normal + infinite duration = infinity' );
 
     my $neg_dur = $far_future - $pos;
@@ -50,30 +47,31 @@ my $nan = abs( $posinf - $posinf );
         'normal - infinity = neg infinity' );
 
     my $neg2 = $long_ago + $neg_dur;
-    is( $neg2, $neg,
-        'normal + neg infinite duration = neg infinity' );
+    ok( $neg2 == $neg,
+            'normal + neg infinite duration = neg infinity' );
 
     my $dur = $pos - $pos;
     my %deltas = $dur->deltas;
-    my @compare = $is_win32 ? ( qw( days seconds ) ) : ( qw( days seconds nanoseconds ) );
+    my @compare = qw( days seconds nanoseconds );
     foreach (@compare)
     {
-        is( $deltas{$_}, $nan, "infinity - infinity = nan ($_)" );
+        # NaN != NaN (but should stringify the same)
+        ok( $deltas{$_} eq $nan, "infinity - infinity = nan ($_)" );
     }
 
     my $new_pos = $pos->clone->add( days => 10 );
-    is( $new_pos, $pos,
-        "infinity + normal duration = infinity" );
+    ok( $new_pos == $pos,
+            "infinity + normal duration = infinity" );
 
     my $new_pos2 = $pos->clone->subtract( days => 10 );
-    is( $new_pos2, $pos,
-        "infinity - normal duration = infinity" );
+    ok( $new_pos2 == $pos,
+            "infinity - normal duration = infinity" );
 
-    is( $pos, $posinf,
-        "infinity (datetime) == infinity (number)" );
+    ok( $pos == $posinf,
+            "infinity (datetime) == infinity (number)" );
 
-    is( $neg, $neginf,
-        "neg infinity (datetime) == neg infinity (number)" );
+    ok( $neg == $neginf,
+            "neg infinity (datetime) == neg infinity (number)" );
 }
 
 # This could vary across platforms
@@ -105,7 +103,7 @@ my $neg_as_string = $neginf . '';
     my $pos2 = $pos + DateTime::Duration->new( months => 1 );
 
     ok( $pos == $pos2,
-        "infinity (datetime) == infinity (datetime)" );
+            "infinity (datetime) == infinity (datetime)" );
 }
 
 {
