@@ -11,7 +11,7 @@ my $neg = DateTime::Infinite::Past->new;
 my $posinf = 100 ** 100 ** 100;
 my $neginf = -1 * $posinf;
 # used to use abs() which broke some Win32 platforms but may have
-# fixed others
+# fixed others - will wait for bug reports
 my $nan = $posinf - $posinf;
 
 # infinite date math
