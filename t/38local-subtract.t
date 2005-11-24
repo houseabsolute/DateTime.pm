@@ -393,6 +393,8 @@ use DateTime;
     is( $deltas{days}, 0, '0 days between two local times over DST change' );
     is( $deltas{minutes}, 60, '60 minutes between two local times over DST change' );
 
-    is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible' );
-    is( $dt2->clone->subtract_duration($dur), $dt1, 'subtraction is doubly reversible' );
+    is( DateTime->compare( $dt1->clone->add_duration($dur), $dt2 ), 0,
+        'subtraction is reversible' );
+    is( DateTime->compare( $dt2->clone->subtract_duration($dur), $dt1 ), 0,
+        'subtraction is doubly reversible' );
 }
