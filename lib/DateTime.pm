@@ -2227,7 +2227,7 @@ the fourth day of January, which is equivalent to saying that it's the
 first week to overlap the new year by at least four days.
 
 Typically the week year will be the same as the year that the object
-is in, but dates at the very begining of a calendar year often end up
+is in, but dates at the very beginning of a calendar year often end up
 in the last week of the prior year, and similarly, the final few days
 of the year may be placed in the first week of the next year.
 
