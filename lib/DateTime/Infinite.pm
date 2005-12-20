@@ -27,6 +27,11 @@ sub _seconds_as_components
     return ($_[1]) x 3;
 }
 
+sub _stringify { ( $_[0]->{utc_rd_days} == DateTime::INFINITY
+                   ? DateTime::INFINITY . ''
+                   : DateTime::NEG_INFINITY . ''
+                 ) }
+
 sub STORABLE_freeze { return }
 sub STORABLE_thaw { return }
 

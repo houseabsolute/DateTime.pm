@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 40;
+use Test::More tests => 42;
 
 use DateTime;
 
@@ -112,4 +112,9 @@ my $neg_as_string = $neginf . '';
 
     ok( $neg == $neg2,
         "-infinity (datetime) == -infinity (datetime)" );
+}
+
+{
+    cmp_ok( "$pos", 'eq', $posinf, 'stringified infinity (datetime) eq infinity (number)' );
+    cmp_ok( "$neg", 'eq', $neginf, 'stringified neg infinity (datetime) eq neg infinity (number)' );
 }

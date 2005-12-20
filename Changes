@@ -11,6 +11,11 @@ math.
 - Added calendar_duration() and clock_duration() methods to
 DateTime::Duration
 
+- Explicitly override the stringification method for
+DateTime::Infinite objects.  They now stringify as whatever the IEEE
+infinity and negative infinity numbers stringify to on your platform.
+On Linux this is "inf" and "-inf".
+
 [ BUG FIXES ]
 
 - delta_md() and delta_days() did not always return correct values
