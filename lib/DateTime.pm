@@ -58,7 +58,7 @@ use Time::Local ();
 use overload ( 'fallback' => 1,
                '<=>' => '_compare_overload',
                'cmp' => '_compare_overload',
-               '""'  => 'format_datetime',
+               '""'  => '_stringify',
                '-'   => '_subtract_overload',
                '+'   => '_add_overload',
              );
@@ -721,7 +721,7 @@ sub leap_seconds
     return DateTime->_accumulated_leap_seconds( $self->{utc_rd_days} );
 }
 
-sub format_datetime
+sub _stringify
 {
     my $self = shift;
 
