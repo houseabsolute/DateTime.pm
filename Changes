@@ -1,4 +1,4 @@
-0.30
+0.30    2005-12-22
 
 [ ENHANCEMENTS ]
 
@@ -31,6 +31,10 @@ there was no leap second that day.  Reported by Mike Schilli.
 - If you added a second to a datetime that was on a leap second (like
 2005-12-31T23:59:60) it got "stuck" and kept returning the same
 datetime.  Reported by Mike Schilli.
+
+- Changes to the tests in 20infinite.t may fix failures seen on some
+platforms and with new versions of Test::More (0.62 was known to cause
+failures)
 
 [ *** BACKWARDS INCOMPATIBILITIES *** ]
 
