@@ -14,7 +14,7 @@ DateTime::Duration
 - Explicitly override the stringification method for
 DateTime::Infinite objects.  They now stringify as whatever the IEEE
 infinity and negative infinity numbers stringify to on your platform.
-On Linux this is "inf" and "-inf".
+On Linux this is "inf" and "-inf". CPAN RT #16632.
 
 [ BUG FIXES ]
 
