@@ -40,15 +40,15 @@ ok( $dt, "Constructor (from_object) : $@" );
 
 is( $dt->formatter, $formatter, "check from_object copies formatter" );
 
-is( $dt->format_datetime(), '20040902 13:23:34', 'Format datetime' );
+is( $dt->_stringify(), '20040902 13:23:34', 'Format datetime' );
 
 # check stringification (with formatter)
-is( $dt->format_datetime, "$dt", "Stringification (with formatter)" );
+is( $dt->_stringify, "$dt", "Stringification (with formatter)" );
 
 # check if the default behavior works
 $dt->set_formatter(undef);
-is( $dt->format_datetime(), $dt->iso8601, 'Default iso8601 works' );
+is( $dt->_stringify(), $dt->iso8601, 'Default iso8601 works' );
 
 # check stringification (default)
-is( $dt->format_datetime, "$dt", "Stringification (no formatter -> format_datetime)" );
+is( $dt->_stringify, "$dt", "Stringification (no formatter -> format_datetime)" );
 is( $dt->iso8601, "$dt", "Stringification (no formatter -> iso8601)" );
