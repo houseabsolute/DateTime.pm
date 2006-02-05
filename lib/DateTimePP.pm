@@ -139,8 +139,8 @@ sub _ymd2rd
     # add: day of month, days of previous 0-11 month period that began
     # w/March, days of previous 0-399 year period that began w/March
     # of a 400-multiple year), days of any 400-year periods before
-    # that, and 306 days to adjust from Mar 1, year 0-relative to Jan
-    # 1, year 1-relative (whew)
+    # that, and finally subtract 306 days to adjust from Mar 1, year
+    # 0-relative to Jan 1, year 1-relative (whew)
 
     $d += ( $m * 367 - 1094 ) / 12 + $y % 100 * 1461 / 4 +
           ( $y / 100 * 36524 + $y / 400 ) - 306;
