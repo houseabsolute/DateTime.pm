@@ -1844,6 +1844,14 @@ datetimes.
 If you are going to be using doing date math, please read the section
 L<How Datetime Math is Done|How Datetime Math is Done>.
 
+=head2 Time Zone Warning
+
+Do not try to use named time zones (like "America/Chicago") with dates
+very far in the future (thousands of years). The current
+implementation of C<DateTime::TimeZone> will use a huge amount of
+memory calculating all the DST changes from now until the future
+date. Use UTC or the floating time zone and you will be safe.
+
 =head2 Methods
 
 =head3 Constructors
