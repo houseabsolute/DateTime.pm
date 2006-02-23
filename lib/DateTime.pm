@@ -4,6 +4,8 @@ use strict;
 
 use vars qw($VERSION);
 
+use Scalar::Util ();
+
 
 BEGIN
 {
@@ -1433,12 +1435,12 @@ sub _compare
     }
 
     die "Cannot compare a datetime to a regular scalar"
-        unless ( UNIVERSAL::can( $dt1, 'utc_rd_values' ) &&
-                 UNIVERSAL::can( $dt2, 'utc_rd_values' ) );
+        unless ( __can( $dt1, 'utc_rd_values' ) &&
+                 __can( $dt2, 'utc_rd_values' ) );
 
     if ( ! $consistent &&
-         UNIVERSAL::can( $dt1, 'time_zone' ) &&
-         UNIVERSAL::can( $dt2, 'time_zone' )
+         __can( $dt1, 'time_zone' ) &&
+         __can( $dt2, 'time_zone' )
        )
     {
         my $is_floating1 = $dt1->time_zone->is_floating;
@@ -1659,6 +1661,15 @@ sub STORABLE_thaw
     %$self = %$new;
 
     return $self;
+}
+
+sub __can
+{
+    my $object = shift;
+    my $method = shift;
+
+    return unless Scalar::Util::blessed($object);
+    return $object->can($method);
 }
 
 package DateTime::_Thawed;
