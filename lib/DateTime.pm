@@ -4,6 +4,7 @@ use strict;
 
 use vars qw($VERSION);
 
+use Carp;
 use DateTime::Helpers;
 use Scalar::Util ();
 
@@ -170,7 +171,7 @@ sub new
     my $class = shift;
     my %p = validate( @_, $NewValidate );
 
-    die "Invalid day of month (day = $p{day} - month = $p{month})\n"
+    Carp::croak( "Invalid day of month (day = $p{day} - month = $p{month})\n" )
         if $p{day} > $class->_month_length( $p{year}, $p{month} );
 
     my $self = bless {}, $class;
@@ -230,7 +231,7 @@ sub new
                $p{second} - 59 )
            )
         {
-            die "Invalid second value ($p{second})\n";
+            Carp::croak( "Invalid second value ($p{second})\n" );
         }
     }
 
@@ -571,7 +572,7 @@ sub from_day_of_year
 
     my $is_leap_year = $class->_is_leap_year( $p{year} );
 
-    die "$p{year} is not a leap year.\n"
+    Carp::croak( "$p{year} is not a leap year.\n" )
         if $p{day_of_year} == 366 && ! $is_leap_year;
 
     my $month = 1;
@@ -1435,7 +1436,7 @@ sub _compare
         return $dt1->{utc_rd_days} <=> $dt2;
     }
 
-    die "Cannot compare a datetime to a regular scalar"
+    Carp::croak( "Cannot compare a datetime to a regular scalar" )
         unless ( DateTime::Helpers::can( $dt1, 'utc_rd_values' ) &&
                  DateTime::Helpers::can( $dt2, 'utc_rd_values' ) );
 

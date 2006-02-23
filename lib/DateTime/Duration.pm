@@ -2,6 +2,7 @@ package DateTime::Duration;
 
 use strict;
 
+use Carp ();
 use DateTime::Helpers;
 use Params::Validate qw( validate SCALAR );
 
@@ -289,7 +290,7 @@ sub _subtract_overload
 
     ($d1, $d2) = ($d2, $d1) if $rev;
 
-    die "Cannot subtract a DateTime object from a DateTime::Duration object"
+    Carp::croak( "Cannot subtract a DateTime object from a DateTime::Duration object" )
         if DateTime::Helpers::isa( $d2, 'DateTime' );
 
     return $d1->clone->subtract_duration($d2);
@@ -306,7 +307,8 @@ sub _multiply_overload
 
 sub _compare_overload
 {
-    die "DateTime::Duration does not overload comparison.  See the documentation on the compare() method for details.";
+    Carp::croak( 'DateTime::Duration does not overload comparison.'
+                 . '  See the documentation on the compare() method for details.' );
 }
 
 
