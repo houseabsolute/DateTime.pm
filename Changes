@@ -1,5 +1,11 @@
 0.31
 
+[ ENHANCEMENTS ]
+
+- Switched some uses of die() to Carp::croak(), where
+appropriate. This should make error messages more useful in many
+cases. Based on a suggestion by Max Maischein. See RT ticket 11692.
+
 [ BUG FIXES ]
 
 - Removed all uses of UNIVERSAL::isa and UNIVERSAL::can.
