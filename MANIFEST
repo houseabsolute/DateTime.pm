@@ -5,6 +5,7 @@ leap_seconds.h
 leaptab.txt
 lib/DateTime.pm
 lib/DateTime/Duration.pm
+lib/DateTime/Helpers.pm
 lib/DateTime/Infinite.pm
 lib/DateTime/LeapSecond.pm
 lib/DateTimePP.pm

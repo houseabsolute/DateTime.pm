@@ -1,3 +1,10 @@
+0.31
+
+[ BUG FIXES ]
+
+- Removed all uses of UNIVERSAL::isa and UNIVERSAL::can.
+
+
 0.30    2005-12-22
 
 [ ENHANCEMENTS ]

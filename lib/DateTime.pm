@@ -4,6 +4,7 @@ use strict;
 
 use vars qw($VERSION);
 
+use DateTime::Helpers;
 use Scalar::Util ();
 
 
@@ -1268,7 +1269,7 @@ sub _subtract_overload
         ( $date2, $date1 ) = ( $date1, $date2 );
     }
 
-    if ( UNIVERSAL::isa( $date2, 'DateTime::Duration' ) )
+    if ( DateTime::Helpers::isa( $date2, 'DateTime::Duration' ) )
     {
         my $new = $date1->clone;
         $new->add_duration( $date2->inverse );
@@ -1435,12 +1436,12 @@ sub _compare
     }
 
     die "Cannot compare a datetime to a regular scalar"
-        unless ( __can( $dt1, 'utc_rd_values' ) &&
-                 __can( $dt2, 'utc_rd_values' ) );
+        unless ( DateTime::Helpers::can( $dt1, 'utc_rd_values' ) &&
+                 DateTime::Helpers::can( $dt2, 'utc_rd_values' ) );
 
     if ( ! $consistent &&
-         __can( $dt1, 'time_zone' ) &&
-         __can( $dt2, 'time_zone' )
+         DateTime::Helpers::can( $dt1, 'time_zone' ) &&
+         DateTime::Helpers::can( $dt2, 'time_zone' )
        )
     {
         my $is_floating1 = $dt1->time_zone->is_floating;
@@ -1663,14 +1664,6 @@ sub STORABLE_thaw
     return $self;
 }
 
-sub __can
-{
-    my $object = shift;
-    my $method = shift;
-
-    return unless Scalar::Util::blessed($object);
-    return $object->can($method);
-}
 
 package DateTime::_Thawed;
 
@@ -3200,7 +3193,7 @@ stole all the code from.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2003-2005 David Rolsky.  All rights reserved.  This
+Copyright (c) 2003-2006 David Rolsky.  All rights reserved.  This
 program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
