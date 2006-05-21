@@ -11,7 +11,7 @@ use Scalar::Util ();
 
 BEGIN
 {
-    $VERSION = '0.30';
+    $VERSION = '0.31';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
