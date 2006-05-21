@@ -38,7 +38,7 @@ EOF
 	    or die "Cannot unlink $_: $!";
     }
 
-    if ( -d 'CVS' )
+    if ( -d '.svn' )
     {
         local *DIR;
         opendir DIR, "t" or die "Cannot read t: $!";
