@@ -2,6 +2,8 @@ package DateTime::Helpers;
 
 use strict;
 
+use Scalar::Util ();
+
 
 sub can
 {

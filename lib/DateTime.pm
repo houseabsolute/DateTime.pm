@@ -6,7 +6,6 @@ use vars qw($VERSION);
 
 use Carp;
 use DateTime::Helpers;
-use Scalar::Util ();
 
 
 BEGIN
