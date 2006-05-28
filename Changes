@@ -1,3 +1,12 @@
+0.32
+
+[BUG FIXES]
+
+- Change how C compiler detection is done in the Makefile.PL so it
+does not rely on having make on the system. The new way should work on
+(most?) Unix and Win32 systems. Suggested by David Golden.
+
+
 0.31    2006-05-21
 
 [ ENHANCEMENTS ]

@@ -14,6 +14,12 @@ for (@ARGV)
     /^--xs/ and $no_xs = 0;
 }
 
+if ($no_xs)
+{
+    write_makefile();
+    exit;
+}
+
 unless (defined $no_xs)
 {
     check_for_compiler()
@@ -59,7 +65,7 @@ sub write_makefile
                    VERSION_FROM => 'lib/DateTime.pm',
                    AUTHOR       => 'Dave Rolsky <autarch@urth.org>',
                    ABSTRACT     => 'DateTime base objects',
-                   clean        => { FILES => $zz },
+                   clean        => { FILES => "test.c test.o $zz" },
                    CONFIGURE    => \&init,
 
                    PREREQ_PM    => { 'DateTime::Locale'   => 0.21,
@@ -137,16 +143,7 @@ sub _check_for_compiler_manually
 int main() { return 0; }
 EOF
 
-    my $has_cc = 1;
-    close F or $has_cc = 0;
+    close F or return 0;
 
-    system( "$Config{cc} -o test$Config{obj_ext} test.c" ) and $has_cc = 0;
-
-    foreach ( grep { -f } 'test.c', "test$Config{obj_ext}" )
-    {
-	unlink $_
-	    or die "Cannot unlink $_: $!";
-    }
-
-    return $has_cc;
+    system( "$Config{cc} -o test$Config{obj_ext} test.c" ) and return 0;
 }
