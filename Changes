@@ -19,7 +19,7 @@ cases. Based on a suggestion by Max Maischein. See RT tickets 11692 &
 
 [ BUG FIXES ]
 
-- Removed all uses of UNIVERSAL::isa and UNIVERSAL::can.
+- Removed all uses of UNIVERSAL::isa and UNIVERSAL::can as functions.
 
 - Tweaked 20infinite.t test to give more useful output for some
 failures, though it probably doesn't fix them. See RT 17390.
