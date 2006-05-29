@@ -146,4 +146,6 @@ EOF
     close F or return 0;
 
     system( "$Config{cc} -o test$Config{obj_ext} test.c" ) and return 0;
+
+    return 1;
 }
