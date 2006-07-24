@@ -14,7 +14,6 @@ LICENSE
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
-META.yml
 ppport.h
 README
 t/00load.t
