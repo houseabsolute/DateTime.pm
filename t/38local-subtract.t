@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 120;
+use Test::More tests => 124;
 
 use DateTime;
 
@@ -397,4 +397,34 @@ use DateTime;
         'subtraction is reversible' );
     is( DateTime->compare( $dt2->clone->subtract_duration($dur), $dt1 ), 0,
         'subtraction is doubly reversible' );
+}
+
+# Fix a bug that occurred when the local time zone had DST and the two
+# datetime objects were on the same day
+{
+    my $dt1 = DateTime->new( year => 2005, month => 4, day => 3,
+                             hour => 7, minute => 0,
+                             time_zone => "America/New_York" );
+
+    my $dt2 = DateTime->new( year => 2005, month => 4, day => 3,
+                             hour => 8, minute => 0,
+                             time_zone => "America/New_York" );
+
+    my $dur = $dt2->subtract_datetime($dt1);
+    my ( $minutes, $seconds ) = $dur->in_units( 'minutes','seconds' );
+
+    is( $minutes, 60, 'subtraction of two dates on a DST change date, minutes == 60' );
+    is( $seconds, 0, 'subtraction of two dates on a DST change date, seconds == 0' );
+
+    $dur = $dt1->subtract_datetime($dt1);
+    ok( $dur->is_zero, 'dst change date (no dst) - itself, duration is zero' );
+}
+
+{
+    my $dt1 = DateTime->new( year => 2005, month => 4, day => 3,
+                             hour => 1, minute => 0,
+                             time_zone => "America/New_York" );
+
+    my $dur = $dt1->subtract_datetime($dt1);
+    ok( $dur->is_zero, 'dst change date (with dst) - itself, duration is zero' );
 }

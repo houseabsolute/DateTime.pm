@@ -10,7 +10,7 @@ use DateTime::Helpers;
 
 BEGIN
 {
-    $VERSION = '0.32';
+    $VERSION = '0.33';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -1052,8 +1052,15 @@ sub subtract_datetime
     #
     # This produces the most "intuitive" results, though there are
     # still reversibility problems with the resultant duration.
+    #
+    # However, if the two objects are on the same (local) date, and we
+    # are not crossing a DST change, we don't want to invoke the hack
+    # - see 38local-subtract.t
     my $bigger_min = $bigger->hour * 60 + $bigger->minute;
-    if ( $bigger->time_zone->has_dst_changes )
+    if ( $bigger->time_zone->has_dst_changes
+         && ( $bigger->ymd ne $smaller->ymd
+              || $bigger->is_dst != $smaller->is_dst )
+       )
     {
 
         $bigger_min -= 60
