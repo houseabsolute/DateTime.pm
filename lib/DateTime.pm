@@ -1260,11 +1260,17 @@ sub _add_overload
         ( $dur, $dt ) = ( $dt, $dur );
     }
 
-    # how to handle non duration objects?
+    unless ( DateTime::Helpers::isa( $dur, 'DateTime::Duration' ) )
+    {
+        my $class = ref $dt;
+        my $dt_string = overload::StrVal($dt);
 
-    my $new = $dt->clone;
-    $new->add_duration($dur);
-    return $new;
+        Carp::croak( "Cannot add $dur to a $class object ($dt_string).\n"
+                     . " Only a DateTime::Duration object can "
+                     . " be added to a $class object." );
+    }
+
+    return $dt->clone->add_duration($dur);
 }
 
 sub _subtract_overload
@@ -1282,11 +1288,19 @@ sub _subtract_overload
         $new->add_duration( $date2->inverse );
         return $new;
     }
-    else
+    elsif ( DateTime::Helpers::isa( $date2, 'DateTime' ) )
     {
         return $date1->subtract_datetime($date2);
     }
-    # handle other cases?
+    else
+    {
+        my $class = ref $date1;
+        my $dt_string = overload::StrVal($date1);
+
+        Carp::croak( "Cannot subtract $date2 from a $class object ($dt_string).\n"
+                     . " Only a DateTime::Duration or DateTime object can "
+                     . " be subtracted from a $class object." );
+    }
 }
 
 sub add { return shift->add_duration( DateTime::Duration->new(@_) ) }
@@ -1442,9 +1456,15 @@ sub _compare
         return $dt1->{utc_rd_days} <=> $dt2;
     }
 
-    Carp::croak( "Cannot compare a datetime to a regular scalar" )
-        unless ( DateTime::Helpers::can( $dt1, 'utc_rd_values' ) &&
-                 DateTime::Helpers::can( $dt2, 'utc_rd_values' ) );
+    unless ( DateTime::Helpers::can( $dt1, 'utc_rd_values' )
+             && DateTime::Helpers::can( $dt2, 'utc_rd_values' ) )
+    {
+        my $dt1_string = overload::StrVal($dt1);
+        my $dt2_string = overload::StrVal($dt2);
+
+        Carp::croak( "A DateTime object can only be compared to"
+                     . " another DateTime object ($dt1_string, $dt2_string)." );
+    }
 
     if ( ! $consistent &&
          DateTime::Helpers::can( $dt1, 'time_zone' ) &&
