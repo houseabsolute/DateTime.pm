@@ -145,7 +145,18 @@ EOF
 
     close F or return 0;
 
-    system( "$Config{cc} -o test$Config{obj_ext} test.c" ) and return 0;
+    my $cc = $Config{cc};
+    if ( $cc =~ /cl(\.exe)?$/ )
+    {
+        # stupid stupid MSVC compiler hack tacken from version.pm's
+        # Makefile.PL
+        $cc .= ' -c'; # prevent it from calling the linker
+    }
+
+    system( "$cc -o test$Config{obj_ext} test.c" ) and return 0;
+
+    unlink $_
+        for grep { -f } 'test.c', "test$Config{obj_ext}";
 
     return 1;
 }

@@ -7,6 +7,9 @@ a bug. When subtracting two dates, both occurring on a DST change
 date, but where the dates did not cross the change, the answer was off
 by an hour. Reported by Chris Prather. See RT 20697.
 
+- Borrowed a tweak from version.pm's Makefile.PL to make compiler
+detection work with MSVC.
+
 
 0.32    2006-07-24
 
