@@ -28,9 +28,11 @@ BEGIN
 		@DateTime::ISA = 'DynaLoader';
 		DateTime->bootstrap( $DateTime::VERSION );
 	    }
+
+            $DateTime::IsPurePerl = 0;
 	};
 
-	die $@ if $@ && $@ !~ /object version/;
+	die $@ if $@ && $@ !~ /object version|loadable object/;
 
         $loaded = 1 unless $@;
     }

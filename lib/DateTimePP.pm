@@ -2,6 +2,8 @@ package DateTime;
 
 use strict;
 
+$DateTime::IsPurePerl = 1;
+
 my @MonthLengths =
     ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
 
