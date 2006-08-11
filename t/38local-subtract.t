@@ -25,9 +25,9 @@ use DateTime;
     is( $deltas1{minutes}, 0, 'delta_minutes is 0' );
     is( $deltas1{seconds}, 0, 'delta_seconds is 0' );
 
-    is( $dt1->clone->add_duration($dur1), $dt2,
+    is( DateTime->compare( $dt1->clone->add_duration($dur1), $dt2 ), 0,
         'subtract_datetime is reversible from start point' );
-    is( $dt2->clone->subtract_duration($dur1), $dt1,
+    is( DateTime->compare( $dt2->clone->subtract_duration($dur1), $dt1 ), 0,
         'subtract_datetime is reversible from end point' );
     is( $deltas1{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
@@ -47,9 +47,9 @@ use DateTime;
     is( $deltas3{seconds}, 0, 'delta_seconds is 0' );
     is( $deltas3{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
-    is( $dt1->clone->add_duration($dur3), $dt2,
+    is( DateTime->compare( $dt1->clone->add_duration($dur3), $dt2 ), 0,
         'delta_md is reversible from start point' );
-    is( $dt2->clone->subtract_duration($dur3), $dt1,
+    is( DateTime->compare( $dt2->clone->subtract_duration($dur3), $dt1 ), 0,
         'delta_md is reversible from end point' );
 
     my $dur4 = $dt2->delta_days($dt1);
@@ -60,9 +60,9 @@ use DateTime;
     is( $deltas4{seconds}, 0, 'delta_seconds is 0' );
     is( $deltas4{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
-    is( $dt1->clone->add_duration($dur3), $dt2,
+    is( DateTime->compare( $dt1->clone->add_duration($dur3), $dt2 ), 0,
         'delta_days is reversible from start point' );
-    is( $dt2->clone->subtract_duration($dur4), $dt1,
+    is( DateTime->compare( $dt2->clone->subtract_duration($dur4), $dt1 ), 0,
         'delta_days is reversible from end point' );
 }
 
@@ -131,9 +131,9 @@ use DateTime;
 
     my $dur = $dt2->subtract_datetime($dt1);
 
-    is( $dt1->add_duration($dur), $dt2,
+    is( DateTime->compare( $dt1->add_duration($dur), $dt2 ), 0,
         'subtraction is reversible from start point with UTC' );
-    is( $dt2->subtract_duration($dur), $dt2,
+    is( DateTime->compare( $dt2->subtract_duration($dur), $dt2 ), 0,
         'subtraction is reversible from start point with UTC' );
 }
 
@@ -158,8 +158,10 @@ use DateTime;
     is( $deltas1{seconds}, 15901200, 'delta_seconds is 15901200' );
     is( $deltas1{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
-    is( $dt1->clone->add_duration($dur1), $dt2, 'subtraction is reversible' );
-    is( $dt2->clone->subtract_duration($dur1), $dt1, 'subtraction is doubly reversible' );
+    is( DateTime->compare( $dt1->clone->add_duration($dur1), $dt2 ), 0,
+        'subtraction is reversible' );
+    is( DateTime->compare( $dt2->clone->subtract_duration($dur1), $dt1 ), 0,
+        'subtraction is doubly reversible' );
 
     my $dur2 = $dt1->subtract_datetime_absolute($dt2);
 
@@ -170,8 +172,10 @@ use DateTime;
     is( $deltas2{seconds}, -15901200, 'delta_seconds is -15901200' );
     is( $deltas2{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
-    is( $dt2->clone->add_duration($dur2), $dt1, 'subtraction is reversible' );
-    is( $dt1->clone->subtract_duration($dur2), $dt2, 'subtraction is doubly reversible' );
+    is( DateTime->compare( $dt2->clone->add_duration($dur2), $dt1 ), 0,
+        'subtraction is reversible' );
+    is( DateTime->compare( $dt1->clone->subtract_duration($dur2), $dt2 ), 0,
+        'subtraction is doubly reversible' );
 }
 
 {
@@ -194,8 +198,10 @@ use DateTime;
     is( $deltas{seconds}, 0, 'delta_seconds is 0' );
     is( $deltas{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
-    is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible' );
-    is( $dt2->clone->subtract_duration($dur), $dt1, 'subtraction is doubly reversible' );
+    is( DateTime->compare( $dt1->clone->add_duration($dur), $dt2 ), 0,
+        'subtraction is reversible' );
+    is( DateTime->compare( $dt2->clone->subtract_duration($dur), $dt1), 0,
+        'subtraction is doubly reversible' );
 }
 
 {
@@ -218,13 +224,18 @@ use DateTime;
     is( $deltas{seconds}, 0, 'delta_seconds is 0' );
     is( $deltas{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
-    is( $dt1->clone->add_duration($dur), $dt2, 'dt1 + dur = dt2' );
+    is( DateTime->compare( $dt1->clone->add_duration($dur), $dt2 ), 0,
+        'dt1 + dur = dt2' );
     # this are two examples from the docs
-    is( $dt2->clone->subtract_duration($dur), $dt1->clone->add( hours => 1 ),
+    is( DateTime->compare( $dt2->clone->subtract_duration($dur),
+                           $dt1->clone->add( hours => 1 ) ),
+        0,
         'dt2 - dur != dt1 (not reversible)' );
-    is( $dt2->clone->subtract_duration( $dur->clock_duration )
-                   ->subtract_duration( $dur->calendar_duration ),
-        $dt1, 'dt2 - dur->clock - dur->cal = dt1 (reversible when componentized)' );
+    is( DateTime->compare( $dt2->clone->subtract_duration( $dur->clock_duration )
+                               ->subtract_duration( $dur->calendar_duration ),
+                           $dt1 ),
+        0,
+        'dt2 - dur->clock - dur->cal = dt1 (reversible when componentized)' );
 
     my $dur2 = $dt1->subtract_datetime($dt2);
     my %deltas2 = $dur2->deltas;
@@ -234,10 +245,13 @@ use DateTime;
     is( $deltas2{seconds}, 0, 'delta_seconds is 0' );
     is( $deltas2{nanoseconds}, 0, 'delta_nanoseconds is 0' );
     is( $dt2->clone->add_duration($dur2)->datetime, '2003-04-05T02:58:00', 'dt2 + dur2 != dt1' );
-    is( $dt2->clone->add_duration( $dur2->clock_duration )
-                   ->add_duration( $dur2->calendar_duration ),
-        $dt1, 'dt2 + dur2->clock + dur2->cal = dt1' );
-    is( $dt1->clone->subtract_duration($dur2), $dt2, 'dt1 - dur2 = dt2' );
+    is( DateTime->compare( $dt2->clone->add_duration( $dur2->clock_duration )
+                               ->add_duration( $dur2->calendar_duration ),
+                           $dt1 ),
+        0,
+        'dt2 + dur2->clock + dur2->cal = dt1' );
+    is( DateTime->compare( $dt1->clone->subtract_duration($dur2), $dt2 ), 0,
+        'dt1 - dur2 = dt2' );
 
 }
 
@@ -294,8 +308,9 @@ use DateTime;
     is( $deltas{seconds}, 0, 'delta_seconds is 0' );
     is( $deltas{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
-    is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible' );
-    is( $dt2->clone->subtract_duration($dur), $dt1,
+    is( DateTime->compare( $dt1->clone->add_duration($dur), $dt2 ), 0,
+        'subtraction is reversible' );
+    is( DateTime->compare( $dt2->clone->subtract_duration($dur), $dt1 ), 0,
         'subtraction is doubly reversible' );
 }
 
@@ -320,8 +335,10 @@ use DateTime;
     is( $deltas{seconds}, 0, 'delta_seconds is 0' );
     is( $deltas{nanoseconds}, 0, 'delta_nanoseconds is 0' );
 
-    is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible from start point' );
-    is( $dt2->clone->subtract_duration($dur), $dt1, 'subtraction is reversible from end point' );
+    is( DateTime->compare( $dt1->clone->add_duration($dur), $dt2 ), 0,
+        'subtraction is reversible from start point' );
+    is( DateTime->compare( $dt2->clone->subtract_duration($dur), $dt1 ), 0,
+        'subtraction is reversible from end point' );
 }
 
 {
@@ -373,8 +390,10 @@ use DateTime;
     is( $deltas{days}, 0, '0 days between two local times over DST change' );
     is( $deltas{minutes}, 60, '60 minutes between two local times over DST change' );
 
-    is( $dt1->clone->add_duration($dur), $dt2, 'subtraction is reversible' );
-    is( $dt2->clone->subtract_duration($dur), $dt1, 'subtraction is doubly reversible' );
+    is( DateTime->compare( $dt1->clone->add_duration($dur), $dt2 ), 0,
+        'subtraction is reversible' );
+    is( DateTime->compare( $dt2->clone->subtract_duration($dur), $dt1 ), 0,
+        'subtraction is doubly reversible' );
 }
 
 {
