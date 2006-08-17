@@ -201,20 +201,11 @@ sub _is_leap_year
     shift;
     my $year = shift;
 
-    if ($year % 400 == 0)
-    {
-        return 1;
-    }
-    elsif ($year % 100 == 0)
-    {
-        return 0;
-    }
-    elsif ($year % 4 == 0)
-    {
-        return 1;
-    }
+    return 0 if $year % 4;
+    return 1 if $year % 100;
+    return 0 if $year % 400;
 
-    return 0;
+    return 1;
 }
 
 sub _day_length { DateTime::LeapSecond::day_length($_[1]) }
