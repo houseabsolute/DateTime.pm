@@ -55,6 +55,7 @@ t/36invalid_local.t
 t/37local-add.t
 t/38local-subtract.t
 t/39no-so.t
+t/40leap-years.t
 t/99-pod.t
 TODO
 tools/leap_seconds_header.pl
