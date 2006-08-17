@@ -64,13 +64,9 @@ const IV neg_dow[] = { 1, 7, 6, 5, 4, 3, 2 };
 
 IV
 _real_is_leap_year(IV y) {
-  if ( y % 4 ) return 0;
-
-  if ( y % 100 ) return 1;
-
-  if ( y % 400 ) return 0;
-
-  return 1;
+  /* See http://www.perlmonks.org/?node_id=274247 for where this
+     silliness comes from */
+  return (y % 4) ? 0 : (y % 100) ? 1 : (y % 400) ? 0 : 1;
 }
 
 
