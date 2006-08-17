@@ -63,21 +63,16 @@ const int PREVIOUS_MONTH_DOLY[12] = { 0,
 const IV neg_dow[] = { 1, 7, 6, 5, 4, 3, 2 };
 
 IV
-_real_is_leap_year(IV y)
-{
-  IV r = 0;
+_real_is_leap_year(IV y) {
+  if ( y % 4 ) return 0;
 
-  /* We need to have this first so that year 0 is a leap year */
-  if (y % 400 == 0) {
-    r = 1;
-  } else if (y % 100 == 0) {
-    r = 0;
-  } else if (y % 4 == 0) {
-    r = 1;
-  }
+  if ( y % 100 ) return 1;
 
-  return r;
+  if ( y % 400 ) return 0;
+
+  return 1;
 }
+
 
 MODULE = DateTime       PACKAGE = DateTime
 
