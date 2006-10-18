@@ -3028,7 +3028,8 @@ The day of the month as a decimal number (range 01 to 31).
 =item * %D
 
 Equivalent to %m/%d/%y.  This is not a good standard format if you
-want both United States and European people to understand the date!
+want folks from both the United States and the rest of the world to
+understand the date!
 
 =item * %e
 
