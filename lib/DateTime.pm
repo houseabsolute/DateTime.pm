@@ -2529,8 +2529,7 @@ Each of these methods returns a new C<DateTime::Duration> object
 representing some portion of the difference between two datetimes.
 The C<delta_md()> method returns a duration which contains only the
 month and day portions of the duration is represented.  The
-C<delta_days()> method returns a duration which contains only days,
-and the C<delta_ms()> method 
+C<delta_days()> method returns a duration which contains only days.
 
 The C<delta_md> and C<delta_days> methods truncate the duration so
 that any fractional portion of a day is ignored.  Both of these
