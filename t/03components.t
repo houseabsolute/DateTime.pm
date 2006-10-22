@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 130;
+use Test::More tests => 135;
 
 use DateTime;
 
@@ -75,6 +75,13 @@ is( $d->iso8601, '2001-07-05T02:12:50', '->iso8601' );
 
 is( $d->is_leap_year, 0, '->is_leap_year' );
 
+is( $d->era_abbr, 'AD', '->era_abbr' );
+is( $d->era, $d->era_abbr, '->era (deprecated)' );
+is( $d->era_name, 'Anno Domini', '->era_abbr' );
+
+is( $d->quarter_abbr, 'Q3', '->quarter_abbr' );
+is( $d->quarter_name, '3rd quarter', '->quarter_name' );
+
 my $leap_d = DateTime->new( year => 2004,
                             month => 7,
                             day => 5,
@@ -128,7 +135,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
     is( $dt0->year, 1, "year 1 is year 1" );
     is( $dt0->ce_year, 1, "ce_year 1 is year 1" );
-    is( $dt0->era, 'AD', 'era is AD' );
+    is( $dt0->era_abbr, 'AD', 'era is AD' );
     is( $dt0->year_with_era, '1AD', 'year_with_era is 1AD' );
     is( $dt0->christian_era, 'AD', 'christian_era is AD' );
     is( $dt0->year_with_christian_era, '1AD', 'year_with_christian_era is 1AD' );
@@ -139,7 +146,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
     is( $dt0->year, 0, "year 1 minus 1 is year 0" );
     is( $dt0->ce_year, -1, "ce_year 1 minus 1 is year -1" );
-    is( $dt0->era, 'BC', 'era is BC' );
+    is( $dt0->era_abbr, 'BC', 'era is BC' );
     is( $dt0->year_with_era, '1BC', 'year_with_era is 1BC' );
     is( $dt0->christian_era, 'BC', 'christian_era is BC' );
     is( $dt0->year_with_christian_era, '1BC', 'year_with_christian_era is 1BC' );

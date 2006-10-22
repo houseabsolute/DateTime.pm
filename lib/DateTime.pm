@@ -10,7 +10,7 @@ use DateTime::Helpers;
 
 BEGIN
 {
-    $VERSION = '0.34';
+    $VERSION = '0.35';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -601,11 +601,16 @@ sub ce_year { $_[0]->{local_c}{year} <= 0 ?
               $_[0]->{local_c}{year} - 1 :
               $_[0]->{local_c}{year} }
 
-sub era { $_[0]->{locale}->era( $_[0] ) }
+sub era_name { $_[0]->{locale}->era_name( $_[0] ) }
+
+sub era_abbr { $_[0]->{locale}->era_abbreviation( $_[0] ) }
+# deprecated
+*era = \&era_abbr;
+
 sub christian_era { $_[0]->ce_year > 0 ? 'AD' : 'BC' }
 sub secular_era   { $_[0]->ce_year > 0 ? 'CE' : 'BCE' }
 
-sub year_with_era { (abs $_[0]->ce_year) . $_[0]->era }
+sub year_with_era { (abs $_[0]->ce_year) . $_[0]->era_abbr }
 sub year_with_christian_era { (abs $_[0]->ce_year) . $_[0]->christian_era }
 sub year_with_secular_era   { (abs $_[0]->ce_year) . $_[0]->secular_era }
 
@@ -626,6 +631,9 @@ sub day_of_month { $_[0]->{local_c}{day} }
 sub weekday_of_month { use integer; ( ( $_[0]->day - 1 ) / 7 ) + 1 }
 
 sub quarter {$_[0]->{local_c}{quarter} };
+
+sub quarter_name { $_[0]->{locale}->quarter_name( $_[0] ) }
+sub quarter_abbr { $_[0]->{locale}->quarter_abbreviation( $_[0] ) }
 
 sub day_of_month_0 { $_[0]->{local_c}{day} - 1 }
 *day_0  = \&day_of_month_0;
@@ -1837,11 +1845,11 @@ or C<epoch()>, will never die.
 
 =head2 Locales
 
-Some methods are localizable.  This is done by setting the locale
-when constructing a DateTime object.  There is also a
-C<DefaultLocale()> class method which may be used to set the default
-locale for all DateTime objects created.  If this is not set, then
-"English" is used.
+All the object methods which return names or abbreviations return data
+based on a locale.  This is done by setting the locale when
+constructing a DateTime object.  There is also a C<DefaultLocale()>
+class method which may be used to set the default locale for all
+DateTime objects created.  If this is not set, then "en_US" is used.
 
 Some locales may return data as Unicode.  When using Perl 5.6.0 or
 greater, this will be a native Perl Unicode string.  When using older
@@ -2096,9 +2104,15 @@ Returns the year.
 Returns the year according to the BCE/CE numbering system.  The year
 before year 1 in this system is year -1, aka "1 BCE".
 
-=item * era
+=item * era_name
 
-Returns a string provided by the locale, based on the year.
+Returns the long name of the current era, something like "Before
+Christ".  See the L<Locales|/Locales> section for more details.
+
+=item * era_abbr
+
+Returns the abbreviated name of the current era, something like "BC".
+See the L<Locales|/Locales> section for more details.
 
 =item * christian_era
 
@@ -2110,9 +2124,9 @@ Returns a string, either "BCE" or "CE", according to the year.
 
 =item * year_with_era
 
-Returns a string containing the year immediately followed by its era.
-The year is the absolute value of C<ce_year()>, so that year 1 is
-"1BC" and year 0 is "1AD".
+Returns a string containing the year immediately followed by its era
+abbreviation.  The year is the absolute value of C<ce_year()>, so that
+year 1 is "1BC" and year 0 is "1AD".
 
 =item * year_with_christian_era
 
@@ -2164,6 +2178,16 @@ Returns the day of the year.
 =item * quarter
 
 Returns the quarter of the year, from 1..4.
+
+=item * quarter_name
+
+Returns the name of the current quarter.  See the
+L<Locales|/Locales> section for more details.
+
+=item * quarter_abbr
+
+Returns the abbreviated name of the current quarter.  See the
+L<Locales|/Locales> section for more details.
 
 =item * day_of_quarter, doq
 

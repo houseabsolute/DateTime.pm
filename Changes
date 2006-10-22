@@ -1,3 +1,12 @@
+0.35   2006-10-22
+
+[ ENHANCEMENTS ]
+
+- Added several new methods for getting locale-based data, era_abbr(),
+  era_name(), quarter_abbr(), and quarter_name(). The era() method
+  returns the same data as era_abbr(), but is deprecated.
+
+
 0.34   2006-08-11
 
 [ BUG FIXES ]
