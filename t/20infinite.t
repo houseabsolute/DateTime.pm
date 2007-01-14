@@ -8,7 +8,7 @@ use DateTime;
 
 my $pos = DateTime::Infinite::Future->new;
 my $neg = DateTime::Infinite::Past->new;
-my $posinf = 100 ** 100 ** 100;
+my $posinf = 100 ** 1000;
 my $neginf = -1 * $posinf;
 # used to use abs() which broke some Win32 platforms but may have
 # fixed others - will wait for bug reports
