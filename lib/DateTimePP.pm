@@ -201,6 +201,10 @@ sub _is_leap_year
     shift;
     my $year = shift;
 
+    # According to Bjorn Tackmann, this line prevents an infinite loop
+    # when running the tests under Qemu. I cannot reproduce this on
+    # Ubuntu or with Strawberry Perl on Win2K.
+    return 0 if $year == INFINITY() || $year == NEG_INFINITY();
     return 0 if $year % 4;
     return 1 if $year % 100;
     return 0 if $year % 400;
