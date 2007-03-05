@@ -1690,7 +1690,6 @@ sub STORABLE_thaw
                        }, 'DateTime::_Thawed';
 
     my %formatter = defined $$formatter ? ( formatter => $$formatter ) : ();
-
     my $new = (ref $self)->from_object( object => $object,
                                         locale => $locale,
                                         %formatter,

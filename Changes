@@ -1,3 +1,13 @@
+0.37
+
+[ BUG FIXES ]
+
+- Require DateTime::Locale 0.34, which fixes a problem that manifested
+  when thawing a DateTime.pm object. See
+  http://www.mail-archive.com/datetime@perl.org/msg05633.html for some
+  discussion of this.
+
+
 0.36   2007-01-18
 
 [ BUG FIXES ]
