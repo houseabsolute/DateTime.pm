@@ -7,6 +7,10 @@
   http://www.mail-archive.com/datetime@perl.org/msg05633.html for some
   discussion of this.
 
+[ ENHANCEMENTS ]
+
+- This distro is now GPG-signed, per RT #24776.
+
 
 0.36   2007-01-18
 

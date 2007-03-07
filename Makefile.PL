@@ -77,6 +77,7 @@ sub write_makefile
                                      'Test::More'         => 0.34,
                                      'Time::Local'        => 1.04,
                                    },
+                   ( MM->can('signature_target') ? ( SIGN => 1 ) : () ),
                  );
 }
 
