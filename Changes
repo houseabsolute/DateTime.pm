@@ -1,4 +1,4 @@
-0.37
+0.37   2007-03-30
 
 [ BUG FIXES ]
 
@@ -6,6 +6,9 @@
   when thawing a DateTime.pm object. See
   http://www.mail-archive.com/datetime@perl.org/msg05633.html for some
   discussion of this.
+
+- Added pod coverage tests, and added some POD for undocumented
+  methods as a result.
 
 [ ENHANCEMENTS ]
 
