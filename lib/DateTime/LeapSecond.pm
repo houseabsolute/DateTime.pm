@@ -73,7 +73,7 @@ sub day_length {
     exists $RD_LENGTH{ $_[0] } ? 86400 + $RD_LENGTH{ $_[0] } : 86400
 }
 
-sub initialize {
+sub _initialize {
     # this table: ftp://62.161.69.5/pub/tai/publication/leaptab.txt
     # known accurate until (at least): 2005-12-31
     #
@@ -109,7 +109,7 @@ sub initialize {
     ) );
 }
 
-__PACKAGE__->initialize;
+__PACKAGE__->_initialize();
 
 1;
 __END__
