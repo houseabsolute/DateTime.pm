@@ -10,7 +10,7 @@ use DateTime::Helpers;
 
 BEGIN
 {
-    $VERSION = '0.36';
+    $VERSION = '0.37';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -2137,7 +2137,7 @@ name.
 Like C<year_with_era()>, but uses the secular_era() method to get the
 era name.
 
-=item * month
+=item * month, mon
 
 Returns the month of the year, from 1..12.
 
@@ -2425,6 +2425,11 @@ as well as leap seconds.
 
 Returns the current locale object.
 
+=item * formatter
+
+Returns current formatter object or class. See L<Formatters And
+Stringification> for details.
+
 =back
 
 =head3 "Set" Methods
@@ -2501,6 +2506,11 @@ work:
   $dt->set_time_zone( 'Europe/Paris' );
 
 Yes, now we can know "ni3 na4 bian1 ji2dian3?"
+
+=item * set_formatter( $formatter )
+
+Set the formatter for the object. See L<Formatters And
+Stringification> for details.
 
 =item * add_duration( $duration_object )
 
