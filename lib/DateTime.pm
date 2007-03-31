@@ -3263,9 +3263,12 @@ stole all the code from.
 
 =head1 COPYRIGHT
 
-Copyright (c) 1997-2003 Graham Barr, 2003-2007 David Rolsky.  All
-rights reserved.  This program is free software; you can redistribute
-it and/or modify it under the same terms as Perl itself.
+Copyright (c) 2003-2006 David Rolsky.  All rights reserved.  This
+program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+Portions of the code in this distribution are derived from other
+works.  Please see the CREDITS file for more details.
 
 The full text of the license can be found in the LICENSE file included
 with this module.
