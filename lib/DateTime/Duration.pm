@@ -511,8 +511,8 @@ Returns one of "wrap", "limit", or "preserve".
 
 =item * calendar_duration
 
-Returns a new object with the same I<calendar> delta (months only) and
-end of month mode as the current object.
+Returns a new object with the same I<calendar> delta (months and days
+only) and end of month mode as the current object.
 
 =item * clock_duration
 
@@ -555,8 +555,9 @@ if used to compare two duration objects containing different units.
 It will also give non-repeatable results if the durations contain
 multiple types of units, such as months and days.
 
-However, if you know that both objects only contain the same units,
-and just a single I<type>, then the results of the comparison will be
+However, if you know that both objects only consist of one type of
+unit (months I<or> days I<or> hours, etc.), and each duration contains
+the same type of unit, then the results of the comparison will be
 repeatable.
 
 =item * years, months, weeks, days, hours, minutes, seconds, nanoseconds
