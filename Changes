@@ -1,3 +1,12 @@
+0.38
+
+[ ENHANCEMENTS ]
+
+- DateTime.pm now explicitly overloads string comparison. This was
+  done so that comparing a DateTime.pm object to a string returns
+  false, rather than throwing an exception. Addresses RT #26085.
+
+
 0.37   2007-03-30
 
 [ BUG FIXES ]

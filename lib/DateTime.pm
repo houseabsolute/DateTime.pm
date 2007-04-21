@@ -10,7 +10,7 @@ use DateTime::Helpers;
 
 BEGIN
 {
-    $VERSION = '0.37';
+    $VERSION = '0.38';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -66,6 +66,8 @@ use overload ( 'fallback' => 1,
                '""'  => '_stringify',
                '-'   => '_subtract_overload',
                '+'   => '_add_overload',
+               'eq'  => '_string_equals_overload',
+               'ne'  => '_string_not_equals_overload',
              );
 
 # Have to load this after overloading is defined, after BEGIN blocks
@@ -1504,6 +1506,24 @@ sub _compare
     }
 
     return 0;
+}
+
+sub _string_equals_overload
+{
+    my ( $class, $dt1, $dt2 ) = ref $_[0] ? ( undef, @_ ) : @_;
+
+    return unless
+        (    DateTime::Helpers::can( $dt1, 'utc_rd_values' )
+          && DateTime::Helpers::can( $dt2, 'utc_rd_values' )
+        );
+
+    $class ||= ref $dt1;
+    return ! $class->compare( $dt1, $dt2 );
+}
+
+sub _string_not_equals_overload
+{
+    return ! _string_equals_overload(@_);
 }
 
 sub _normalize_nanoseconds
@@ -2995,6 +3015,11 @@ following all do sensible things:
 Additionally, the fallback parameter is set to true, so other
 derivable operators (+=, -=, etc.) will work properly.  Do not expect
 increment (++) or decrement (--) to do anything useful.
+
+If you attempt to sort DateTime objects with non-DateTime.pm objects
+or scalars (strings, number, whatever) then an exception will be
+thrown. Using the string comparison operators, C<eq> or C<ne>, to
+compare a DateTime.pm always returns false.
 
 The module also overloads stringification to use the C<iso8601()>
 method.

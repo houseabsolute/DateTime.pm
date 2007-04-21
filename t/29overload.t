@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 8;
+use Test::More tests => 12;
 
 use DateTime;
 
@@ -41,4 +41,17 @@ use DateTime;
     eval { my $x = $dt > bless {}, 'FooBar' };
     like( $@, qr/A DateTime object can only be compared to another DateTime object/,
           'Cannot compare a DateTime object to a FooBar object' );
+
+    ok( ! ( $dt eq 'some string' ),
+        'DateTime object always compares false to a string' );
+
+    ok( $dt ne 'some string',
+        'DateTime object always compares false to a string' );
+
+    ok( $dt eq $dt->clone,
+        'DateTime object is equal to a clone of itself' );
+
+    ok( ! ( $dt ne $dt->clone ),
+        'DateTime object is equal to a clone of itself (! ne)' );
+
 }
