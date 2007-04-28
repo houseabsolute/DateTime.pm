@@ -1,5 +1,11 @@
 0.38
 
+[ BUG FIXES ]
+
+- Require Test::Pod::Coverage 1.08 in pod-coverage.t, since we use
+  all_modules, which was only exported as of version 1.08. Fixes RT
+  #26594.
+
 [ ENHANCEMENTS ]
 
 - DateTime.pm now explicitly overloads string comparison. This was
