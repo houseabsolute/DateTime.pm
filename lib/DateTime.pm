@@ -1897,7 +1897,7 @@ datetimes.
 =head2 Math
 
 If you are going to be using doing date math, please read the section
-L<How Datetime Math is Done|How Datetime Math is Done>.
+L<How Datetime Math is Done>.
 
 =head2 Time Zone Warning
 
