@@ -1,16 +1,20 @@
-0.38
+0.38   2007-06-30
 
 [ BUG FIXES ]
 
 - Require Test::Pod::Coverage 1.08 in pod-coverage.t, since we use
-  all_modules, which was only exported as of version 1.08. Fixes RT
-  #26594.
+  all_modules, which was only exported as of version 1.08. Reported by
+  MATSUNO Tokuhiro. Fixes RT #26594.
+
+- Fixed a bad link to the old FAQ location in the docs. Reported by
+  Ric Signes. Fixes RT #26846.
 
 [ ENHANCEMENTS ]
 
 - DateTime.pm now explicitly overloads string comparison. This was
   done so that comparing a DateTime.pm object to a string returns
-  false, rather than throwing an exception. Addresses RT #26085.
+  false, rather than throwing an exception. Reported by Chris
+  Dolan. Addresses RT #26085.
 
 
 0.37   2007-03-30
