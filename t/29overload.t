@@ -53,5 +53,4 @@ use DateTime;
 
     ok( ! ( $dt ne $dt->clone ),
         'DateTime object is equal to a clone of itself (! ne)' );
-
 }
