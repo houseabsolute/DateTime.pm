@@ -8,11 +8,9 @@ use DateTime;
 
 my $pos = DateTime::Infinite::Future->new;
 my $neg = DateTime::Infinite::Past->new;
-my $posinf = 100 ** 1000;
-my $neginf = -1 * $posinf;
-# used to use abs() which broke some Win32 platforms but may have
-# fixed others - will wait for bug reports
-my $nan_string = ($posinf - $posinf) . '';
+my $posinf = DateTime::INFINITY;
+my $neginf = DateTime::NEG_INFINITY;
+my $nan_string = DateTime::NAN;
 
 # infinite date math
 {

@@ -10,7 +10,7 @@ use DateTime::Helpers;
 
 BEGIN
 {
-    $VERSION = '0.38';
+    $VERSION = '0.39';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -76,8 +76,8 @@ require DateTime::Infinite;
 
 use constant MAX_NANOSECONDS => 1_000_000_000;  # 1E9 = almost 32 bits
 
-use constant INFINITY     =>       100 ** 1000;
-use constant NEG_INFINITY => -1 * (100 ** 1000);
+use constant INFINITY     =>      (9 ** 9 ** 9);
+use constant NEG_INFINITY => -1 * (9 ** 9 ** 9);
 use constant NAN          => INFINITY - INFINITY;
 
 use constant SECONDS_PER_DAY => 86400;

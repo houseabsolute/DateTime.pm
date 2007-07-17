@@ -1,3 +1,10 @@
+0.39   2007-07-17
+
+- Yet more changes to how infinity is handled and tested. This passes
+  for me on 32-bit Win XP and 64-bit Linux, which is promising. Patch
+  by Yitzchak Scott-Thoennes. RT #22392.
+
+
 0.38   2007-06-30
 
 [ BUG FIXES ]
