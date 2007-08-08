@@ -10,7 +10,7 @@ use DateTime::Helpers;
 
 BEGIN
 {
-    $VERSION = '0.39';
+    $VERSION = '0.40';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -1561,7 +1561,8 @@ sub set
 
     my %old_p =
         ( map { $_ => $self->$_() }
-          qw( year month day hour minute second nanosecond locale time_zone )
+          qw( year month day hour minute second nanosecond
+              locale time_zone formatter )
         );
 
     my $new_dt = (ref $self)->new( %old_p, %p );
@@ -1594,6 +1595,7 @@ sub truncate
 
     my %new = ( locale    => $self->{locale},
                 time_zone => $self->{tz},
+                formatter => $self->{formatter},
               );
 
     if ( $p{to} eq 'week' )

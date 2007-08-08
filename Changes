@@ -1,3 +1,9 @@
+0.40
+
+- A custom formatter would be lost after a call to set() or
+  truncate(). Reported by Kjell-Magne Øierud. RT #28728.
+
+
 0.39   2007-07-17
 
 - Yet more changes to how infinity is handled and tested. This passes
