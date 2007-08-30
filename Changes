@@ -1,10 +1,18 @@
-0.40
+0.40   2007-08-30
+
+[ BUG FIXES ]
 
 - A custom formatter would be lost after a call to set() or
   truncate(). Reported by Kjell-Magne Øierud. RT #28728.
 
+- The truncate() method docs said it accepted "second" as a parameter,
+  but it didn't actually do the right thing with it. Now it always
+  truncates nanoseconds to 0 for any parameter it is passed.
+
 
 0.39   2007-07-17
+
+[ BUG FIXES ]
 
 - Yet more changes to how infinity is handled and tested. This passes
   for me on 32-bit Win XP and 64-bit Linux, which is promising. Patch
