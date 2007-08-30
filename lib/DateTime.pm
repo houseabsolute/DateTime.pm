@@ -241,6 +241,21 @@ sub new
     return $self;
 }
 
+# This method exists for the benefit of internal methods which create
+# a new object based on the current object, like set() and truncate().
+sub _new_from_self
+{
+    my $self = shift;
+
+    my %old = map { $_ => $self->$_() }
+        qw( year month day hour minute second nanosecond
+            locale time_zone );
+    $old{formatter} = $self->formatter()
+        if defined $self->formatter();
+
+    return (ref $self)->new( %old, @_ );
+}
+
 sub _handle_offset_modifier
 {
     my $self = shift;
@@ -1559,13 +1574,7 @@ sub set
     my $self = shift;
     my %p = validate( @_, $SetValidate );
 
-    my %old_p =
-        ( map { $_ => $self->$_() }
-          qw( year month day hour minute second nanosecond
-              locale time_zone formatter )
-        );
-
-    my $new_dt = (ref $self)->new( %old_p, %p );
+    my $new_dt = $self->_new_from_self(%p);
 
     %$self = %$new_dt;
 
@@ -1584,46 +1593,51 @@ sub set_locale { $_[0]->set( locale => $_[1] ) }
 
 sub set_formatter { $_[0]->{formatter} = $_[1] }
 
-sub truncate
 {
-    my $self = shift;
-    my %p = validate( @_,
-                      { to =>
-                        { regex => qr/^(?:year|month|week|day|hour|minute|second)$/ },
-                      },
-                    );
+    my %TruncateDefault = ( month  => 1,
+                            day    => 1,
+                            hour   => 0,
+                            minute => 0,
+                            second => 0,
+                            nanosecond => 0,
+                          );
+    my $re = join '|', 'year', 'week', grep { $_ ne 'nanosecond' } keys %TruncateDefault;
+    my $spec = { to => { regex => qr/^(?:$re)/ } };
 
-    my %new = ( locale    => $self->{locale},
-                time_zone => $self->{tz},
-                formatter => $self->{formatter},
-              );
-
-    if ( $p{to} eq 'week' )
+    sub truncate
     {
-        my $day_diff = $self->day_of_week - 1;
+        my $self = shift;
+        my %p = validate( @_, $spec );
 
-        if ($day_diff)
+        my %new;
+        if ( $p{to} eq 'week' )
         {
-            $self->add( days => -1 * $day_diff );
+            my $day_diff = $self->day_of_week - 1;
+
+            if ($day_diff)
+            {
+                $self->add( days => -1 * $day_diff );
+            }
+
+            return $self->truncate( to => 'day' );
+        }
+        else
+        {
+            my $truncate;
+            foreach my $f ( qw( year month day hour minute second nanosecond ) )
+            {
+                $new{$f} = $truncate ? $TruncateDefault{$f} : $self->$f();
+
+                $truncate = 1 if $p{to} eq $f;
+            }
         }
 
-        return $self->truncate( to => 'day' );
+        my $new_dt = $self->_new_from_self(%new);
+
+        %$self = %$new_dt;
+
+        return $self;
     }
-    else
-    {
-	foreach my $f ( qw( year month day hour minute second ) )
-	{
-	    $new{$f} = $self->$f();
-
-	    last if $p{to} eq $f;
-	}
-    }
-
-    my $new_dt = (ref $self)->new(%new);
-
-    %$self = %$new_dt;
-
-    return $self;
 }
 
 sub set_time_zone
