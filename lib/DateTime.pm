@@ -49,8 +49,8 @@ BEGIN
 }
 
 use DateTime::Duration;
-use DateTime::Locale;
-use DateTime::TimeZone 0.38;
+use DateTime::Locale 0.34;
+use DateTime::TimeZone 0.59;
 use Params::Validate qw( validate validate_pos SCALAR BOOLEAN HASHREF OBJECT );
 use Time::Local ();
 
