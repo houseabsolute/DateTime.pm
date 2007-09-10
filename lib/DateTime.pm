@@ -10,7 +10,7 @@ use DateTime::Helpers;
 
 BEGIN
 {
-    $VERSION = '0.40';
+    $VERSION = '0.41';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )

@@ -69,7 +69,7 @@ sub write_makefile
                    clean        => { FILES => "test.c test.o $zz" },
                    CONFIGURE    => \&init,
 
-                   PREREQ_PM    => { 'DateTime::Locale'   => 0.34,
+                   PREREQ_PM    => { 'DateTime::Locale'   => 0.35,
                                      'DateTime::TimeZone' => 0.59,
                                      'Params::Validate'   => 0.76,
                                      'Pod::Man'           => 1.14,
