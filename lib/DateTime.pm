@@ -1008,11 +1008,11 @@ sub epoch
     my @hms = $self->_utc_hms;
 
     $self->{utc_c}{epoch} =
-        eval { Time::Local::timegm_nocheck( ( reverse @hms ),
-                                            $day,
-                                            $month - 1,
-                                            $year,
-                                          ) };
+        Time::Local::timegm_nocheck( ( reverse @hms ),
+                                     $day,
+                                     $month - 1,
+                                     $year,
+                                   );
 
     return $self->{utc_c}{epoch};
 }
