@@ -15,6 +15,7 @@ BEGIN
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
     {
+        local $@;
 	eval
 	{
 	    if ( $] >= 5.006 )
@@ -1098,7 +1099,8 @@ sub subtract_datetime
             # it's a 23 hour (local) day
             if ( $bigger->is_dst
                  &&
-                 do { my $prev_day = eval { $bigger->clone->subtract( days => 1 ) };
+                 do { local $@;
+                      my $prev_day = eval { $bigger->clone->subtract( days => 1 ) };
                       $prev_day && ! $prev_day->is_dst ? 1 : 0 }
                );
 
@@ -1106,7 +1108,8 @@ sub subtract_datetime
             # it's a 25 hour (local) day
             if ( ! $bigger->is_dst
                  &&
-                 do { my $prev_day = eval { $bigger->clone->subtract( days => 1 ) };
+                 do { local $@;
+                      my $prev_day = eval { $bigger->clone->subtract( days => 1 ) };
                       $prev_day && $prev_day->is_dst ? 1 : 0 }
                );
     }
