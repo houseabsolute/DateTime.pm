@@ -2558,6 +2558,17 @@ Yes, now we can know "ni3 na4 bian1 ji2dian3?"
 Set the formatter for the object. See L<Formatters And
 Stringification> for details.
 
+=back
+
+=head3 Math Methods
+
+Like the set methods, math related methods always return the object
+itself, to allow for chaining:
+
+  $dt->add( days => 1 )->subtract( seconds => 1 );
+
+=over 4
+
 =item * add_duration( $duration_object )
 
 This method adds a C<DateTime::Duration> to the current datetime.  See
@@ -2621,9 +2632,9 @@ positive (or zero) duration>.
 =item * delta_ms( $datetime )
 
 Returns a duration which contains only minutes and seconds.  Any day
-and month differences to minutes are converted to minutes and seconds.
-
-B<Always return a positive (or zero) duration>.
+and month differences to minutes are converted to minutes and
+seconds. This method also B<always return a positive (or zero)
+duration>.
 
 =item * subtract_datetime_absolute( $datetime )
 
