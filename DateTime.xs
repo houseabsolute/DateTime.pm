@@ -280,7 +280,7 @@ _normalize_leap_seconds(self, days, secs)
           sv_setiv(secs, (IV) s);
         }
 
-#endif /* finite */
+#endif /* ifdef isfinite */
 
 void
 _time_as_seconds(self, h, m, s)
