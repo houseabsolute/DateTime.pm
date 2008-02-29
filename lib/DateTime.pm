@@ -175,7 +175,7 @@ sub new
     my $class = shift;
     my %p = validate( @_, $NewValidate );
 
-    Carp::croak( "Invalid day of month (day = $p{day} - month = $p{month})\n" )
+    Carp::croak( "Invalid day of month (day = $p{day} - month = $p{month} - year = $p{year})\n" )
         if $p{day} > $class->_month_length( $p{year}, $p{month} );
 
     my $self = bless {}, $class;
