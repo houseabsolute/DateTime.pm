@@ -8,7 +8,7 @@ use DateTime;
 use DateTime::Duration;
 
 {
-    my $dt = DateTime->now();
+    my $dt = DateTime->new( year => 2008, month => 2, day => 28 );
     my $du = DateTime::Duration->new( years => 1 );
 
     my $p;
