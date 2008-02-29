@@ -1,3 +1,11 @@
+0.42   2008-02-29
+
+[ BUG FIXES ]
+
+- The 17set_return.t tests failed on leap days, like today. Reported
+  by Duncan Ferguson. RT #33695.
+
+
 0.41   2007-09-10
 
 [ BUG FIXES ]
