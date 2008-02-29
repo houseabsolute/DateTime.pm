@@ -1,0 +1,7 @@
+# auto-generated shipit config file.
+steps = FindVersion, ChangeVersion, CheckChangeLog, DistTest, Commit, Tag, MakeDist, DistClean
+
+svn.tagpattern = %v
+svn.tagpattern = https://perl-date-time.svn.sourceforge.net/svnroot/perl-date-time/modules/DateTime.pm/tags/%v
+
+CheckChangeLog.files = Changes

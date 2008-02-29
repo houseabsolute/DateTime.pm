@@ -19,3 +19,4 @@ t/zz.*
 test\.[co]
 benchmarks/.*
 \.svn
+\.shipit
