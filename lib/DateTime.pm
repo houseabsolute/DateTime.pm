@@ -2605,7 +2605,7 @@ the object from which C<$datetime> is subtracted.  For example:
  = 1 month
 
 Note that this duration is not an absolute measure of the amount of
-time between the two datetimes, because the length of a month varies,,
+time between the two datetimes, because the length of a month varies,
 as well as due to the presence of leap seconds.
 
 The returned duration may have deltas for months, days, minutes,
