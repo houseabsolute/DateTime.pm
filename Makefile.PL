@@ -3,7 +3,7 @@
 use 5.006;
 
 use strict;
-use wanrings;
+use warnings;
 
 use Config qw(%Config);
 use ExtUtils::MakeMaker;
