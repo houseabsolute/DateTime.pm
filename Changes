@@ -1,3 +1,11 @@
+0.4301 2008-05-18
+
+[ BUG FIXES ]
+
+- In the 0.43 release, I forgot to change the DateTime::Locale
+  dependency to require DT::Locale 0.40.
+
+
 0.43   2008-05-18
 
 [ *** BACKWARDS INCOMPATIBILITIES *** ]
