@@ -1,3 +1,22 @@
+0.43
+
+[ *** BACKWARDS INCOMPATIBILITIES *** ]
+
+* Dropped support for Perl 5.005.
+
+[ ENHANCEMENTS ]
+
+- Added support for formatting the CLDR date pattern language, which
+  is much more powerful than strftime. This, combined with the latest
+  DateTime::Locale, makes the localized output much more correct.
+
+[ BUG FIXES ]
+
+- The hour_1() method was returning the real hour + 1, rather than
+  just representing midnight as 24 instead of 0. This bug fix will
+  probably break someone's code.
+
+
 0.42   2008-02-29
 
 [ BUG FIXES ]

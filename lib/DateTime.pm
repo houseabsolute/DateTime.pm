@@ -1,16 +1,18 @@
 package DateTime;
 
-use strict;
+use 5.006;
 
-use vars qw($VERSION);
+use strict;
+use warnings;
 
 use Carp;
 use DateTime::Helpers;
 
+our $VERSION;
 
 BEGIN
 {
-    $VERSION = '0.42';
+    $VERSION = '0.43';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -18,17 +20,8 @@ BEGIN
         local $@;
 	eval
 	{
-	    if ( $] >= 5.006 )
-	    {
-		require XSLoader;
-		XSLoader::load( 'DateTime', $DateTime::VERSION );
-	    }
-	    else
-	    {
-		require DynaLoader;
-		@DateTime::ISA = 'DynaLoader';
-		DateTime->bootstrap( $DateTime::VERSION );
-	    }
+            require XSLoader;
+            XSLoader::load( 'DateTime', $DateTime::VERSION );
 
             $DateTime::IsPurePerl = 0;
 	};
@@ -739,7 +732,7 @@ sub dmy
 }
 
 sub hour   { $_[0]->{local_c}{hour} }
-sub hour_1 { $_[0]->{local_c}{hour} + 1 }
+sub hour_1 { $_[0]->{local_c}{hour} == 0 ? 24 : $_[0]->{local_c}{hour} }
 
 sub hour_12   { my $h = $_[0]->hour % 12; return $h ? $h : 12 }
 sub hour_12_0 { $_[0]->hour % 12 }
@@ -960,7 +953,7 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
           'X' => sub { $_[0]->format_cldr( $_[0]->{locale}->time_format_default() ) },
           'y' => sub { sprintf( '%02d', substr( $_[0]->year, -2 ) ) },
           'Y' => sub { return $_[0]->year },
-          'z' => sub { DateTime::TimeZone::offset_as_string( $_[0]->offset ) },
+          'z' => sub { DateTime::TimeZone->offset_as_string( $_[0]->offset ) },
           'Z' => sub { $_[0]->{tz}->short_name_for_datetime( $_[0] ) },
           '%' => sub { '%' },
         );
@@ -1012,15 +1005,16 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
     my @patterns =
         ( qr/GGGGG/  => sub { $_[0]->{locale}->era_narrow->[ $_[0]->_era_index() ] },
           qr/GGGG/   => 'era_name',
-          qr/G{1,3}/ => 'era_abbreviation',
+          qr/G{1,3}/ => 'era_abbr',
 
-          qr/(y|y{3,5})/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->year() ) },
+          qr/(y{3,5})/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->year() ) },
           # yy is a weird special case, where it must be exactly 2 digits
-          qr/yy/         => sub { my $year = $_[0]->year();
-                                  $year = substr( $year, -2, 2 ) if length $year > 2;
-                                  $_[0]->_zero_padded_number( 2, $year ) },
-          qr/(u+)/       => sub { $_[0]->_zero_padded_number( $1, $_[0]->year() ) },
-          qr/(Y+)/       => sub { $_[0]->_zero_padded_number( $1, $_[0]->week_year() ) },
+          qr/yy/       => sub { my $year = $_[0]->year();
+                                $year = substr( $year, -2, 2 ) if length $year > 2;
+                                $_[0]->_zero_padded_number( 2, $year ) },
+          qr/y/        => sub { $_[0]->year() },
+          qr/(u+)/     => sub { $_[0]->_zero_padded_number( $1, $_[0]->year() ) },
+          qr/(Y+)/     => sub { $_[0]->_zero_padded_number( $1, $_[0]->week_year() ) },
 
           qr/QQQQ/  => 'quarter_name',
           qr/QQQ/   => 'quarter_abbr',
@@ -1033,25 +1027,25 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
 
           qr/LLLLL/ => sub { $_[0]->{locale}->month_stand_alone_narrow->[ $_[0]->month_0() ] },
           qr/LLLL/  => sub { $_[0]->{locale}->month_stand_alone_wide->[ $_[0]->month_0() ] },
-          qr/LLL/   => sub { $_[0]->{locale}->month_stand_alone_abbreivated->[ $_[0]->month_0() ] },
+          qr/LLL/   => sub { $_[0]->{locale}->month_stand_alone_abbreviated->[ $_[0]->month_0() ] },
           qr/(LL?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->month() ) },
 
-          qr/(ww?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->week_of_year() ) },
+          qr/(ww?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->week_number() ) },
           qr/W/     => 'week_of_month',
 
-          qr/(dd?)/  => sub { $_[0]->_zero_padded_number( $1, $_[0]->day_of_month() ) },
-          qr/(DDD?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->day_of_year() ) },
+          qr/(dd?)/    => sub { $_[0]->_zero_padded_number( $1, $_[0]->day_of_month() ) },
+          qr/(D{1,3})/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->day_of_year() ) },
 
           qr/F/    => 'weekday_of_month',
           qr/(g+)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->mjd() ) },
 
           qr/EEEEE/  => sub { $_[0]->{locale}->day_format_narrow->[ $_[0]->day_of_week_0() ] },
           qr/EEEE/   => 'day_name',
-          qr/E{1,3}/ => 'day_abbreviation',
+          qr/E{1,3}/ => 'day_abbr',
 
           qr/eeeee/ => sub { $_[0]->{locale}->day_format_narrow->[ $_[0]->day_of_week_0() ] },
           qr/eeee/  => 'day_name',
-          qr/eee/   => 'day_abbreviation',
+          qr/eee/   => 'day_abbr',
           qr/(ee?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->local_day_of_week() ) },
 
           qr/ccccc/ => sub { $_[0]->{locale}->day_stand_alone_narrow->[ $_[0]->day_of_week_0() ] },
@@ -1071,17 +1065,24 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
           qr/(mm?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->minute() ) },
 
           qr/(ss?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->second() ) },
-          qr/(SS?)/ => sub { my $l = length $1; sprintf( "%.{$l}f", $_[0]->fractional_second() ) },
-          qr/A+/    => sub { ( $_[0]->{local_rd_secs} * 1000 ) + $_[0]->millisecond() },
+          # I'm not sure this is what is wanted (notably the trailing
+          # and leading zeros it can produce), but once again the LDML
+          # spec is not all that clear.
+          qr/(S+)/  => sub { my $l = length $1;
+                             my $val = sprintf( "%.${l}f", $_[0]->fractional_second() - $_[0]->second() );
+                             $val =~ s/^0\.//;
+                             $val || 0 },
+          qr/A+/    => sub { ( $_[0]->local_rd_as_seconds() * 1000 ) + $_[0]->millisecond() },
 
-          qr/z{1,3}/ => sub { $_[0]->time_zone_short_name() },
           qr/zzzz/   => sub { $_[0]->time_zone_long_name() },
-          qr/Z{1,3}/ => sub { $_[0]->offset() },
-          qr/ZZZZ/   => sub { $_[0]->time_zone_short_name() . $_[0]->offset() },
-          qr/v{1,3}/ => sub { $_[0]->time_zone_short_name() },
+          qr/z{1,3}/ => sub { $_[0]->time_zone_short_name() },
+          qr/ZZZZ/   => sub { $_[0]->time_zone_short_name()
+                              . DateTime::TimeZone->offset_as_string( $_[0]->offset() ) },
+          qr/Z{1,3}/ => sub { DateTime::TimeZone->offset_as_string( $_[0]->offset() ) },
           qr/vvvv/   => sub { $_[0]->time_zone_long_name() },
-          qr/V{1,3}/ => sub { $_[0]->time_zone_short_name() },
+          qr/v{1,3}/ => sub { $_[0]->time_zone_short_name() },
           qr/VVVV/   => sub { $_[0]->time_zone_long_name() },
+          qr/V{1,3}/ => sub { $_[0]->time_zone_short_name() },
     );
 
     sub _zero_padded_number
@@ -1113,25 +1114,26 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
         {
             $p =~ s/\G
                     (?:
-                      \'(.+?)\'(?!\')  # quote escaped bit of text
+                      '((?:[^']|'')*)' # quote escaped bit of text
+                                       # it needs to end with one
+                                       # quote not followed by
+                                       # another
                       |
-                      (\s+)            # space
+                      (([a-zA-Z])\3*)     # could be a pattern
                       |
-                      ([a-zA-Z]+)      # a pattern
-                      |
-                      (.)              # something else
+                      (.)                 # anything else
                     )
                    /
                     defined $1
                     ? $1
                     : defined $2
-                    ? $2
-                    : defined $3
-                    ? $self->_cldr_pattern($3)
+                    ? $self->_cldr_pattern($2)
                     : defined $4
                     ? $4
                     : undef # should never get here
                    /sgex;
+
+            $p =~ s/\'\'/\'/g;
 
             return $p unless wantarray;
 
@@ -3552,7 +3554,7 @@ stole all the code from.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2003-2006 David Rolsky.  All rights reserved.  This
+Copyright (c) 2003-2008 David Rolsky.  All rights reserved.  This
 program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 

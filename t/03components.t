@@ -31,7 +31,7 @@ is( $d->mday_0, 4, '->mday_0' );
 is( $d->mday, 5, '->mday' );
 is( $d->mday_0, 4, '->mday_0' );
 is( $d->hour, 2, '->hour' );
-is( $d->hour_1, 3, '->hour_1' );
+is( $d->hour_1, 2, '->hour_1' );
 is( $d->hour_12, 2, '->hour_12' );
 is( $d->hour_12_0, 2, '->hour_12_0' );
 is( $d->minute, 12, '->minute' );
@@ -125,7 +125,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     is( $d->month, 7, '->month' );
     is( $d->day_of_month, 5, '->day_of_month' );
     is( $d->hour, 2, '->hour' );
-    is( $d->hour_1, 3, '->hour_1' );
+    is( $d->hour_1, 2, '->hour_1' );
     is( $d->minute, 12, '->minute' );
     is( $d->second, 50, '->second' );
 }
@@ -283,7 +283,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 {
     my $dt = DateTime->new( year => 1000, hour => 23 );
     is( $dt->hour,      23, '->hour' );
-    is( $dt->hour_1,    24, '->hour_1' );
+    is( $dt->hour_1,    23, '->hour_1' );
     is( $dt->hour_12,   11, '->hour_12' );
     is( $dt->hour_12_0, 11, '->hour_12_0' );
 }
@@ -291,7 +291,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 {
     my $dt = DateTime->new( year => 1000, hour => 0 );
     is( $dt->hour,       0, '->hour' );
-    is( $dt->hour_1,     1, '->hour_1' );
+    is( $dt->hour_1,    24, '->hour_1' );
     is( $dt->hour_12,   12, '->hour_12' );
     is( $dt->hour_12_0,  0, '->hour_12_0' );
 }
