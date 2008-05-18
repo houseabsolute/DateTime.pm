@@ -122,7 +122,7 @@ for my $fh ( Test::Builder->new()->output(),
                   's'      => '55',
                   'SS'     => '00',
                   'SSSSSS' => '001000',
-                  'A'      => '62350367695001',
+                  'A'      => '66895001',
 
                   'zzzz'   => 'America/Chicago',
                   'zzz'    => 'CDT',

@@ -1072,7 +1072,7 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
                              my $val = sprintf( "%.${l}f", $_[0]->fractional_second() - $_[0]->second() );
                              $val =~ s/^0\.//;
                              $val || 0 },
-          qr/A+/    => sub { ( $_[0]->local_rd_as_seconds() * 1000 ) + $_[0]->millisecond() },
+          qr/A+/    => sub { ( $_[0]->{local_rd_secs} * 1000 ) + $_[0]->millisecond() },
 
           qr/zzzz/   => sub { $_[0]->time_zone_long_name() },
           qr/z{1,3}/ => sub { $_[0]->time_zone_short_name() },
@@ -2609,11 +2609,23 @@ This method implements functionality similar to the C<strftime()>
 method in C.  However, if given multiple format strings, then it will
 return multiple scalars, one for each format string.
 
-See the L<strftime Specifiers|/strftime Specifiers> section for a list
-of all possible format specifiers.
+See the L<strftime Patterns> section for a list of all possible
+strftime patterns.
 
-If you give a format specifier that doesn't exist, then it is simply
-treated as text.
+If you give a pattern that doesn't exist, then it is simply treated as
+text.
+
+=item * $dt->format_cldr( $format, ... )
+
+This method implements formatting based on the CLDR date patterns.  If
+given multiple format strings, then it will return multiple scalars,
+one for each format string.
+
+See the L<CLDR Patterns> section for a list of all possible CLDR
+patterns.
+
+If you give a pattern that doesn't exist, then it is simply treated as
+text.
 
 =item * $dt->epoch()
 
@@ -3313,10 +3325,10 @@ A formatter can be handy when you know that in your application you
 want to stringify your DateTime objects into a special format all the
 time, for example to a different language.
 
-=head2 strftime Specifiers
+=head2 strftime Patterns
 
-The following specifiers are allowed in the format string given to the
-C<strftime()> method:
+The following patterns are allowed in the format string given to the
+C<< $dt->strftime() >> method:
 
 =over 4
 
@@ -3521,10 +3533,291 @@ where "method" is a valid C<DateTime.pm> object method.
 
 =back
 
+=head2 CLDR Patterns
+
+The CLDR pattern language is both more powerful and more complex than
+strftime. Unlike strftime patterns, you often have to explicitly
+escape text that you do not want formatted, as the patterns are simply
+letters without any prefix.
+
+For example, "yyyy-MM-dd" is a valid CLDR pattern. If you want to
+include any lower or upper case ASCII characters as-is, you can
+surround them with single quotes ('). If you want to include a single
+quote, you must escape it as two single quotes ('').
+
+  'Today is ' EEEE
+  'It is now' h 'o''clock' a
+
+Spaces and any non-letter text will always be passed through as-is.
+
+Many CLDR patterns which produce numbers will pad the number with
+leading zeroes depending on the length of the format specifier. For
+example, "h" represents the current hour from 1-12. If you specify
+"hh" then the 1-9 will have a leading zero prepended.
+
+However, CLDR often uses five of a letter to represent the narrow form
+of a pattern. This inconsistency is necessary for backwards
+compatibility.
+
+CLDR often distinguishes between the "format" and "stand-alone" forms
+of a pattern. The format pattern is used when the thing in question is
+being placed into a larger string. The stand-alone form is used when
+displaying that item by itself, for example in a calendar.
+
+It also often provides three sizes for each item, wide (the full
+name), abbreviated, and narrow. The narrow form is often just a single
+character, for example "T" for "Tuesday", and may not be unique.
+
+CLDR provides a fairly complex system for localizing time zones that
+we ignore entirely. The time zone patterns just use the information
+provided by C<DateTime::TimeZone>, and I<do not follow the CLDR spec>.
+
+The output of a CLDR pattern is always localized, when applicable.
+
+CLDR provides the following pattenrs:
+
+=over 4
+
+=item * G{1,3}
+
+The abbreviated era (BC, AD).
+
+=item * GGGG
+
+The wide era (Before Christ, Anno Domini).
+
+=item * GGGGG
+
+The narrow era, if it exists (and it mostly doesn't).
+
+=item * y and y{3,}
+
+The year, zero-prefixed as needed.
+
+=item * yy
+
+This is a special case. It always produces a two-digit year, so "1976"
+becomes "76".
+
+=item * Y{1,}
+
+The week of the year, from C<< $dt->week_year() >>.
+
+=item * u{1,}
+
+Same as "y" except that "uu" is not a special case.
+
+=item * Q{1,2}
+
+The quarter as a number (1..4).
+
+=item * QQQ
+
+The abbreviated format form for the quarter.
+
+=item * QQQQ
+
+The wide format form for the quarter.
+
+=item * q{1,2}
+
+The quarter as a number (1..4).
+
+=item * qqq
+
+The abbreviated stand-alone form for the quarter.
+
+=item * qqqq
+
+The wide stand-alone form for the quarter.
+
+=item * M{1,2]
+
+The numerical month.
+
+=item * MMM
+
+The abbreviated format form for the month.
+
+=item * MMMM
+
+The wide format form for the month.
+
+=item * MMMMM
+
+The narrow format form for the month.
+
+=item * L{1,2]
+
+The numerical month.
+
+=item * LLL
+
+The abbreviated stand-alone form for the month.
+
+=item * LLLL
+
+The wide stand-alone form for the month.
+
+=item * LLLLL
+
+The narrow stand-alone form for the month.
+
+=item * w{1,2}
+
+The week of the year, from C<< $dt->week_number() >>.
+
+=item * W
+
+The week of the month, from C<< $dt->week_of_month() >>.
+
+=item * d{1,2}
+
+The numeric day of of the month.
+
+=item * D{1,3}
+
+The numeric day of of the year.
+
+=item * F
+
+The day of the week in the month, from C<< $dt->weekday_of_month() >>.
+
+=item * g{1,}
+
+The modified Julian day, from C<< $dt->mjd() >>.
+
+=item * E{1,3}
+
+The abbreviated format form for the day of the week.
+
+=item * EEEE
+
+The wide format form for the day of the week.
+
+=item * EEEEE
+
+The narrow format form for the day of the week.
+
+=item * e{1,2}
+
+The I<local> day of the week, from 1 to 7. This number depends on what
+day is considered the first day of the week, which varies by
+locale. For example, in the US, Sunday is the first day of the week,
+so this returns 2 for Monday.
+
+=item * eee
+
+The abbreviated format form for the day of the week.
+
+=item * eeee
+
+The wide format form for the day of the week.
+
+=item * eeeee
+
+The narrow format form for the day of the week.
+
+=item * c
+
+The numeric day of the week (not localized).
+
+=item * ccc
+
+The abbreviated stand-alone form for the day of the week.
+
+=item * cccc
+
+The wide stand-alone form for the day of the week.
+
+=item * ccccc
+
+The narrow format form for the day of the week.
+
+=item * a
+
+The localized form of AM or PM for the time.
+
+=item * h{1,2}
+
+The hour from 1-12.
+
+=item * H{1,2}
+
+The hour from 0-23.
+
+=item * K{1,2}
+
+The hour from 0-11.
+
+=item * k{1,2}
+
+The hour from 1-24.
+
+=item * j{1,2}
+
+The hour, in 12 or 24 hour form, based on the preferred form for the
+locale. In other words, this is equivalent to either "h{1,2}" or
+"H{1,2}".
+
+=item * m{1,2}
+
+The minute.
+
+=item * s{1,2}
+
+The second.
+
+=item * S{1,}
+
+The fractional portion of the seconds, rounded based on the length of
+the specifier. This returned I<without> a leading decimal point, but
+may have leading or trailing zeroes.
+
+=item * A{1,}
+
+The millisecond of the day, based on the current time. In other words,
+if it is 12:00:00.00, this returns 43200000.
+
+=item * z{1,3}
+
+The time zone short name.
+
+=item * zzzz
+
+The time zone long name.
+
+=item * Z{1,3}
+
+The time zone short name and the offset as one string, so something
+like "CDT-0500".
+
+=item * ZZZZ
+
+The time zone long name.
+
+=item * v{1,3}
+
+The time zone short name.
+
+=item * vvvv
+
+The time zone long name.
+
+=item * V{1,3}
+
+The time zone short name.
+
+=item * VVVV
+
+The time zone long name.
+
+=back
+
 =head1 DateTime.pm and Storable
 
-As of version 0.13, DateTime implements Storable hooks in order to
-reduce the size of a serialized DateTime object.
+DateTime implements Storable hooks in order to reduce the size of a
+serialized DateTime object.
 
 =head1 KNOWN BUGS
 
