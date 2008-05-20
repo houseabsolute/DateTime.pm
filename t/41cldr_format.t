@@ -6,14 +6,17 @@ use Test::More tests => 90;
 
 use DateTime;
 
-for my $fh ( Test::Builder->new()->output(),
-             Test::Builder->new()->failure_output(),
-             Test::Builder->new()->todo_output(),
-           )
-{
-    binmode $fh, ':utf8';
-}
 
+if ( $} >= 5.008 )
+{
+    for my $fh ( Test::Builder->new()->output(),
+                 Test::Builder->new()->failure_output(),
+                 Test::Builder->new()->todo_output(),
+               )
+    {
+        binmode $fh, ':utf8';
+    }
+}
 
 {
     my $dt = DateTime->new( year       => 1976,
