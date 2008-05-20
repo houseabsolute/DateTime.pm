@@ -7,7 +7,7 @@ use Test::More tests => 90;
 use DateTime;
 
 
-if ( $} >= 5.008 )
+if ( $] >= 5.008 )
 {
     for my $fh ( Test::Builder->new()->output(),
                  Test::Builder->new()->failure_output(),
