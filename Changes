@@ -1,7 +1,7 @@
 0.4304 2008-07-13
 
 - Fix test failures when tests are run with DateTime::Locale
-  0.41. Reported by David Cantrell via CAPAN Testers.
+  0.41. Reported by David Cantrell via CPAN Testers.
 
 
 0.4303 2008-07-12
