@@ -30,7 +30,7 @@ if ( $] >= 5.008 )
                             time_zone  => 'America/Chicago',
                           );
 
-    my %tests = ( 'GGGGG'  => 'AD',
+    my %tests = ( 'GGGGG'  => 'A',
                   'GGGG'   => 'Anno Domini',
                   'GGG'    => 'AD',
                   'GG'     => 'AD',

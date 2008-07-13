@@ -183,7 +183,7 @@ de
 %y	99
 %Y	1999
 %%	%
-%a	Di
+%a	Di.
 %A	Dienstag
 %b	Sep
 %B	September
