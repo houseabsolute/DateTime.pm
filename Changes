@@ -1,3 +1,9 @@
+0.4305 2008-10-03
+
+- The pure Perl version of this module did not know about the end of
+  2008 leap second. Reported by James T Monty.
+
+
 0.4304 2008-07-13
 
 - Fix test failures when tests are run with DateTime::Locale
