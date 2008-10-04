@@ -459,7 +459,7 @@ conversions possible are:
 
 =over 8
 
-=item * year <=> months
+=item * years <=> months
 
 =item * weeks <=> days
 
@@ -546,7 +546,7 @@ This is a class method that can be used to compare or sort durations.
 Comparison is done by adding each duration to the specified
 C<DateTime.pm> object and comparing the resulting datetimes.  This is
 necessary because without a base, many durations are not comparable.
-For example, 1 month may otr may not be longer than 29 days, depending
+For example, 1 month may or may not be longer than 29 days, depending
 on what datetime it is added to.
 
 If no base datetime is given, then the result of C<< DateTime->now >>
@@ -569,14 +569,14 @@ is returned.  These numbers are always positive.
 
 Here's what each method returns:
 
- $dur->year()    == abs( $dur->in_units('years') )
- $dur->months()  == ( abs( $dur->in_units( 'months', 'years' ) ) )[0]
- $dur->weeks()   == abs( $dur->in_units( 'weeks' ) )
- $dur->days()    == ( abs( $dur->in_units( 'days', 'weeks' ) ) )[0]
- $dur->hours()   == abs( $dur->in_units( 'hours' ) )
- $dur->minutes   == ( abs( $dur->in_units( 'minutes', 'hours' ) ) )[0]
- $dur->seconds   == abs( $dur->in_units( 'seconds' ) )
- $dur->nanoseconds() == abs( $dur->in_units( 'nanoseconds', 'seconds' ) )
+ $dur->years()       == abs( $dur->in_units('years') )
+ $dur->months()      == abs( ( $dur->in_units( 'months', 'years' ) )[0] )
+ $dur->weeks()       == abs( $dur->in_units( 'weeks' ) )
+ $dur->days()        == abs( ( $dur->in_units( 'days', 'weeks' ) )[0] )
+ $dur->hours()       == abs( $dur->in_units( 'hours' ) )
+ $dur->minutes       == abs( ( $dur->in_units( 'minutes', 'hours' ) )[0] )
+ $dur->seconds       == abs( $dur->in_units( 'seconds' ) )
+ $dur->nanoseconds() == abs( ( $dur->in_units( 'nanoseconds', 'seconds' ) )[0] )
 
 If this seems confusing, remember that you can always use the
 C<in_units()> method to specify exactly what you want.
