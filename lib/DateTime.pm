@@ -46,7 +46,7 @@ use DateTime::Duration;
 use DateTime::Locale 0.40;
 use DateTime::TimeZone 0.59;
 use Params::Validate qw( validate validate_pos SCALAR BOOLEAN HASHREF OBJECT );
-use Time::Local ();
+use Time::y2038 qw( timegm );
 
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
@@ -1188,11 +1188,11 @@ sub epoch
     my @hms = $self->_utc_hms;
 
     $self->{utc_c}{epoch} =
-        Time::Local::timegm_nocheck( ( reverse @hms ),
-                                     $day,
-                                     $month - 1,
-                                     $year,
-                                   );
+        timegm( ( reverse @hms ),
+                $day,
+                $month - 1,
+                $year - 1900,
+              );
 
     return $self->{utc_c}{epoch};
 }
@@ -2359,7 +2359,7 @@ Returns a string, either "BCE" or "CE", according to the year.
 
 Returns a string containing the year immediately followed by its era
 abbreviation.  The year is the absolute value of C<ce_year()>, so that
-year 1 is "1BC" and year 0 is "1AD".
+year 1 is "1AD" and year 0 is "1BC".
 
 =item * $dt->year_with_christian_era()
 

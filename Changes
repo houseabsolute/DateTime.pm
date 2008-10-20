@@ -1,3 +1,9 @@
+0.44
+
+- Using Time::y2038 instead of Time::Local lets us handle epochs up to
+  142 million years before and after the Unix epoch.
+
+
 0.4305 2008-10-03
 
 - The pure Perl version of this module did not know about the end of
