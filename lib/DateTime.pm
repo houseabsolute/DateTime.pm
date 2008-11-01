@@ -12,7 +12,7 @@ our $VERSION;
 
 BEGIN
 {
-    $VERSION = '0.4305';
+    $VERSION = '0.44';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -24,6 +24,9 @@ BEGIN
             XSLoader::load( 'DateTime', $DateTime::VERSION );
 
             $DateTime::IsPurePerl = 0;
+
+            require Time::y2038;
+            Time::y2038->import('timegm');
 	};
 
 	die $@ if $@ && $@ !~ /object version|loadable object/;
@@ -39,6 +42,11 @@ BEGIN
     else
     {
         require DateTimePP;
+
+        require Time::Local;
+        Time::Local->import('timegm_nocheck');
+
+        *timegm = sub { goto &timegm_nocheck };
     }
 }
 
@@ -46,7 +54,6 @@ use DateTime::Duration;
 use DateTime::Locale 0.40;
 use DateTime::TimeZone 0.59;
 use Params::Validate qw( validate validate_pos SCALAR BOOLEAN HASHREF OBJECT );
-use Time::y2038 qw( timegm );
 
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
