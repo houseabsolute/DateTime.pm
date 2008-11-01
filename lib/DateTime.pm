@@ -2006,9 +2006,9 @@ DateTime - A date and time object
   $day_name    = $dt->day_name;   # Monday, Tuesday, ...
   $day_abbr    = $dt->day_abbr;   # Mon, Tue, ...
 
+  # May not work for all possible datetime, see the docs on this
+  # method for more details.
   $epoch_time  = $dt->epoch;
-  # may return undef if the datetime is outside the range that is
-  # representable by your OS's epoch system.
 
   $dt2 = $dt + $duration_object;
 
@@ -2650,19 +2650,26 @@ is implemented using C<Time::Local>, which uses the Unix epoch even on
 machines with a different epoch (such as MacOS).  Datetimes before the
 start of the epoch will be returned as a negative number.
 
-This return value from this method is always an integer.
+The return value from this method is always an integer.
 
 Since the epoch does not account for leap seconds, the epoch time for
 1972-12-31T23:59:60 (UTC) is exactly the same as that for
 1973-01-01T00:00:00.
 
-Epoch times cannot represent many dates on most platforms, and this
-method may simply return undef in some cases.
+If you have the XS version of C<DateTime.pm> installed, it uses
+C<Time::y2038> to calculate the epoch. C<Time::y2038> can handle epoch
+values approximately 142 million years into the future and past,
+regardless of whether your system has native support for such epochs.
 
-Using your system's epoch time may be error-prone, since epoch times
-have such a limited range on 32-bit machines.  Additionally, the fact
-that different operating systems have different epoch beginnings is
-another source of possible bugs.
+If you have the pure Perl version C<DateTime.pm>, it uses
+C<Time::Local>, which may or may not handle epochs before 1904 or
+after 2038.If you need epoch support outside of these ranges, it is
+strongly recommended that you make sure you have the XS version of
+C<DateTime.pm> installed.
+
+You can check which you have using the following code snippet:
+
+  perl -MDateTime -le 'print $DateTime::IsPurePerl ? q{no XS} : q{has XS}'
 
 =item * $dt->hires_epoch()
 
