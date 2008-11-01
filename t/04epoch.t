@@ -112,14 +112,22 @@ use DateTime;
     is( $dt->nanosecond, 123_456_789, 'nanosecond should be an integer ' );
 }
 
+SKIP:
 {
+    skip 'These tests require an XS DateTime', 3
+        if $DateTime::IsPurePerl;
+
     my $dt = DateTime->from_epoch( epoch => -3155673600 );
     is( $dt->year, 1870, 'year should be 1870' );
     is( $dt->month,   1, 'month should be 1' );
     is( $dt->day,     1, 'day should be 1' );
 }
 
+SKIP:
 {
+    skip 'These tests require an XS DateTime', 3
+        if $DateTime::IsPurePerl;
+
     my $dt = DateTime->from_epoch( epoch => 10413792000 );
     is( $dt->year, 2300, 'year should be 2300' );
     is( $dt->month,   1, 'month should be 1' );
