@@ -75,7 +75,7 @@ use DateTime;
 
 # Adding/subtracting should affect epoch
 {
-    my $expected = '1049160602';
+    my $expected = 1049160602;
     my $epochtest = DateTime->from_epoch( epoch => $expected  );
 
     is( $epochtest->epoch, $expected,
