@@ -2380,7 +2380,7 @@ era name.
 
 =item * $dt->month()
 
-=item * mon
+=item * $dt->mon()
 
 Returns the month of the year, from 1..12.
 
