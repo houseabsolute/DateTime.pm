@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use utf8;
 
-use Test::More tests => 90;
+use Test::More tests => 91;
 
 use DateTime;
 
@@ -150,4 +150,20 @@ if ( $] >= 5.008 )
         is( $dt->format_cldr($k), $tests{$k},
             "format_cldr for $k" );
     }
+}
+
+{
+    my $dt = DateTime->new( year       => 2008,
+                            month      => 10,
+                            day        => 20,
+                            hour       => 18,
+                            minute     => 34,
+                            second     => 55,
+                            nanosecond => 1_000_000,
+                            locale     => 'en',
+                            time_zone  => 'America/Chicago',
+                          );
+
+    is( $dt->format_cldr('yy'), '08',
+        'format_cldr for yy in 2008 should be 08' );
 }

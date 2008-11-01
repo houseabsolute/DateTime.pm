@@ -1,10 +1,16 @@
-0.44
+0.44   2008-11-01
 
 - XS-capable DateTime.pm now uses Time::y2038 instead of
   Time::Local. This lets it handle epochs up to 142 million years
   before and after the Unix epoch.
 
 - Fixed a compiler warning with Perl 5.10.0.
+
+- Fixed docs for year_with_era, which had AD and BC
+  backwards. Reported by Vynce Montgomery. RT #39923.
+
+- The format_cldr() method did not format the "yy" format properly
+  when the year ended in "0X". Reported by Wilson Santos. RT #40555.
 
 
 0.4305 2008-10-03

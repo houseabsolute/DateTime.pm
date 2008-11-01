@@ -1018,7 +1018,7 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
           # yy is a weird special case, where it must be exactly 2 digits
           qr/yy/       => sub { my $year = $_[0]->year();
                                 $year = substr( $year, -2, 2 ) if length $year > 2;
-                                $_[0]->_zero_padded_number( 2, $year ) },
+                                $_[0]->_zero_padded_number( 'yy', $year ) },
           qr/y/        => sub { $_[0]->year() },
           qr/(u+)/     => sub { $_[0]->_zero_padded_number( $1, $_[0]->year() ) },
           qr/(Y+)/     => sub { $_[0]->_zero_padded_number( $1, $_[0]->week_year() ) },
