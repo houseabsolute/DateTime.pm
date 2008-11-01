@@ -9,6 +9,7 @@ plan tests => scalar @modules;
 my %trustme =
     ( 'DateTime'           =>
       { trustme => [ qr/0$/, qr/^STORABLE/, 'utc_year',
+                     'timegm',
                      # deprecated methods
                      'DefaultLanguage', 'era', 'language',
                    ] },
