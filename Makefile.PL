@@ -63,6 +63,12 @@ write_makefile();
 
 sub write_makefile
 {
+    my %timegm_provider = 
+        ( $no_xs
+          ? ( 'Time::Local' => '1.04' )
+          : ( 'Time::y2038' => '20081020' )
+        );
+
     my $zz = join ' ', glob File::Spec->catfile( 't', 'zz_*.t' );
     WriteMakefile( NAME         => 'DateTime',
                    VERSION_FROM => 'lib/DateTime.pm',
@@ -77,7 +83,7 @@ sub write_makefile
                                      'Pod::Man'           => '1.14',
                                      'Scalar::Util'       => '0',
                                      'Test::More'         => '0.34',
-                                     'Time::y2038'        => '20081020',
+                                     %timegm_provider,
                                    },
                    ( MM->can('signature_target') ? ( SIGN => 1 ) : () ),
                    LICENSE      => 'perl',

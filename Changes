@@ -1,7 +1,8 @@
 0.44
 
-- Using Time::y2038 instead of Time::Local lets us handle epochs up to
-  142 million years before and after the Unix epoch.
+- XS-capable DateTime.pm now uses Time::y2038 instead of
+  Time::Local. This lets it handle epochs up to 142 million years
+  before and after the Unix epoch.
 
 - Fixed a compiler warning with Perl 5.10.0.
 
