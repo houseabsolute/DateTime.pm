@@ -208,7 +208,9 @@ _seconds_as_components(self, secs, utc_secs = 0, secs_modifier = 0)
         if (utc_secs >= SECONDS_PER_DAY) {
 
           if (utc_secs >= SECONDS_PER_DAY + 1)
-            croak("Invalid UTC RD seconds value: %d", utc_secs);
+            /* If we just use %d and the IV, we get a warning that IV
+               is not an int */
+            croak("Invalid UTC RD seconds value: %s", SvPV_nolen(newSViv(utc_secs)));
 
           s += (utc_secs - SECONDS_PER_DAY) + 60;
           m = 59;
