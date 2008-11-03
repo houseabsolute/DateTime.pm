@@ -12,7 +12,7 @@ our $VERSION;
 
 BEGIN
 {
-    $VERSION = '0.44';
+    $VERSION = '0.4401';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -26,7 +26,7 @@ BEGIN
             $DateTime::IsPurePerl = 0;
 
             require Time::y2038;
-            Time::y2038->import('timegm');
+            Time::y2038->import( qw( gmtime timegm ) );
 	};
 
 	die $@ if $@ && $@ !~ /object version|loadable object/;
