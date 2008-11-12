@@ -1,3 +1,10 @@
+0.45   2008-11-11
+
+- Reverted the changes to use Time::y2038, on the recommendation of
+  Michael Schwern (the author of said module), because it is not yet
+  stable. This may come back in a future release.
+
+
 0.4401 2008-11-03
 
 - In order to handle epochs > 2**32 properly on a 32-bit machine, we
