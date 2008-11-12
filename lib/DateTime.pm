@@ -24,9 +24,6 @@ BEGIN
             XSLoader::load( 'DateTime', $DateTime::VERSION );
 
             $DateTime::IsPurePerl = 0;
-
-            require Time::y2038;
-            Time::y2038->import( qw( gmtime timegm ) );
 	};
 
 	die $@ if $@ && $@ !~ /object version|loadable object/;
@@ -42,17 +39,13 @@ BEGIN
     else
     {
         require DateTimePP;
-
-        require Time::Local;
-        Time::Local->import('timegm_nocheck');
-
-        *timegm = sub { goto &timegm_nocheck };
     }
 }
 
 use DateTime::Duration;
 use DateTime::Locale 0.40;
 use DateTime::TimeZone 0.59;
+use Time::Local qw( timegm_nocheck );
 use Params::Validate qw( validate validate_pos SCALAR BOOLEAN HASHREF OBJECT );
 
 # for some reason, overloading doesn't work unless fallback is listed
@@ -1195,11 +1188,11 @@ sub epoch
     my @hms = $self->_utc_hms;
 
     $self->{utc_c}{epoch} =
-        timegm( ( reverse @hms ),
-                $day,
-                $month - 1,
-                $year - 1900,
-              );
+        timegm_nocheck( ( reverse @hms ),
+                        $day,
+                        $month - 1,
+                        $year - 1900,
+                      );
 
     return $self->{utc_c}{epoch};
 }
@@ -2656,20 +2649,10 @@ Since the epoch does not account for leap seconds, the epoch time for
 1972-12-31T23:59:60 (UTC) is exactly the same as that for
 1973-01-01T00:00:00.
 
-If you have the XS version of C<DateTime.pm> installed, it uses
-C<Time::y2038> to calculate the epoch. C<Time::y2038> can handle epoch
-values approximately 142 million years into the future and past,
-regardless of whether your system has native support for such epochs.
-
-If you have the pure Perl version C<DateTime.pm>, it uses
-C<Time::Local>, which may or may not handle epochs before 1904 or
-after 2038.If you need epoch support outside of these ranges, it is
-strongly recommended that you make sure you have the XS version of
-C<DateTime.pm> installed.
-
-You can check which you have using the following code snippet:
-
-  perl -MDateTime -le 'print $DateTime::IsPurePerl ? q{no XS} : q{has XS}'
+This module uses C<Time::Local> to calculate the epoch, which may or
+may not handle epochs before 1904 or after 2038 (depending on the size
+of your system's integers, and whether or not Perl was compiled with
+64-bit int support).
 
 =item * $dt->hires_epoch()
 
