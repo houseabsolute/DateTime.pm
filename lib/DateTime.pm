@@ -12,7 +12,7 @@ our $VERSION;
 
 BEGIN
 {
-    $VERSION = '0.45';
+    $VERSION = '0.4501';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
@@ -1191,7 +1191,7 @@ sub epoch
         timegm_nocheck( ( reverse @hms ),
                         $day,
                         $month - 1,
-                        $year - 1900,
+                        $year,
                       );
 
     return $self->{utc_c}{epoch};

@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 28;
+use Test::More tests => 32;
 
 use DateTime;
 
@@ -104,3 +104,20 @@ use DateTime;
     my $dt = DateTime->from_epoch( epoch => 0.1234567891 );
     is( $dt->nanosecond, 123_456_789, 'nanosecond should be an integer ' );
 }
+
+my $negative_epoch_ok = defined( (localtime(-1))[0] ) ? 1 : 0;
+
+SKIP:
+{
+    skip 'Negative epoch times do not work on some operating systems, including Win32', 4
+        unless $negative_epoch_ok;
+
+    is( DateTime->new( year => 1904 )->epoch, -2082844800,
+        "epoch should work back to at least 1904" );
+
+    my $dt = DateTime->from_epoch( epoch => -2082844800 );
+    is( $dt->year, 1904, 'year should be 1904' );
+    is( $dt->month,   1, 'month should be 1904' );
+    is( $dt->day,     1, 'day should be 1904' );
+}
+

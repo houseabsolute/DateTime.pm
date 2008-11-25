@@ -1,3 +1,10 @@
+0.4501 2008-11-25
+
+- The epoch() method got broken in the recent shuffling between
+  Time::Local and Time::y2038. Unfortunately, the tests to catch this
+  also got lost in the shuffle. Reported by Avianna Chao.
+
+
 0.45   2008-11-11
 
 - Reverted the changes to use Time::y2038, on the recommendation of
