@@ -634,7 +634,7 @@ sub year_with_secular_era   { (abs $_[0]->ce_year) . $_[0]->secular_era }
 sub month   { $_[0]->{local_c}{month} }
 *mon = \&month;
 
-sub month_0 { $_[0]->{local_c}{month} - 1 };
+sub month_0 { $_[0]->{local_c}{month} - 1 }
 *mon_0 = \&month_0;
 
 sub month_name { $_[0]->{locale}->month_format_wide->[ $_[0]->month_0() ] }
@@ -647,7 +647,7 @@ sub day_of_month { $_[0]->{local_c}{day} }
 
 sub weekday_of_month { use integer; ( ( $_[0]->day - 1 ) / 7 ) + 1 }
 
-sub quarter {$_[0]->{local_c}{quarter} };
+sub quarter { $_[0]->{local_c}{quarter} }
 
 sub quarter_name { $_[0]->{locale}->quarter_format_wide->[ $_[0]->quarter_0() ] }
 sub quarter_abbr { $_[0]->{locale}->quarter_format_abbreviated->[ $_[0]->quarter_0() ] }
