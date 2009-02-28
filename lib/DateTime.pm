@@ -76,6 +76,8 @@ use constant NAN          => INFINITY - INFINITY;
 
 use constant SECONDS_PER_DAY => 86400;
 
+use constant duration_class => 'DateTime::Duration';
+
 my( @MonthLengths, @LeapYearMonthLengths );
 
 BEGIN
@@ -1323,7 +1325,7 @@ sub subtract_datetime
     }
 
     return
-        DateTime::Duration->new
+        $dt1->duration_class->new
             ( months      => $months,
 	      days        => $days,
 	      minutes     => $minutes,
@@ -1401,7 +1403,7 @@ sub subtract_datetime_absolute
     }
 
     return
-        DateTime::Duration->new
+        $self->duration_class->new
             ( seconds     => $seconds,
               nanoseconds => $nanoseconds,
             );
@@ -1431,8 +1433,8 @@ sub delta_md
 	      $smaller->_month_length( $smaller->year, $smaller->month ),
             );
 
-    return DateTime::Duration->new( months => $months,
-                                    days   => $days );
+    return $self->duration_class->new( months => $months,
+                                       days   => $days );
 }
 
 sub delta_days
@@ -1442,7 +1444,7 @@ sub delta_days
 
     my ( $smaller, $bigger ) = sort( ($self->local_rd_values)[0], ($dt->local_rd_values)[0] );
 
-    DateTime::Duration->new( days => $bigger - $smaller );
+    $self->duration_class->new( days => $bigger - $smaller );
 }
 
 sub delta_ms
@@ -1461,7 +1463,7 @@ sub delta_ms
     $p{minutes} = $dur->minutes;
     $p{seconds} = $dur->seconds;
 
-    return DateTime::Duration->new(%p);
+    return $self->duration_class->new(%p);
 }
 
 sub _add_overload
@@ -1516,9 +1518,19 @@ sub _subtract_overload
     }
 }
 
-sub add { return shift->add_duration( DateTime::Duration->new(@_) ) }
+sub add
+{
+    my $self = shift;
 
-sub subtract { return shift->subtract_duration( DateTime::Duration->new(@_) ) }
+    return $self->add_duration( $self->duration_class->new(@_) );
+}
+
+sub subtract
+{
+    my $self = shift;
+
+    return $self->subtract_duration( $self->duration_class->new(@_) );
+}
 
 sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
@@ -2815,6 +2827,11 @@ itself, to allow for chaining:
   $dt->add( days => 1 )->subtract( seconds => 1 );
 
 =over 4
+
+=item * $dt->duration_class()
+
+This returns C<DateTime::Duration>, but exists so that a subclass of
+C<DateTime.pm> can provide a different value.
 
 =item * $dt->add_duration( $duration_object )
 

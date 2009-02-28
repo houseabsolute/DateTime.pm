@@ -1,3 +1,9 @@
+0.46
+
+- Added a duration_class method for the benefit of DateTime.pm
+  subclasses. Patch by Shawn Moore.
+
+
 0.4501 2008-11-25
 
 - The epoch() method got broken in the recent shuffling between
