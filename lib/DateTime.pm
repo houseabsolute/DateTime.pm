@@ -1442,9 +1442,9 @@ sub delta_days
     my $self = shift;
     my $dt = shift;
 
-    my ( $smaller, $bigger ) = sort( ($self->local_rd_values)[0], ($dt->local_rd_values)[0] );
+    my $days = abs( ($self->local_rd_values)[0] - ($dt->local_rd_values)[0] );
 
-    $self->duration_class->new( days => $bigger - $smaller );
+    $self->duration_class->new( days => $days );
 }
 
 sub delta_ms
