@@ -1,4 +1,4 @@
-0.46
+0.46   2009-02-28
 
 - Added a duration_class method for the benefit of DateTime.pm
   subclasses. Patch by Shawn Moore.
