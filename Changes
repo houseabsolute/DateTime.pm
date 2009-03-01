@@ -1,4 +1,4 @@
-0.47
+0.47   2009-03-01
 
 - The handling of CLDR format 'j' and 'jj' was backwards, using 24
   hour time for locales that wanted 12 hour, and vice versa. Reported
