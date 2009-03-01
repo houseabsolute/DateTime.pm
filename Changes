@@ -1,3 +1,10 @@
+0.47
+
+- The handling of CLDR format 'j' and 'jj' was backwards, using 24
+  hour time for locales that wanted 12 hour, and vice versa. Reported
+  by Maros Kollar.
+
+
 0.46   2009-02-28
 
 - Added a duration_class method for the benefit of DateTime.pm

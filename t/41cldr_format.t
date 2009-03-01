@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use utf8;
 
-use Test::More tests => 91;
+use Test::More tests => 93;
 
 use DateTime;
 
@@ -115,8 +115,8 @@ if ( $] >= 5.008 )
                   'K'      => '6',
                   'kk'     => '18',
                   'kk'     => '18',
-                  'jj'     => '18',
-                  'j'      => '18',
+                  'j'      => '6',
+                  'jj'     => '06',
 
                   'mm'     => '34',
                   'm'      => '34',
@@ -166,4 +166,36 @@ if ( $] >= 5.008 )
 
     is( $dt->format_cldr('yy'), '08',
         'format_cldr for yy in 2008 should be 08' );
+}
+
+{
+    my $dt = DateTime->new( year       => 2008,
+                            month      => 10,
+                            day        => 20,
+                            hour       => 18,
+                            minute     => 34,
+                            second     => 55,
+                            nanosecond => 1_000_000,
+                            locale     => 'en_US',
+                            time_zone  => 'America/Chicago',
+                          );
+
+    is( $dt->format_cldr('j'), '6',
+        'format_cldr for j in en_US should be 6 (at 18:34)' );
+}
+
+{
+    my $dt = DateTime->new( year       => 2008,
+                            month      => 10,
+                            day        => 20,
+                            hour       => 18,
+                            minute     => 34,
+                            second     => 55,
+                            nanosecond => 1_000_000,
+                            locale     => 'fr',
+                            time_zone  => 'America/Chicago',
+                          );
+
+    is( $dt->format_cldr('j'), '18',
+        'format_cldr for j in fr should be 18 (at 18:34)' );
 }

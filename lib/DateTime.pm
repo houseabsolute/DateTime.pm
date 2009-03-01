@@ -1061,7 +1061,7 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
           qr/(HH?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->hour() ) },
           qr/(KK?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->hour_12_0() ) },
           qr/(kk?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->hour_1() ) },
-          qr/(jj?)/ => sub { my $h = $_[0]->{locale}->prefers_24_hour_time() ? $_[0]->hour_12() : $_[0]->hour();
+          qr/(jj?)/ => sub { my $h = $_[0]->{locale}->prefers_24_hour_time() ? $_[0]->hour() : $_[0]->hour_12();
                              $_[0]->_zero_padded_number( $1, $h ) },
 
           qr/(mm?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->minute() ) },
