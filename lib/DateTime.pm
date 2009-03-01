@@ -1022,6 +1022,10 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
           qr/QQQ/   => 'quarter_abbr',
           qr/(QQ?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->quarter() ) },
 
+          qr/qqqq/  => sub { $_[0]->{locale}->quarter_stand_alone_wide()->[ $_[0]->quarter_0() ] },
+          qr/qqq/   => sub { $_[0]->{locale}->quarter_stand_alone_abbreviated()->[ $_[0]->quarter_0() ] },
+          qr/(qq?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->quarter() ) },
+
           qr/MMMMM/ => sub { $_[0]->{locale}->month_format_narrow->[ $_[0]->month_0() ] },
           qr/MMMM/  => 'month_name',
           qr/MMM/   => 'month_abbr',

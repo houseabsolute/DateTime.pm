@@ -4,6 +4,9 @@
   hour time for locales that wanted 12 hour, and vice versa. Reported
   by Maros Kollar.
 
+- The CLDR formatting was missing support for lower-case "q"
+  patterns. Reported by Maros Kollar.
+
 
 0.46   2009-02-28
 

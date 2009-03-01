@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use utf8;
 
-use Test::More tests => 93;
+use Test::More tests => 97;
 
 use DateTime;
 
@@ -59,6 +59,11 @@ if ( $] >= 5.008 )
                   'QQQ'    => 'Q4',
                   'QQ'     => '04',
                   'Q'      => '4',
+
+                  'qqqq'   => '4th quarter',
+                  'qqq'    => 'Q4',
+                  'qq'     => '04',
+                  'q'      => '4',
 
                   'MMMMM'  => 'O',
                   'MMMM'   => 'October',
