@@ -1,3 +1,10 @@
+0.48
+
+- Some of the accessors (the "main" ones like year(), month(), day(),
+  etc) now warn if they are passed a value. Patch from Shawn
+  Moore. Fixes RT #6979.
+
+
 0.47   2009-03-01
 
 - The handling of CLDR format 'j' and 'jj' was backwards, using 24

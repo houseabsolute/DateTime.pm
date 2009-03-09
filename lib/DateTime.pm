@@ -612,7 +612,10 @@ sub formatter { $_[0]->{formatter} }
 
 sub clone { bless { %{ $_[0] } }, ref $_[0] }
 
-sub year    { $_[0]->{local_c}{year} }
+sub year {
+    Carp::carp('year() is a read-only accessor') if @_ > 1;
+    return $_[0]->{local_c}{year};
+}
 
 sub ce_year { $_[0]->{local_c}{year} <= 0 ?
               $_[0]->{local_c}{year} - 1 :
@@ -633,7 +636,10 @@ sub year_with_era { (abs $_[0]->ce_year) . $_[0]->era_abbr }
 sub year_with_christian_era { (abs $_[0]->ce_year) . $_[0]->christian_era }
 sub year_with_secular_era   { (abs $_[0]->ce_year) . $_[0]->secular_era }
 
-sub month   { $_[0]->{local_c}{month} }
+sub month   {
+    Carp::carp('month() is a read-only accessor') if @_ > 1;
+    return $_[0]->{local_c}{month};
+}
 *mon = \&month;
 
 sub month_0 { $_[0]->{local_c}{month} - 1 }
@@ -643,7 +649,10 @@ sub month_name { $_[0]->{locale}->month_format_wide->[ $_[0]->month_0() ] }
 
 sub month_abbr { $_[0]->{locale}->month_format_abbreviated->[ $_[0]->month_0() ] }
 
-sub day_of_month { $_[0]->{local_c}{day} }
+sub day_of_month {
+    Carp::carp('day_of_month() is a read-only accessor') if @_ > 1;
+    $_[0]->{local_c}{day};
+}
 *day  = \&day_of_month;
 *mday = \&day_of_month;
 
@@ -733,21 +742,33 @@ sub dmy
                     $self->year );
 }
 
-sub hour   { $_[0]->{local_c}{hour} }
+sub hour   {
+    Carp::carp('hour() is a read-only accessor') if @_ > 1;
+    return $_[0]->{local_c}{hour};
+}
 sub hour_1 { $_[0]->{local_c}{hour} == 0 ? 24 : $_[0]->{local_c}{hour} }
 
 sub hour_12   { my $h = $_[0]->hour % 12; return $h ? $h : 12 }
 sub hour_12_0 { $_[0]->hour % 12 }
 
-sub minute { $_[0]->{local_c}{minute} }
+sub minute {
+    Carp::carp('minute() is a read-only accessor') if @_ > 1;
+    return $_[0]->{local_c}{minute};
+}
 *min = \&minute;
 
-sub second { $_[0]->{local_c}{second} }
+sub second {
+    Carp::carp('second() is a read-only accessor') if @_ > 1;
+    return $_[0]->{local_c}{second};
+}
 *sec = \&second;
 
 sub fractional_second { $_[0]->second + $_[0]->nanosecond / MAX_NANOSECONDS }
 
-sub nanosecond { $_[0]->{rd_nanosecs} }
+sub nanosecond {
+    Carp::carp('nanosecond() is a read-only accessor') if @_ > 1;
+    return $_[0]->{rd_nanosecs};
+}
 
 sub millisecond { _round( $_[0]->{rd_nanosecs} / 1000000 ) }
 
@@ -866,7 +887,10 @@ sub week_of_month
     return ( $first_wday_of_month <= 4 ) ? $wom + 1 : $wom;
 }
 
-sub time_zone { $_[0]->{tz} }
+sub time_zone {
+    Carp::carp('time_zone() is a read-only accessor') if @_ > 1;
+    return $_[0]->{tz};
+}
 
 sub offset                     { $_[0]->{tz}->offset_for_datetime( $_[0] ) }
 sub _offset_for_local_datetime { $_[0]->{tz}->offset_for_local_datetime( $_[0] ) }
@@ -876,7 +900,10 @@ sub is_dst { $_[0]->{tz}->is_dst_for_datetime( $_[0] ) }
 sub time_zone_long_name  { $_[0]->{tz}->name }
 sub time_zone_short_name { $_[0]->{tz}->short_name_for_datetime( $_[0] ) }
 
-sub locale { $_[0]->{locale} }
+sub locale {
+    Carp::carp('locale() is a read-only accessor') if @_ > 1;
+    return $_[0]->{locale};
+}
 *language = \&locale;
 
 sub utc_rd_values { @{ $_[0] }{ 'utc_rd_days', 'utc_rd_secs', 'rd_nanosecs' } }

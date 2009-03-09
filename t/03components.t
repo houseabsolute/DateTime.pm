@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 135;
+use Test::More tests => 144;
 
 use DateTime;
 
@@ -294,4 +294,30 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     is( $dt->hour_1,    24, '->hour_1' );
     is( $dt->hour_12,   12, '->hour_12' );
     is( $dt->hour_12_0,  0, '->hour_12_0' );
+}
+
+SKIP:
+{
+    skip 'These tests require Test::Exception', 9
+        unless eval "use Test::Warn; 1";
+
+    my $dt = DateTime->new( year => 2000 );
+    warnings_like( sub { $dt->year(2001) }, qr/is a read-only/,
+                   'year() is read-only' );
+    warnings_like( sub { $dt->month(5) }, qr/is a read-only/,
+                   'month() is read-only' );
+    warnings_like( sub { $dt->day(5) }, qr/is a read-only/,
+                   'day() is read-only' );
+    warnings_like( sub { $dt->hour(5) }, qr/is a read-only/,
+                   'hour() is read-only' );
+    warnings_like( sub { $dt->minute(5) }, qr/is a read-only/,
+                   'minute() is read-only' );
+    warnings_like( sub { $dt->second(5) }, qr/is a read-only/,
+                   'second() is read-only' );
+    warnings_like( sub { $dt->nanosecond(5) }, qr/is a read-only/,
+                   'nanosecond() is read-only' );
+    warnings_like( sub { $dt->time_zone('America/Chicago') }, qr/is a read-only/,
+                   'time_zone() is read-only' );
+    warnings_like( sub { $dt->locale('en_US') }, qr/is a read-only/,
+                   'locale() is read-only' );
 }
