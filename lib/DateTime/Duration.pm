@@ -3,6 +3,7 @@ package DateTime::Duration;
 use strict;
 
 use Carp ();
+use DateTime;
 use DateTime::Helpers;
 use Params::Validate qw( validate SCALAR );
 
