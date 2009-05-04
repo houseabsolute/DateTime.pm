@@ -8,6 +8,11 @@
   constants from it, but did not explicitly "use DateTime". Reported
   by Jeff Kubina. RT #44740.
 
+- The CLDR formatting for "c" and "cc" was incorrectly using the local
+  day of the week. This meant that it gave the wrong result for
+  locales where Monday is not considered the first day of the
+  week. Reported by Maros Kollar. RT #45007.
+
 
 0.47   2009-03-01
 
