@@ -3755,8 +3755,8 @@ The narrow format form for the day of the week.
 
 =item * e{1,2}
 
-The I<local> day of the week, from 1 to 7. This number depends on what
-day is considered the first day of the week, which varies by
+The I<local> numeric day of the week, from 1 to 7. This number depends
+on what day is considered the first day of the week, which varies by
 locale. For example, in the US, Sunday is the first day of the week,
 so this returns 2 for Monday.
 
@@ -3774,8 +3774,8 @@ The narrow format form for the day of the week.
 
 =item * c
 
-The numeric day of the week, treating Monday as the first of the week,
-regardless of locale.
+The numeric day of the week from 1 to 7, treating Monday as the first
+of the week, regardless of locale.
 
 =item * ccc
 
