@@ -124,10 +124,10 @@ SKIP:
 {
     package Number::Overloaded;
     use overload
-        "0+"          => sub { ${$_[0]} },
+        "0+"          => sub { $_[0]->{num} },
         fallback      => 1;
 
-    sub new { bless \$_[1], $_[0] }
+    sub new { bless { num => $_[1] }, $_[0] }
 }
 
 {
