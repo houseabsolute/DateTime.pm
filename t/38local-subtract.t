@@ -181,12 +181,12 @@ use DateTime;
 {
     my $dt1 = DateTime->new( year => 2003, month => 4, day => 6,
                              hour => 1, minute => 58,
-                             time_zone => "America/Chicago",
+                             time_zone => 'America/Chicago',
                            );
 
     my $dt2 = DateTime->new( year => 2003, month => 4, day => 6,
                              hour => 3, minute => 1,
-                             time_zone => "America/Chicago",
+                             time_zone => 'America/Chicago',
                            );
 
     my $dur = $dt2->subtract_datetime($dt1);
@@ -207,12 +207,12 @@ use DateTime;
 {
     my $dt1 = DateTime->new( year => 2003, month => 4, day => 5,
                              hour => 1, minute => 58,
-                             time_zone => "America/Chicago",
+                             time_zone => 'America/Chicago',
                            );
 
     my $dt2 = DateTime->new( year => 2003, month => 4, day => 6,
                              hour => 3, minute => 1,
-                             time_zone => "America/Chicago",
+                             time_zone => 'America/Chicago',
                            );
 
     my $dur = $dt2->subtract_datetime($dt1);
@@ -260,12 +260,12 @@ use DateTime;
 {
     my $dt1 = DateTime->new( year => 2003, month => 4, day => 6,
                              hour => 3, minute => 1,
-                             time_zone => "America/Chicago",
+                             time_zone => 'America/Chicago',
                            );
 
     my $dt2 = DateTime->new( year => 2003, month => 4, day => 7,
                              hour => 3, minute => 2,
-                             time_zone => "America/Chicago",
+                             time_zone => 'America/Chicago',
                            );
 
     my $dur = $dt2->subtract_datetime($dt1);
@@ -291,12 +291,12 @@ use DateTime;
 {
     my $dt1 = DateTime->new( year => 2003, month => 4, day => 5,
                              hour => 1, minute => 58,
-                             time_zone => "America/Chicago",
+                             time_zone => 'America/Chicago',
                            );
 
     my $dt2 = DateTime->new( year => 2003, month => 4, day => 7,
                              hour => 2, minute => 1,
-                             time_zone => "America/Chicago",
+                             time_zone => 'America/Chicago',
                            );
 
     my $dur = $dt2->subtract_datetime($dt1);
@@ -423,11 +423,11 @@ use DateTime;
 {
     my $dt1 = DateTime->new( year => 2005, month => 4, day => 3,
                              hour => 7, minute => 0,
-                             time_zone => "America/New_York" );
+                             time_zone => 'America/New_York' );
 
     my $dt2 = DateTime->new( year => 2005, month => 4, day => 3,
                              hour => 8, minute => 0,
-                             time_zone => "America/New_York" );
+                             time_zone => 'America/New_York' );
 
     my $dur = $dt2->subtract_datetime($dt1);
     my ( $minutes, $seconds ) = $dur->in_units( 'minutes','seconds' );
@@ -442,7 +442,7 @@ use DateTime;
 {
     my $dt1 = DateTime->new( year => 2005, month => 4, day => 3,
                              hour => 1, minute => 0,
-                             time_zone => "America/New_York" );
+                             time_zone => 'America/New_York' );
 
     my $dur = $dt1->subtract_datetime($dt1);
     ok( $dur->is_zero, 'dst change date (with dst) - itself, duration is zero' );
