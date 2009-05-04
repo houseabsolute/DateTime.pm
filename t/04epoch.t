@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 32;
+use Test::More tests => 38;
 
 use DateTime;
 
@@ -121,3 +121,45 @@ SKIP:
     is( $dt->day,     1, 'day should be 1904' );
 }
 
+{
+    package Number::Overloaded;
+    use overload
+        "0+"          => sub { ${$_[0]} },
+        fallback      => 1;
+
+    sub new { bless \$_[1], $_[0] }
+}
+
+{
+    my $time = Number::Overloaded->new(12345);
+
+    my $dt = DateTime->from_epoch( epoch => $time );
+    is( $dt->epoch, 12345, 'can pass overloaded object to from_epoch' );
+
+    $time = Number::Overloaded->new(-12345);
+    $dt = DateTime->from_epoch( epoch => $time );
+
+    is( $dt->epoch, -12345, 'negative epoch in overloaded object' );
+
+    $time = Number::Overloaded->new(12345.1234);
+    $dt = DateTime->from_epoch( epoch => $time );
+    is( $dt->epoch, 12345, 'decimal epoch in overloaded object' );
+}
+
+{
+    my @tests = ( 'asldkjlkjd',
+                  '1234 foo',
+                  'adlkj 1234',
+                );
+
+    for my $test (@tests)
+    {
+        eval
+        {
+            DateTime->from_epoch( epoch => $test );
+        };
+
+        like( $@, qr/did not pass regex check/,
+              qq{'$test' is not a valid epoch value} );
+    }
+}

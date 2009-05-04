@@ -438,7 +438,7 @@ sub _utc_hms
 }
 
 {
-    my $spec = { epoch => { type => SCALAR },
+    my $spec = { epoch      => { regex => qr/^-?(?:\d+(?:\.\d*)?|\.\d+)$/ },
                  locale     => { type => SCALAR | OBJECT, optional => 1 },
                  language   => { type => SCALAR | OBJECT, optional => 1 },
                  time_zone  => { type => SCALAR | OBJECT, optional => 1 },
