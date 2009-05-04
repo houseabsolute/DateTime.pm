@@ -3774,7 +3774,8 @@ The narrow format form for the day of the week.
 
 =item * c
 
-The numeric day of the week (not localized).
+The numeric day of the week, treating Monday as the first of the week,
+regardless of locale.
 
 =item * ccc
 
