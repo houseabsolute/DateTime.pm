@@ -1255,10 +1255,8 @@ sub subtract_datetime
     my $dt1 = shift;
     my $dt2 = shift;
 
-    my $is_same_tz = $dt1->time_zone() eq $dt2->time_zone();
-
     $dt2 = $dt2->clone->set_time_zone( $dt1->time_zone )
-        unless $dt1->time_zone->name eq $dt2->time_zone->name;
+        unless $dt1->time_zone eq $dt2->time_zone;
 
     # We only want a negative duration if $dt2 > $dt1 ($self)
     my ( $bigger, $smaller, $negative ) =
@@ -1303,10 +1301,8 @@ sub subtract_datetime
     # are not crossing a DST change, we don't want to invoke the hack
     # - see 38local-subtract.t
     my $bigger_min = $bigger->hour * 60 + $bigger->minute;
-    if ( $is_same_tz
-         && $bigger->time_zone->has_dst_changes
-         && ( $bigger->ymd ne $smaller->ymd
-              || $bigger->is_dst != $smaller->is_dst )
+    if ( $bigger->time_zone->has_dst_changes
+         && $bigger->is_dst != $smaller->is_dst
        )
     {
 

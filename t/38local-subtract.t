@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 125;
+use Test::More tests => 127;
 
 use DateTime;
 
@@ -462,6 +462,41 @@ use DateTime;
     my $dur = $dt1->subtract_datetime($dt2);
 
     is( $dur->delta_minutes, 720,
-        'subtraction the day after a DST change in only one zone' );
+        'subtraction the day after a DST change in one zone, where the other datetime is in a different zone' );
+}
+
+{
+    # This is UTC-5
+    my $dt1 = DateTime->new( year => 2009, month => 3, day => 8,
+                             hour => 1,
+                             time_zone => 'America/New_York' );
+    # This is UTC+8
+    my $dt2 = DateTime->new( year => 2009, month => 3, day => 8,
+                             hour => 1,
+                             time_zone => 'Asia/Hong_Kong' );
+
+    my $dur = $dt1->subtract_datetime($dt2);
+
+    is( $dur->delta_minutes, 780,
+        'subtraction the day of a DST change in one zone (before the change),'
+        . ' where the other datetime is in a different zone' );
+}
+
+
+{
+    # This is UTC-4
+    my $dt1 = DateTime->new( year => 2009, month => 3, day => 8,
+                             hour => 4,
+                             time_zone => 'America/New_York' );
+    # This is UTC+8
+    my $dt2 = DateTime->new( year => 2009, month => 3, day => 8,
+                             hour => 4,
+                             time_zone => 'Asia/Hong_Kong' );
+
+    my $dur = $dt1->subtract_datetime($dt2);
+
+    is( $dur->delta_minutes, 720,
+        'subtraction the day of a DST change in one zone (after the change),'
+        . ' where the other datetime is in a different zone' );
 }
 
