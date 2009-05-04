@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use utf8;
 
-use Test::More tests => 97;
+use Test::More tests => 101;
 
 use DateTime;
 
@@ -203,4 +203,33 @@ if ( $] >= 5.008 )
 
     is( $dt->format_cldr('j'), '18',
         'format_cldr for j in fr should be 18 (at 18:34)' );
+}
+
+{
+    my $dt = DateTime->new( year       => 2009,
+                            month      => 4,
+                            day        => 13,
+                            locale     => 'en_US',
+                          );
+
+    is( $dt->format_cldr('e'), '2',
+        'format_cldr for e in en_US should be 2 (for Monday, 2009-04-13)' );
+
+    is( $dt->format_cldr('c'), '1',
+        'format_cldr for c in en_US should be 1 (for Monday, 2009-04-13)' );
+}
+
+
+{
+    my $dt = DateTime->new( year       => 2009,
+                            month      => 4,
+                            day        => 13,
+                            locale     => 'fr_FR',
+                          );
+
+    is( $dt->format_cldr('e'), '1',
+        'format_cldr for e in fr_FR should be 1 (for Monday, 2009-04-13)' );
+
+    is( $dt->format_cldr('c'), '1',
+        'format_cldr for c in fr_FR should be 1 (for Monday, 2009-04-13)' );
 }

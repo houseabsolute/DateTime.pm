@@ -1084,7 +1084,7 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
           qr/ccccc/ => sub { $_[0]->{locale}->day_stand_alone_narrow->[ $_[0]->day_of_week_0() ] },
           qr/cccc/  => sub { $_[0]->{locale}->day_stand_alone_wide->[ $_[0]->day_of_week_0() ] },
           qr/ccc/   => sub { $_[0]->{locale}->day_stand_alone_abbreviated->[ $_[0]->day_of_week_0() ] },
-          qr/(cc?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->local_day_of_week() ) },
+          qr/(cc?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->day_of_week() ) },
 
           qr/a/ => 'am_or_pm',
 
