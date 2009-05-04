@@ -3378,6 +3378,10 @@ A formatter can be handy when you know that in your application you
 want to stringify your DateTime objects into a special format all the
 time, for example to a different language.
 
+If you provide a formatter class name or object, it must implement a
+C<format_datetime> method. This method will be called with just the
+DateTime object as its argument.
+
 =head2 strftime Patterns
 
 The following patterns are allowed in the format string given to the
