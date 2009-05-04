@@ -13,6 +13,10 @@
   locales where Monday is not considered the first day of the
   week. Reported by Maros Kollar. RT #45007.
 
+- DateTime->from_epoch did not allow an object which overloaded
+  numification as the epoch value. Patch by Michael Schwern. RT
+  #45653.
+
 
 0.47   2009-03-01
 
