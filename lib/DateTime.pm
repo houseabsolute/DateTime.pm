@@ -3359,8 +3359,8 @@ method.
 =head2 Formatters And Stringification
 
 You can optionally specify a "formatter", which is usually a
-DateTime::Format::* object/class, to control how the stringification
-of the DateTime object.
+DateTime::Format::* object/class, to control the stringification of
+the DateTime object.
 
 Any of the constructor methods can accept a formatter argument:
 
