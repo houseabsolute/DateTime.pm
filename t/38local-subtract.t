@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 124;
+use Test::More tests => 125;
 
 use DateTime;
 
@@ -447,3 +447,21 @@ use DateTime;
     my $dur = $dt1->subtract_datetime($dt1);
     ok( $dur->is_zero, 'dst change date (with dst) - itself, duration is zero' );
 }
+
+# This tests a bug where one of the datetimes is changing DST, and the
+# other is not. In this case, no "adjustments" (aka hacks) are made in
+# subtract_datetime, and it just gives the "UTC difference".
+{
+    # This is UTC-4
+    my $dt1 = DateTime->new( year => 2009, month => 3, day => 9,
+                             time_zone => 'America/New_York' );
+    # This is UTC+8
+    my $dt2 = DateTime->new( year => 2009, month => 3, day => 9,
+                             time_zone => 'Asia/Hong_Kong' );
+
+    my $dur = $dt1->subtract_datetime($dt2);
+
+    is( $dur->delta_minutes, 720,
+        'subtraction the day after a DST change in only one zone' );
+}
+
