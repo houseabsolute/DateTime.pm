@@ -298,7 +298,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
 SKIP:
 {
-    skip 'These tests require Test::Exception', 9
+    skip 'These tests require Test::Warn', 9
         unless eval "use Test::Warn; 1";
 
     my $dt = DateTime->new( year => 2000 );
