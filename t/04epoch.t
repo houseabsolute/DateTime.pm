@@ -136,14 +136,20 @@ SKIP:
     my $dt = DateTime->from_epoch( epoch => $time );
     is( $dt->epoch, 12345, 'can pass overloaded object to from_epoch' );
 
-    $time = Number::Overloaded->new(-12345);
-    $dt = DateTime->from_epoch( epoch => $time );
-
-    is( $dt->epoch, -12345, 'negative epoch in overloaded object' );
-
     $time = Number::Overloaded->new(12345.1234);
     $dt = DateTime->from_epoch( epoch => $time );
     is( $dt->epoch, 12345, 'decimal epoch in overloaded object' );
+}
+
+SKIP:
+{
+    skip 'Negative epoch times do not work on some operating systems, including Win32', 1
+        unless $negative_epoch_ok;
+
+    my $time = Number::Overloaded->new(-12345);
+    my $dt = DateTime->from_epoch( epoch => $time );
+
+    is( $dt->epoch, -12345, 'negative epoch in overloaded object' );
 }
 
 {
