@@ -1,7 +1,7 @@
 0.50   2009-05-11
 
 - Tests were failing on Win32 because they attempted to use a negative
-  epoch. Fixed so that these tests are skipped.
+  epoch. Fixed so that these tests are skipped. Fixes RT #45966.
 
 
 0.49   2009-05-04
