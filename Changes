@@ -1,3 +1,11 @@
+0.51
+
+- Switched to Module::Build. To force a non-XS build, start the build
+  process with "perl Build.PL --pp".
+
+- POD-related tests are only run for the maintainer now.
+
+
 0.50   2009-05-11
 
 - Tests were failing on Win32 because they attempted to use a negative
