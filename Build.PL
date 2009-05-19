@@ -25,6 +25,13 @@ my $builder = Module::Build->new
       add_to_cleanup => \@pp,
       create_readme  => 1,
       sign           => 1,
+      meta_merge =>
+          { resources =>
+            { homepage   => 'http://datetime.perl.org/',
+              bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=DateTime',
+              repository => 'https://perl-date-time.svn.sourceforge.net/svnroot/perl-date-time',
+            },
+          },
     );
 
 if ($force_pp)
