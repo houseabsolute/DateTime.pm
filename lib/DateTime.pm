@@ -2117,11 +2117,6 @@ constructing a DateTime object.  There is also a C<DefaultLocale()>
 class method which may be used to set the default locale for all
 DateTime objects created.  If this is not set, then "en_US" is used.
 
-Some locales may return data as Unicode.  When using Perl 5.6.0 or
-greater, this will be a native Perl Unicode string.  When using older
-Perls, this will be a sequence of bytes representing the Unicode
-character.
-
 =head2 Floating DateTimes
 
 The default time zone for new DateTime objects, except where stated
