@@ -3053,8 +3053,8 @@ are always true:
 
 Note that using C<delta_days> ensures that this formula always works,
 regardless of the timezone of the objects involved, as does using
-C<subtract_datetime_absolute()>.  Anything may sometimes be
-non-reversible.
+C<subtract_datetime_absolute()>. Other methods of subtraction are not
+always reversible.
 
 =back
 
