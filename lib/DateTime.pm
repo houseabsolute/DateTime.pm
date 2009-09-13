@@ -3739,15 +3739,15 @@ The day of the week in the month, from C<< $dt->weekday_of_month() >>.
 
 The modified Julian day, from C<< $dt->mjd() >>.
 
-=item * E{1,3}
+=item * E{1,3} and eee
 
 The abbreviated format form for the day of the week.
 
-=item * EEEE
+=item * EEEE and eeee
 
 The wide format form for the day of the week.
 
-=item * EEEEE
+=item * EEEEE and eeeee
 
 The narrow format form for the day of the week.
 
@@ -3757,18 +3757,6 @@ The I<local> numeric day of the week, from 1 to 7. This number depends
 on what day is considered the first day of the week, which varies by
 locale. For example, in the US, Sunday is the first day of the week,
 so this returns 2 for Monday.
-
-=item * eee
-
-The abbreviated format form for the day of the week.
-
-=item * eeee
-
-The wide format form for the day of the week.
-
-=item * eeeee
-
-The narrow format form for the day of the week.
 
 =item * c
 
