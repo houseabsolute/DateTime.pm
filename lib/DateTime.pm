@@ -1125,9 +1125,7 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
         my $size = length shift;
         my $val  = shift;
 
-        my $sign = $val < 0 ? q{-} : q{};
-
-        return sprintf( "$sign%0${size}d", abs $val );
+        return sprintf( "%0${size}d", $val );
     }
 
     sub _space_padded_string
@@ -3648,7 +3646,10 @@ The narrow era, if it exists (and it mostly doesn't).
 =item * y and y{3,}
 
 The year, zero-prefixed as needed. Negative years will start with a "-",
-making them one character longer.
+and this will be included in the length calculation.
+
+In other, words the "yyyyy" pattern will format year -1234 as "-1234", not
+"-01234".
 
 =item * yy
 
