@@ -3104,7 +3104,7 @@ We see similar strangeness when math crosses a DST boundary:
   $dt->add( days => 1, minutes => 3 );
   # 2003-04-06 02:01:00
 
-  $dt->add( minutes => 3 )->( days => 1 );
+  $dt->add( minutes => 3 )->add( days => 1 );
   # 2003-04-06 03:01:00
 
 Note that if you converted the datetime object to UTC first you would
