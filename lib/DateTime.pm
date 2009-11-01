@@ -2953,9 +2953,9 @@ creating DateTime objects.  If unset, then "en_US" is used.
 
   $cmp = DateTime->compare_ignore_floating( $dt1, $dt2 );
 
-Compare two DateTime objects.  The semantics are compatible with
-Perl's C<sort()> function; it returns -1 if $a < $b, 0 if $a == $b, 1
-if $a > $b.
+Compare two DateTime objects.  The semantics are compatible with Perl's
+C<sort()> function; it returns -1 if $dt1 < $dt2, 0 if $dt1 == $dt2, 1 if $dt1
+> $dt2.
 
 If one of the two DateTime objects has a floating time zone, it will
 first be converted to the time zone of the other object.  This is what
