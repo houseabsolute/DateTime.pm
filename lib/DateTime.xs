@@ -122,7 +122,7 @@ _rd2ymd(self, d, extra = 0)
         PUSHs(sv_2mortal(newSViv(d)));
 
         if (extra) {
-	  quarter = ( ( 1.0 / 3.1 ) * m ) + 1;
+          quarter = ( ( 1.0 / 3.1 ) * m ) + 1;
           dow = ((rd_days + 6) % 7);
 
           if (rd_days < -6) {
