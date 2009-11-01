@@ -5,9 +5,9 @@
 
 - POD-related tests are only run for the maintainer now.
 
-- Fixed handling of negative years in CLDR formatting for "y" patterns. Note
-  that the LDML spec says nothing about how this should work, so I took my
-  best guess.
+- Fixed handling of negative years in CLDR formatting for "y" and "u"
+  patterns. Note that the LDML spec says nothing about how this should work,
+  so I took my best guess.
 
 
 0.50   2009-05-11
