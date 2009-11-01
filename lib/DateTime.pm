@@ -3647,12 +3647,13 @@ The narrow era, if it exists (and it mostly doesn't).
 
 =item * y and y{3,}
 
-The year, zero-prefixed as needed.
+The year, zero-prefixed as needed. Negative years will start with a "-",
+making them one character longer.
 
 =item * yy
 
-This is a special case. It always produces a two-digit year, so "1976"
-becomes "76".
+This is a special case. It always produces a two-digit year, so "1976" becomes
+"76". Negative years will start with a "-", making them one character longer.
 
 =item * Y{1,}
 
