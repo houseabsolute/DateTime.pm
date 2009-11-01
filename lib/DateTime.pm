@@ -12,7 +12,7 @@ our $VERSION;
 
 BEGIN
 {
-    $VERSION = '0.50';
+    $VERSION = '0.51';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} )
