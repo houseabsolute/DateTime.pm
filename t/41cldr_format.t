@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use utf8;
 
-use Test::More tests => 111;
+use Test::More tests => 121;
 
 use DateTime;
 
@@ -242,6 +242,12 @@ if ( $] >= 5.008 )
                   'yyy'   => '-10',
                   'yyyy'  => '-010',
                   'yyyyy' => '-0010',
+
+                  'u'     => '-10',
+                  'uu'    => '-10',
+                  'uuu'   => '-10',
+                  'uuuu'  => '-010',
+                  'uuuuu' => '-0010',
                 );
 
     for my $k ( sort keys %tests )
@@ -259,6 +265,12 @@ if ( $] >= 5.008 )
                   'yyy'   => '-1976',
                   'yyyy'  => '-1976',
                   'yyyyy' => '-1976',
+
+                  'u'     => '-1976',
+                  'uu'    => '-1976',
+                  'uuu'   => '-1976',
+                  'uuuu'  => '-1976',
+                  'uuuuu' => '-1976',
                 );
 
     for my $k ( sort keys %tests )
