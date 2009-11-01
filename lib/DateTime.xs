@@ -60,8 +60,6 @@ const int PREVIOUS_MONTH_DOLY[12] = { 0,
                                       335 };
 
 
-const IV neg_dow[] = { 1, 7, 6, 5, 4, 3, 2 };
-
 IV
 _real_is_leap_year(IV y) {
   /* See http://www.perlmonks.org/?node_id=274247 for where this
@@ -123,27 +121,20 @@ _rd2ymd(self, d, extra = 0)
 
         if (extra) {
           quarter = ( ( 1.0 / 3.1 ) * m ) + 1;
-          dow = ((rd_days + 6) % 7);
 
-          if (rd_days < -6) {
-            /* if the left side of the modulus was negative we now
-               have a bogus answer.  This fixes it, though it ccould
-               probably be done more elegantly if I wasn't such a math
-               gimp. */
-
-            dow = neg_dow[ abs(dow) ];
-          } else {
-            dow++;
+          dow = rd_days % 7;
+          if ( dow <= 0 ) {
+            dow += 7;
           }
 
           PUSHs(sv_2mortal(newSViv(dow)));
 
           if (_real_is_leap_year(y)) {
             doy = PREVIOUS_MONTH_DOLY[m - 1] + d;
-	    doq = doy - PREVIOUS_MONTH_DOLY[ (3 * quarter) - 3 ];
+            doq = doy - PREVIOUS_MONTH_DOLY[ (3 * quarter) - 3 ];
           } else {
             doy = PREVIOUS_MONTH_DOY[m - 1] + d;
-	    doq = doy - PREVIOUS_MONTH_DOY[ (3 * quarter ) - 3 ];
+            doq = doy - PREVIOUS_MONTH_DOY[ (3 * quarter ) - 3 ];
           }
 
           PUSHs(sv_2mortal(newSViv(doy)));
