@@ -1039,8 +1039,9 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
           qr/(y{3,5})/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->year() ) },
           # yy is a weird special case, where it must be exactly 2 digits
           qr/yy/       => sub { my $year = $_[0]->year();
-                                $year = substr( $year, -2, 2 ) if length $year > 2;
-                                $_[0]->_zero_padded_number( 'yy', $year ) },
+                                my $y2 = substr( $year, -2, 2 ) if length $year > 2;
+                                $y2 *= -1 if $year < 0;
+                                $_[0]->_zero_padded_number( 'yy', $y2 ) },
           qr/y/        => sub { $_[0]->year() },
           qr/(u+)/     => sub { $_[0]->_zero_padded_number( $1, $_[0]->year() ) },
           qr/(Y+)/     => sub { $_[0]->_zero_padded_number( $1, $_[0]->week_year() ) },
@@ -1124,7 +1125,9 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
         my $size = length shift;
         my $val  = shift;
 
-        return sprintf( "%0${size}d", $val );
+        my $sign = $val < 0 ? q{-} : q{};
+
+        return sprintf( "$sign%0${size}d", abs $val );
     }
 
     sub _space_padded_string

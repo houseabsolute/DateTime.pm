@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use utf8;
 
-use Test::More tests => 101;
+use Test::More tests => 111;
 
 use DateTime;
 
@@ -232,4 +232,38 @@ if ( $] >= 5.008 )
 
     is( $dt->format_cldr('c'), '1',
         'format_cldr for c in fr_FR should be 1 (for Monday, 2009-04-13)' );
+}
+
+{
+    my $dt = DateTime->new( year => -10 );
+
+    my %tests = ( 'y'     => '-10',
+                  'yy'    => '-10',
+                  'yyy'   => '-010',
+                  'yyyy'  => '-0010',
+                  'yyyyy' => '-00010',
+                );
+
+    for my $k ( sort keys %tests )
+    {
+        is( $dt->format_cldr($k), $tests{$k},
+            "format_cldr for $k" );
+    }
+}
+
+{
+    my $dt = DateTime->new( year => -1976 );
+
+    my %tests = ( 'y'     => '-1976',
+                  'yy'    => '-76',
+                  'yyy'   => '-1976',
+                  'yyyy'  => '-1976',
+                  'yyyyy' => '-01976',
+                );
+
+    for my $k ( sort keys %tests )
+    {
+        is( $dt->format_cldr($k), $tests{$k},
+            "format_cldr for $k" );
+    }
 }
