@@ -3026,7 +3026,7 @@ presentation:
 =item * math on non-UTC time zones
 
 If you need to do date math on objects with non-UTC time zones, please
-read the caveats below carefully.  The results C<DateTime.pm> are
+read the caveats below carefully.  The results C<DateTime.pm> produces are
 predictable and correct, and mostly intuitive, but datetime math gets
 very ugly when time zones are involved, and there are a few strange
 corner cases involving subtraction of two datetimes across a DST
