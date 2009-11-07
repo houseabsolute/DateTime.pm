@@ -3072,11 +3072,11 @@ We cannot convert between these units, except for seconds and
 nanoseconds, because there is no fixed conversion between the two
 units, because of things like leap seconds, DST changes, etc.
 
-C<DateTime.pm> always adds (or subtracts) days, then months, minutes,
-and then seconds and nanoseconds.  If there are any boundary
-overflows, these are normalized at each step.  For the days and months
-(the calendar) the local (not UTC) values are used.  For minutes and
-seconds, the local values are used.  This generally just works.
+C<DateTime.pm> always adds (or subtracts) days, then months, minutes, and then
+seconds and nanoseconds.  If there are any boundary overflows, these are
+normalized at each step.  For the days and months the local (not UTC) values
+are used.  For minutes and seconds, the local values are used.  This generally
+just works.
 
 This means that adding one month and one day to February 28, 2003 will
 produce the date April 1, 2003, not March 29, 2003.
