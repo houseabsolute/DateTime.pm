@@ -4,6 +4,10 @@
   integers. Previously, things like "month => 11.2" would have been
   allowed. Based on a bug report from Max Kanat-Alexandar. RT #45767.
 
+- Added a warning to the docs suggesting that you cache the locale time zone
+  if you need to make many DateTime objects in the local zone. Looking up the
+  local zone can be fairly expensive. RT #46753.
+
 
 0.51   2009-11-01
 
