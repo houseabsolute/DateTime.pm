@@ -35,8 +35,6 @@ while ( defined( my $line = <DATA> ) )
         eval "use DateTime::Locale::$1";
         die $@ if $@;
 
-        Test::More::diag("New locale: $locale\n");
-
         $dt = DateTime->new( %params, time_zone => 'UTC', locale => $locale );
         next;
     }
