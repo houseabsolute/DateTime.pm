@@ -3648,7 +3648,7 @@ provided by C<DateTime::TimeZone>, and I<do not follow the CLDR spec>.
 
 The output of a CLDR pattern is always localized, when applicable.
 
-CLDR provides the following pattenrs:
+CLDR provides the following patterns:
 
 =over 4
 
