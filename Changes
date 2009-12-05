@@ -1,3 +1,10 @@
+0.52
+
+- Numeric to ->new() are now all validated to make sure they are
+  integers. Previously, things like "month => 11.2" would have been
+  allowed. Based on a bug report from Max Kanat-Alexandar. RT #45767.
+
+
 0.51   2009-11-01
 
 - Switched to Module::Build. To force a non-XS build, start the build
