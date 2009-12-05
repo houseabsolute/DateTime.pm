@@ -2155,7 +2155,7 @@ you know that the local time zone won't change while your code is running, it
 is strongly recommended that you retrieve the local time zone once and cache
 it:
 
-  my $App::LocalTZ = DateTime::TimeZone->new( name => 'local' );
+  our $App::LocalTZ = DateTime::TimeZone->new( name => 'local' );
 
   ... # then everywhere else
 
