@@ -1,4 +1,4 @@
-0.52
+0.52   2009-12-05
 
 - Numeric to ->new() are now all validated to make sure they are
   integers. Previously, things like "month => 11.2" would have been
