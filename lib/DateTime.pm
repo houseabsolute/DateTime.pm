@@ -115,41 +115,46 @@ BEGIN
 __PACKAGE__->DefaultLocale('en_US');
 
 my $BasicValidate =
-    { year   => { type => SCALAR },
+    { year   => { type => SCALAR,
+                  callbacks =>
+                  { 'is an integer' =>
+                    sub { $_[0] =~ /^-?\d+$/ }
+                  },
+                },
       month  => { type => SCALAR, default => 1,
                   callbacks =>
-                  { 'is between 1 and 12' =>
-                    sub { $_[0] >= 1 && $_[0] <= 12 }
+                  { 'an integer between 1 and 12' =>
+                    sub { $_[0] =~ /^\d+$/ && $_[0] >= 1 && $_[0] <= 12 }
                   },
                 },
       day    => { type => SCALAR, default => 1,
                   callbacks =>
-                  { 'is a possible valid day of month' =>
-                    sub { $_[0] >= 1 && $_[0] <= 31 }
+                  { 'an integer which is a possible valid day of month' =>
+                    sub { $_[0] =~ /^\d+$/ && $_[0] >= 1 && $_[0] <= 31 }
                   },
                 },
       hour   => { type => SCALAR, default => 0,
                   callbacks =>
-                  { 'is between 0 and 23' =>
-                    sub { $_[0] >= 0 && $_[0] <= 23 },
+                  { 'an integer between 0 and 23' =>
+                    sub { $_[0] =~ /^\d+$/ && $_[0] >= 0 && $_[0] <= 23 },
                   },
                 },
       minute => { type => SCALAR, default => 0,
                   callbacks =>
-                  { 'is between 0 and 59' =>
-                    sub { $_[0] >= 0 && $_[0] <= 59 },
+                  { 'an integer between 0 and 59' =>
+                    sub { $_[0] =~ /^\d+$/ && $_[0] >= 0 && $_[0] <= 59 },
                   },
                 },
       second => { type => SCALAR, default => 0,
                   callbacks =>
-                  { 'is between 0 and 61' =>
-                    sub { $_[0] >= 0 && $_[0] <= 61 },
+                  { 'an integer between 0 and 61' =>
+                    sub { $_[0] =~ /^\d+$/ && $_[0] >= 0 && $_[0] <= 61 },
                   },
                 },
       nanosecond => { type => SCALAR, default => 0,
                       callbacks =>
-                      { 'cannot be negative' =>
-                        sub { $_[0] >= 0 },
+                      { 'a positive integer' =>
+                        sub { $_[0] =~ /^\d+$/ && $_[0] >= 0 },
                       }
                     },
       locale    => { type => SCALAR | OBJECT,
