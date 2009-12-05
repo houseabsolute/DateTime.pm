@@ -43,3 +43,6 @@
 \.shipit
 
 t/pp_.*
+^MYMETA.yml$
+\.o$
+lib/DateTime\.c$
