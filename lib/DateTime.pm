@@ -2151,9 +2151,9 @@ L<How Datetime Math is Done>.
 
 Determining the local time zone for a system can be slow. If C<$ENV{TZ}> is
 not set, it may involve reading a number of files in F</etc> or elsewhere. If
-you know that the local time zone won't change while your code is running, it
-is strongly recommended that you retrieve the local time zone once and cache
-it:
+you know that the local time zone won't change while your code is running, and
+you need to make many objects for the local time zone, it is strongly
+recommended that you retrieve the local time zone once and cache it:
 
   our $App::LocalTZ = DateTime::TimeZone->new( name => 'local' );
 
