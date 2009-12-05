@@ -1,7 +1,9 @@
 package DateTime::LeapSecond;
 
-use 5.005;
 use strict;
+use warnings;
+
+our $VERSION = '0.51';
 
 use vars qw( $VERSION );
 use vars qw( @RD @LEAP_SECONDS %RD_LENGTH );
