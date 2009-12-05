@@ -2147,7 +2147,23 @@ datetimes.
 If you are going to be using doing date math, please read the section
 L<How Datetime Math is Done>.
 
-=head2 Time Zone Warning
+=head2 Time Zone Warnings
+
+Determining the local time zone for a system can be slow. If C<$ENV{TZ}> is
+not set, it may involve reading a number of files in F</etc> or elsewhere. If
+you know that the local time zone won't change while your code is running, it
+is strongly recommended that you retrieve the local time zone once and cache
+it:
+
+  my $App::LocalTZ = DateTime::TimeZone->new( name => 'local' );
+
+  ... # then everywhere else
+
+  my $dt = DateTime->new( ..., time_zone => $App::LocalTZ );
+
+DateTime itself does not do this internally because local time zones can
+change, and there's no good way to determine if it's changed without doing all
+the work to look it up.
 
 Do not try to use named time zones (like "America/Chicago") with dates
 very far in the future (thousands of years). The current
