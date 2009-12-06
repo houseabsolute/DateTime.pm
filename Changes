@@ -1,3 +1,8 @@
+0.53   2009-12-06
+
+- Added Test::Exception to build_requires.
+
+
 0.52   2009-12-05
 
 - Numeric to ->new() are now all validated to make sure they are
