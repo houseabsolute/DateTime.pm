@@ -2202,29 +2202,30 @@ and "nanosecond" parameters.  The valid values for these parameters are:
 
 =item * month
 
-1-12
+An integer from 1-12.
 
 =item * day
 
-1-31, and it must be within the valid range of days for the specified
-month
+An integer from 1-31, and it must be within the valid range of days for the
+specified month.
 
 =item * hour
 
-0-23
+An integer from 0-23.
 
 =item * minute
 
-0-59
+An integer from 0-59.
 
 =item * second
 
-0-61 (to allow for leap seconds).  Values of 60 or 61 are only allowed
-when they match actual leap seconds.
+An integer from 0-61 (to allow for leap seconds).  Values of 60 or 61 are only
+allowed when they match actual leap seconds.
 
 =item * nanosecond
 
->= 0
+An integer >= 0. If this number is greater than 1 billion, it will be
+normalized into the second value for the DateTime object.
 
 =back
 
