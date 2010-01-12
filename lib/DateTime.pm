@@ -2623,11 +2623,11 @@ of the year may be placed in the first week of the next year.
 
 =item * $dt->week_year()
 
-Returns the year of the week.
+Returns the year of the week. See C<< $dt->week() >> for details.
 
 =item * $dt->week_number()
 
-Returns the week of the year, from 1..53.
+Returns the week of the year, from 1..53. See C<< $dt->week() >> for details.
 
 =item * $dt->week_of_month()
 
