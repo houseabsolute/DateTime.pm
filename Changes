@@ -1,3 +1,10 @@
+0.54
+
+- Bumped the DateTime::TimeZone prereq to 1.09 to force people to use a modern
+  version. Previously the minimum version was 0.59, and there have been a lot
+  of bug fixes since then.
+
+
 0.53   2009-12-06
 
 - Added Test::Exception to build_requires.
