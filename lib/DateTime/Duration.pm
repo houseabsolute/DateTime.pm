@@ -205,6 +205,7 @@ sub clock_duration
 sub inverse
 {
     my $self = shift;
+    my %p    = @_;
 
     my %new;
     foreach my $u (@all_units)
@@ -213,6 +214,9 @@ sub inverse
         # avoid -0 bug
         $new{$u} *= -1 if $new{$u};
     }
+
+    $new{end_of_month} = $p{end_of_month}
+        if exists $p{end_of_month};
 
     return (ref $self)->new(%new);
 }
@@ -523,12 +527,15 @@ only) and end of month mode as the current object.
 Returns a new object with the same I<clock> deltas (minutes, seconds,
 and nanoseconds) and end of month mode as the current object.
 
-=item * inverse
+=item * inverse( ... )
 
 Returns a new object with the same deltas as the current object, but
 multiple by -1.  The end of month mode for the new object will be the
 default end of month mode, which depends on whether the new duration
 is positive or negative.
+
+You can set the end of month mode in the inverted duration explicitly by
+passing "end_of_month => ..." to the C<inverse()> method.
 
 =item * add_duration( $duration_object ), subtract_duration( $duration_object )
 

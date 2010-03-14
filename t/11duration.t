@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 128;
+use Test::More tests => 130;
 
 use DateTime;
 use DateTime::Duration;
@@ -160,6 +160,19 @@ my $leap_day = DateTime->new( year => 2004, month => 2, day => 29,
     ok( $inverse->is_negative, "should be negative" );
     ok( ! $inverse->is_zero, "should not be zero" );
     ok( ! $inverse->is_positive, "should not be positivea" );
+
+    is(
+        $inverse->end_of_month_mode(), 'preserve',
+        'inverse method uses default end_of_month_mode without explicit parameter'
+    );
+
+    my $inverse2 = DateTime::Duration->new( years => 1 )
+        ->inverse( end_of_month => 'limit' );
+
+    is(
+        $inverse2->end_of_month_mode(), 'limit',
+        'inverse method allows setting end_of_month_mode'
+    );
 }
 
 {

@@ -20,6 +20,9 @@
 
   Patch by Michael Schwern. RT #55453.
 
+- Allow passing end_of_month setting to $duration->inverse(). Requested by
+  John Siracusa. RT #53985.
+
 
 0.53   2009-12-06
 
