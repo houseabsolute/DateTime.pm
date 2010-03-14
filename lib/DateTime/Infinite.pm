@@ -10,51 +10,52 @@ use DateTime::TimeZone;
 
 use base qw(DateTime);
 
-foreach my $m ( qw( set set_time_zone truncate ) )
-{
+foreach my $m (qw( set set_time_zone truncate )) {
     no strict 'refs';
-    *{"DateTime::Infinite::$m"} =
-        sub { return $_[0] };
+    *{"DateTime::Infinite::$m"} = sub { return $_[0] };
 }
 
-sub is_finite { 0 }
-sub is_infinite { 1 }
+sub is_finite   {0}
+sub is_infinite {1}
 
-sub _rd2ymd
-{
-    return $_[2] ? ($_[1]) x 7 : ($_[1]) x 3;
+sub _rd2ymd {
+    return $_[2] ? ( $_[1] ) x 7 : ( $_[1] ) x 3;
 }
 
-sub _seconds_as_components
-{
-    return ($_[1]) x 3;
+sub _seconds_as_components {
+    return ( $_[1] ) x 3;
 }
 
-sub _stringify { ( $_[0]->{utc_rd_days} == DateTime::INFINITY
-                   ? DateTime::INFINITY . ''
-                   : DateTime::NEG_INFINITY . ''
-                 ) }
+sub _stringify {
+    (
+        $_[0]->{utc_rd_days} == DateTime::INFINITY
+        ? DateTime::INFINITY . ''
+        : DateTime::NEG_INFINITY . ''
+    );
+}
 
-sub STORABLE_freeze { return }
-sub STORABLE_thaw { return }
+sub STORABLE_freeze {return}
+sub STORABLE_thaw   {return}
 
 package DateTime::Infinite::Future;
 
 use base qw(DateTime::Infinite);
 
 {
-    my $Pos = bless { utc_rd_days => DateTime::INFINITY,
-                      utc_rd_secs => DateTime::INFINITY,
-                      local_rd_days => DateTime::INFINITY,
-                      local_rd_secs => DateTime::INFINITY,
-                      rd_nanosecs => DateTime::INFINITY,
-                      tz          => DateTime::TimeZone->new( name => 'floating' ),
-                    }, __PACKAGE__;
+    my $Pos = bless {
+        utc_rd_days   => DateTime::INFINITY,
+        utc_rd_secs   => DateTime::INFINITY,
+        local_rd_days => DateTime::INFINITY,
+        local_rd_secs => DateTime::INFINITY,
+        rd_nanosecs   => DateTime::INFINITY,
+        tz            => DateTime::TimeZone->new( name => 'floating' ),
+        },
+        __PACKAGE__;
 
     $Pos->_calc_utc_rd;
     $Pos->_calc_local_rd;
 
-    sub new { $Pos }
+    sub new {$Pos}
 }
 
 package DateTime::Infinite::Past;
@@ -62,20 +63,21 @@ package DateTime::Infinite::Past;
 use base qw(DateTime::Infinite);
 
 {
-    my $Neg = bless { utc_rd_days => DateTime::NEG_INFINITY,
-                      utc_rd_secs => DateTime::NEG_INFINITY,
-                      local_rd_days => DateTime::NEG_INFINITY,
-                      local_rd_secs => DateTime::NEG_INFINITY,
-                      rd_nanosecs => DateTime::NEG_INFINITY,
-                      tz          => DateTime::TimeZone->new( name => 'floating' ),
-                    }, __PACKAGE__;
+    my $Neg = bless {
+        utc_rd_days   => DateTime::NEG_INFINITY,
+        utc_rd_secs   => DateTime::NEG_INFINITY,
+        local_rd_days => DateTime::NEG_INFINITY,
+        local_rd_secs => DateTime::NEG_INFINITY,
+        rd_nanosecs   => DateTime::NEG_INFINITY,
+        tz            => DateTime::TimeZone->new( name => 'floating' ),
+        },
+        __PACKAGE__;
 
     $Neg->_calc_utc_rd;
     $Neg->_calc_local_rd;
 
-    sub new { $Neg }
+    sub new {$Neg}
 }
-
 
 1;
 

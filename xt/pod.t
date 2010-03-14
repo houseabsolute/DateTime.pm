@@ -3,7 +3,6 @@ use warnings;
 
 use Test::More;
 
-
 plan skip_all => 'This test is only run for the module author'
     unless -d '.svn' || $ENV{IS_MAINTAINER};
 

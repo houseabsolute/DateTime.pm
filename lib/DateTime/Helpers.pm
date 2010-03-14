@@ -7,9 +7,7 @@ our $VERSION = '0.53';
 
 use Scalar::Util ();
 
-
-sub can
-{
+sub can {
     my $object = shift;
     my $method = shift;
 
@@ -17,15 +15,13 @@ sub can
     return $object->can($method);
 }
 
-sub isa
-{
+sub isa {
     my $object = shift;
     my $method = shift;
 
     return unless Scalar::Util::blessed($object);
     return $object->isa($method);
 }
-
 
 1;
 

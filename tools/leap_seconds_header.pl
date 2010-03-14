@@ -8,7 +8,8 @@ my $VERSION = 0.03;
 my $leap = shift || './leaptab.txt';
 
 my $x = 1;
-my %months = map { $_ => $x++ } qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+my %months = map { $_ => $x++ }
+    qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 
 my @LeapSeconds;
 my @RD;
@@ -17,14 +18,12 @@ my %RDLength;
 build_data_structures();
 write_header();
 
-sub build_data_structures
-{
+sub build_data_structures {
     my $fh = do { local *FH; *FH };
     open $fh, "<$leap" or die "Cannot read $leap: $!";
 
     my $value = -1;
-    while (<$fh>)
-    {
+    while (<$fh>) {
         my ( $year, $mon, $day, $leap_seconds ) = split /\s+/;
 
         $mon =~ s/\W//;
@@ -37,7 +36,7 @@ sub build_data_structures
         $value += $leap_seconds * $mult;
 
         push @LeapSeconds, $value;
-        push @RD, $utc_epoch;
+        push @RD,          $utc_epoch;
 
         $RDLength{ $utc_epoch - 1 } = $leap_seconds;
     }
@@ -47,8 +46,7 @@ sub build_data_structures
     push @LeapSeconds, ++$value;
 }
 
-sub write_header
-{
+sub write_header {
     my $set_leap_seconds = <<"EOF";
 
 #define SET_LEAP_SECONDS(utc_rd, ls)  \\
@@ -58,18 +56,19 @@ sub write_header
       ls = $LeapSeconds[0];           \\
 EOF
 
-    for ( my $x = 1; $x < @RD; $x++ )
-    {
+    for ( my $x = 1; $x < @RD; $x++ ) {
         my $else = $x == 1 ? '' : 'else ';
 
-        my $condition =
-            $x == @RD ? "utc_rd < $RD[$x]" : "utc_rd >= $RD[$x - 1] && utc_rd < $RD[$x]";
+        my $condition
+            = $x == @RD
+            ? "utc_rd < $RD[$x]"
+            : "utc_rd >= $RD[$x - 1] && utc_rd < $RD[$x]";
 
         $set_leap_seconds .= <<"EOF"
     } else if ($condition) {  \\
       ls = $LeapSeconds[$x];                      \\
 EOF
-}
+    }
 
     $set_leap_seconds .= <<"EOF";
     } else {                         \\
@@ -97,8 +96,7 @@ EOF
     switch (utc_rd) {                  \\
 EOF
 
-    foreach my $utc_rd ( sort keys %RDLength )
-    {
+    foreach my $utc_rd ( sort keys %RDLength ) {
         $set_extra_seconds .= <<"EOF";
       case $utc_rd: es = $RDLength{$utc_rd}; break;            \\
 EOF
@@ -106,7 +104,7 @@ EOF
         $set_day_length .= <<"EOF";
       case $utc_rd: dl = 86400 + $RDLength{$utc_rd}; break;    \\
 EOF
-}
+    }
 
     $set_extra_seconds .= <<"EOF";
     }                                  \\
@@ -131,38 +129,36 @@ EOF
 */
 EOF
 
-    open my $fh, '>', 'c/leap_seconds.h' or die "Cannot write to c/leap_seconds.h: $!";
+    open my $fh, '>', 'c/leap_seconds.h'
+        or die "Cannot write to c/leap_seconds.h: $!";
 
-    print $fh ( $header,
-                $set_leap_seconds,
-                $set_extra_seconds,
-                $set_day_length,
-              );
+    print $fh (
+        $header,
+        $set_leap_seconds,
+        $set_extra_seconds,
+        $set_day_length,
+    );
 }
 
 # from lib/DateTimePP.pm
-sub _ymd2rd
-{
+sub _ymd2rd {
     use integer;
     my ( $y, $m, $d ) = @_;
     my $adj;
 
     # make month in range 3..14 (treat Jan & Feb as months 13..14 of
     # prev year)
-    if ( $m <= 2 )
-    {
+    if ( $m <= 2 ) {
         $y -= ( $adj = ( 14 - $m ) / 12 );
         $m += 12 * $adj;
     }
-    elsif ( $m > 14 )
-    {
+    elsif ( $m > 14 ) {
         $y += ( $adj = ( $m - 3 ) / 12 );
         $m -= 12 * $adj;
     }
 
     # make year positive (oh, for a use integer 'sane_div'!)
-    if ( $y < 0 )
-    {
+    if ( $y < 0 ) {
         $d -= 146097 * ( $adj = ( 399 - $y ) / 400 );
         $y += 400 * $adj;
     }
@@ -173,6 +169,8 @@ sub _ymd2rd
     # that, and 306 days to adjust from Mar 1, year 0-relative to Jan
     # 1, year 1-relative (whew)
 
-    $d += ( $m * 367 - 1094 ) / 12 + $y % 100 * 1461 / 4 +
-          ( $y / 100 * 36524 + $y / 400 ) - 306;
+    $d
+        += ( $m * 367 - 1094 ) / 12 
+        + $y % 100 * 1461 / 4
+        + ( $y / 100 * 36524 + $y / 400 ) - 306;
 }

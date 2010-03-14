@@ -15,21 +15,26 @@ use DateTime;
 # "Invalid local time".
 #
 {
+
     # Each iteration needs to use a different zone, because if it
     # works once, the generated spans are cached.
-    foreach my $add ( [ years   => 50,                   'America/New_York' ],
-                      [ days    => 50 * 365,             'America/Chicago' ],
-                      [ minutes => 50 * 365 * 1440,      'America/Denver', ],
-                      [ seconds => 50 * 365 * 1440 * 60, 'America/Los_Angeles' ],
-                      [ nanoseconds => 50 * 365 * 1440 * 60 * 1_000_000_000,
-                        'America/North_Dakota/Center' ],
-                    )
-    {
+    foreach my $add (
+        [ years   => 50,                   'America/New_York' ],
+        [ days    => 50 * 365,             'America/Chicago' ],
+        [ minutes => 50 * 365 * 1440,      'America/Denver', ],
+        [ seconds => 50 * 365 * 1440 * 60, 'America/Los_Angeles' ],
+        [
+            nanoseconds => 50 * 365 * 1440 * 60 * 1_000_000_000,
+            'America/North_Dakota/Center'
+        ],
+        ) {
         my $dt = DateTime->now( time_zone => $add->[2] );
 
         my $new = eval { $dt->clone->add( $add->[0], $add->[1] ) };
 
-        ok( ! $@,
-            "Make sure we can add 50 years worth of $add->[0] in $add->[2] time zone" );
+        ok(
+            !$@,
+            "Make sure we can add 50 years worth of $add->[0] in $add->[2] time zone"
+        );
     }
 }

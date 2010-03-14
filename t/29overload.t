@@ -34,6 +34,7 @@ use DateTime;
     ok( !( $dt lt $dt_string ), '  not' );
 
     {
+
         package Other::Date;
         use overload
             q[""] => sub { return ${ $_[0] }; },

@@ -2,11 +2,11 @@
 
 # test suite stolen shamelessly from TimeDate distro
 
-BEGIN
-{
+BEGIN {
     return unless $] >= 5.006;
 
-    require utf8; import utf8;
+    require utf8;
+    import utf8;
 }
 
 use strict;
@@ -18,19 +18,16 @@ use DateTime;
 my $locale = 'en_US';
 my $dt;
 my %params;
-while ( defined( my $line = <DATA> ) )
-{
+while ( defined( my $line = <DATA> ) ) {
     chomp $line;
 
-    if ( $line =~ /^year =>/ )
-    {
+    if ( $line =~ /^year =>/ ) {
         %params = map { split /\s*=>\s*/ } split /\s*,\s*/, $line;
 
         $dt = DateTime->new( %params, time_zone => 'UTC' );
         next;
     }
-    elsif ( $line =~ /^(\w+)/ )
-    {
+    elsif ( $line =~ /^(\w+)/ ) {
         $locale = $1;
         eval "use DateTime::Locale::$1";
         die $@ if $@;
@@ -39,12 +36,13 @@ while ( defined( my $line = <DATA> ) )
         next;
     }
 
-    my ($fmt, $res) = split /\s+=>\s+/, $line, 2;
+    my ( $fmt, $res ) = split /\s+=>\s+/, $line, 2;
     $res =~ s/^\'|\'$//g;
 
-    if ( $fmt eq '%A' && $locale eq 'it' && $] >= 5.006 && $] <= 5.008 )
-    {
-        ok( 1, "Perl 5.6.0 & 5.6.1 cannot handle Unicode characters in the DATA filehandle properly" );
+    if ( $fmt eq '%A' && $locale eq 'it' && $] >= 5.006 && $] <= 5.008 ) {
+        ok( 1,
+            "Perl 5.6.0 & 5.6.1 cannot handle Unicode characters in the DATA filehandle properly"
+        );
         next;
     }
 
@@ -54,67 +52,87 @@ while ( defined( my $line = <DATA> ) )
 # test use of strftime with multiple params - in list and scalar
 # context
 {
-    my $dt = DateTime->new( year => 1800,
-                            month => 1,
-                            day => 10,
-                            time_zone => 'UTC',
-                          );
+    my $dt = DateTime->new(
+        year      => 1800,
+        month     => 1,
+        day       => 10,
+        time_zone => 'UTC',
+    );
 
-    my ($y, $d) = $dt->strftime( '%Y', '%d' );
+    my ( $y, $d ) = $dt->strftime( '%Y', '%d' );
     is( $y, 1800, 'first value is year' );
-    is( $d, 10, 'second value is day' );
+    is( $d, 10,   'second value is day' );
 
     $y = $dt->strftime( '%Y', '%d' );
     is( $y, 1800, 'scalar context returns year' );
 }
 
 {
-    my $dt = DateTime->new( year => 2003,
-                            hour => 0,
-                            minute => 0
-                          ) ;
+    my $dt = DateTime->new(
+        year   => 2003,
+        hour   => 0,
+        minute => 0
+    );
 
-    is( $dt->strftime('%I %M %p'), '12 00 AM', 'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), '12 00 AM', 'formatting of hours as 1-12' );
+    is( $dt->strftime('%I %M %p'), '12 00 AM',
+        'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), '12 00 AM',
+        'formatting of hours as 1-12' );
 
-    $dt->set(hour => 1) ;
-    is( $dt->strftime('%I %M %p'), '01 00 AM', 'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), ' 1 00 AM', 'formatting of hours as 1-12' );
+    $dt->set( hour => 1 );
+    is( $dt->strftime('%I %M %p'), '01 00 AM',
+        'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), ' 1 00 AM',
+        'formatting of hours as 1-12' );
 
-    $dt->set(hour => 11) ;
-    is( $dt->strftime('%I %M %p'), '11 00 AM', 'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), '11 00 AM', 'formatting of hours as 1-12' );
+    $dt->set( hour => 11 );
+    is( $dt->strftime('%I %M %p'), '11 00 AM',
+        'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), '11 00 AM',
+        'formatting of hours as 1-12' );
 
-    $dt->set(hour => 12) ;
-    is( $dt->strftime('%I %M %p'), '12 00 PM', 'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), '12 00 PM', 'formatting of hours as 1-12' );
+    $dt->set( hour => 12 );
+    is( $dt->strftime('%I %M %p'), '12 00 PM',
+        'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), '12 00 PM',
+        'formatting of hours as 1-12' );
 
-    $dt->set(hour => 13) ;
-    is( $dt->strftime('%I %M %p'), '01 00 PM', 'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), ' 1 00 PM', 'formatting of hours as 1-12' );
+    $dt->set( hour => 13 );
+    is( $dt->strftime('%I %M %p'), '01 00 PM',
+        'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), ' 1 00 PM',
+        'formatting of hours as 1-12' );
 
-    $dt->set(hour => 23) ;
-    is( $dt->strftime('%I %M %p'), '11 00 PM', 'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), '11 00 PM', 'formatting of hours as 1-12' );
+    $dt->set( hour => 23 );
+    is( $dt->strftime('%I %M %p'), '11 00 PM',
+        'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), '11 00 PM',
+        'formatting of hours as 1-12' );
 
-    $dt->set(hour => 0) ;
-    is( $dt->strftime('%I %M %p'), '12 00 AM', 'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), '12 00 AM', 'formatting of hours as 1-12' );
+    $dt->set( hour => 0 );
+    is( $dt->strftime('%I %M %p'), '12 00 AM',
+        'formatting of hours as 1-12' );
+    is( $dt->strftime('%l %M %p'), '12 00 AM',
+        'formatting of hours as 1-12' );
 }
 
 {
-    is( DateTime->new( year => 2003, month => 1, day => 1 )->strftime('%V'),
-        '01', '%V is 01' );
+    is(
+        DateTime->new( year => 2003, month => 1, day => 1 )->strftime('%V'),
+        '01', '%V is 01'
+    );
 }
 
 {
-    my $dt = DateTime->new( year => 2004, month => 8, day => 16,
-                            hour => 15, minute => 30, nanosecond => 123456789,
-                            locale => 'en',
-                          );
+    my $dt = DateTime->new(
+        year   => 2004, month  => 8,  day        => 16,
+        hour   => 15,   minute => 30, nanosecond => 123456789,
+        locale => 'en',
+    );
 
     # Should print '%{day_name}', prints '30onday'!
-    is( $dt->strftime('%%{day_name}%n'), "%{day_name}\n", '%%{day_name}%n bug' );
+    is( $dt->strftime('%%{day_name}%n'), "%{day_name}\n",
+        '%%{day_name}%n bug' );
 
     # Should print '%6N', prints '123456'
     is( $dt->strftime('%%6N%n'), "%6N\n", '%%6N%n bug' );

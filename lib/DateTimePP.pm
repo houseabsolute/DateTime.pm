@@ -4,8 +4,7 @@ use strict;
 
 $DateTime::IsPurePerl = 1;
 
-my @MonthLengths =
-    ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
+my @MonthLengths = ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
 
 my @LeapYearMonthLengths = @MonthLengths;
 $LeapYearMonthLengths[1]++;
@@ -13,35 +12,32 @@ $LeapYearMonthLengths[1]++;
 my @EndOfLastMonthDayOfYear;
 {
     my $x = 0;
-    foreach my $length (@MonthLengths)
-    {
+    foreach my $length (@MonthLengths) {
         push @EndOfLastMonthDayOfYear, $x;
         $x += $length;
     }
 }
 
 my @EndOfLastMonthDayOfLeapYear = @EndOfLastMonthDayOfYear;
-$EndOfLastMonthDayOfLeapYear[$_]++ for 2..11;
+$EndOfLastMonthDayOfLeapYear[$_]++ for 2 .. 11;
 
-sub _time_as_seconds
-{
+sub _time_as_seconds {
     shift;
     my ( $hour, $min, $sec ) = @_;
 
     $hour ||= 0;
-    $min ||= 0;
-    $sec ||= 0;
+    $min  ||= 0;
+    $sec  ||= 0;
 
     my $secs = $hour * 3600 + $min * 60 + $sec;
     return $secs;
 }
 
-sub _rd2ymd
-{
+sub _rd2ymd {
     my $class = shift;
 
     use integer;
-    my $d = shift;
+    my $d  = shift;
     my $rd = $d;
 
     my $yadj = 0;
@@ -50,44 +46,41 @@ sub _rd2ymd
     # add 306 days to make relative to Mar 1, 0; also adjust $d to be
     # within a range (1..2**28-1) where our calculations will work
     # with 32bit ints
-    if ( $d > 2**28 - 307 )
-    {
+    if ( $d > 2**28 - 307 ) {
+
         # avoid overflow if $d close to maxint
         $yadj = ( $d - 146097 + 306 ) / 146097 + 1;
         $d -= $yadj * 146097 - 306;
     }
-    elsif ( ( $d += 306 ) <= 0 )
-    {
-        $yadj =
-          -( -$d / 146097 + 1 );    # avoid ambiguity in C division of negatives
+    elsif ( ( $d += 306 ) <= 0 ) {
+        $yadj = -( -$d / 146097 + 1 )
+            ;    # avoid ambiguity in C division of negatives
         $d -= $yadj * 146097;
     }
 
-    $c = ( $d * 4 - 1 ) / 146097;   # calc # of centuries $d is after 29 Feb of yr 0
-    $d -= $c * 146097 / 4;          # (4 centuries = 146097 days)
-    $y = ( $d * 4 - 1 ) / 1461;     # calc number of years into the century,
-    $d -= $y * 1461 / 4;            # again March-based (4 yrs =~ 146[01] days)
-    $m = ( $d * 12 + 1093 ) / 367;  # get the month (3..14 represent March through
-    $d -= ( $m * 367 - 1094 ) / 12; # February of following year)
-    $y += $c * 100 + $yadj * 400;   # get the real year, which is off by
-    ++$y, $m -= 12 if $m > 12;      # one if month is January or February
+    $c = ( $d * 4 - 1 )
+        / 146097;    # calc # of centuries $d is after 29 Feb of yr 0
+    $d -= $c * 146097 / 4;    # (4 centuries = 146097 days)
+    $y = ( $d * 4 - 1 ) / 1461;    # calc number of years into the century,
+    $d -= $y * 1461 / 4;           # again March-based (4 yrs =~ 146[01] days)
+    $m = ( $d * 12 + 1093 )
+        / 367;    # get the month (3..14 represent March through
+    $d -= ( $m * 367 - 1094 ) / 12;    # February of following year)
+    $y += $c * 100 + $yadj * 400;      # get the real year, which is off by
+    ++$y, $m -= 12 if $m > 12;         # one if month is January or February
 
-    if ( $_[0] )
-    {
+    if ( $_[0] ) {
         my $dow;
 
-        if ( $rd < -6 )
-        {
+        if ( $rd < -6 ) {
             $dow = ( $rd + 6 ) % 7;
             $dow += $dow ? 8 : 1;
         }
-        else
-        {
+        else {
             $dow = ( ( $rd + 6 ) % 7 ) + 1;
         }
 
-        my $doy =
-            $class->_end_of_last_month_day_of_year( $y, $m );
+        my $doy = $class->_end_of_last_month_day_of_year( $y, $m );
 
         $doy += $d;
 
@@ -99,10 +92,8 @@ sub _rd2ymd
 
         my $qm = ( 3 * $quarter ) - 2;
 
-        my $doq =
-            ( $doy -
-              $class->_end_of_last_month_day_of_year( $y, $qm )
-            );
+        my $doq
+            = ( $doy - $class->_end_of_last_month_day_of_year( $y, $qm ) );
 
         return ( $y, $m, $d, $dow, $doy, $quarter, $doq );
     }
@@ -110,9 +101,8 @@ sub _rd2ymd
     return ( $y, $m, $d );
 }
 
-sub _ymd2rd
-{
-    shift; # ignore class
+sub _ymd2rd {
+    shift;    # ignore class
 
     use integer;
     my ( $y, $m, $d ) = @_;
@@ -120,20 +110,17 @@ sub _ymd2rd
 
     # make month in range 3..14 (treat Jan & Feb as months 13..14 of
     # prev year)
-    if ( $m <= 2 )
-    {
+    if ( $m <= 2 ) {
         $y -= ( $adj = ( 14 - $m ) / 12 );
         $m += 12 * $adj;
     }
-    elsif ( $m > 14 )
-    {
+    elsif ( $m > 14 ) {
         $y += ( $adj = ( $m - 3 ) / 12 );
         $m -= 12 * $adj;
     }
 
     # make year positive (oh, for a use integer 'sane_div'!)
-    if ( $y < 0 )
-    {
+    if ( $y < 0 ) {
         $d -= 146097 * ( $adj = ( 399 - $y ) / 400 );
         $y += 400 * $adj;
     }
@@ -144,14 +131,15 @@ sub _ymd2rd
     # that, and finally subtract 306 days to adjust from Mar 1, year
     # 0-relative to Jan 1, year 1-relative (whew)
 
-    $d += ( $m * 367 - 1094 ) / 12 + $y % 100 * 1461 / 4 +
-          ( $y / 100 * 36524 + $y / 400 ) - 306;
+    $d
+        += ( $m * 367 - 1094 ) / 12 
+        + $y % 100 * 1461 / 4
+        + ( $y / 100 * 36524 + $y / 400 ) - 306;
 }
 
-sub _seconds_as_components
-{
+sub _seconds_as_components {
     shift;
-    my $secs = shift;
+    my $secs     = shift;
     my $utc_secs = shift;
     my $modifier = shift || 0;
 
@@ -166,15 +154,15 @@ sub _seconds_as_components
 
     my $second = $secs - ( $minute * 60 );
 
-    if ( $utc_secs && $utc_secs >= 86400 )
-    {
+    if ( $utc_secs && $utc_secs >= 86400 ) {
+
         # there is no such thing as +3 or more leap seconds!
         die "Invalid UTC RD seconds value: $utc_secs"
             if $utc_secs > 86401;
 
         $second += $utc_secs - 86400 + 60;
 
-        $minute  = 59;
+        $minute = 59;
 
         $hour--;
         $hour = 23 if $hour < 0;
@@ -183,21 +171,19 @@ sub _seconds_as_components
     return ( $hour, $minute, $second );
 }
 
-sub _end_of_last_month_day_of_year
-{
+sub _end_of_last_month_day_of_year {
     my $class = shift;
 
-    my ($y, $m) = @_;
+    my ( $y, $m ) = @_;
     $m--;
-    return
-        ( $class->_is_leap_year($y) ?
-          $EndOfLastMonthDayOfLeapYear[$m] :
-          $EndOfLastMonthDayOfYear[$m]
-        );
+    return (
+          $class->_is_leap_year($y)
+        ? $EndOfLastMonthDayOfLeapYear[$m]
+        : $EndOfLastMonthDayOfYear[$m]
+    );
 }
 
-sub _is_leap_year
-{
+sub _is_leap_year {
     shift;
     my $year = shift;
 
@@ -212,14 +198,13 @@ sub _is_leap_year
     return 1;
 }
 
-sub _day_length { DateTime::LeapSecond::day_length($_[1]) }
+sub _day_length { DateTime::LeapSecond::day_length( $_[1] ) }
 
-sub _accumulated_leap_seconds { DateTime::LeapSecond::leap_seconds($_[1]) }
+sub _accumulated_leap_seconds { DateTime::LeapSecond::leap_seconds( $_[1] ) }
 
 # This is down here so that _ymd2rd is available when it loads,
 # because it will load DateTime::LeapSecond, which needs
 # DateTime->_ymd2rd to be available when it is loading
 use DateTimePPExtra;
-
 
 1;

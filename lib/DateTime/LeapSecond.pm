@@ -8,24 +8,24 @@ our $VERSION = '0.53';
 use vars qw( $VERSION );
 use vars qw( @RD @LEAP_SECONDS %RD_LENGTH );
 
-$VERSION = '0.05';  # last standalone distro was 0.03
+$VERSION = '0.05';    # last standalone distro was 0.03
 
 use DateTime;
 
 # Generates a Perl binary decision tree
 sub _make_utx {
-    my ($beg, $end, $tab, $op) = @_;
-    my $step = int(($end - $beg) / 2);
+    my ( $beg, $end, $tab, $op ) = @_;
+    my $step = int( ( $end - $beg ) / 2 );
     my $tmp;
-    if ($step <= 0) {
-        $tmp = "${tab}return $LEAP_SECONDS[$beg + 1];\n";  
+    if ( $step <= 0 ) {
+        $tmp = "${tab}return $LEAP_SECONDS[$beg + 1];\n";
         return $tmp;
     }
-    $tmp  = "${tab}if (\$val < " . $RD[$beg + $step] . ") {\n";
-    $tmp .= _make_utx ($beg, $beg + $step, $tab . "    ", $op);
+    $tmp = "${tab}if (\$val < " . $RD[ $beg + $step ] . ") {\n";
+    $tmp .= _make_utx( $beg,         $beg + $step, $tab . "    ", $op );
     $tmp .= "${tab}}\n";
     $tmp .= "${tab}else {\n";
-    $tmp .= _make_utx ($beg + $step, $end, $tab . "    ", $op);
+    $tmp .= _make_utx( $beg + $step, $end,         $tab . "    ", $op );
     $tmp .= "${tab}}\n";
     return $tmp;
 }
@@ -34,15 +34,17 @@ sub _make_utx {
 sub _init {
     my $value = -1;
     while (@_) {
-        my ( $year, $mon, $mday, $leap_seconds ) = 
-           ( shift, shift, shift, shift );
+        my ( $year, $mon, $mday, $leap_seconds )
+            = ( shift, shift, shift, shift );
+
         # print "$year,$mon,$mday\n";
 
-        my $utc_epoch = DateTime->_ymd2rd( $year, ( $mon =~ /Jan/i ? 1 : 7 ), $mday );
+        my $utc_epoch
+            = DateTime->_ymd2rd( $year, ( $mon =~ /Jan/i ? 1 : 7 ), $mday );
 
         $value++;
         push @LEAP_SECONDS, $value;
-        push @RD, $utc_epoch;
+        push @RD,           $utc_epoch;
 
         $RD_LENGTH{ $utc_epoch - 1 } = $leap_seconds;
 
@@ -55,9 +57,9 @@ sub _init {
 
     # write binary tree decision table
 
-    $tmp  = "sub leap_seconds {\n";
+    $tmp = "sub leap_seconds {\n";
     $tmp .= "    my \$val = shift;\n";
-    $tmp .= _make_utx (-1, 1 + $#RD, "    ", "+");
+    $tmp .= _make_utx( -1, 1 + $#RD, "    ", "+" );
     $tmp .= "}\n";
 
     # NOTE: uncomment the line below to see the code:
@@ -68,14 +70,15 @@ sub _init {
 }
 
 sub extra_seconds {
-    exists $RD_LENGTH{ $_[0] } ? $RD_LENGTH{ $_[0] } : 0
+    exists $RD_LENGTH{ $_[0] } ? $RD_LENGTH{ $_[0] } : 0;
 }
 
 sub day_length {
-    exists $RD_LENGTH{ $_[0] } ? 86400 + $RD_LENGTH{ $_[0] } : 86400
+    exists $RD_LENGTH{ $_[0] } ? 86400 + $RD_LENGTH{ $_[0] } : 86400;
 }
 
 sub _initialize {
+
     # this table: ftp://62.161.69.5/pub/tai/publication/leaptab.txt
     # known accurate until (at least): 2005-12-31
     #
@@ -84,32 +87,34 @@ sub _initialize {
     #
     # year month day number-of-leapseconds
     #
-    _init ( qw(
-1972  Jul. 1  +1
-1973  Jan. 1  +1
-1974  Jan. 1  +1
-1975  Jan. 1  +1
-1976  Jan. 1  +1
-1977  Jan. 1  +1
-1978  Jan. 1  +1
-1979  Jan. 1  +1
-1980  Jan. 1  +1
-1981  Jul. 1  +1
-1982  Jul. 1  +1
-1983  Jul. 1  +1
-1985  Jul. 1  +1
-1988  Jan. 1  +1
-1990  Jan. 1  +1
-1991  Jan. 1  +1
-1992  Jul. 1  +1
-1993  Jul. 1  +1
-1994  Jul. 1  +1
-1996  Jan. 1  +1
-1997  Jul. 1  +1
-1999  Jan. 1  +1
-2006  Jan. 1  +1
-2009  Jan. 1  +1
-    ) );
+    _init(
+        qw(
+            1972  Jul. 1  +1
+            1973  Jan. 1  +1
+            1974  Jan. 1  +1
+            1975  Jan. 1  +1
+            1976  Jan. 1  +1
+            1977  Jan. 1  +1
+            1978  Jan. 1  +1
+            1979  Jan. 1  +1
+            1980  Jan. 1  +1
+            1981  Jul. 1  +1
+            1982  Jul. 1  +1
+            1983  Jul. 1  +1
+            1985  Jul. 1  +1
+            1988  Jan. 1  +1
+            1990  Jan. 1  +1
+            1991  Jan. 1  +1
+            1992  Jul. 1  +1
+            1993  Jul. 1  +1
+            1994  Jul. 1  +1
+            1996  Jan. 1  +1
+            1997  Jul. 1  +1
+            1999  Jan. 1  +1
+            2006  Jan. 1  +1
+            2009  Jan. 1  +1
+            )
+    );
 }
 
 __PACKAGE__->_initialize();
