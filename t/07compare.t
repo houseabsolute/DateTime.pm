@@ -162,6 +162,29 @@ ok( ( $infinity <=> $date1 ) == 1, 'Comparison overload $inf <=> $a' );
 }
 
 {
+    my $date1 = DateTime->new(
+        year       => 2000, month  => 10, day    => 24,
+        hour       => 12,   minute => 0,  second => 0,
+        nanosecond => 10000,
+    );
+
+    my $date2 = DateTime->new(
+        year       => 2000, month  => 10, day    => 24,
+        hour       => 12,   minute => 0,  second => 0,
+        nanosecond => 10000,
+    );
+
+    is( DateTime->compare( $date1, $date2 ), 0,
+        'Comparison with floating time (cmp)' );
+    is( ( $date1 <=> $date2 ), 0, 'Comparison with floating time (<=>)' );
+    is( ( $date1 cmp $date2 ), 0, 'Comparison with floating time (cmp)' );
+    is(
+        DateTime->compare_ignore_floating( $date1, $date2 ), 0,
+        'Comparison with compare_ignore_floating (cmp)'
+    );
+}
+
+{
 
     package DT::Test;
 
