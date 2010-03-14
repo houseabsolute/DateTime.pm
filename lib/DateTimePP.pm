@@ -1,6 +1,7 @@
 package DateTime;
 
 use strict;
+use warnings;
 
 $DateTime::IsPurePerl = 1;
 

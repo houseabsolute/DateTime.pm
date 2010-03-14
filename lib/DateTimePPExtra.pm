@@ -1,6 +1,7 @@
 package DateTime;
 
 use strict;
+use warnings;
 
 use DateTime::LeapSecond;
 
