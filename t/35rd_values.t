@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 12;
+use Test::More;
 
 use DateTime;
 
@@ -49,3 +48,5 @@ use DateTime;
     is( $local_rd_secs,  3600,   'local rd seconds is 3600' );
     is( $local_nanosecs, 500,    'local nanoseconds is 500' );
 }
+
+done_testing();

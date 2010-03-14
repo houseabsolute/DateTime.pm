@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 8;
+use Test::More;
 
 use DateTime;
 use DateTime::Locale;
@@ -43,3 +42,5 @@ is( $@, '', 'make sure constructor accepts locale parameter as object' );
 
 DateTime->DefaultLocale('it');
 is( DateTime->now->locale->id, 'it', 'default locale should now be "it"' );
+
+done_testing();

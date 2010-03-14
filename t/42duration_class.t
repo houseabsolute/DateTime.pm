@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 3;
+use Test::More;
 use DateTime;
 
 {
@@ -26,3 +26,4 @@ isa_ok( $dt + $delta, 'DateTime::MySubclass' );
 my $delta_days = $dt->delta_days($dt);
 isa_ok( $delta_days, 'DateTime::Duration::MySubclass' );
 
+done_testing();

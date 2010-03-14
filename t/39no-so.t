@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 3;
+use Test::More;
 
 no warnings 'once', 'redefine';
 
@@ -25,3 +24,5 @@ ok(
     DateTime->new( year => 2005 ),
     'can make DateTime object without DateTime.so file'
 );
+
+done_testing();

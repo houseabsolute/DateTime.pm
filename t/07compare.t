@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 26;
+use Test::More;
 
 use DateTime;
 
@@ -187,3 +186,5 @@ ok( ( $infinity <=> $date1 ) == 1, 'Comparison overload $inf <=> $a' );
 
     ok( $dt > $dt_test2, 'comparison works across different classes' );
 }
+
+done_testing();

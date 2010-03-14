@@ -1,6 +1,5 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
 use Test::More;
 
@@ -9,8 +8,6 @@ BEGIN {
     if ($@) {
         plan skip_all => "DateTime::Format::Strptime 1.0400+ not installed";
     }
-
-    plan tests => 11;
 }
 
 use DateTime;
@@ -64,3 +61,5 @@ is( $dt->_stringify(), $dt->iso8601, 'Default iso8601 works' );
 is( $dt->_stringify, "$dt",
     "Stringification (no formatter -> format_datetime)" );
 is( $dt->iso8601, "$dt", "Stringification (no formatter -> iso8601)" );
+
+done_testing();

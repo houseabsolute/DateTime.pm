@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use Test::Exception;
-use Test::More tests => 8;
+use Test::More;
 
 use DateTime;
 
@@ -55,3 +55,5 @@ throws_ok {
     );
 }
 qr/positive integer/, 'nanosecond must be an integer';
+
+done_testing();

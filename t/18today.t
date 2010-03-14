@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 6;
+use Test::More;
 
 use DateTime;
 
@@ -18,3 +17,5 @@ use DateTime;
     is( $today->minute, 0, 'today->hour' );
     is( $today->second, 0, 'today->hour' );
 }
+
+done_testing();

@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 172;
+use Test::More;
 use DateTime;
 
 # tests using UTC times
@@ -1101,3 +1100,5 @@ use DateTime;
         );
     }
 }
+
+done_testing();

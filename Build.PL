@@ -23,7 +23,7 @@ my $builder = Module::Build->new(
     build_requires => {
         'Pod::Man'        => '1.14',
         'Test::Exception' => '0',
-        'Test::More'      => '0.34',
+        'Test::More'      => '0.88',
     },
     add_to_cleanup => \@pp,
     create_readme  => 1,

@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 105;
+use Test::More;
 
 use DateTime;
 
@@ -427,3 +426,5 @@ use DateTime;
         '$dt2 - $dur == $dt1'
     );
 }
+
+done_testing();

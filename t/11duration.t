@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 130;
+use Test::More;
 
 use DateTime;
 use DateTime::Duration;
@@ -411,3 +410,5 @@ my $leap_day = DateTime->new(
     like( $@, qr/is an integer/,
         'cannot create a duration with fractional units' );
 }
+
+done_testing();

@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 7;
+use Test::More;
 
 use DateTime;
 use DateTime::Duration;
@@ -35,3 +34,5 @@ use DateTime::Duration;
     is( DateTime->compare( $p, $dt ), 0, "truncate() returns self" );
 
 }
+
+done_testing();

@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 29;
+use Test::More;
 
 use DateTime;
 
@@ -129,3 +128,5 @@ use DateTime;
         'DateTime object is equal to a clone of itself (! ne)'
     );
 }
+
+done_testing();

@@ -1,6 +1,7 @@
 use strict;
+use warnings;
 
-use Test::More tests => 9;
+use Test::More;
 
 use DateTime::LeapSecond;
 
@@ -45,3 +46,5 @@ is( DateTime::LeapSecond::leap_seconds($day), 22, 'after leap-second day' );
 # ...
 # 1997  Jul. 1
 # 1999  Jan. 1
+
+done_testing();

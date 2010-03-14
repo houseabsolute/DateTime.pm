@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 10;
+use Test::More;
 
 use DateTime;
 
@@ -31,3 +30,5 @@ use DateTime;
     is( $dt2->minute, 59,   'minute is 59' );
     is( $dt2->second, 59,   'second is 59' );
 }
+
+done_testing();

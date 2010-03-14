@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 35;
+use Test::More;
 
 use DateTime;
 
@@ -87,3 +86,5 @@ use DateTime;
     $dt->set_locale('fr_FR');
     is( $dt->month_name, 'mai', 'check month name after set_locale' );
 }
+
+done_testing();

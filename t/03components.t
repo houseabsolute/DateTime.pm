@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 144;
+use Test::More;
 
 use DateTime;
 
@@ -354,3 +353,5 @@ SKIP:
         'locale() is read-only'
     );
 }
+
+done_testing();

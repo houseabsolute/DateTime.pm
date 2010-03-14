@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 6;
+use Test::More;
 
 use DateTime;
 
@@ -83,3 +82,5 @@ use DateTime;
 
     is( $dt->datetime, '1997-07-01T00:00:30', '+00:00:30 leap second T+1' );
 }
+
+done_testing();

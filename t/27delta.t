@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 38;
+use Test::More;
 
 use DateTime;
 
@@ -101,3 +100,5 @@ use DateTime;
 
     is( $dur_ms->hours, 21, 'hours is 21' );
 }
+
+done_testing();

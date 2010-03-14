@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 4;
+use Test::More;
 
 use DateTime;
 
@@ -46,3 +45,5 @@ use DateTime;
     like( $@, qr/Invalid local time .+/,
         'exception for invalid time produced via add' );
 }
+
+done_testing();

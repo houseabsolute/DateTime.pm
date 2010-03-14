@@ -1,17 +1,9 @@
-#!/usr/bin/perl -w
-
 # test suite stolen shamelessly from TimeDate distro
-
-BEGIN {
-    return unless $] >= 5.006;
-
-    require utf8;
-    import utf8;
-}
-
 use strict;
+use warnings;
+use utf8;
 
-use Test::More tests => 134;
+use Test::More;
 
 use DateTime;
 
@@ -137,6 +129,8 @@ while ( defined( my $line = <DATA> ) ) {
     # Should print '%6N', prints '123456'
     is( $dt->strftime('%%6N%n'), "%6N\n", '%%6N%n bug' );
 }
+
+done_testing();
 
 # add these if we do roman-numeral stuff
 # %Od   VII

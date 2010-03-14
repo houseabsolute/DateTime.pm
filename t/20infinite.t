@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 42;
+use Test::More;
 
 use DateTime;
 
@@ -154,3 +153,5 @@ my $neg_as_string = $neginf . '';
     cmp_ok( "$neg", 'eq', $neginf,
         'stringified neg infinity (datetime) eq neg infinity (number)' );
 }
+
+done_testing();

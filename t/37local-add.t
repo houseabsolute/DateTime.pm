@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 26;
+use Test::More;
 
 use DateTime;
 
@@ -171,3 +170,5 @@ use DateTime;
         'datetime after adding 24 hours is 2003-04-06T03:00:00'
     );
 }
+
+done_testing();

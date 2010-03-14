@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 73;
+use Test::More;
 
 use DateTime;
 
@@ -44,3 +43,5 @@ foreach my $month ( 1 .. 12 ) {
         "last_day_of_month should accept nanosecond"
     );
 }
+
+done_testing();

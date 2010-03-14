@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use utf8;
 
-use Test::More tests => 121;
+use Test::More;
 
 use DateTime;
 
@@ -302,3 +302,5 @@ if ( $] >= 5.008 ) {
         );
     }
 }
+
+done_testing();

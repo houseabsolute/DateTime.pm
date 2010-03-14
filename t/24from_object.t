@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 10;
+use Test::More;
 
 use DateTime;
 
@@ -52,6 +51,8 @@ is( $dt1->nanosecond, 100,  'nanosecond is 100' );
         'new DateTime from_object with TZ which is a leap second' );
 }
 
+done_testing();
+
 # Set up two simple test packages
 
 package DateTime::Calendar::_Test::WithoutTZ;
@@ -79,4 +80,3 @@ sub utc_rd_values {
 sub time_zone {
     return $_[0]{time_zone};
 }
-

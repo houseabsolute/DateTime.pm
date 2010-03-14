@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 1112;
+use Test::More;
 
 use DateTime;
 
@@ -62,3 +61,5 @@ use DateTime;
         }
     }
 }
+
+done_testing();

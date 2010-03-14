@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 57;
+use Test::More;
 
 use DateTime;
 
@@ -328,3 +327,5 @@ SKIP:
         'local RD seconds for leap second T+2'
     );
 }
+
+done_testing();

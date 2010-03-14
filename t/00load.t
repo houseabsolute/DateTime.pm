@@ -1,7 +1,8 @@
-#!/usr/bin/perl -w
+use strict;
+use warnings;
 
 use Test::More;
 
-plan tests => 1;
 use_ok('DateTime');
 
+done_testing();

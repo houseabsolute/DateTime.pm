@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 25;
+use Test::More;
 
 use DateTime;
 
@@ -62,3 +61,4 @@ foreach my $p (
     ok( !$@, "February 29 should be valid in leap years" );
 }
 
+done_testing();

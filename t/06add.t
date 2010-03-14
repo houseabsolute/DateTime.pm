@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 537;
+use Test::More;
 
 use DateTime;
 
@@ -365,3 +364,5 @@ is( $new->date, '1998-12-01', 'test + overloading' );
     is( $dt->minute, 30, 'minute is 30' );
     is( $dt->second, 59, 'second is 59' );
 }
+
+done_testing();

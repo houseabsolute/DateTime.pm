@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 26;
+use Test::More;
 
 use DateTime;
 
@@ -50,3 +49,5 @@ foreach my $test (@tests) {
 
     is( "$year-W$week", "$results[0]-W$results[1]" );
 }
+
+done_testing();

@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 98;
+use Test::More;
 
 use DateTime;
 
@@ -56,3 +55,5 @@ $leap_last[1]++;
     eval { DateTime->from_day_of_year( year => 2004, day_of_year => 366 ) };
     ok( !$@, "Day of year 366 should work in leap years" );
 }
+
+done_testing();

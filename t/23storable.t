@@ -1,15 +1,11 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
 use Test::More;
 
 use DateTime;
 
-if ( eval { require Storable; 1 } ) {
-    plan tests => 21;
-}
-else {
+unless ( eval { require Storable; 1 } ) {
     plan skip_all => 'Cannot load Storable';
 }
 
@@ -105,3 +101,5 @@ SKIP:
         );
     }
 }
+
+done_testing();

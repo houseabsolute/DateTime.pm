@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 16;
+use Test::More;
 
 use DateTime;
 
@@ -96,3 +95,5 @@ while ( my ( $mjd, $comps ) = splice @mjd, 0, 2 ) {
     my $jd = sprintf( '%.3f', $mjd + 2_400_000.5 );
     is( sprintf( '%.3f', $dt->jd ), $jd, "JD should be $jd" );
 }
+
+done_testing();

@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 35;
+use Test::More;
 
 use DateTime;
 
@@ -111,3 +110,4 @@ while ( $y <= 4800 ) {
 
 pass("greg torture test") if $y == 4801;
 
+done_testing();

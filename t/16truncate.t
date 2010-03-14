@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 52;
+use Test::More;
 
 use DateTime;
 
@@ -122,3 +121,5 @@ my %vals = (
         is( $dt->day,   29,   'truncation to week across month boundary' );
     }
 }
+
+done_testing();

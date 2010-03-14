@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 8;
+use Test::More;
 
 use DateTime;
 
@@ -38,3 +37,4 @@ use DateTime;
     is( $dt->offset, -3600, 'offset should be -3600 (1934-02-25 23:59:59)' );
 }
 
+done_testing();

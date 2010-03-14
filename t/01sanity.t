@@ -1,8 +1,7 @@
-#!/usr/bin/perl -w
-
 use strict;
+use warnings;
 
-use Test::More tests => 16;
+use Test::More;
 
 use DateTime;
 
@@ -41,3 +40,5 @@ use DateTime;
     is( $dt->minute, '10', "Minute accessor, outside the epoch" );
     is( $dt->second, '45', "Second accessor, outside the epoch" );
 }
+
+done_testing();
