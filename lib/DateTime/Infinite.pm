@@ -131,7 +131,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2003-2009 David Rolsky.  All rights reserved.  This
+Copyright (c) 2003-2010 David Rolsky.  All rights reserved.  This
 program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 

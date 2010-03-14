@@ -171,7 +171,7 @@ Flávio Soibelmann Glock, E<lt>fglock@pucrs.brE<gt>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2003 Flávio Soibelmann Glock.  Copyright (c) 2004-2009
+Copyright (c) 2003 Flávio Soibelmann Glock.  Copyright (c) 2004-2010
 David Rolsky.  All rights reserved.  This program is free software;
 you can redistribute it and/or modify it under the same terms as Perl
 itself.
