@@ -1,4 +1,4 @@
-0.54
+0.54   2010-03-14
 
 - Bumped the DateTime::TimeZone prereq to 1.09 to force people to use a modern
   version. Previously the minimum version was 0.59, and there have been a lot
