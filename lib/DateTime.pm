@@ -56,7 +56,7 @@ use Params::Validate qw( validate validate_pos SCALAR BOOLEAN HASHREF OBJECT );
 #
 use overload ( 'fallback' => 1,
                '<=>' => '_compare_overload',
-               'cmp' => '_compare_overload',
+               'cmp' => '_string_compare_overload',
                '""'  => '_stringify',
                '-'   => '_subtract_overload',
                '+'   => '_add_overload',
@@ -1699,6 +1699,19 @@ sub _compare_overload
     return $_[2] ? - $_[0]->compare( $_[1] ) : $_[0]->compare( $_[1] );
 }
 
+sub _string_compare_overload {
+    my ( $dt1, $dt2, $flip ) = @_;
+
+    # One is a DateTime object, one isn't.  Just stringify and compare.
+    if ( !DateTime::Helpers::can( $dt2, 'utc_rd_values' ) ) {
+        my $sign = $flip ? -1 : 1;
+        return $sign * ( "$dt1" cmp "$dt2" );
+    }
+    else {
+        goto $dt1->can('_compare_overload');
+    }
+}
+
 sub compare
 {
     shift->_compare( @_, 0 );
@@ -1764,10 +1777,9 @@ sub _string_equals_overload
 {
     my ( $class, $dt1, $dt2 ) = ref $_[0] ? ( undef, @_ ) : @_;
 
-    return unless
-        (    DateTime::Helpers::can( $dt1, 'utc_rd_values' )
-          && DateTime::Helpers::can( $dt2, 'utc_rd_values' )
-        );
+    if ( !DateTime::Helpers::can( $dt2, 'utc_rd_values' ) ) {
+        return "$dt1" eq "$dt2";
+    }
 
     $class ||= ref $dt1;
     return ! $class->compare( $dt1, $dt2 );
@@ -3365,13 +3377,17 @@ Additionally, the fallback parameter is set to true, so other
 derivable operators (+=, -=, etc.) will work properly.  Do not expect
 increment (++) or decrement (--) to do anything useful.
 
-If you attempt to sort DateTime objects with non-DateTime.pm objects
-or scalars (strings, number, whatever) then an exception will be
-thrown. Using the string comparison operators, C<eq> or C<ne>, to
-compare a DateTime.pm always returns false.
+The string comparison operators, C<eq> or C<ne>, will use the string
+value to compare with non-DateTime objects.
 
-The module also overloads stringification to use the C<iso8601()>
-method.
+DateTime objects do not have a numeric value, using C<==> or C<< <=>
+>> to compare a DateTime object with a non-DateTime object will result
+in an exception.  To safely sort mixed DateTime and non-DateTime
+objects, use C<sort { $a cmp $b } @dates>.
+
+The module also overloads stringification using the object's
+formatter, defaulting to C<iso8601()> method.  See L<Formatters And
+Stringification> for details.
 
 =head2 Formatters And Stringification
 
