@@ -1,10 +1,15 @@
 use strict;
 use warnings;
 
-use Test::DependentModules qw( test_all_dependents );
+use Test::More;
 
-plan skip_all => 'Must set DATETIME_TEST_ALL_DEPS to true in order to run these tests'
-    unless $ENV{DATETIME_TEST_ALL_DEPS};
+BEGIN {
+    plan skip_all =>
+        'Must set DATETIME_TEST_ALL_DEPS to true in order to run these tests'
+        unless $ENV{DATETIME_TEST_ALL_DEPS};
+}
+
+use Test::DependentModules qw( test_all_dependents );
 
 $ENV{PERL_TEST_DM_LOG_DIR}
     = '/home/autarch/projects/DateTime/modules/DateTime.pm/tamd';
