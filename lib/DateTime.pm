@@ -1766,7 +1766,8 @@ sub _string_compare_overload {
         return $sign * ( "$dt1" cmp "$dt2" );
     }
     else {
-        goto $dt1->can('_compare_overload');
+        my $meth = $dt1->can('_compare_overload');
+        goto $meth;
     }
 }
 
