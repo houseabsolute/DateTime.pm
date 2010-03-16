@@ -45,26 +45,28 @@ use DateTime;
         }
     }
 
-    my $same   = Other::Date->new($dt_string);
-    my $after  = Other::Date->new($after_string);
-    my $before = Other::Date->new($before_string);
-    ok $dt eq $same, "DateTime eq non-DateTime overloaded object true";
-    ok !( $dt eq $after ), "  eq false";
-    ok $dt ne $after, "  ne true";
-    ok !( $dt ne $same ), "  ne false";
+    my $same_od   = Other::Date->new($dt_string);
+    my $after_od  = Other::Date->new($after_string);
+    my $before_od = Other::Date->new($before_string);
 
-    is( $dt cmp $same,  0,  'cmp overloading' );
-    is( $dt cmp $after, -1, '  lt overloading' );
-    ok( $dt lt $after,     'lt overloading' );
-    ok( !( $dt lt $same ), '  not' );
+    ok( $dt eq $same_od, "DateTime eq non-DateTime overloaded object true" );
+    ok( !( $dt eq $after_od ), "  eq false" );
+    ok( $dt ne $after_od, "  ne true" );
+    ok( !( $dt ne $same_od ), "  ne false" );
+
+    is( $dt cmp $same_od,  0,  'cmp overloading' );
+    is( $dt cmp $after_od, -1, '  lt overloading' );
+    ok( $dt lt $after_od,     'lt overloading' );
+    ok( !( $dt lt $same_od ), '  not' );
 
     is_deeply(
         [
-            sort { $a cmp $b } $same, $after, $before, $dt, $dt_string,
+            sort { $a cmp $b } $same_od, $after_od, $before_od, $dt,
+            $dt_string,
             $after_string, $before_string
         ],
         [
-            $before, $before_string, $dt, $same, $dt_string, $after,
+            $before_od, $before_string, $dt, $same_od, $dt_string, $after_od,
             $after_string
         ],
         "eq sort"
