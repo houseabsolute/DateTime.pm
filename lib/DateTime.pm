@@ -11,7 +11,7 @@ use DateTime::Helpers;
 our $VERSION;
 
 BEGIN {
-    $VERSION = '0.54';
+    $VERSION = '0.55';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} ) {
