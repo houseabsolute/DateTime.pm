@@ -1,3 +1,11 @@
+0.55   2010-03-16
+
+- Get all tests passing on 5.6.2. Thanks to Zefram for help spotting the
+  problems.
+
+- Moved code to my hg repo at http://hg.urth.org/hg/DateTime.pm.
+
+
 0.54   2010-03-14
 
 - Bumped the DateTime::TimeZone prereq to 1.09 to force people to use a modern
