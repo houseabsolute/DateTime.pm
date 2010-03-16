@@ -62,8 +62,7 @@ use DateTime;
     is_deeply(
         [
             sort { $a cmp $b } $same_od, $after_od, $before_od, $dt,
-            $dt_string,
-            $after_string, $before_string
+            $dt_string, $after_string, $before_string
         ],
         [
             $before_od, $before_string, $dt, $same_od, $dt_string, $after_od,
