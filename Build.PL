@@ -45,7 +45,7 @@ if ($force_pp) {
 $builder->create_build_script();
 
 sub _make_pp_tests {
-    return unless -d '.svn';
+    return unless -d '.hg';
 
     require File::Slurp;
     File::Slurp->import(qw( read_file write_file ));
