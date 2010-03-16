@@ -32,8 +32,7 @@ my $builder = Module::Build->new(
         resources => {
             homepage   => 'http://datetime.perl.org/',
             bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=DateTime',
-            repository =>
-                'https://perl-date-time.svn.sourceforge.net/svnroot/perl-date-time',
+            repository => 'https://hg.urth.org/hg/DateTime.pm',
         },
     },
 );
