@@ -18,19 +18,19 @@ use DateTime;
     );
 
     my $before_string = '2050-01-15T20:10:09';
-    my $dt_string     = '2050-01-15T20:10:10';
+    my $same_string   = '2050-01-15T20:10:10';
     my $after_string  = '2050-01-15T20:10:11';
 
-    is( "$dt", $dt_string, 'stringification overloading' );
-    ok( $dt eq $dt_string, 'eq overloading true' );
+    is( "$dt", $same_string, 'stringification overloading' );
+    ok( $dt eq $same_string, 'eq overloading true' );
     ok( !( $dt eq $after_string ), 'eq overloading false' );
     ok( $dt ne $after_string, 'ne overloading true' );
-    ok( !( $dt ne $dt_string ), 'ne overloading false' );
+    ok( !( $dt ne $same_string ), 'ne overloading false' );
 
-    is( $dt cmp $dt_string,    0,  'cmp overloading' );
+    is( $dt cmp $same_string,  0,  'cmp overloading' );
     is( $dt cmp $after_string, -1, '  less than' );
-    ok( $dt lt $after_string,   'lt overloading' );
-    ok( !( $dt lt $dt_string ), '  not' );
+    ok( $dt lt $after_string,     'lt overloading' );
+    ok( !( $dt lt $same_string ), '  not' );
 
     {
 
@@ -45,7 +45,7 @@ use DateTime;
         }
     }
 
-    my $same_od   = Other::Date->new($dt_string);
+    my $same_od   = Other::Date->new($same_string);
     my $after_od  = Other::Date->new($after_string);
     my $before_od = Other::Date->new($before_string);
 
@@ -61,12 +61,13 @@ use DateTime;
 
     is_deeply(
         [
-            sort { $a cmp $b } $same_od, $after_od, $before_od, $dt,
-            $dt_string, $after_string, $before_string
+            map { $_ . ' - ' . ( ref $_ || 'no ref' ) }
+                sort { $a cmp $b or ref $a cmp ref $b } $same_od, $after_od,
+            $before_od, $dt, $same_string, $after_string, $before_string
         ],
         [
-            $before_od, $before_string, $dt, $same_od, $dt_string, $after_od,
-            $after_string
+            map { $_ . ' - ' . ( ref $_ || 'no ref' ) } $before_string,
+            $before_od, $same_string, $dt, $same_od, $after_string, $after_od
         ],
         "eq sort"
     );
