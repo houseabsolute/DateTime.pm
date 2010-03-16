@@ -3,7 +3,7 @@ package DateTime::Infinite;
 use strict;
 use warnings;
 
-our $VERSION = '0.54';
+our $VERSION = '0.55';
 
 use DateTime;
 use DateTime::TimeZone;
