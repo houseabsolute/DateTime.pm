@@ -3082,6 +3082,24 @@ If you do not care about time zones or leap seconds, use the
 Math done on two objects in the floating time zone produces very
 predictable results.
 
+Note that in most cases you will want to start by creating an object in a
+specific zone and I<then> convert it to the floating time zone. When an object
+goes from a real zone to the floating zone, the time for the object remains
+the same.
+
+This means that passing the floating zone to a constructor may not do what you
+want.
+
+  my $dt = DateTime->now( time_zone => 'floating' );
+
+is equivalent to
+
+  my $dt = DateTime->now( time_zone => 'UTC' )->set_time_zone('floating');
+
+This might not be what you wanted. Instead, you may prefer to do this:
+
+  my $dt = DateTime->now( time_zone => 'local' )->set_time_zone('floating');
+
 =item * use UTC for all calculations
 
 If you do care about time zones (particularly DST) or leap seconds,
