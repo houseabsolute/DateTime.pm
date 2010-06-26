@@ -1,3 +1,8 @@
+0.57   2010-06-26
+
+- Make DateTime::LeapSecond have the same $VERSION as every other .pm file.
+
+
 0.56   2010-06-26
 
 - The set_formatter() method did not return the DateTime object, and did not
