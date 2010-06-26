@@ -1,5 +1,8 @@
 0.56   2010-06-26
 
+- The set_formatter() method did not return the DateTime object, and did not
+  actually validate the value provided for the formatter.
+
 - Added mention of end-of-month algorithms to docs on DateTime math. Based on
   a patch by Michael R. Davis. RT #58533.
 

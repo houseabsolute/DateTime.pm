@@ -38,7 +38,7 @@ use DateTime::Locale 0.40;
 use DateTime::TimeZone 0.59;
 use Time::Local qw( timegm_nocheck );
 use Params::Validate
-    qw( validate validate_pos SCALAR BOOLEAN HASHREF OBJECT );
+    qw( validate validate_pos UNDEF SCALAR BOOLEAN HASHREF OBJECT );
 
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
@@ -168,6 +168,14 @@ my $BasicValidate = {
         type     => SCALAR | OBJECT,
         optional => 1
     },
+    formatter => {
+        type      => UNDEF | SCALAR | OBJECT,
+        optional  => 1,
+        callbacks => {
+            'can format_datetime' =>
+                sub { defined $_[0] ? $_[0]->can('format_datetime') : 1 },
+        },
+    },
 };
 
 my $NewValidate = {
@@ -176,8 +184,6 @@ my $NewValidate = {
         type    => SCALAR | OBJECT,
         default => 'floating'
     },
-    formatter =>
-        { type => SCALAR | OBJECT, can => 'format_datetime', optional => 1 },
 };
 
 sub new {
@@ -1879,10 +1885,8 @@ sub set_hour       { $_[0]->set( hour       => $_[1] ) }
 sub set_minute     { $_[0]->set( minute     => $_[1] ) }
 sub set_second     { $_[0]->set( second     => $_[1] ) }
 sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
-
-sub set_locale { $_[0]->set( locale => $_[1] ) }
-
-sub set_formatter { $_[0]->{formatter} = $_[1] }
+sub set_locale     { $_[0]->set( locale     => $_[1] ) }
+sub set_formatter  { $_[0]->set( formatter  => $_[1] ) }
 
 {
     my %TruncateDefault = (
@@ -2910,6 +2914,8 @@ Yes, now we can know "ni3 na4 bian1 ji2dian3?"
 
 Set the formatter for the object. See L<Formatters And
 Stringification> for details.
+
+You can set this to C<undef> to revert to the default formatter.
 
 =back
 
