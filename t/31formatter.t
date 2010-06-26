@@ -31,7 +31,7 @@ $dt = eval {
         formatter => $formatter
     );
 };
-ok( $dt, "Construtor (new) : $@" );
+ok( $dt, "Constructor (new) : $@" );
 
 $dt
     = eval { DateTime->from_object( object => $dt, formatter => $formatter ) };
