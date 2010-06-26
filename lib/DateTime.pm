@@ -8,11 +8,7 @@ use warnings;
 use Carp;
 use DateTime::Helpers;
 
-our $VERSION;
-
 BEGIN {
-    $VERSION = '0.55';
-
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} ) {
         local $@;
@@ -2035,11 +2031,9 @@ sub time_zone { $_[0]->{tz} }
 
 1;
 
+# ABSTRACT: A date and time object
+
 __END__
-
-=head1 NAME
-
-DateTime - A date and time object
 
 =head1 SYNOPSIS
 
@@ -3215,6 +3209,23 @@ This returns a duration which only contains seconds and nanoseconds.
 If we were add the duration to a different datetime object we might
 get a different number of seconds.
 
+L<DateTime::Duration> supports three different end-of-month algorithms for
+adding months. This comes into play when an addition results in a day past the
+end of the month (for example, adding one month to January 30).
+
+ # 2010-08-31 + 1 month = 2010-10-01
+ $dt->add( months => 1, end_of_month => 'wrap' );
+
+ # 2010-01-30 + 1 month = 2010-02-28
+ $dt->add( months => 1, end_of_month => 'limit' );
+
+ # 2010-04-30 + 1 month = 2010-05-31
+ $dt->add( months => 1, end_of_month => 'preserve' );
+
+By default, it uses "wrap" for positive durations and "preserve" for negative
+durations. See L<DateTime::Duration> for a detailed explanation of these
+algorithms.
+
 If you need to do lots of work with durations, take a look at Rick
 Measham's C<DateTime::Format::Duration> module, which lets you present
 information from durations in many useful ways.
@@ -4000,25 +4011,6 @@ best.
 To donate, log into PayPal and send money to autarch@urth.org or use
 the button on this page:
 L<http://www.urth.org/~autarch/fs-donation.html>
-
-=head1 AUTHOR
-
-Dave Rolsky <autarch@urth.org>
-
-However, please see the CREDITS file for more details on who I really
-stole all the code from.
-
-=head1 COPYRIGHT
-
-Copyright (c) 2003-2010 David Rolsky.  All rights reserved.  This
-program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
-Portions of the code in this distribution are derived from other
-works.  Please see the CREDITS file for more details.
-
-The full text of the license can be found in the LICENSE file included
-with this module.
 
 =head1 SEE ALSO
 

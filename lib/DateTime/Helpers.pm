@@ -3,8 +3,6 @@ package DateTime::Helpers;
 use strict;
 use warnings;
 
-our $VERSION = '0.55';
-
 use Scalar::Util ();
 
 sub can {
@@ -25,23 +23,8 @@ sub isa {
 
 1;
 
+# ABSTRACT: Helper functions for other DateTime modules
+
 __END__
-
-=head1 NAME
-
-DateTime::Helpers - Helper functions for other DateTime modules
-
-=head1 AUTHOR
-
-Dave Rolsky <autarch@urth.org>
-
-However, please see the CREDITS file for more details on who I really
-stole all the code from.
-
-=head1 COPYRIGHT
-
-Copyright (c) 2003-2010 David Rolsky.  All rights reserved.  This
-program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
 
 =cut

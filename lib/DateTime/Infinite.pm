@@ -3,8 +3,6 @@ package DateTime::Infinite;
 use strict;
 use warnings;
 
-our $VERSION = '0.55';
-
 use DateTime;
 use DateTime::TimeZone;
 
@@ -81,11 +79,9 @@ use base qw(DateTime::Infinite);
 
 1;
 
+# ABSTRACT: Infinite past and future DateTime objects
+
 __END__
-
-=head1 NAME
-
-DateTime::Infinite - Infinite past and future DateTime objects
 
 =head1 SYNOPSIS
 
@@ -124,19 +120,6 @@ the object they are called with.
 
 Obviously, the C<is_finite()> method returns false and the
 C<is_infinite()> method returns true.
-
-=head1 AUTHOR
-
-Dave Rolsky <autarch@urth.org>
-
-=head1 COPYRIGHT
-
-Copyright (c) 2003-2010 David Rolsky.  All rights reserved.  This
-program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
-The full text of the license can be found in the LICENSE file included
-with this module.
 
 =head1 SEE ALSO
 

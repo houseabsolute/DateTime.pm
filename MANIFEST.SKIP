@@ -50,3 +50,4 @@ t/pp_.*
 \.o$
 
 lib/DateTime\.c$
+^MYMETA.yml$

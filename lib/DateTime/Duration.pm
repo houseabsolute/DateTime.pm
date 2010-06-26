@@ -3,8 +3,6 @@ package DateTime::Duration;
 use strict;
 use warnings;
 
-our $VERSION = '0.55';
-
 use Carp ();
 use DateTime;
 use DateTime::Helpers;
@@ -305,11 +303,9 @@ sub _compare_overload {
 
 1;
 
+# ABSTRACT: Duration objects for date math
+
 __END__
-
-=head1 NAME
-
-DateTime::Duration - Duration objects for date math
 
 =head1 SYNOPSIS
 
@@ -592,25 +588,6 @@ C<compare()> class method instead.
 
 Support for this module is provided via the datetime@perl.org email
 list.  See http://lists.perl.org/ for more details.
-
-=head1 AUTHOR
-
-Dave Rolsky <autarch@urth.org>
-
-However, please see the CREDITS file for more details on who I really
-stole all the code from.
-
-=head1 COPYRIGHT
-
-Copyright (c) 2003-2010 David Rolsky.  All rights reserved.  This
-program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
-Portions of the code in this distribution are derived from other
-works.  Please see the CREDITS file for more details.
-
-The full text of the license can be found in the LICENSE file included
-with this module.
 
 =head1 SEE ALSO
 
