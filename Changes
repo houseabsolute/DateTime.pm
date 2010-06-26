@@ -4,6 +4,9 @@
   actually validate the value provided for the formatter. Based on a patch by
   Andrew Whatson. RT #58506.
 
+- Improved docs on floating time zone. Based on suggestions by Michael
+  Svoboda. RT #56389.
+
 - Added mention of end-of-month algorithms to docs on DateTime math. Based on
   a patch by Michael R. Davis. RT #58533.
 
