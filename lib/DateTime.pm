@@ -2074,7 +2074,7 @@ __END__
 
   $qtr    = $dt->quarter;        # 1-4
 
-  # all of the start-at-1 methods above have correponding start-at-0
+  # all of the start-at-1 methods above have corresponding start-at-0
   # methods, such as $dt->day_of_month_0, $dt->month_0 and so on
 
   $ymd    = $dt->ymd;           # 2002-12-06
