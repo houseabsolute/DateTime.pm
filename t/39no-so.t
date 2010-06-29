@@ -1,3 +1,5 @@
+# xs-only test
+
 use strict;
 use warnings;
 
