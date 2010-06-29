@@ -1,3 +1,11 @@
+0.59   2010-06-29
+
+- More packaging fixes. This release makes sure that POD only shows up in the
+  right files. In 0.56 through 0.58, some POD in the wrong place confused the
+  search.cpan.org POD display code, and the main module's documentation wasn't
+  viewable.
+
+
 0.58   2010-06-28
 
 - Versions 0.56 and 0.57 did not build XS properly when installing.
