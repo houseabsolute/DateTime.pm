@@ -22,9 +22,3 @@ sub isa {
 }
 
 1;
-
-# ABSTRACT: Helper functions for other DateTime modules
-
-__END__
-
-=cut
