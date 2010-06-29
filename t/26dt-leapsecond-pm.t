@@ -1,4 +1,4 @@
-# xs-only test
+# no pp test
 
 use strict;
 use warnings;
