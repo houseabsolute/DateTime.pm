@@ -12,6 +12,7 @@ my $dt;
 my %params;
 while ( defined( my $line = <DATA> ) ) {
     chomp $line;
+    next unless $line =~ /\S/;
 
     if ( $line =~ /^year =>/ ) {
         %params = map { split /\s*=>\s*/ } split /\s*,\s*/, $line;
