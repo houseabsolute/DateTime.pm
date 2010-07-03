@@ -1,3 +1,9 @@
+0.60   2010-07-03
+
+- By default, Dist::Zilla generates a Build.PL that requires Module::Build
+  0.3601+, but this distro really doesn't need any particular version.
+
+
 0.59   2010-06-29
 
 - More packaging fixes. This release makes sure that POD only shows up in the
