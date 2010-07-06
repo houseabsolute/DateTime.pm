@@ -3,7 +3,11 @@ use utf8;
 use strict;
 use warnings;
 
-use Test::Spelling;
+use Test::More;
+
+eval "use Test::Spelling";
+plan skip_all => "Test::Spelling required for spell checking"
+    if $@;
 
 my @stopwords;
 for (<DATA>) {
@@ -17,8 +21,8 @@ set_spell_cmd('aspell list -l en');
 
 # This prevents a weird segfault from the aspell command - see
 # https://bugs.launchpad.net/ubuntu/+source/aspell/+bug/71322
-local $ENV{LC_ALL} = 'C';
-all_pod_files_spelling_ok;
+local $ENV{LC_ALL} = 'en_US';
+all_pod_files_spelling_ok();
 
 __DATA__
 Anno
