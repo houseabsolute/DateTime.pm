@@ -28,6 +28,8 @@ __DATA__
 Anno
 BCE
 CLDR
+CPAN
+DateTime
 DateTimes
 Datetime
 Datetimes
@@ -57,6 +59,7 @@ Tsai
 UTC
 VVVV
 ZZZZ
+afterwards
 bian
 ccc
 cccc
@@ -69,6 +72,7 @@ dian
 eee
 eeee
 eeeee
+fallback
 formatter
 hh
 iCal
@@ -91,5 +95,5 @@ IEEE
 Flávio
 Glock
 Rata
+Rolsky
 Soibelmann
-
