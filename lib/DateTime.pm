@@ -3059,7 +3059,7 @@ implements the C<utc_rd_values()> method.
 
 =back
 
-=head2 How Datetime Math is Done
+=head2 How Datetime Math Works
 
 It's important to have some understanding of how datetime math is
 implemented in order to effectively use this module and
