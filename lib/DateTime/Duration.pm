@@ -317,7 +317,7 @@ __END__
                                 days    => 1,
                                 hours   => 6,
                                 minutes => 15,
-                                seconds => 45, 
+                                seconds => 45,
                                 nanoseconds => 12000 );
 
   # Convert to different units
