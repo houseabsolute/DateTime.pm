@@ -5,7 +5,7 @@ use warnings;
 
 use Moose;
 
-extends 'Dist::Zilla::Plugin::ModuleBuild';
+extends 'Dist::Zilla::Plugin::ModuleBuild::XSOrPP';
 
 around module_build_args => sub {
     my $orig = shift;

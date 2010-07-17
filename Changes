@@ -1,3 +1,9 @@
+0.61   2010-07-16
+
+- Switching to dzil in 0.56 broke the --pp flag for the Build.PL. Reported by
+  Jonathan Noack. RT #59421.
+
+
 0.60   2010-07-03
 
 - By default, Dist::Zilla generates a Build.PL that requires Module::Build

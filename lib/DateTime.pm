@@ -947,7 +947,7 @@ sub jd {
 
     my $day_length = $self->_day_length( $self->{utc_rd_days} );
 
-    return (  $jd 
+    return (  $jd
             + ( $self->{utc_rd_secs} / $day_length )
             + ( $self->{rd_nanosecs} / $day_length / MAX_NANOSECONDS ) );
 }
