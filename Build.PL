@@ -31,7 +31,7 @@ if ( grep { $_ eq '--pp' } @ARGV ) {
     $build->build_elements(
         [ grep { $_ ne 'xs' } @{ $build->build_elements() } ] );
 }
-elsif ( $ENV{IS_MAINTAINER} || -d '.hg' ) {
+elsif ( $ENV{AUTHOR_TESTING} || -d '.hg' ) {
     require File::Find::Rule;
     require File::Slurp;
     File::Slurp->import( qw( read_file write_file ));
