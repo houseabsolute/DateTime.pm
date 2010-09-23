@@ -1,3 +1,9 @@
+0.62   2010-09-23
+
+- Don't try to test with DateTime::Format::Strptime unless we have a
+  relatively recent version. Should fix some test failures.
+
+
 0.61   2010-07-16
 
 - Switching to dzil in 0.56 broke the --pp flag for the Build.PL. Reported by
