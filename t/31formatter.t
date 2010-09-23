@@ -4,9 +4,9 @@ use warnings;
 use Test::More;
 
 BEGIN {
-    eval "use DateTime::Format::Strptime 1.0400";
+    eval "use DateTime::Format::Strptime 1.2000";
     if ($@) {
-        plan skip_all => "DateTime::Format::Strptime 1.0400+ not installed";
+        plan skip_all => "DateTime::Format::Strptime 1.2000+ not installed";
     }
 }
 
