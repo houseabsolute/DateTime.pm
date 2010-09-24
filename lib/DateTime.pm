@@ -9,7 +9,7 @@ use Carp;
 use DateTime::Helpers;
 
 BEGIN {
-    our $VERSION = '0.61';
+    our $VERSION = '0.63';
 
     my $loaded = 0;
     unless ( $ENV{PERL_DATETIME_PP} ) {
