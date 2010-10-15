@@ -196,6 +196,23 @@ sub new {
         "Invalid day of month (day = $p{day} - month = $p{month} - year = $p{year})\n"
     ) if $p{day} > $class->_month_length( $p{year}, $p{month} );
 
+    return $class->_new(%p);
+}
+
+sub _new {
+    my $class = shift;
+    my %p     = @_;
+
+    # If this method is called from somewhere other than new(), then some of
+    # these default may not get applied.
+    $p{month}      = 1          unless exists $p{month};
+    $p{day}        = 1          unless exists $p{day};
+    $p{hour}       = 0          unless exists $p{hour};
+    $p{minute}     = 0          unless exists $p{minute};
+    $p{second}     = 0          unless exists $p{second};
+    $p{nanosecond} = 0          unless exists $p{nanosecond};
+    $p{time_zone}  = 'floating' unless exists $p{time_zone};
+
     my $self = bless {}, $class;
 
     $p{locale} = delete $p{language} if exists $p{language};
@@ -261,6 +278,7 @@ sub new {
 # a new object based on the current object, like set() and truncate().
 sub _new_from_self {
     my $self = shift;
+    my %p    = @_;
 
     my %old = map { $_ => $self->$_() }
         qw( year month day hour minute second nanosecond
@@ -268,7 +286,9 @@ sub _new_from_self {
     $old{formatter} = $self->formatter()
         if defined $self->formatter();
 
-    return ( ref $self )->new( %old, @_ );
+    my $method = delete $p{_skip_validation} ? '_new' : 'new';
+
+    return ( ref $self )->$method( %old, %p );
 }
 
 sub _handle_offset_modifier {
@@ -473,7 +493,7 @@ sub _utc_hms {
         $args{year} += 1900;
         $args{month}++;
 
-        my $self = $class->new( %p, %args, time_zone => 'UTC' );
+        my $self = $class->_new( %p, %args, time_zone => 'UTC' );
 
         $self->set_time_zone( $p{time_zone} ) if exists $p{time_zone};
 
@@ -561,7 +581,7 @@ sub last_day_of_month {
 
     my $day = $class->_month_length( $p{year}, $p{month} );
 
-    return $class->new( %p, day => $day );
+    return $class->_new( %p, day => $day );
 }
 
 sub _month_length {
@@ -608,7 +628,7 @@ sub from_day_of_year {
         $month++;
     }
 
-    return DateTime->new(
+    return $class->_new(
         %p,
         month => $month,
         day   => $day,
@@ -1927,7 +1947,7 @@ sub set_formatter  { $_[0]->set( formatter  => $_[1] ) }
             }
         }
 
-        my $new_dt = $self->_new_from_self(%new);
+        my $new_dt = $self->_new_from_self( %new, _skip_validation => 1 );
 
         %$self = %$new_dt;
 
