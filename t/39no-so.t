@@ -10,14 +10,8 @@ no warnings 'once', 'redefine';
 my $sub
     = sub { die q{Can't locate loadable object for module DateTime in @INC} };
 
-if ( $] >= 5.006 ) {
-    require XSLoader;
-    *XSLoader::load = $sub;
-}
-else {
-    require DynaLoader;
-    *DynaLoader::bootstrap = $sub;
-}
+require XSLoader;
+*XSLoader::load = $sub;
 
 eval { require DateTime };
 is( $@, '', 'No error loading DateTime without DateTime.so file' );
