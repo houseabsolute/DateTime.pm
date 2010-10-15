@@ -1,3 +1,10 @@
+0.64
+
+- The t/39no-so.t failed for some people. I can't reproduce it, but this
+  release should hopefully fix the problem. Patch by Tokuhiro Matsuno. RT
+  #62061.
+
+
 0.63   2010-09-24
 
 - Actually bump the version in the module files. Oops. Reported by bricas.
