@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 
+use Cwd qw( abs_path );
 use Test::More;
 
 BEGIN {
@@ -11,8 +12,7 @@ BEGIN {
 
 use Test::DependentModules qw( test_all_dependents );
 
-$ENV{PERL_TEST_DM_LOG_DIR}
-    = '/home/autarch/projects/DateTime/modules/DateTime.pm/tamd';
+$ENV{PERL_TEST_DM_LOG_DIR} = abs_path('.');
 
 my $exclude = qr/(?:^App-)
                  |
