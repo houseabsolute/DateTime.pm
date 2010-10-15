@@ -20,4 +20,4 @@ DateTime-*
 c/leap_seconds.h
 lib/*.o
 lib/*.c
-
+t/author-pp-*
