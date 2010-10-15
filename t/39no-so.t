@@ -7,10 +7,19 @@ use Test::More;
 
 no warnings 'once', 'redefine';
 
-my $sub
-    = sub { die q{Can't locate loadable object for module DateTime in @INC} };
-
 require XSLoader;
+
+my $orig = \&XSLoader::load;
+
+my $sub = sub {
+    if ( $_[0] eq 'DateTime' ) {
+        die q{Can't locate loadable object for module DateTime in @INC};
+    }
+    else {
+        goto $orig;
+    }
+};
+
 *XSLoader::load = $sub;
 
 eval { require DateTime };
