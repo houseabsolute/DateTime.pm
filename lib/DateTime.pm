@@ -4020,6 +4020,9 @@ L<DateTime::Format::HTTP> parses dates according to the RFC 1123 format:
 
   print DateTime::Format::HTTP->format_datetime($datetime);
 
+Most format modules are suitable for use as a C<formatter> with a DateTime
+object.
+
 All format modules start with C<DateTime::Format::>.
 
 =head2 Calendar Modules
