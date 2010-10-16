@@ -9,6 +9,12 @@
   twice. Avoiding this should make everything that constructs a new object
   (besides new() itself) a little faster.
 
+- Added a section on the DateTime Project ecosystem to the docs. Addresses RT
+  #60930.
+
+- Fixed wiki links in the docs now that the wiki has moved to a new wiki
+  platform.
+
 
 0.63   2010-09-24
 
