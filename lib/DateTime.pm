@@ -2141,7 +2141,7 @@ DateTime is a class for the representation of date/time combinations,
 and is part of the Perl DateTime project.  For details on this project
 please see L<http://datetime.perl.org/>.  The DateTime site has a FAQ
 which may help answer many "how do I do X?" questions.  The FAQ is at
-L<http://datetime.perl.org/?FAQ>.
+L<http://datetime.perl.org/wiki/datetime/page/FAQ>.
 
 It represents the Gregorian calendar, extended backwards in time
 before its creation (in 1582).  This is sometimes known as the
@@ -4057,8 +4057,8 @@ this. This will be fixed (perhaps) in future versions.
 
 =head1 SUPPORT
 
-Support for this module is provided via the datetime@perl.org email
-list. See http://datetime.perl.org/?MailingList for details.
+Support for this module is provided via the datetime@perl.org email list. See
+http://datetime.perl.org/wiki/datetime/page/Mailing_List for details.
 
 Please submit bugs to the CPAN RT system at
 http://rt.cpan.org/NoAuth/ReportBug.html?Queue=datetime or via email
