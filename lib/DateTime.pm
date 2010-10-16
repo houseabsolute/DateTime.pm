@@ -3995,10 +3995,55 @@ The time zone long name.
 
 =back
 
-=head1 DateTime.pm and Storable
+=head2 DateTime.pm and Storable
 
 DateTime implements Storable hooks in order to reduce the size of a
 serialized DateTime object.
+
+=head1 THE DATETIME PROJECT ECOSYSTEM
+
+This module is part of a larger ecosystem of modules in the DateTime
+family.
+
+=head2 L<DateTime::Set>
+
+The L<DateTime::Set> module represents sets (including recurrences) of
+datetimes. Many modules return sets or recurrences.
+
+=head2 Format Modules
+
+The various format modules exist to parse and format datetimes. For example,
+L<DateTime::Format::HTTP> parses dates according to the RFC 1123 format:
+
+  my $datetime
+      = DateTime::Format::HTTP->parse_datetime('Thu Feb  3 17:03:55 GMT 1994');
+
+  print DateTime::Format::HTTP->format_datetime($datetime);
+
+All format modules start with C<DateTime::Format::>.
+
+=head2 Calendar Modules
+
+There are a number of modules on CPAN that implement non-Gregorian calendars,
+such as the Chinese, Mayan, and Julian calendars.
+
+All calendar modules start with C<DateTime::Calendar::>.
+
+=head2 Event Modules
+
+There are a number of modules that calculate the dates for events, such as
+Easter, Sunrise, etc.
+
+All event modules start with C<DateTime::Event::>.
+
+=head2 Others
+
+There are many other modules that work with DateTime, including modules in the
+C<DateTimeX> namespace, as well as others.
+
+See the L<datetime wiki|http://datetime.perl.org> and
+L<search.cpan.org|http://search.cpan.org/search?query=datetime&mode=dist> for
+more details.
 
 =head1 KNOWN BUGS
 
@@ -4008,7 +4053,7 @@ handling of IEEE infinity and NaN, and seems to be highly
 platform/compiler/phase of moon dependent.
 
 If you don't plan to use infinite datetimes you can probably ignore
-this.  This will be fixed (somehow) in future versions.
+this. This will be fixed (perhaps) in future versions.
 
 =head1 SUPPORT
 
