@@ -9,14 +9,17 @@ use Carp;
 use DateTime::Helpers;
 
 BEGIN {
-    our $VERSION = '0.63';
-
     my $loaded = 0;
+
     unless ( $ENV{PERL_DATETIME_PP} ) {
         local $@;
         eval {
             require XSLoader;
-            XSLoader::load( 'DateTime', $DateTime::VERSION );
+            XSLoader::load( __PACKAGE__,
+                exists $DateTime::{VERSION}
+                ? ${ $DateTime::{VERSION} }
+                : ()
+            );
 
             $DateTime::IsPurePerl = 0;
         };
