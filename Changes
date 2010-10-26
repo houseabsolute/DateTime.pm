@@ -1,13 +1,16 @@
 0.64
 
-- The t/39no-so.t failed for some people. I can't reproduce it, but this
-  release should hopefully fix the problem. Patch by Tokuhiro Matsuno. RT
-  #62061.
-
-- All the constructors besides new() ended up calling new(), which meant that
+* All the constructors besides new() ended up calling new(), which meant that
   these constructors went through the same parameter validation code
   twice. Avoiding this should make everything that constructs a new object
   (besides new() itself) a little faster.
+
+  ** This change breaks DateTime::Fiscal::Retail454, but no other modules, to
+     the best of my knowledge. **
+
+- The t/39no-so.t failed for some people. I can't reproduce it, but this
+  release should hopefully fix the problem. Patch by Tokuhiro Matsuno. RT
+  #62061.
 
 - Added a section on the DateTime Project ecosystem to the docs. Addresses RT
   #60930.
