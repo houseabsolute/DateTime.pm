@@ -8,7 +8,7 @@
   ** This change breaks DateTime::Fiscal::Retail454, but no other modules, to
      the best of my knowledge. **
 
-- The t/39no-so.t failed for some people. I can't reproduce it, but this
+- The t/39no-so.t test failed for some people. I can't reproduce it, but this
   release should hopefully fix the problem. Patch by Tokuhiro Matsuno. RT
   #62061.
 
