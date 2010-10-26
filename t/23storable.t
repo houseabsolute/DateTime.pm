@@ -81,25 +81,23 @@ unless ( eval { require Storable; 1 } ) {
 }
 
 {
-    my $has_ical = eval { require DateTime::Format::ICal; 1 };
+    package Formatter;
 
-SKIP:
-    {
-        skip 'This test needs DateTime::Format::ICal', 1
-            unless $has_ical;
+    sub format_datetime {};
+}
 
-        my $dt = DateTime->new(
-            year      => 2004,
-            formatter => 'DateTime::Format::ICal',
-        );
+{
+    my $dt = DateTime->new(
+        year      => 2004,
+        formatter => 'Formatter',
+    );
 
-        my $copy = Storable::thaw( Storable::nfreeze($dt) );
+    my $copy = Storable::thaw( Storable::nfreeze($dt) );
 
-        is(
-            $dt->formatter, $copy->formatter,
-            'Storable freeze/thaw preserves formatter'
-        );
-    }
+    is(
+        $dt->formatter, $copy->formatter,
+        'Storable freeze/thaw preserves formatter'
+    );
 }
 
 done_testing();
