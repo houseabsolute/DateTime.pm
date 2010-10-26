@@ -1,7 +1,7 @@
 0.64
 
 * All the constructors besides new() ended up calling new(), which meant that
-  these constructors went through the same parameter validation code
+  these constructors went through the parameter validation code
   twice. Avoiding this should make everything that constructs a new object
   (besides new() itself) a little faster.
 
@@ -9,7 +9,7 @@
      the best of my knowledge. **
 
 - The t/39no-so.t test failed for some people. I can't reproduce it, but this
-  release should hopefully fix the problem. Patch by Tokuhiro Matsuno. RT
+  release will hopefully fix the problem. Patch by Tokuhiro Matsuno. RT
   #62061.
 
 - Added a section on the DateTime Project ecosystem to the docs. Addresses RT
@@ -17,6 +17,11 @@
 
 - Fixed wiki links in the docs now that the wiki has moved to a new wiki
   platform.
+
+- Restored some of the dzil-ification. The repo now has a very minimal
+  Build.PL file which is just enough to build the XS code and run the
+  tests. This fixes the total lack of prereqs in the META.* files. Reported by
+  Bjørn-Olav. RT #62427.
 
 
 0.63   2010-09-24
