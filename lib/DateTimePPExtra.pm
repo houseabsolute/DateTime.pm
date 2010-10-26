@@ -3,8 +3,6 @@ package DateTime;
 use strict;
 use warnings;
 
-our $VERSION = '0.63';
-
 use DateTime::LeapSecond;
 
 sub _normalize_tai_seconds {

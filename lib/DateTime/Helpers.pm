@@ -3,8 +3,6 @@ package DateTime::Helpers;
 use strict;
 use warnings;
 
-our $VERSION = '0.63';
-
 use Scalar::Util ();
 
 sub can {
