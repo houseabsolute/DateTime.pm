@@ -1,4 +1,9 @@
-0.64
+0.65   2010-10-25
+
+- Actually put the right $VERSION in every package. No other changes.
+
+
+0.64   2010-10-25
 
 * All the constructors besides new() ended up calling new(), which meant that
   these constructors went through the parameter validation code
