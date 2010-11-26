@@ -2068,34 +2068,35 @@ __END__
 
   use DateTime;
 
-  $dt = DateTime->new( year   => 1964,
-                       month  => 10,
-                       day    => 16,
-                       hour   => 16,
-                       minute => 12,
-                       second => 47,
-                       nanosecond => 500000000,
-                       time_zone => 'Asia/Taipei',
-                     );
+  $dt = DateTime->new(
+      year       => 1964,
+      month      => 10,
+      day        => 16,
+      hour       => 16,
+      minute     => 12,
+      second     => 47,
+      nanosecond => 500000000,
+      time_zone  => 'Asia/Taipei',
+  );
 
   $dt = DateTime->from_epoch( epoch => $epoch );
   $dt = DateTime->now; # same as ( epoch => time() )
 
   $year   = $dt->year;
-  $month  = $dt->month;          # 1-12 - also mon
+  $month  = $dt->month;          # 1-12
 
-  $day    = $dt->day;            # 1-31 - also day_of_month, mday
+  $day    = $dt->day;            # 1-31
 
-  $dow    = $dt->day_of_week;    # 1-7 (Monday is 1) - also dow, wday
+  $dow    = $dt->day_of_week;    # 1-7 (Monday is 1)
 
   $hour   = $dt->hour;           # 0-23
-  $minute = $dt->minute;         # 0-59 - also min
+  $minute = $dt->minute;         # 0-59
 
-  $second = $dt->second;         # 0-61 (leap seconds!) - also sec
+  $second = $dt->second;         # 0-61 (leap seconds!)
 
-  $doy    = $dt->day_of_year;    # 1-366 (leap years) - also doy
+  $doy    = $dt->day_of_year;    # 1-366 (leap years)
 
-  $doq    = $dt->day_of_quarter; # 1.. - also doq
+  $doq    = $dt->day_of_quarter; # 1..
 
   $qtr    = $dt->quarter;        # 1-4
 
@@ -2103,7 +2104,7 @@ __END__
   # methods, such as $dt->day_of_month_0, $dt->month_0 and so on
 
   $ymd    = $dt->ymd;           # 2002-12-06
-  $ymd    = $dt->ymd('/');      # 2002/12/06 - also date
+  $ymd    = $dt->ymd('/');      # 2002/12/06
 
   $mdy    = $dt->mdy;           # 12-06-2002
   $mdy    = $dt->mdy('/');      # 12/06/2002
@@ -2112,7 +2113,7 @@ __END__
   $dmy    = $dt->dmy('/');      # 06/12/2002
 
   $hms    = $dt->hms;           # 14:02:29
-  $hms    = $dt->hms('!');      # 14!02!29 - also time
+  $hms    = $dt->hms('!');      # 14!02!29
 
   $is_leap  = $dt->is_leap_year;
 
@@ -2260,15 +2261,16 @@ This class method accepts parameters for each date and time component:
 "year", "month", "day", "hour", "minute", "second", "nanosecond".
 It also accepts "locale", "time_zone", and "formatter" parameters.
 
-  my $dt = DateTime->new( year   => 1066,
-                          month  => 10,
-                          day    => 25,
-                          hour   => 7,
-                          minute => 15,
-                          second => 47,
-                          nanosecond => 500000000,
-                          time_zone  => 'America/Chicago',
-                        );
+  my $dt = DateTime->new(
+      year       => 1066,
+      month      => 10,
+      day        => 25,
+      hour       => 7,
+      minute     => 15,
+      second     => 47,
+      nanosecond => 500000000,
+      time_zone  => 'America/Chicago',
+  );
 
 DateTime validates the "month", "day", "hour", "minute", and "second",
 and "nanosecond" parameters.  The valid values for these parameters are:
@@ -2357,14 +2359,15 @@ simply subtract an hour to the object in order to move to saving time,
 for example:
 
   # This object represent 01:30:00 standard time
-  my $dt = DateTime->new( year   => 2003,
-                          month  => 10,
-                          day    => 26,
-                          hour   => 1,
-                          minute => 30,
-                          second => 0,
-                          time_zone => 'America/Chicago',
-                        );
+  my $dt = DateTime->new(
+      year      => 2003,
+      month     => 10,
+      day       => 26,
+      hour      => 1,
+      minute    => 30,
+      second    => 0,
+      time_zone => 'America/Chicago',
+  );
 
   print $dt->hms;  # prints 01:30:00
 
@@ -2907,9 +2910,14 @@ then the I<local> time is adjusted accordingly.
 
 For example:
 
-  my $dt = DateTime->new( year => 2000, month => 5, day => 10,
-                          hour => 15, minute => 15,
-                          time_zone => 'America/Los_Angeles', );
+  my $dt = DateTime->new(
+      year      => 2000,
+      month     => 5,
+      day       => 10,
+      hour      => 15,
+      minute    => 15,
+      time_zone => 'America/Los_Angeles',
+  );
 
   print $dt->hour; # prints 15
 
@@ -2984,9 +2992,7 @@ the object from which C<$datetime> is subtracted.  For example:
 
     2003-03-15 00:00:00.00000000
  -  2003-02-15 00:00:00.00000000
-
  -------------------------------
-
  = 1 month
 
 Note that this duration is not an absolute measure of the amount of
@@ -3209,10 +3215,14 @@ days, we end up with March 29, 2003:
 
 We see similar strangeness when math crosses a DST boundary:
 
-  my $dt = DateTime->new( year => 2003, month => 4, day => 5,
-                          hour => 1, minute => 58,
-                          time_zone => "America/Chicago",
-                        );
+  my $dt = DateTime->new(
+      year      => 2003,
+      month     => 4,
+      day       => 5,
+      hour      => 1,
+      minute    => 58,
+      time_zone => "America/Chicago",
+  );
 
   $dt->add( days => 1, minutes => 3 );
   # 2003-04-06 02:01:00
@@ -3272,70 +3282,103 @@ explained through examples:
 
 The first of these probably makes the most sense:
 
-    my $dt1 = DateTime->new( year => 2003, month => 5, day => 6,
-                             time_zone => 'America/Chicago',
-                           );
-    # not DST
+  my $dt1 = DateTime->new(
+      year      => 2003,
+      month     => 5,
+      day       => 6,
+      time_zone => 'America/Chicago',
+  );
 
-    my $dt2 = DateTime->new( year => 2003, month => 11, day => 6,
-                             time_zone => 'America/Chicago',
-                           );
-    # is DST
+  # not DST
 
-    my $dur = $dt2->subtract_datetime($dt1);
-    # 6 months
+  my $dt2 = DateTime->new(
+      year      => 2003,
+      month     => 11,
+      day       => 6,
+      time_zone => 'America/Chicago',
+  );
+
+  # is DST
+
+  my $dur = $dt2->subtract_datetime($dt1);
+  # 6 months
 
 Nice and simple.
 
 This one is a little trickier, but still fairly logical:
 
-    my $dt1 = DateTime->new( year => 2003, month => 4, day => 5,
-                             hour => 1, minute => 58,
-                             time_zone => "America/Chicago",
-                           );
-    # is DST
+  my $dt1 = DateTime->new(
+      year      => 2003,
+      month     => 4,
+      day       => 5,
+      hour      => 1,
+      minute    => 58,
+      time_zone => "America/Chicago",
+  );
 
-    my $dt2 = DateTime->new( year => 2003, month => 4, day => 7,
-                             hour => 2, minute => 1,
-                             time_zone => "America/Chicago",
-                           );
-    # not DST
+  # is DST
 
-    my $dur = $dt2->subtract_datetime($dt1);
-    # 2 days and 3 minutes
+  my $dt2 = DateTime->new(
+      year      => 2003,
+      month     => 4,
+      day       => 7,
+      hour      => 2,
+      minute    => 1,
+      time_zone => "America/Chicago",
+  );
+
+  # not DST
+
+  my $dur = $dt2->subtract_datetime($dt1);
+
+  # 2 days and 3 minutes
 
 Which contradicts the result this one gives, even though they both
 make sense:
 
-    my $dt1 = DateTime->new( year => 2003, month => 4, day => 5,
-                             hour => 1, minute => 58,
-                             time_zone => "America/Chicago",
-                           );
-    # is DST
+  my $dt1 = DateTime->new(
+      year      => 2003,
+      month     => 4,
+      day       => 5,
+      hour      => 1,
+      minute    => 58,
+      time_zone => "America/Chicago",
+  );
 
-    my $dt2 = DateTime->new( year => 2003, month => 4, day => 6,
-                             hour => 3, minute => 1,
-                             time_zone => "America/Chicago",
-                           );
-    # not DST
+  # is DST
 
-    my $dur = $dt2->subtract_datetime($dt1);
-    # 1 day and 3 minutes
+  my $dt2 = DateTime->new(
+      year      => 2003,
+      month     => 4,
+      day       => 6,
+      hour      => 3,
+      minute    => 1,
+      time_zone => "America/Chicago",
+  );
+
+  # not DST
+
+  my $dur = $dt2->subtract_datetime($dt1);
+
+  # 1 day and 3 minutes
 
 This last example illustrates the "DST" exception mentioned earlier.
 The exception accounts for the fact 2003-04-06 only lasts 23 hours.
 
 And finally:
 
-    my $dt2 = DateTime->new( year => 2003, month => 10, day => 26,
-                             hour => 1,
-                             time_zone => 'America/Chicago',
-                           );
+  my $dt2 = DateTime->new(
+      year      => 2003,
+      month     => 10,
+      day       => 26,
+      hour      => 1,
+      time_zone => 'America/Chicago',
+  );
 
-    my $dt1 = $dt2->clone->subtract( hours => 1 );
+  my $dt1 = $dt2->clone->subtract( hours => 1 );
 
-    my $dur = $dt2->subtract_datetime($dt1);
-    # 60 minutes
+  my $dur = $dt2->subtract_datetime($dt1);
+  # 60 minutes
 
 This seems obvious until you realize that subtracting 60 minutes from
 C<$dt2> in the above example still leaves the clock time at
@@ -3352,15 +3395,23 @@ If we take a duration returned from C<subtract_datetime()> and then
 try to add or subtract that duration from one of the datetimes we just
 used, we sometimes get interesting results:
 
-  my $dt1 = DateTime->new( year => 2003, month => 4, day => 5,
-                           hour => 1, minute => 58,
-                           time_zone => "America/Chicago",
-                         );
+  my $dt1 = DateTime->new(
+      year      => 2003,
+      month     => 4,
+      day       => 5,
+      hour      => 1,
+      minute    => 58,
+      time_zone => "America/Chicago",
+  );
 
-  my $dt2 = DateTime->new( year => 2003, month => 4, day => 6,
-                           hour => 3, minute => 1,
-                           time_zone => "America/Chicago",
-                         );
+  my $dt2 = DateTime->new(
+      year      => 2003,
+      month     => 4,
+      day       => 6,
+      hour      => 3,
+      minute    => 1,
+      time_zone => "America/Chicago",
+  );
 
   my $dur = $dt2->subtract_datetime($dt1);
   # 1 day and 3 minutes
@@ -3387,9 +3438,15 @@ C<calendar_duration()> and C<clock_duration()> methods:
 The presence of leap seconds can cause even more anomalies in date
 math.  For example, the following is a legal datetime:
 
-  my $dt = DateTime->new( year => 1972, month => 12, day => 31,
-                          hour => 23, minute => 59, second => 60,
-                          time_zone => 'UTC' );
+  my $dt = DateTime->new(
+      year      => 1972,
+      month     => 12,
+      day       => 31,
+      hour      => 23,
+      minute    => 59,
+      second    => 60,
+      time_zone => 'UTC'
+  );
 
 If we do the following:
 
@@ -3401,9 +3458,15 @@ Then the datetime is now "1973-02-01 00:00:00", because there is no
 Leap seconds also force us to distinguish between minutes and seconds
 during date math.  Given the following datetime:
 
-  my $dt = DateTime->new( year => 1972, month => 12, day => 31,
-                          hour => 23, minute => 59, second => 30,
-                          time_zone => 'UTC' );
+  my $dt = DateTime->new(
+      year      => 1972,
+      month     => 12,
+      day       => 31,
+      hour      => 23,
+      minute    => 59,
+      second    => 30,
+      time_zone => 'UTC'
+  );
 
 we will get different results when adding 1 minute than we get if we
 add 60 seconds.  This is because in this case, the last minute of the
@@ -3429,10 +3492,14 @@ more or less than 24 hours.
 
 For example, if you do this:
 
-  my $dt = DateTime->new( year => 2003, month => 4, day => 5,
-                          hour => 2,
-                          time_zone => 'America/Chicago',
-                        );
+  my $dt = DateTime->new(
+      year      => 2003,
+      month     => 4,
+      day       => 5,
+      hour      => 2,
+      time_zone => 'America/Chicago',
+  );
+
   $dt->add( days => 1 );
 
 then you will produce an I<invalid> local time, and therefore an
@@ -3440,10 +3507,14 @@ exception will be thrown.
 
 However, this works:
 
-  my $dt = DateTime->new( year => 2003, month => 4, day => 5,
-                          hour => 2,
-                          time_zone => 'America/Chicago',
-                        );
+  my $dt = DateTime->new(
+      year      => 2003,
+      month     => 4,
+      day       => 5,
+      hour      => 2,
+      time_zone => 'America/Chicago',
+  );
+
   $dt->add( hours => 24 );
 
 and produces a datetime with the local time of "03:00".
