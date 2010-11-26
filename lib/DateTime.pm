@@ -2507,9 +2507,9 @@ era name.
 
 =item * $dt->month()
 
-=item * $dt->mon()
-
 Returns the month of the year, from 1..12.
+
+Also available as C<< $dt->mon() >>.
 
 =item * $dt->month_name()
 
@@ -2521,22 +2521,18 @@ L<Locales|/Locales> section for more details.
 Returns the abbreviated name of the current month.  See the
 L<Locales|/Locales> section for more details.
 
-=item * $dt->day_of_month()
-
 =item * $dt->day()
-
-=item * $dt->mday()
 
 Returns the day of the month, from 1..31.
 
+Also available as C<< $dt->mday() >> and C<< $dt->day_of_month() >>.
+
 =item * $dt->day_of_week()
-
-=item * $dt->wday()
-
-=item * $dt->dow()
 
 Returns the day of the week as a number, from 1..7, with 1 being
 Monday and 7 being Sunday.
+
+Also available as C<< $dt->wday() >> and C<< $dt->dow() >>.
 
 =item * $dt->local_day_of_week()
 
@@ -2555,9 +2551,9 @@ L<Locales|/Locales> section for more details.
 
 =item * $dt->day_of_year()
 
-=item * $dt->doy()
-
 Returns the day of the year.
+
+Also available as C<< $dt->doy() >>.
 
 =item * $dt->quarter()
 
@@ -2575,9 +2571,9 @@ L<Locales|/Locales> section for more details.
 
 =item * $dt->day_of_quarter()
 
-=item * $dt->doq()
-
 Returns the day of the quarter.
+
+Also available as C<< $dt->doq() >>.
 
 =item * $dt->weekday_of_month()
 
@@ -2585,7 +2581,7 @@ Returns a number from 1..5 indicating which week day of the month this
 is.  For example, June 9, 2003 is the second Monday of the month, and
 so this method returns 2 for that day.
 
-=item * $dt->ymd( $optional_separator ) - also $dt->date(...)
+=item * $dt->ymd( $optional_separator )
 
 =item * $dt->mdy( $optional_separator )
 
@@ -2597,6 +2593,8 @@ days are 0-padded to two digits.
 
 By default, the values are separated by a dash (-), but this can be
 overridden by passing a value to the method.
+
+The C<< $dt->ymd() >> method is also available as C<< $dt->date() >>.
 
 =item * $dt->hour()
 
@@ -2621,16 +2619,16 @@ current hour.
 
 =item * $dt->minute()
 
-=item * $dt->min()
-
 Returns the minute of the hour, from 0..59.
+
+Also available as C<< $dt->min() >>.
 
 =item * $dt->second()
 
-=item * $dt->sec()
-
 Returns the second, from 0..61.  The values 60 and 61 are used for
 leap seconds.
+
+Also available as C<< $dt->sec() >>.
 
 =item * $dt->fractional_second()
 
@@ -2660,18 +2658,18 @@ Half a second is 500_000_000 nanoseconds.
 
 =item * $dt->hms( $optional_separator )
 
-=item * $dt->time( $optional_separator )
-
 Returns the hour, minute, and second, all zero-padded to two digits.
 If no separator is specified, a colon (:) is used by default.
 
-=item * $dt->datetime()
+Also available as C<< $dt->time() >>.
 
-=item * $dt->iso8601()
+=item * $dt->datetime()
 
 This method is equivalent to:
 
   $dt->ymd('-') . 'T' . $dt->hms(':')
+
+Also available as C<< $dt->iso8601() >>.
 
 =item * $dt->is_leap_year()
 
@@ -2797,7 +2795,7 @@ module.
 
 =item * $dt->is_finite()
 
-=item * $dt->is_infinite
+=item * $dt->is_infinite()
 
 These methods allow you to distinguish normal datetime objects from
 infinite ones.  Infinite datetime objects are documented in
@@ -2825,12 +2823,6 @@ always returns 0.
 =item * $dt->utc_rd_as_seconds()
 
 Returns the current UTC Rata Die days and seconds purely as seconds.
-This number ignores any fractional seconds stored in the object,
-as well as leap seconds.
-
-=item * $dt->local_rd_as_seconds() - deprecated
-
-Returns the current local Rata Die days and seconds purely as seconds.
 This number ignores any fractional seconds stored in the object,
 as well as leap seconds.
 
