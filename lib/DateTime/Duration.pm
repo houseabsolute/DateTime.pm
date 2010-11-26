@@ -359,13 +359,13 @@ __END__
 
 =head1 DESCRIPTION
 
-This is a simple class for representing duration objects.  These
+This is a simple class for representing duration objects. These
 objects are used whenever you do date math with DateTime.pm.
 
 See the L<How Date Math is Done|DateTime/"How Date Math is Done">
-section of the DateTime.pm documentation for more details.  The short
+section of the DateTime.pm documentation for more details. The short
 course:  One cannot in general convert between seconds, minutes, days,
-and months, so this class will never do so.  Instead, create the
+and months, so this class will never do so. Instead, create the
 duration with the desired units to begin with, for example by calling
 the appropriate subtraction/delta method on a C<DateTime.pm> object.
 
@@ -381,36 +381,36 @@ C<DateTime::Duration> has the following methods:
 =item * new( ... )
 
 This method takes the parameters "years", "months", "weeks", "days",
-"hours", "minutes", "seconds", "nanoseconds", and "end_of_month".  All
-of these except "end_of_month" are numbers.  If any of the numbers are
+"hours", "minutes", "seconds", "nanoseconds", and "end_of_month". All
+of these except "end_of_month" are numbers. If any of the numbers are
 negative, the entire duration is negative.
 
 All of the numbers B<must be integers>.
 
-Internally, years as just treated as 12 months.  Similarly, weeks are
-treated as 7 days, and hours are converted to minutes.  Seconds and
+Internally, years as just treated as 12 months. Similarly, weeks are
+treated as 7 days, and hours are converted to minutes. Seconds and
 nanoseconds are both treated separately.
 
 The "end_of_month" parameter must be either "wrap", "limit", or
-"preserve".  This parameter specifies how date math that crosses the
+"preserve". This parameter specifies how date math that crosses the
 end of a month is handled.
 
 In "wrap" mode, adding months or years that result in days beyond the
-end of the new month will roll over into the following month.  For
+end of the new month will roll over into the following month. For
 instance, adding one year to Feb 29 will result in Mar 1.
 
 If you specify "end_of_month" mode as "limit", the end of the month is
-never crossed.  Thus, adding one year to Feb 29, 2000 will result in
-Feb 28, 2001.  If you were to then add three more years this will
+never crossed. Thus, adding one year to Feb 29, 2000 will result in
+Feb 28, 2001. If you were to then add three more years this will
 result in Feb 28, 2004.
 
 If you specify "end_of_month" mode as "preserve", the same calculation
 is done as for "limit" except that if the original date is at the end
-of the month the new date will also be.  For instance, adding one
+of the month the new date will also be. For instance, adding one
 month to Feb 29, 2000 will result in Mar 31, 2000.
 
 For positive durations, the "end_of_month" parameter defaults to wrap.
-For negative durations, the default is "limit".  This should match how
+For negative durations, the default is "limit". This should match how
 most people "intuitively" expect datetime math to work.
 
 =item * clone
@@ -421,8 +421,8 @@ this method was called.
 =item * in_units( ... )
 
 Returns the length of the duration in the units (any of those that can
-be passed to L<new>) given as arguments.  All lengths are integral,
-but may be negative.  Smaller units are computed from what remains
+be passed to L<new>) given as arguments. All lengths are integral,
+but may be negative. Smaller units are computed from what remains
 after taking away the larger units given, so for example:
 
   my $dur = DateTime::Duration->new( years => 1, months => 15 );
@@ -434,7 +434,7 @@ after taking away the larger units given, so for example:
 
 
 The last example demonstrates that there will not be any conversion
-between units which don't have a fixed conversion rate.  The only
+between units which don't have a fixed conversion rate. The only
 conversions possible are:
 
 =over 8
@@ -457,7 +457,7 @@ Note that the numbers returned by this method may not match the values
 given to the constructor.
 
 In list context, in_units returns the lengths in the order of the units
-given.  In scalar context, it returns the length in the first unit (but
+given. In scalar context, it returns the length in the first unit (but
 still computes in terms of all given units).
 
 If you need more flexibility in presenting information about
@@ -491,7 +491,7 @@ and nanoseconds) and end of month mode as the current object.
 =item * inverse( ... )
 
 Returns a new object with the same deltas as the current object, but
-multiple by -1.  The end of month mode for the new object will be the
+multiple by -1. The end of month mode for the new object will be the
 default end of month mode, which depends on whether the new duration
 is positive or negative.
 
@@ -504,7 +504,7 @@ Adds or subtracts one duration from another.
 
 =item * add( ... ), subtract( ... )
 
-Syntactic sugar for addition and subtraction.  The parameters given to
+Syntactic sugar for addition and subtraction. The parameters given to
 these methods are used to create a new object, which is then passed to
 C<add_duration()> or C<subtract_duration()>, as appropriate.
 
@@ -516,13 +516,13 @@ Multiplies each unit in the by the specified number.
 
 This is a class method that can be used to compare or sort durations.
 Comparison is done by adding each duration to the specified
-C<DateTime.pm> object and comparing the resulting datetimes.  This is
+C<DateTime.pm> object and comparing the resulting datetimes. This is
 necessary because without a base, many durations are not comparable.
 For example, 1 month may or may not be longer than 29 days, depending
 on what datetime it is added to.
 
 If no base datetime is given, then the result of C<< DateTime->now >>
-is used instead.  Using this default will give non-repeatable results
+is used instead. Using this default will give non-repeatable results
 if used to compare two duration objects containing different units.
 It will also give non-repeatable results if the durations contain
 multiple types of units, such as months and days.
@@ -549,7 +549,7 @@ mostly useful for doing date math in L<DateTime>.
 These methods return numbers indicating how many of the given unit the
 object represents, after having done a conversion to any larger units.
 For example, days are first converted to weeks, and then the remainder
-is returned.  These numbers are always positive.
+is returned. These numbers are always positive.
 
 Here's what each method returns:
 
@@ -574,14 +574,14 @@ use the C<DateTime::Format::Duration> module.
 
 This class overloads addition, subtraction, and mutiplication.
 
-Comparison is B<not> overloaded.  If you attempt to compare durations
+Comparison is B<not> overloaded. If you attempt to compare durations
 using C<< <=> >> or C<cmp>, then an exception will be thrown!  Use the
 C<compare()> class method instead.
 
 =head1 SUPPORT
 
 Support for this module is provided via the datetime@perl.org email
-list.  See http://lists.perl.org/ for more details.
+list. See http://lists.perl.org/ for more details.
 
 =head1 SEE ALSO
 
