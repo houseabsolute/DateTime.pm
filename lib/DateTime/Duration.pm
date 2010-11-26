@@ -311,26 +311,30 @@ __END__
 
   use DateTime::Duration;
 
-  $d = DateTime::Duration->new( years   => 3,
-                                months  => 5,
-                                weeks   => 1,
-                                days    => 1,
-                                hours   => 6,
-                                minutes => 15,
-                                seconds => 45,
-                                nanoseconds => 12000 );
+  $d = DateTime::Duration->new(
+      years       => 3,
+      months      => 5,
+      weeks       => 1,
+      days        => 1,
+      hours       => 6,
+      minutes     => 15,
+      seconds     => 45,
+      nanoseconds => 12000
+  );
 
   # Convert to different units
   $d->in_units('days', 'hours', 'seconds');
 
-  # The important parts for date math
-  $d->delta_months
-  $d->delta_days
-  $d->delta_minutes
-  $d->delta_seconds
-  $d->delta_nanoseconds
-
-  my %deltas = $d->deltas
+  # Human-readable accessors, always positive, but consider using
+  # DateTime::Format::Duration instead
+  $d->years;
+  $d->months;
+  $d->weeks;
+  $d->days;
+  $d->hours;
+  $d->minutes;
+  $d->seconds;
+  $d->nanoseconds;
 
   $d->is_wrap_mode
   $d->is_limit_mode
@@ -348,17 +352,6 @@ __END__
   my $base_dt = DateTime->new( year => 2000 );
   my @sorted =
       sort { DateTime::Duration->compare( $a, $b, $base_dt ) } @durations;
-
-  # Human-readable accessors, always positive, but use
-  # DateTime::Format::Duration instead
-  $d->years;
-  $d->months;
-  $d->weeks;
-  $d->days;
-  $d->hours;
-  $d->minutes;
-  $d->seconds;
-  $d->nanoseconds;
 
   if ( $d->is_positive ) { ... }
   if ( $d->is_zero )     { ... }
@@ -470,17 +463,6 @@ still computes in terms of all given units).
 If you need more flexibility in presenting information about
 durations, please take a look a C<DateTime::Format::Duration>.
 
-=item * delta_months, delta_days, delta_minutes, delta_seconds, delta_nanoseconds
-
-These methods provide the information C<DateTime.pm> needs for doing
-date math.  The numbers returned may be positive or negative.
-
-=item * deltas
-
-Returns a hash with the keys "months", "days", "minutes", "seconds",
-and "nanoseconds", containing all the delta information for the
-object.
-
 =item * is_positive, is_zero, is_negative
 
 Indicates whether or not the duration is positive, zero, or negative.
@@ -549,6 +531,18 @@ However, if you know that both objects only consist of one type of
 unit (months I<or> days I<or> hours, etc.), and each duration contains
 the same type of unit, then the results of the comparison will be
 repeatable.
+
+=item * delta_months, delta_days, delta_minutes, delta_seconds, delta_nanoseconds
+
+These methods provide the information C<DateTime.pm> needs for doing date
+math. The numbers returned may be positive or negative. This is mostly useful
+for doing date math in L<DateTime>.
+
+=item * deltas
+
+Returns a hash with the keys "months", "days", "minutes", "seconds", and
+"nanoseconds", containing all the delta information for the object. This is
+mostly useful for doing date math in L<DateTime>.
 
 =item * years, months, weeks, days, hours, minutes, seconds, nanoseconds
 
