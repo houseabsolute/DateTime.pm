@@ -2262,7 +2262,7 @@ This class method accepts parameters for each date and time component:
 It also accepts "locale", "time_zone", and "formatter" parameters.
 
   my $dt = DateTime->new(
-      year       => 1066,
+      year       => 1966,
       month      => 10,
       day        => 25,
       hour       => 7,
