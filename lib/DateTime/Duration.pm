@@ -311,7 +311,7 @@ __END__
 
   use DateTime::Duration;
 
-  $d = DateTime::Duration->new(
+  $dur = DateTime::Duration->new(
       years       => 3,
       months      => 5,
       weeks       => 1,
@@ -322,28 +322,27 @@ __END__
       nanoseconds => 12000
   );
 
-  # Convert to different units
-  $d->in_units('days', 'hours', 'seconds');
+  my ( $days, $hours, $seconds ) = $dur->in_units('days', 'hours', 'seconds');
 
   # Human-readable accessors, always positive, but consider using
   # DateTime::Format::Duration instead
-  $d->years;
-  $d->months;
-  $d->weeks;
-  $d->days;
-  $d->hours;
-  $d->minutes;
-  $d->seconds;
-  $d->nanoseconds;
+  $dur->years;
+  $dur->months;
+  $dur->weeks;
+  $dur->days;
+  $dur->hours;
+  $dur->minutes;
+  $dur->seconds;
+  $dur->nanoseconds;
 
-  $d->is_wrap_mode
-  $d->is_limit_mode
-  $d->is_preserve_mode
+  $dur->is_wrap_mode
+  $dur->is_limit_mode
+  $dur->is_preserve_mode
 
-  print $d->end_of_month_mode;
+  print $dur->end_of_month_mode;
 
-  # Multiple all deltas by -1
-  my $opposite = $d->inverse;
+  # Multiply all values by -1
+  my $opposite = $dur->inverse;
 
   my $bigger  = $dur1 + $dur2;
   my $smaller = $dur1 - $dur2; # the result could be negative
@@ -353,9 +352,9 @@ __END__
   my @sorted =
       sort { DateTime::Duration->compare( $a, $b, $base_dt ) } @durations;
 
-  if ( $d->is_positive ) { ... }
-  if ( $d->is_zero )     { ... }
-  if ( $d->is_negative ) { ... }
+  if ( $dur->is_positive ) { ... }
+  if ( $dur->is_zero )     { ... }
+  if ( $dur->is_negative ) { ... }
 
 =head1 DESCRIPTION
 
@@ -431,7 +430,6 @@ after taking away the larger units given, so for example:
   $dur->in_units( 'months' );           # 27
   $dur->in_units( 'years', 'months' );  # (2, 3)
   $dur->in_units( 'weeks', 'days' );    # (0, 0) !
-
 
 The last example demonstrates that there will not be any conversion
 between units which don't have a fixed conversion rate. The only
