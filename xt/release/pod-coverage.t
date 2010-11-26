@@ -16,7 +16,19 @@ my %trustme = (
         trustme => [
             qr/0$/, qr/^STORABLE/, 'utc_year',
             'timegm',
-
+            qw(
+                day_of_month
+                doq
+                dow
+                doy
+                iso8601
+                local_rd_as_seconds
+                mday
+                min
+                mon
+                sec
+                wday
+                ),
             # deprecated methods
             'DefaultLanguage', 'era', 'language',
         ]
