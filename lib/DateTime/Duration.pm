@@ -447,8 +447,8 @@ conversions possible are:
 
 =back
 
-For the explanation of why this happens, please see the L<How Datetime Math
-Works|DateTime/"How DateTime Math Works"> section of the DateTime.pm
+For the explanation of why this is the case, please see the L<How Datetime
+Math Works|DateTime/"How DateTime Math Works"> section of the DateTime.pm
 documentation
 
 Note that the numbers returned by this method may not match the values
