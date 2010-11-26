@@ -25,11 +25,9 @@ sub _seconds_as_components {
 }
 
 sub _stringify {
-    (
-        $_[0]->{utc_rd_days} == DateTime::INFINITY
+    $_[0]->{utc_rd_days} == DateTime::INFINITY
         ? DateTime::INFINITY . ''
-        : DateTime::NEG_INFINITY . ''
-    );
+        : DateTime::NEG_INFINITY . '';
 }
 
 sub STORABLE_freeze {return}
