@@ -85,8 +85,8 @@ __END__
 
 =head1 SYNOPSIS
 
-  my $future = DateTime::Infinite::Future->new;
-  my $past   = DateTime::Infinite::Past->new;
+  my $future = DateTime::Infinite::Future->new();
+  my $past   = DateTime::Infinite::Past->new();
 
 =head1 DESCRIPTION
 
@@ -99,19 +99,19 @@ changed.
 =head1 BUGS
 
 There seem to be lots of problems when dealing with infinite numbers
-on Win32.  This may be a problem with this code, Perl, or Win32's IEEE
-math implementation.  Either way, the module may not be well-behaved
+on Win32. This may be a problem with this code, Perl, or Win32's IEEE
+math implementation. Either way, the module may not be well-behaved
 on Win32 operating systems.
 
 =head1 METHODS
 
 The only constructor for these two classes is the C<new()> method, as
-shown in the L<SYNOPSIS|/SYNOPSIS>.  This method takes no parameters.
+shown in the L<SYNOPSIS|/SYNOPSIS>. This method takes no parameters.
 
 All "get" methods in this module simply return infinity, positive or
-negative.  If the method is expected to return a string, it return the
+negative. If the method is expected to return a string, it return the
 string representation of positive or negative infinity used by your
-system.  For example, on my system calling C<year()> returns a number
+system. For example, on my system calling C<year()> returns a number
 which when printed appears either "inf" or "-inf".
 
 The object is not mutable, so the C<set()>, C<set_time_zone()>, and
