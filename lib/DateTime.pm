@@ -3579,214 +3579,6 @@ If you provide a formatter class name or object, it must implement a
 C<format_datetime> method. This method will be called with just the
 DateTime object as its argument.
 
-=head2 strftime Patterns
-
-The following patterns are allowed in the format string given to the
-C<< $dt->strftime() >> method:
-
-=over 4
-
-=item * %a
-
-The abbreviated weekday name.
-
-=item * %A
-
-The full weekday name.
-
-=item * %b
-
-The abbreviated month name.
-
-=item * %B
-
-The full month name.
-
-=item * %c
-
-The default datetime format for the object's locale.
-
-=item * %C
-
-The century number (year/100) as a 2-digit integer.
-
-=item * %d
-
-The day of the month as a decimal number (range 01 to 31).
-
-=item * %D
-
-Equivalent to %m/%d/%y. This is not a good standard format if you
-want folks from both the United States and the rest of the world to
-understand the date!
-
-=item * %e
-
-Like %d, the day of the month as a decimal number, but a leading zero
-is replaced by a space.
-
-=item * %F
-
-Equivalent to %Y-%m-%d (the ISO 8601 date format)
-
-=item * %G
-
-The ISO 8601 year with century as a decimal number. The 4-digit year
-corresponding to the ISO week number (see %V). This has the same
-format and value as %Y, except that if the ISO week number belongs to
-the previous or next year, that year is used instead. (TZ)
-
-=item * %g
-
-Like %G, but without century, i.e., with a 2-digit year (00-99).
-
-=item * %h
-
-Equivalent to %b.
-
-=item * %H
-
-The hour as a decimal number using a 24-hour clock (range 00 to 23).
-
-=item * %I
-
-The hour as a decimal number using a 12-hour clock (range 01 to 12).
-
-=item * %j
-
-The day of the year as a decimal number (range 001 to 366).
-
-=item * %k
-
-The hour (24-hour clock) as a decimal number (range 0 to 23); single
-digits are preceded by a blank. (See also %H.)
-
-=item * %l
-
-The hour (12-hour clock) as a decimal number (range 1 to 12); single
-digits are preceded by a blank. (See also %I.)
-
-=item * %m
-
-The month as a decimal number (range 01 to 12).
-
-=item * %M
-
-The minute as a decimal number (range 00 to 59).
-
-=item * %n
-
-A newline character.
-
-=item * %N
-
-The fractional seconds digits. Default is 9 digits (nanoseconds).
-
-  %3N   milliseconds (3 digits)
-  %6N   microseconds (6 digits)
-  %9N   nanoseconds  (9 digits)
-
-=item * %p
-
-Either `AM' or `PM' according to the given time value, or the
-corresponding strings for the current locale. Noon is treated as `pm'
-and midnight as `am'.
-
-=item * %P
-
-Like %p but in lowercase: `am' or `pm' or a corresponding string for
-the current locale.
-
-=item * %r
-
-The time in a.m. or p.m. notation. In the POSIX locale this is
-equivalent to `%I:%M:%S %p'.
-
-=item * %R
-
-The time in 24-hour notation (%H:%M). (SU) For a version including the
-seconds, see %T below.
-
-=item * %s
-
-The number of seconds since the epoch.
-
-=item * %S
-
-The second as a decimal number (range 00 to 61).
-
-=item * %t
-
-A tab character.
-
-=item * %T
-
-The time in 24-hour notation (%H:%M:%S).
-
-=item * %u
-
-The day of the week as a decimal, range 1 to 7, Monday being 1. See
-also %w.
-
-=item * %U
-
-The week number of the current year as a decimal number, range 00 to
-53, starting with the first Sunday as the first day of week 01. See
-also %V and %W.
-
-=item * %V
-
-The ISO 8601:1988 week number of the current year as a decimal number,
-range 01 to 53, where week 1 is the first week that has at least 4
-days in the current year, and with Monday as the first day of the
-week. See also %U and %W.
-
-=item * %w
-
-The day of the week as a decimal, range 0 to 6, Sunday being 0. See
-also %u.
-
-=item * %W
-
-The week number of the current year as a decimal number, range 00 to
-53, starting with the first Monday as the first day of week 01.
-
-=item * %x
-
-The default date format for the object's locale.
-
-=item * %X
-
-The default time format for the object's locale.
-
-=item * %y
-
-The year as a decimal number without a century (range 00 to 99).
-
-=item * %Y
-
-The year as a decimal number including the century.
-
-=item * %z
-
-The time-zone as hour offset from UTC. Required to emit
-RFC822-conformant dates (using "%a, %d %b %Y %H:%M:%S %z").
-
-=item * %Z
-
-The time zone or name or abbreviation.
-
-=item * %%
-
-A literal `%' character.
-
-=item * %{method}
-
-Any method name may be specified using the format C<%{method}> name
-where "method" is a valid C<DateTime.pm> object method.
-
-=back
-
 =head2 CLDR Patterns
 
 The CLDR pattern language is both more powerful and more complex than
@@ -4058,6 +3850,214 @@ The time zone short name.
 =item * VVVV
 
 The time zone long name.
+
+=back
+
+=head2 strftime Patterns
+
+The following patterns are allowed in the format string given to the
+C<< $dt->strftime() >> method:
+
+=over 4
+
+=item * %a
+
+The abbreviated weekday name.
+
+=item * %A
+
+The full weekday name.
+
+=item * %b
+
+The abbreviated month name.
+
+=item * %B
+
+The full month name.
+
+=item * %c
+
+The default datetime format for the object's locale.
+
+=item * %C
+
+The century number (year/100) as a 2-digit integer.
+
+=item * %d
+
+The day of the month as a decimal number (range 01 to 31).
+
+=item * %D
+
+Equivalent to %m/%d/%y. This is not a good standard format if you
+want folks from both the United States and the rest of the world to
+understand the date!
+
+=item * %e
+
+Like %d, the day of the month as a decimal number, but a leading zero
+is replaced by a space.
+
+=item * %F
+
+Equivalent to %Y-%m-%d (the ISO 8601 date format)
+
+=item * %G
+
+The ISO 8601 year with century as a decimal number. The 4-digit year
+corresponding to the ISO week number (see %V). This has the same
+format and value as %Y, except that if the ISO week number belongs to
+the previous or next year, that year is used instead. (TZ)
+
+=item * %g
+
+Like %G, but without century, i.e., with a 2-digit year (00-99).
+
+=item * %h
+
+Equivalent to %b.
+
+=item * %H
+
+The hour as a decimal number using a 24-hour clock (range 00 to 23).
+
+=item * %I
+
+The hour as a decimal number using a 12-hour clock (range 01 to 12).
+
+=item * %j
+
+The day of the year as a decimal number (range 001 to 366).
+
+=item * %k
+
+The hour (24-hour clock) as a decimal number (range 0 to 23); single
+digits are preceded by a blank. (See also %H.)
+
+=item * %l
+
+The hour (12-hour clock) as a decimal number (range 1 to 12); single
+digits are preceded by a blank. (See also %I.)
+
+=item * %m
+
+The month as a decimal number (range 01 to 12).
+
+=item * %M
+
+The minute as a decimal number (range 00 to 59).
+
+=item * %n
+
+A newline character.
+
+=item * %N
+
+The fractional seconds digits. Default is 9 digits (nanoseconds).
+
+  %3N   milliseconds (3 digits)
+  %6N   microseconds (6 digits)
+  %9N   nanoseconds  (9 digits)
+
+=item * %p
+
+Either `AM' or `PM' according to the given time value, or the
+corresponding strings for the current locale. Noon is treated as `pm'
+and midnight as `am'.
+
+=item * %P
+
+Like %p but in lowercase: `am' or `pm' or a corresponding string for
+the current locale.
+
+=item * %r
+
+The time in a.m. or p.m. notation. In the POSIX locale this is
+equivalent to `%I:%M:%S %p'.
+
+=item * %R
+
+The time in 24-hour notation (%H:%M). (SU) For a version including the
+seconds, see %T below.
+
+=item * %s
+
+The number of seconds since the epoch.
+
+=item * %S
+
+The second as a decimal number (range 00 to 61).
+
+=item * %t
+
+A tab character.
+
+=item * %T
+
+The time in 24-hour notation (%H:%M:%S).
+
+=item * %u
+
+The day of the week as a decimal, range 1 to 7, Monday being 1. See
+also %w.
+
+=item * %U
+
+The week number of the current year as a decimal number, range 00 to
+53, starting with the first Sunday as the first day of week 01. See
+also %V and %W.
+
+=item * %V
+
+The ISO 8601:1988 week number of the current year as a decimal number,
+range 01 to 53, where week 1 is the first week that has at least 4
+days in the current year, and with Monday as the first day of the
+week. See also %U and %W.
+
+=item * %w
+
+The day of the week as a decimal, range 0 to 6, Sunday being 0. See
+also %u.
+
+=item * %W
+
+The week number of the current year as a decimal number, range 00 to
+53, starting with the first Monday as the first day of week 01.
+
+=item * %x
+
+The default date format for the object's locale.
+
+=item * %X
+
+The default time format for the object's locale.
+
+=item * %y
+
+The year as a decimal number without a century (range 00 to 99).
+
+=item * %Y
+
+The year as a decimal number including the century.
+
+=item * %z
+
+The time-zone as hour offset from UTC. Required to emit
+RFC822-conformant dates (using "%a, %d %b %Y %H:%M:%S %z").
+
+=item * %Z
+
+The time zone or name or abbreviation.
+
+=item * %%
+
+A literal `%' character.
+
+=item * %{method}
+
+Any method name may be specified using the format C<%{method}> name
+where "method" is a valid C<DateTime.pm> object method.
 
 =back
 
