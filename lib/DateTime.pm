@@ -2334,6 +2334,8 @@ The "formatter" can be either a scalar or an object, but the class
 specified by the scalar or the object must implement a
 C<format_datetime()> method.
 
+=back
+
 =head4 Parsing Dates
 
 B<This module does not parse dates!> That means there is no
@@ -2391,6 +2393,8 @@ no 02:00:00 through 02:59:59 on April 6!
 
 Attempting to create an invalid time currently causes a fatal error.
 This may change in future version of this module.
+
+=over 4
 
 =item * DateTime->from_epoch( epoch => $epoch, ... )
 
