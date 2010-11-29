@@ -4130,8 +4130,8 @@ Support for this module is provided via the datetime@perl.org email list. See
 http://datetime.perl.org/wiki/datetime/page/Mailing_List for details.
 
 Please submit bugs to the CPAN RT system at
-http://rt.cpan.org/NoAuth/ReportBug.html?Queue=datetime or via email
-at bug-datetime@rt.cpan.org.
+http://rt.cpan.org/NoAuth/Bugs.html?Dist=DateTime or via email at
+bug-datetime@rt.cpan.org.
 
 =head1 DONATIONS
 
