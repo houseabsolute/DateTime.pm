@@ -2220,8 +2220,8 @@ datetimes.
 
 =head2 Math
 
-If you are going to be using doing date math, please read the section
-L<How Datetime Math is Done>.
+If you are going to be using doing date math, please read the section L<How
+Datetime Math Works>.
 
 =head2 Time Zone Warnings
 
