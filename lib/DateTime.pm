@@ -3828,12 +3828,12 @@ The time zone long name.
 
 =item * Z{1,3}
 
-The time zone short name and the offset as one string, so something
-like "CDT-0500".
+The time zone offset.
 
 =item * ZZZZ
 
-The time zone long name.
+The time zone short name and the offset as one string, so something
+like "CDT-0500".
 
 =item * v{1,3}
 
