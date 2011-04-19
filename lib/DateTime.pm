@@ -904,18 +904,10 @@ sub week_number { ( $_[0]->week )[1] }
 # ISO says that the first week of a year is the first week containing
 # a Thursday. Extending that says that the first week of the month is
 # the first week containing a Thursday. ICU agrees.
-#
-# Algorithm supplied by Rick Measham, who doesn't understand how it
-# works. Neither do I. Please feel free to explain this to me!
 sub week_of_month {
     my $self = shift;
-
-    # Faster than cloning just to get the dow
-    my $first_wday_of_month = ( 8 - ( $self->day - $self->dow ) % 7 ) % 7;
-    $first_wday_of_month = 7 unless $first_wday_of_month;
-
-    my $wom = int( ( $self->day + $first_wday_of_month - 2 ) / 7 );
-    return ( $first_wday_of_month <= 4 ) ? $wom + 1 : $wom;
+    my $thu  = $self->day + 4 - $self->day_of_week;
+    return int( ( $thu + 6 ) / 7 );
 }
 
 sub time_zone {
