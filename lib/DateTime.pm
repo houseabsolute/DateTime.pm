@@ -198,7 +198,7 @@ sub new {
 
     Carp::croak(
         "Invalid day of month (day = $p{day} - month = $p{month} - year = $p{year})\n"
-    ) if $p{day} > $class->_month_length( $p{year}, $p{month} );
+    ) if $p{day} > 28 && $p{day} > $class->_month_length( $p{year}, $p{month} );
 
     return $class->_new(%p);
 }
