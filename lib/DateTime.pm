@@ -618,18 +618,19 @@ sub from_day_of_year {
     my $class = shift;
     my %p = validate( @_, $FromDayOfYearValidate );
 
-    my $is_leap_year = $class->_is_leap_year( $p{year} );
-
     Carp::croak("$p{year} is not a leap year.\n")
-        if $p{day_of_year} == 366 && !$is_leap_year;
+        if $p{day_of_year} == 366 && !$class->_is_leap_year( $p{year} );
 
     my $month = 1;
     my $day   = delete $p{day_of_year};
 
-    while ( $month <= 12 && $day > $class->_month_length( $p{year}, $month ) )
-    {
-        $day -= $class->_month_length( $p{year}, $month );
-        $month++;
+    if ($day > 31) {
+        my $dim = $class->_month_length( $p{year}, $month );
+        while ($day > $dim) {
+            $day -= $dim;
+            $month++;
+            $dim = $class->_month_length( $p{year}, $month );
+        }
     }
 
     return $class->_new(
