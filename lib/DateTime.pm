@@ -1007,13 +1007,9 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
         't' => sub {"\t"},
         'T' => sub { $_[0]->strftime('%H:%M:%S') },
         'u' => sub { $_[0]->day_of_week },
-
-        # algorithm from Date::Format::wkyr
         'U' => sub {
-            my $dow = $_[0]->day_of_week;
-            $dow = 0 if $dow == 7;    # convert to 0-6, Sun-Sat
-            my $doy = $_[0]->day_of_year - 1;
-            return sprintf( '%02d', int( ( $doy - $dow + 13 ) / 7 - 1 ) );
+            my $sun = $_[0]->day_of_year - ($_[0]->day_of_week + 7) % 7;
+            return sprintf( '%02d', int( ( $sun + 6 ) / 7) );
         },
         'V' => sub { sprintf( '%02d', $_[0]->week_number ) },
         'w' => sub {
@@ -1021,9 +1017,8 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
             return $dow % 7;
         },
         'W' => sub {
-            my $dow = $_[0]->day_of_week;
-            my $doy = $_[0]->day_of_year - 1;
-            return sprintf( '%02d', int( ( $doy - $dow + 13 ) / 7 - 1 ) );
+            my $mon = $_[0]->day_of_year - ($_[0]->day_of_week + 6) % 7;
+            return sprintf( '%02d', int( ( $mon + 6 ) / 7 ) );
         },
         'x' => sub {
             $_[0]->format_cldr( $_[0]->{locale}->date_format_default() );
