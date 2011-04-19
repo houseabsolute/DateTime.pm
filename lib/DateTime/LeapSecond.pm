@@ -125,8 +125,8 @@ __END__
   use DateTime::LeapSecond;
 
   print "Leap seconds between years 1990 and 2000 are ";
-  print Date::Leapsecond::leap_seconds( $utc_rd_2000 ) -
-        Date::Leapsecond::leap_seconds( $utc_rd_1990 );
+  print DateTime::Leapsecond::leap_seconds( $utc_rd_2000 ) -
+        DateTime::Leapsecond::leap_seconds( $utc_rd_1990 );
 
 =head1 DESCRIPTION
 
