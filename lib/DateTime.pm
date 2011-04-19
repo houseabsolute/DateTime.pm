@@ -888,15 +888,15 @@ sub week {
     return @{ $self->{local_c} }{ 'week_year', 'week_number' };
 }
 
-# Also from DateCalc.c
 sub _weeks_in_year {
     my $self = shift;
     my $year = shift;
 
-    my $jan_one_dow = ( ( $self->_ymd2rd( $year, 1,  1 ) + 6 ) % 7 ) + 1;
-    my $dec_31_dow  = ( ( $self->_ymd2rd( $year, 12, 31 ) + 6 ) % 7 ) + 1;
+    my $dow = $self->_ymd2rd( $year, 1, 1 ) % 7; # Sun=0
 
-    return $jan_one_dow == 4 || $dec_31_dow == 4 ? 53 : 52;
+    # All years starting with Thursday, and leap years starting with Wednesday 
+    # has 53 weeks.
+    return ($dow == 4 || ($dow == 3 && $self->_is_leap_year($year))) ? 53 : 52;
 }
 
 sub week_year   { ( $_[0]->week )[0] }
