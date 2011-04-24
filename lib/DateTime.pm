@@ -198,7 +198,9 @@ sub new {
 
     Carp::croak(
         "Invalid day of month (day = $p{day} - month = $p{month} - year = $p{year})\n"
-    ) if $p{day} > 28 && $p{day} > $class->_month_length( $p{year}, $p{month} );
+        )
+        if $p{day} > 28
+            && $p{day} > $class->_month_length( $p{year}, $p{month} );
 
     return $class->_new(%p);
 }
@@ -624,12 +626,13 @@ sub from_day_of_year {
     my $month = 1;
     my $day   = delete $p{day_of_year};
 
-    if ($day > 31) {
-        my $dim = $class->_month_length( $p{year}, $month );
-        while ($day > $dim) {
-            $day -= $dim;
+    if ( $day > 31 ) {
+        my $length = $class->_month_length( $p{year}, $month );
+
+        while ( $day > $length ) {
+            $day -= $length;
             $month++;
-            $dim = $class->_month_length( $p{year}, $month );
+            $length = $class->_month_length( $p{year}, $month );
         }
     }
 
@@ -892,11 +895,13 @@ sub _weeks_in_year {
     my $self = shift;
     my $year = shift;
 
-    my $dow = $self->_ymd2rd( $year, 1, 1 ) % 7; # Sun=0
+    my $dow = $self->_ymd2rd( $year, 1, 1 ) % 7;
 
-    # All years starting with Thursday, and leap years starting with Wednesday 
-    # has 53 weeks.
-    return ($dow == 4 || ($dow == 3 && $self->_is_leap_year($year))) ? 53 : 52;
+    # Tears starting with a Thursday and leap years starting with a Wednesday
+    # have 53 weeks.
+    return ( $dow == 4 || ( $dow == 3 && $self->_is_leap_year($year) ) )
+        ? 53
+        : 52;
 }
 
 sub week_year   { ( $_[0]->week )[0] }
@@ -1001,8 +1006,8 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
         'T' => sub { $_[0]->strftime('%H:%M:%S') },
         'u' => sub { $_[0]->day_of_week },
         'U' => sub {
-            my $sun = $_[0]->day_of_year - ($_[0]->day_of_week + 7) % 7;
-            return sprintf( '%02d', int( ( $sun + 6 ) / 7) );
+            my $sun = $_[0]->day_of_year - ( $_[0]->day_of_week + 7 ) % 7;
+            return sprintf( '%02d', int( ( $sun + 6 ) / 7 ) );
         },
         'V' => sub { sprintf( '%02d', $_[0]->week_number ) },
         'w' => sub {
@@ -1010,7 +1015,7 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
             return $dow % 7;
         },
         'W' => sub {
-            my $mon = $_[0]->day_of_year - ($_[0]->day_of_week + 6) % 7;
+            my $mon = $_[0]->day_of_year - ( $_[0]->day_of_week + 6 ) % 7;
             return sprintf( '%02d', int( ( $mon + 6 ) / 7 ) );
         },
         'x' => sub {
