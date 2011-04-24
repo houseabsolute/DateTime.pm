@@ -7,6 +7,7 @@ use warnings;
 
 use Carp;
 use DateTime::Helpers;
+use Math::Round qw( nearest round );
 
 BEGIN {
     my $loaded = 0;
@@ -816,16 +817,9 @@ sub nanosecond {
     return $_[0]->{rd_nanosecs};
 }
 
-sub millisecond { _round( $_[0]->{rd_nanosecs} / 1000000 ) }
+sub millisecond { round( $_[0]->{rd_nanosecs} / 1000000 ) }
 
-sub microsecond { _round( $_[0]->{rd_nanosecs} / 1000 ) }
-
-sub _round {
-    my $val = shift;
-    my $int = int $val;
-
-    return $val - $int >= 0.5 ? $int + 1 : $int;
-}
+sub microsecond { round( $_[0]->{rd_nanosecs} / 1000 ) }
 
 sub leap_seconds {
     my $self = shift;
@@ -1307,17 +1301,12 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
 }
 
 sub _format_nanosecs {
-    my $self      = shift;
-    my $precision = shift;
+    my $self = shift;
+    my $precision = @_ ? shift : 9;
 
-    my $ret = sprintf( "%09d", $self->{rd_nanosecs} );
-    return $ret unless $precision;    # default = 9 digits
+    my $divide_by = 10**( 9 - $precision );
 
-    # rd_nanosecs might contain a fractional separator
-    my ( $int, $frac ) = split /[.,]/, $self->{rd_nanosecs};
-    $ret .= $frac if $frac;
-
-    return substr( $ret, 0, $precision );
+    return round( $self->{rd_nanosecs} / $divide_by );
 }
 
 sub epoch {
