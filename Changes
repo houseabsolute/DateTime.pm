@@ -9,7 +9,7 @@
 - The %W strftime specifier was off by one in years where January 1st was a
   Sunday or Monday. Patch by Christian Hansen. RT #67631.
 
-- Some smal optimizations from Christian Hansen. The biggest impact is for
+- Some small optimizations from Christian Hansen. The biggest impact is for
   calculating week_of_month, week_number, and week_year.
 
 - This distro now requires Perl 5.8.1+ (it implicitly did this anyway now that
