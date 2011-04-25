@@ -486,16 +486,18 @@ sub _utc_hms {
         my %p = validate( @_, $spec );
 
         my %args;
+        # Epoch may come from Time::HiRes, so it may not be an integer.
+        my ( $int, $dec ) = split /[.,]/, $p{epoch};
 
-        # Because epoch may come from Time::HiRes
-        my $fraction = $p{epoch} - int( $p{epoch} );
-        $args{nanosecond} = int( $fraction * MAX_NANOSECONDS )
-            if $fraction;
+        $dec /= 100;
+
+        $args{nanosecond} = int( $dec * MAX_NANOSECONDS )
+            if $dec;
 
         # Note, for very large negative values this may give a
         # blatantly wrong answer.
         @args{qw( second minute hour day month year )}
-            = ( gmtime( int delete $p{epoch} ) )[ 0 .. 5 ];
+            = ( gmtime($int) )[ 0 .. 5 ];
         $args{year} += 1900;
         $args{month}++;
 
