@@ -1,5 +1,13 @@
 {{$NEXT}}
 
+- The tests for %N in the last release relied on the vagaries of floating
+  point math on a 64-bit system. Now the from_epoch() method just uses string
+  operations to separate the epoch into an integer value and a mantissa. This
+  avoids floating point insanity.
+
+
+0.67   2011-04-24
+
 - The %N strftime specifier simply truncated nanoseconds, rather than rounding
   them. Reported by Michael R. Davis. RT #66744.
 
