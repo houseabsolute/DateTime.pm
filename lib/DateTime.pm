@@ -487,9 +487,10 @@ sub _utc_hms {
 
         my %args;
         # Epoch may come from Time::HiRes, so it may not be an integer.
-        my ( $int, $dec ) = split /[.,]/, $p{epoch};
+        my ( $int, $dec ) = $p{epoch} =~ /^(-?\d+)?(\.\d+)?/;
+        $int ||= 0;
 
-        $args{nanosecond} = int( ( '.' . $dec ) * MAX_NANOSECONDS )
+        $args{nanosecond} = int( $dec * MAX_NANOSECONDS )
             if $dec;
 
         # Note, for very large negative values this may give a
