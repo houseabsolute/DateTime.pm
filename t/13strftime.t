@@ -159,6 +159,17 @@ while ( defined( my $line = <DATA> ) ) {
     }
 }
 
+{
+    my $dt = DateTime->new( year => 2011 );
+
+    for my $i (1..9) {
+        my $spec = '%' . $i . 'N';
+        my $expect = '0' x$i;
+
+        is( $dt->strftime($spec), $expect, "strftime $spec with 0 nanoseconds" );
+    }
+}
+
 done_testing();
 
 # add these if we do roman-numeral stuff
