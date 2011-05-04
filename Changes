@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- When a DateTime object had nanoseconds == 0, the %N strftime specifier
+  always returned "0" regardless of the precision requested. Reported by John
+  Siracusa. RT #67928.
+
+
 0.68   2011-04-25
 
 - The tests for %N in the last release relied on the vagaries of floating
