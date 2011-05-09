@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Really fix %N, finally. This was breaking the DateTime::Event::Recurrence
+  test suite. Patch by Dagfinn Ilmari Mannsåker.
+
+
 0.69   2011-05-03
 
 - When a DateTime object had nanoseconds == 0, the %N strftime specifier
