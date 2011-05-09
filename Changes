@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.69   2011-05-03
+
 - When a DateTime object had nanoseconds == 0, the %N strftime specifier
   always returned "0" regardless of the precision requested. Reported by John
   Siracusa. RT #67928.
