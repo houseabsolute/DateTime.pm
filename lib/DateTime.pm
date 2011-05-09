@@ -1298,14 +1298,12 @@ sub _format_nanosecs {
     my $self = shift;
     my $precision = @_ ? shift : 9;
 
-    if ( $self->{rd_nanosecs} ) {
-        my $divide_by = 10**( 9 - $precision );
+    my $divide_by = 10**( 9 - $precision );
 
-        return round( $self->{rd_nanosecs} / $divide_by );
-    }
-    else {
-        return '0' x $precision;
-    }
+    return sprintf(
+        '%0' . $precision . 'u',
+        round( $self->{rd_nanosecs} / $divide_by )
+    );
 }
 
 sub epoch {
