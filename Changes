@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.70   2011-05-09
+
 - Really fix %N, finally. This was breaking the DateTime::Event::Recurrence
   test suite. Patch by Dagfinn Ilmari Mannsåker.
 
