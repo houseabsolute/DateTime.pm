@@ -12,7 +12,7 @@ require XSLoader;
 my $orig = \&XSLoader::load;
 
 my $sub = sub {
-    if ( $_[0] eq 'DateTime' ) {
+    if ( defined $_[0] && $_[0] eq 'DateTime' ) {
         die q{Can't locate loadable object for module DateTime in @INC};
     }
     else {
