@@ -75,7 +75,6 @@ PROTOTYPES: ENABLE
 
 void
 _rd2ymd(self, d, extra = 0)
-     SV* self;
      IV d;
      IV extra;
 
@@ -145,7 +144,6 @@ _rd2ymd(self, d, extra = 0)
 
 void
 _ymd2rd(self, y, m, d)
-     SV* self;
      IV y;
      IV m;
      IV d;
@@ -179,7 +177,6 @@ _ymd2rd(self, y, m, d)
 
 void
 _seconds_as_components(self, secs, utc_secs = 0, secs_modifier = 0)
-     SV* self;
      IV secs;
      IV utc_secs;
      IV secs_modifier;
@@ -220,7 +217,6 @@ _seconds_as_components(self, secs, utc_secs = 0, secs_modifier = 0)
 #ifdef isfinite
 void
 _normalize_tai_seconds(self, days, secs)
-     SV* self;
      SV* days;
      SV* secs;
 
@@ -245,7 +241,6 @@ _normalize_tai_seconds(self, days, secs)
 
 void
 _normalize_leap_seconds(self, days, secs)
-     SV* self;
      SV* days;
      SV* secs;
 
@@ -278,7 +273,6 @@ _normalize_leap_seconds(self, days, secs)
 
 void
 _time_as_seconds(self, h, m, s)
-     SV* self;
      IV h;
      IV m;
      IV s;
@@ -289,7 +283,6 @@ _time_as_seconds(self, h, m, s)
 
 void
 _is_leap_year(self, y)
-     SV* self;
      IV y;
 
      PPCODE:
@@ -298,7 +291,6 @@ _is_leap_year(self, y)
 
 void
 _day_length(self, utc_rd)
-     SV* self;
      IV utc_rd;
 
      PPCODE:
@@ -310,7 +302,6 @@ _day_length(self, utc_rd)
 
 void
 _day_has_leap_second(self, utc_rd)
-     SV* self;
      IV utc_rd;
 
      PPCODE:
@@ -322,7 +313,6 @@ _day_has_leap_second(self, utc_rd)
 
 void
 _accumulated_leap_seconds(self, utc_rd)
-     SV* self;
      IV utc_rd;
 
      PPCODE:
