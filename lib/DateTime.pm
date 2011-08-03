@@ -2038,7 +2038,8 @@ sub STORABLE_thaw {
     return $self;
 }
 
-package DateTime::_Thawed;
+package
+    DateTime::_Thawed;
 
 sub utc_rd_values { @{ $_[0]->{utc_vals} } }
 
