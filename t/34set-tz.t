@@ -33,7 +33,7 @@ use DateTime;
     is( $dt->minute, 59, 'local minute should be 59 (1934-02-25 23:59:59)' );
     is( $dt->second, 59, 'local second should be 59 (1934-02-25 23:59:59)' );
 
-    is( $dt->is_dst, 0,     'is_dst should be 0 (1934-02-25 23:59:59)' );
+    ok( !$dt->is_dst, 'is_dst should be false (1934-02-25 23:59:59)' );
     is( $dt->offset, -3600, 'offset should be -3600 (1934-02-25 23:59:59)' );
 }
 
