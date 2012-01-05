@@ -420,7 +420,7 @@ this method was called.
 =item * in_units( ... )
 
 Returns the length of the duration in the units (any of those that can
-be passed to L<new>) given as arguments. All lengths are integral,
+be passed to C<new>) given as arguments. All lengths are integral,
 but may be negative. Smaller units are computed from what remains
 after taking away the larger units given, so for example:
 
