@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 
+use Test::Fatal;
 use Test::More;
 use DateTime;
 
@@ -1156,21 +1157,21 @@ use DateTime;
         [ 2008, 12, 31 ],
         [ 2012, 6,  30 ],
         ) {
-        my $dt = eval {
-            DateTime->new(
-                year      => $date->[0],
-                month     => $date->[1],
-                day       => $date->[2],
-                hour      => 23,
-                minute    => 59,
-                second    => 60,
-                time_zone => 'UTC',
-            );
-        };
+        my $formatted = join '-', map { sprintf( '%02d', $_ ) } @{$date};
 
-        my $formatted = join '-', @{$date};
-        ok(
-            $dt,
+        is(
+            exception {
+                DateTime->new(
+                    year      => $date->[0],
+                    month     => $date->[1],
+                    day       => $date->[2],
+                    hour      => 23,
+                    minute    => 59,
+                    second    => 60,
+                    time_zone => 'UTC',
+                );
+            },
+            undef,
             "We can make a DateTime object for the leap second on $formatted"
         );
     }
