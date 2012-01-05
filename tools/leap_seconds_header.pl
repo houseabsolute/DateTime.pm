@@ -1,6 +1,9 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 
 use strict;
+use warnings;
+use autodie;
+
 use lib './lib';
 
 my $VERSION = 0.03;
@@ -19,8 +22,7 @@ build_data_structures();
 write_header();
 
 sub build_data_structures {
-    my $fh = do { local *FH; *FH };
-    open $fh, "<$leap" or die "Cannot read $leap: $!";
+    open my $fh, '<', $leap;
 
     my $value = -1;
     while (<$fh>) {
@@ -129,8 +131,7 @@ EOF
 */
 EOF
 
-    open my $fh, '>', 'c/leap_seconds.h'
-        or die "Cannot write to c/leap_seconds.h: $!";
+    open my $fh, '>', 'c/leap_seconds.h';
 
     print $fh (
         $header,
