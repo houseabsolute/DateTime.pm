@@ -40,10 +40,10 @@ use Math::Round qw( nearest round );
 }
 
 use DateTime::Duration;
-use DateTime::Locale 0.40;
-use DateTime::TimeZone 0.59;
-use Time::Local qw( timegm_nocheck );
-use Params::Validate
+use DateTime::Locale 0.41;
+use DateTime::TimeZone 1.09;
+use Time::Local 1.04 qw( timegm_nocheck );
+use Params::Validate 0.76
     qw( validate validate_pos UNDEF SCALAR BOOLEAN HASHREF OBJECT );
 
 # for some reason, overloading doesn't work unless fallback is listed
