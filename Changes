@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.72   2012-01-05
+
 - Remove Test::DependentModules from the dep list. This is used by some
   author-only tests. Reported by Zefram.
 
