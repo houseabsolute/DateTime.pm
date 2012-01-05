@@ -9,7 +9,7 @@ use Carp;
 use DateTime::Helpers;
 use Math::Round qw( nearest round );
 
-BEGIN {
+{
     my $loaded = 0;
 
     unless ( $ENV{PERL_DATETIME_PP} ) {
