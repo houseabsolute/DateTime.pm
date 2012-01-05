@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::Exception;
+use Test::Fatal;
 use Test::More;
 
 use DateTime;
@@ -9,8 +9,11 @@ use overload;
 
 my $dt = DateTime->now;
 
-throws_ok { $dt->set_formatter('Invalid::Formatter') }
-qr/can format_datetime/, 'set_format is validated';
+like(
+    exception { $dt->set_formatter('Invalid::Formatter') },
+    qr/can format_datetime/,
+    'set_format is validated'
+);
 
 SKIP:
 {
