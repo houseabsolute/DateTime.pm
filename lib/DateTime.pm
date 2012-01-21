@@ -2488,7 +2488,7 @@ year 1 is "1AD" and year 0 is "1BC".
 
 =item * $dt->year_with_christian_era()
 
-Like C<year_with_era()>, but uses the christian_era() to get the era
+Like C<year_with_era()>, but uses the christian_era() method to get the era
 name.
 
 =item * $dt->year_with_secular_era()
@@ -3405,7 +3405,7 @@ used, we sometimes get interesting results:
   $dt2->subtract_duration($dur);
   # gives us 2003-04-05 02:58:00 - 1 hour later than $dt1
 
-The C<subtract_dauration()> operation gives us a (perhaps) unexpected
+The C<subtract_duration()> operation gives us a (perhaps) unexpected
 answer because it first subtracts one day to get 2003-04-05T03:01:00
 and then subtracts 3 minutes to get the final result.
 
