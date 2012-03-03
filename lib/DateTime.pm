@@ -16,7 +16,8 @@ use Math::Round qw( nearest round );
         local $@;
         eval {
             require XSLoader;
-            XSLoader::load( __PACKAGE__,
+            XSLoader::load(
+                __PACKAGE__,
                 exists $DateTime::{VERSION}
                 ? ${ $DateTime::{VERSION} }
                 : ()
