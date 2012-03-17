@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Change tests to work with Zefram's entirely rebuilt DateTime::TimeZone
+  distribution, which will replace the current implementation. Patch by
+  Zefram. RT #75757.
+
+
 0.72   2012-01-05
 
 - Remove Test::DependentModules from the dep list. This is used by some
