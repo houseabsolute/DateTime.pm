@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.73   2012-03-17
+
 - Change tests to work with Zefram's entirely rebuilt DateTime::TimeZone
   distribution, which will replace the current implementation. Patch by
   Zefram. RT #75757.
