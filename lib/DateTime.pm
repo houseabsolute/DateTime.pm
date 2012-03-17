@@ -2854,6 +2854,9 @@ the C<set_time_zone()> method.
 This method performs parameters validation just as is done in the
 C<new()> method.
 
+B<Do not use this method to do date math. Use the C<add()> and C<subtract()>
+methods instead.>
+
 =item * $dt->set_year()
 
 =item * $dt->set_month()
