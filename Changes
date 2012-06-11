@@ -3,6 +3,8 @@
 - The epoch for years 1-999 was broken because Time::Local is "clever". A pox
   on all clever APIs, I say! Reported by Christian Hansen. RT #77719.
 
+- Shut up compilation warning from 5.17.x. Reported by Tom Wyant. RT #77490.
+
 
 0.74   2012-03-22
 
