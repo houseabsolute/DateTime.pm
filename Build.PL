@@ -22,5 +22,5 @@ Module::Build->new(
     license              => 'artistic_2',
     c_source             => 'c',
     recursive_test_files => 1,
-    extra_compiler_flags => [ '-Wall', '-Werror' ],
+    extra_compiler_flags => [ '-Wall' ],
 )->create_build_script();
