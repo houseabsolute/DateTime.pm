@@ -129,6 +129,23 @@ use DateTime;
 }
 
 {
+    for my $pair (
+        [ 1   => -62135596800 ],
+        [ 99  => -59042995200 ],
+        [ 100 => -59011459200 ],
+        [ 999 => -30641760000 ],
+        ) {
+
+        my ( $year, $epoch ) = @{$pair};
+
+        is(
+            DateTime->new( year => $year )->epoch, $epoch,
+            "epoch for $year is $epoch"
+        );
+    }
+}
+
+{
 
     package Number::Overloaded;
     use overload
