@@ -116,15 +116,7 @@ use DateTime;
     is( $dt->nanosecond, 123_456_789, 'nanosecond should be an integer ' );
 }
 
-my $negative_epoch_ok = defined( ( localtime(-1) )[0] ) ? 1 : 0;
-
-SKIP:
 {
-    skip
-        'Negative epoch times do not work on some operating systems, including Win32',
-        4
-        unless $negative_epoch_ok;
-
     is(
         DateTime->new( year => 1904 )->epoch, -2082844800,
         "epoch should work back to at least 1904"
@@ -157,13 +149,7 @@ SKIP:
     is( $dt->epoch, 12345, 'decimal epoch in overloaded object' );
 }
 
-SKIP:
 {
-    skip
-        'Negative epoch times do not work on some operating systems, including Win32',
-        1
-        unless $negative_epoch_ok;
-
     my $time = Number::Overloaded->new(-12345);
     my $dt = DateTime->from_epoch( epoch => $time );
 
