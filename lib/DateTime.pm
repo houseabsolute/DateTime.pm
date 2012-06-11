@@ -1314,14 +1314,9 @@ sub epoch {
     my ( $year, $month, $day ) = $self->_utc_ymd;
     my @hms = $self->_utc_hms;
 
-    $self->{utc_c}{epoch} = timegm_nocheck(
-        ( reverse @hms ),
-        $day,
-        $month - 1,
-        $year,
-    );
-
-    return $self->{utc_c}{epoch};
+    return $self->{utc_c}{epoch}
+        = ( $self->{utc_rd_days} - 719163 ) * SECONDS_PER_DAY
+        + $self->{utc_rd_secs};
 }
 
 sub hires_epoch {
