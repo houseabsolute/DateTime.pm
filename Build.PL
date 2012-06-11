@@ -21,6 +21,6 @@ Module::Build->new(
     dist_version         => 42,
     license              => 'artistic_2',
     c_source             => 'c',
-    extra_compiler_flags => ['-Wall'],
     recursive_test_files => 1,
+    extra_compiler_flags => [ '-Wall', '-Werror' ],
 )->create_build_script();
