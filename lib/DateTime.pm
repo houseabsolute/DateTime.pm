@@ -1043,7 +1043,7 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
         foreach my $p (@patterns) {
             $p =~ s/
                     (?:
-                      %{(\w+)}         # method name like %{day_name}
+                      %\{(\w+)\}       # method name like %{day_name}
                       |
                       %([%a-zA-Z])     # single character specifier like %d
                       |
