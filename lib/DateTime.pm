@@ -18,9 +18,9 @@ use Math::Round qw( nearest round );
             require XSLoader;
             XSLoader::load(
                 __PACKAGE__,
-                exists $DateTime::{VERSION}
+                exists $DateTime::{VERSION} && ${ $DateTime::{VERSION} }
                 ? ${ $DateTime::{VERSION} }
-                : ()
+                : 42
             );
 
             $DateTime::IsPurePerl = 0;
