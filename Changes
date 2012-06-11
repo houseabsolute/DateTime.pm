@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- The epoch for years 1-999 was broken because Time::Local is "clever". A pox
+  on all clever APIs, I say! Reported by Christian Hansen. RT #77719.
+
+
 0.74   2012-03-22
 
 - Small packaging fix for metacpan's benefit. No need to upgrade.
