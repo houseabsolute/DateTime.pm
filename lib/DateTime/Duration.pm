@@ -361,12 +361,12 @@ __END__
 This is a simple class for representing duration objects. These
 objects are used whenever you do date math with DateTime.pm.
 
-See the L<How Date Math is Done|DateTime/"How Date Math is Done">
-section of the DateTime.pm documentation for more details. The short
-course:  One cannot in general convert between seconds, minutes, days,
-and months, so this class will never do so. Instead, create the
-duration with the desired units to begin with, for example by calling
-the appropriate subtraction/delta method on a C<DateTime.pm> object.
+See the L<How DateTime Math Works|DateTime/"How DateTime Math Works"> section
+of the DateTime.pm documentation for more details. The short course: One
+cannot in general convert between seconds, minutes, days, and months, so this
+class will never do so. Instead, create the duration with the desired units to
+begin with, for example by calling the appropriate subtraction/delta method on
+a C<DateTime.pm> object.
 
 =head1 METHODS
 
@@ -447,7 +447,7 @@ conversions possible are:
 
 =back
 
-For the explanation of why this is the case, please see the L<How Datetime
+For the explanation of why this is the case, please see the L<How DateTime
 Math Works|DateTime/"How DateTime Math Works"> section of the DateTime.pm
 documentation
 
