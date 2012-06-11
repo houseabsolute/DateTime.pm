@@ -5,10 +5,6 @@ use 5.008001;
 use strict;
 use warnings;
 
-use Carp;
-use DateTime::Helpers;
-use Math::Round qw( nearest round );
-
 {
     my $loaded = 0;
 
@@ -40,10 +36,12 @@ use Math::Round qw( nearest round );
     }
 }
 
+use Carp;
 use DateTime::Duration;
+use DateTime::Helpers;
 use DateTime::Locale 0.41;
 use DateTime::TimeZone 1.09;
-use Time::Local 1.04 qw( timegm_nocheck );
+use Math::Round qw( nearest round );
 use Params::Validate 0.76
     qw( validate validate_pos UNDEF SCALAR BOOLEAN HASHREF OBJECT );
 
