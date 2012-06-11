@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.75   2012-06-11
+
 - The epoch for years 1-999 was broken because Time::Local is "clever". A pox
   on all clever APIs, I say! Reported by Christian Hansen. RT #77719.
 
