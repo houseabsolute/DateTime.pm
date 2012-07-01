@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- The DateTime->subtract method ignored the end_of_month parameter. Patch by
+  Chris Reinhardt. RT #77844.
+
+
 0.75   2012-06-11
 
 - The epoch for years 1-999 was broken because Time::Local is "clever". A pox

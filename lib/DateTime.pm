@@ -1630,8 +1630,15 @@ sub add {
 
 sub subtract {
     my $self = shift;
+    my %p    = @_;
 
-    return $self->subtract_duration( $self->duration_class->new(@_) );
+    my %eom;
+    $eom{end_of_month} = delete $p{end_of_month}
+        if exists $p{end_of_month};
+
+    my $dur = $self->duration_class->new(@_)->inverse(%eom);
+
+    return $self->add_duration($dur);
 }
 
 sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
