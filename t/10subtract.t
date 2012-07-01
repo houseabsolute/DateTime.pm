@@ -427,4 +427,31 @@ use DateTime;
     );
 }
 
+{
+    my $dt = DateTime->new(
+        year      => 2012,
+        month     => 6,
+        day       => 30,
+        time_zone => 'floating',
+    );
+
+    my $default = $dt->clone()->subtract( months => 1 );
+    is(
+        $default->format_cldr('yyyy-MM-dd'),
+        '2012-05-31',
+        'default subtract uses preserve end_of_month mode'
+    );
+
+    my $with_mode = $dt->clone()->subtract(
+        months       => 1,
+        end_of_month => 'limit',
+    );
+    is(
+        $with_mode->format_cldr('yyyy-MM-dd'),
+        '2012-05-30',
+        'set end_of_month mode to limit in call to subtract()'
+    );
+
+}
+
 done_testing();
