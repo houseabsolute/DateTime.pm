@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.76   2012-07-01
+
 - The DateTime->subtract method ignored the end_of_month parameter. Patch by
   Chris Reinhardt. RT #77844.
 
