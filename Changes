@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.77   2012-09-25
+
 - POD changes that should make the documentation look better, especially on
   the web.
 
