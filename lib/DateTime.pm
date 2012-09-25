@@ -2232,15 +2232,16 @@ implementation of C<DateTime::TimeZone> will use a huge amount of
 memory calculating all the DST changes from now until the future
 date. Use UTC or the floating time zone and you will be safe.
 
-=head2 Methods
+=head1 METHODS
 
-=head3 Constructors
+DateTime provide many methods. The documentation breaks them down into groups
+based on what they do (constructor, accessors, modifiers, etc.).
+
+=head2 Constructors
 
 All constructors can die when invalid parameters are given.
 
-=over 4
-
-=item * DateTime->new( ... )
+=head3 DateTime->new( ... )
 
 This class method accepts parameters for each date and time component:
 "year", "month", "day", "hour", "minute", "second", "nanosecond".
@@ -2319,8 +2320,6 @@ The "formatter" can be either a scalar or an object, but the class
 specified by the scalar or the object must implement a
 C<format_datetime()> method.
 
-=back
-
 =head4 Parsing Dates
 
 B<This module does not parse dates!> That means there is no
@@ -2379,9 +2378,7 @@ no 02:00:00 through 02:59:59 on April 6!
 Attempting to create an invalid time currently causes a fatal error.
 This may change in future version of this module.
 
-=over 4
-
-=item * DateTime->from_epoch( epoch => $epoch, ... )
+=head3 DateTime->from_epoch( epoch => $epoch, ... )
 
 This class method can be used to construct a new DateTime object from
 an epoch time instead of components. Just as with the C<new()>
@@ -2395,7 +2392,7 @@ places, it will be truncated to nine, so that 1.1234567891 will become
 
 By default, the returned object will be in the UTC time zone.
 
-=item * DateTime->now( ... )
+=head3 DateTime->now( ... )
 
 This class method is equivalent to calling C<from_epoch()> with the
 value returned from Perl's C<time()> function. Just as with the
@@ -2403,13 +2400,13 @@ C<new()> method, it accepts "time_zone" and "locale" parameters.
 
 By default, the returned object will be in the UTC time zone.
 
-=item * DateTime->today( ... )
+=head3 DateTime->today( ... )
 
 This class method is equivalent to:
 
   DateTime->now->truncate( to => 'day' );
 
-=item * DateTime->from_object( object => $object, ... )
+=head3 DateTime->from_object( object => $object, ... )
 
 This class method can be used to construct a new DateTime object from
 any object that implements the C<utc_rd_values()> method. All
@@ -2423,13 +2420,13 @@ object.
 
 Otherwise, the returned object will be in the floating time zone.
 
-=item * DateTime->last_day_of_month( ... )
+=head3 DateTime->last_day_of_month( ... )
 
 This constructor takes the same arguments as can be given to the
 C<new()> method, except for "day". Additionally, both "year" and
 "month" are required.
 
-=item * DateTime->from_day_of_year( ... )
+=head3 DateTime->from_day_of_year( ... )
 
 This constructor takes the same arguments as can be given to the
 C<new()> method, except that it does not accept a "month" or "day"
@@ -2437,144 +2434,136 @@ argument. Instead, it requires both "year" and "day_of_year". The
 day of year must be between 1 and 366, and 366 is only allowed for
 leap years.
 
-=item * $dt->clone()
+=head3 $dt->clone()
 
 This object method returns a new object that is replica of the object
 upon which the method is called.
 
-=back
-
-=head3 "Get" Methods
+=head2 "Get" Methods
 
 This class has many methods for retrieving information about an
 object.
 
-=over 4
-
-=item * $dt->year()
+=head3 $dt->year()
 
 Returns the year.
 
-=item * $dt->ce_year()
+=head3 $dt->ce_year()
 
 Returns the year according to the BCE/CE numbering system. The year
 before year 1 in this system is year -1, aka "1 BCE".
 
-=item * $dt->era_name()
+=head3 $dt->era_name()
 
 Returns the long name of the current era, something like "Before
 Christ". See the L<Locales|/Locales> section for more details.
 
-=item * $dt->era_abbr()
+=head3 $dt->era_abbr()
 
 Returns the abbreviated name of the current era, something like "BC".
 See the L<Locales|/Locales> section for more details.
 
-=item * $dt->christian_era()
+=head3 $dt->christian_era()
 
 Returns a string, either "BC" or "AD", according to the year.
 
-=item * $dt->secular_era()
+=head3 $dt->secular_era()
 
 Returns a string, either "BCE" or "CE", according to the year.
 
-=item * $dt->year_with_era()
+=head3 $dt->year_with_era()
 
 Returns a string containing the year immediately followed by its era
 abbreviation. The year is the absolute value of C<ce_year()>, so that
 year 1 is "1AD" and year 0 is "1BC".
 
-=item * $dt->year_with_christian_era()
+=head3 $dt->year_with_christian_era()
 
 Like C<year_with_era()>, but uses the christian_era() method to get the era
 name.
 
-=item * $dt->year_with_secular_era()
+=head3 $dt->year_with_secular_era()
 
 Like C<year_with_era()>, but uses the secular_era() method to get the
 era name.
 
-=item * $dt->month()
+=head3 $dt->month()
 
 Returns the month of the year, from 1..12.
 
 Also available as C<< $dt->mon() >>.
 
-=item * $dt->month_name()
+=head3 $dt->month_name()
 
 Returns the name of the current month. See the
 L<Locales|/Locales> section for more details.
 
-=item * $dt->month_abbr()
+=head3 $dt->month_abbr()
 
 Returns the abbreviated name of the current month. See the
 L<Locales|/Locales> section for more details.
 
-=item * $dt->day()
+=head3 $dt->day()
 
 Returns the day of the month, from 1..31.
 
 Also available as C<< $dt->mday() >> and C<< $dt->day_of_month() >>.
 
-=item * $dt->day_of_week()
+=head3 $dt->day_of_week()
 
 Returns the day of the week as a number, from 1..7, with 1 being
 Monday and 7 being Sunday.
 
 Also available as C<< $dt->wday() >> and C<< $dt->dow() >>.
 
-=item * $dt->local_day_of_week()
+=head3 $dt->local_day_of_week()
 
 Returns the day of the week as a number, from 1..7. The day
 corresponding to 1 will vary based on the locale.
 
-=item * $dt->day_name()
+=head3 $dt->day_name()
 
 Returns the name of the current day of the week. See the
 L<Locales|/Locales> section for more details.
 
-=item * $dt->day_abbr()
+=head3 $dt->day_abbr()
 
 Returns the abbreviated name of the current day of the week. See the
 L<Locales|/Locales> section for more details.
 
-=item * $dt->day_of_year()
+=head3 $dt->day_of_year()
 
 Returns the day of the year.
 
 Also available as C<< $dt->doy() >>.
 
-=item * $dt->quarter()
+=head3 $dt->quarter()
 
 Returns the quarter of the year, from 1..4.
 
-=item * $dt->quarter_name()
+=head3 $dt->quarter_name()
 
 Returns the name of the current quarter. See the
 L<Locales|/Locales> section for more details.
 
-=item * $dt->quarter_abbr()
+=head3 $dt->quarter_abbr()
 
 Returns the abbreviated name of the current quarter. See the
 L<Locales|/Locales> section for more details.
 
-=item * $dt->day_of_quarter()
+=head3 $dt->day_of_quarter()
 
 Returns the day of the quarter.
 
 Also available as C<< $dt->doq() >>.
 
-=item * $dt->weekday_of_month()
+=head3 $dt->weekday_of_month()
 
 Returns a number from 1..5 indicating which week day of the month this
 is. For example, June 9, 2003 is the second Monday of the month, and
 so this method returns 2 for that day.
 
-=item * $dt->ymd( $optional_separator )
-
-=item * $dt->mdy( $optional_separator )
-
-=item * $dt->dmy( $optional_separator )
+=head3 $dt->ymd( $optional_separator ), $dt->mdy(...), $dt->dmy(...)
 
 Each method returns the year, month, and day, in the order indicated
 by the method name. Years are zero-padded to four digits. Months and
@@ -2585,53 +2574,53 @@ overridden by passing a value to the method.
 
 The C<< $dt->ymd() >> method is also available as C<< $dt->date() >>.
 
-=item * $dt->hour()
+=head3 $dt->hour()
 
 Returns the hour of the day, from 0..23.
 
-=item * $dt->hour_1()
+=head3 $dt->hour_1()
 
 Returns the hour of the day, from 1..24.
 
-=item * $dt->hour_12()
+=head3 $dt->hour_12()
 
 Returns the hour of the day, from 1..12.
 
-=item * $dt->hour_12_0()
+=head3 $dt->hour_12_0()
 
 Returns the hour of the day, from 0..11.
 
-=item * $dt->am_or_pm()
+=head3 $dt->am_or_pm()
 
 Returns the appropriate localized abbreviation, depending on the
 current hour.
 
-=item * $dt->minute()
+=head3 $dt->minute()
 
 Returns the minute of the hour, from 0..59.
 
 Also available as C<< $dt->min() >>.
 
-=item * $dt->second()
+=head3 $dt->second()
 
 Returns the second, from 0..61. The values 60 and 61 are used for
 leap seconds.
 
 Also available as C<< $dt->sec() >>.
 
-=item * $dt->fractional_second()
+=head3 $dt->fractional_second()
 
 Returns the second, as a real number from 0.0 until 61.999999999
 
 The values 60 and 61 are used for leap seconds.
 
-=item * $dt->millisecond()
+=head3 $dt->millisecond()
 
 Returns the fractional part of the second as milliseconds (1E-3 seconds).
 
 Half a second is 500 milliseconds.
 
-=item * $dt->microsecond()
+=head3 $dt->microsecond()
 
 Returns the fractional part of the second as microseconds (1E-6
 seconds). This value will be rounded to an integer.
@@ -2639,20 +2628,20 @@ seconds). This value will be rounded to an integer.
 Half a second is 500_000 microseconds. This value will be rounded to
 an integer.
 
-=item * $dt->nanosecond()
+=head3 $dt->nanosecond()
 
 Returns the fractional part of the second as nanoseconds (1E-9 seconds).
 
 Half a second is 500_000_000 nanoseconds.
 
-=item * $dt->hms( $optional_separator )
+=head3 $dt->hms( $optional_separator )
 
 Returns the hour, minute, and second, all zero-padded to two digits.
 If no separator is specified, a colon (:) is used by default.
 
 Also available as C<< $dt->time() >>.
 
-=item * $dt->datetime()
+=head3 $dt->datetime()
 
 This method is equivalent to:
 
@@ -2660,12 +2649,12 @@ This method is equivalent to:
 
 Also available as C<< $dt->iso8601() >>.
 
-=item * $dt->is_leap_year()
+=head3 $dt->is_leap_year()
 
 This method returns a true or false indicating whether or not the
 datetime object is in a leap year.
 
-=item * $dt->week()
+=head3 $dt->week()
 
  ($week_year, $week_number) = $dt->week;
 
@@ -2682,15 +2671,15 @@ is in, but dates at the very beginning of a calendar year often end up
 in the last week of the prior year, and similarly, the final few days
 of the year may be placed in the first week of the next year.
 
-=item * $dt->week_year()
+=head3 $dt->week_year()
 
 Returns the year of the week. See C<< $dt->week() >> for details.
 
-=item * $dt->week_number()
+=head3 $dt->week_number()
 
 Returns the week of the year, from 1..53. See C<< $dt->week() >> for details.
 
-=item * $dt->week_of_month()
+=head3 $dt->week_of_month()
 
 The week of the month, from 0..5. The first week of the month is the
 first week that contains a Thursday. This is based on the ICU
@@ -2698,42 +2687,40 @@ definition of week of month, and correlates to the ISO8601 week of
 year definition. A day in the week I<before> the week with the first
 Thursday will be week 0.
 
-=item * $dt->jd()
-
-=item * $dt->mjd()
+=head3 $dt->jd(), $dt->mjd()
 
 These return the Julian Day and Modified Julian Day, respectively.
 The value returned is a floating point number. The fractional portion
 of the number represents the time portion of the datetime.
 
-=item * $dt->time_zone()
+=head3 $dt->time_zone()
 
 This returns the C<DateTime::TimeZone> object for the datetime object.
 
-=item * $dt->offset()
+=head3 $dt->offset()
 
 This returns the offset from UTC, in seconds, of the datetime object
 according to the time zone.
 
-=item * $dt->is_dst()
+=head3 $dt->is_dst()
 
 Returns a boolean indicating whether or not the datetime object is
 currently in Daylight Saving Time or not.
 
-=item * $dt->time_zone_long_name()
+=head3 $dt->time_zone_long_name()
 
 This is a shortcut for C<< $dt->time_zone->name >>. It's provided so
 that one can use "%{time_zone_long_name}" as a strftime format
 specifier.
 
-=item * $dt->time_zone_short_name()
+=head3 $dt->time_zone_short_name()
 
 This method returns the time zone abbreviation for the current time
 zone, such as "PST" or "GMT". These names are B<not> definitive, and
 should not be used in any application intended for general use by
 users around the world.
 
-=item * $dt->strftime( $format, ... )
+=head3 $dt->strftime( $format, ... )
 
 This method implements functionality similar to the C<strftime()>
 method in C. However, if given multiple format strings, then it will
@@ -2745,7 +2732,7 @@ strftime patterns.
 If you give a pattern that doesn't exist, then it is simply treated as
 text.
 
-=item * $dt->format_cldr( $format, ... )
+=head3 $dt->format_cldr( $format, ... )
 
 This method implements formatting based on the CLDR date patterns. If
 given multiple format strings, then it will return multiple scalars,
@@ -2757,7 +2744,7 @@ patterns.
 If you give a pattern that doesn't exist, then it is simply treated as
 text.
 
-=item * $dt->epoch()
+=head3 $dt->epoch()
 
 Return the UTC epoch value for the datetime object. Internally, this
 is implemented using C<Time::Local>, which uses the Unix epoch even on
@@ -2775,58 +2762,54 @@ may not handle epochs before 1904 or after 2038 (depending on the size
 of your system's integers, and whether or not Perl was compiled with
 64-bit int support).
 
-=item * $dt->hires_epoch()
+=head3 $dt->hires_epoch()
 
 Returns the epoch as a floating point number. The floating point
 portion of the value represents the nanosecond value of the object.
 This method is provided for compatibility with the C<Time::HiRes>
 module.
 
-=item * $dt->is_finite()
-
-=item * $dt->is_infinite()
+=head3 $dt->is_finite(), $dt->is_infinite()
 
 These methods allow you to distinguish normal datetime objects from
 infinite ones. Infinite datetime objects are documented in
 L<DateTime::Infinite|DateTime::Infinite>.
 
-=item * $dt->utc_rd_values()
+=head3 $dt->utc_rd_values()
 
 Returns the current UTC Rata Die days, seconds, and nanoseconds as a
 three element list. This exists primarily to allow other calendar
 modules to create objects based on the values provided by this object.
 
-=item * $dt->local_rd_values()
+=head3 $dt->local_rd_values()
 
 Returns the current local Rata Die days, seconds, and nanoseconds as a
 three element list. This exists for the benefit of other modules
 which might want to use this information for date math, such as
 C<DateTime::Event::Recurrence>.
 
-=item * $dt->leap_seconds()
+=head3 $dt->leap_seconds()
 
 Returns the number of leap seconds that have happened up to the
 datetime represented by the object. For floating datetimes, this
 always returns 0.
 
-=item * $dt->utc_rd_as_seconds()
+=head3 $dt->utc_rd_as_seconds()
 
 Returns the current UTC Rata Die days and seconds purely as seconds.
 This number ignores any fractional seconds stored in the object,
 as well as leap seconds.
 
-=item * $dt->locale()
+=head3 $dt->locale()
 
 Returns the current locale object.
 
-=item * $dt->formatter()
+=head3 $dt->formatter()
 
 Returns current formatter object or class. See L<Formatters And
 Stringification> for details.
 
-=back
-
-=head3 "Set" Methods
+=head2 "Set" Methods
 
 The remaining methods provided by C<DateTime.pm>, except where otherwise
 specified, return the object itself, thus making method chaining
@@ -2839,9 +2822,7 @@ possible. For example:
                 ->add( days => 1 )
                 ->subtract( seconds => 1 );
 
-=over 4
-
-=item * $dt->set( .. )
+=head3 $dt->set( .. )
 
 This method can be used to change the local components of a date time,
 or its locale. This method accepts any parameter allowed by the
@@ -2853,6 +2834,13 @@ C<new()> method.
 
 B<Do not use this method to do date math. Use the C<add()> and C<subtract()>
 methods instead.>
+
+=head3 $dt->set_year(), $dt->set_month(), etc.
+
+DateTime has a C<set_*> method for every item that can be passed to the
+constructor:
+
+=over 4
 
 =item * $dt->set_year()
 
@@ -2870,10 +2858,12 @@ methods instead.>
 
 =item * $dt->set_locale()
 
+=back
+
 These are shortcuts to calling C<set()> with a single key. They all
 take a single parameter.
 
-=item * $dt->truncate( to => ... )
+=head3 $dt->truncate( to => ... )
 
 This method allows you to reset some of the local time components in
 the object to their "zero" values. The "to" parameter is used to
@@ -2885,7 +2875,7 @@ minute, and second all become 0.
 If "week" is given, then the datetime is set to the beginning of the
 week in which it occurs, and the time components are all set to 0.
 
-=item * $dt->set_time_zone( $tz )
+=head3 $dt->set_time_zone( $tz )
 
 This method accepts either a time zone object or a string that can be
 passed as the "name" parameter to C<< DateTime::TimeZone->new() >>.
@@ -2923,52 +2913,48 @@ work:
 
 Yes, now we can know "ni3 na4 bian1 ji2dian3?"
 
-=item * $dt->set_formatter( $formatter )
+=head3 $dt->set_formatter( $formatter )
 
 Set the formatter for the object. See L<Formatters And
 Stringification> for details.
 
 You can set this to C<undef> to revert to the default formatter.
 
-=back
-
-=head3 Math Methods
+=head2 Math Methods
 
 Like the set methods, math related methods always return the object
 itself, to allow for chaining:
 
   $dt->add( days => 1 )->subtract( seconds => 1 );
 
-=over 4
-
-=item * $dt->duration_class()
+=head3 $dt->duration_class()
 
 This returns C<DateTime::Duration>, but exists so that a subclass of
 C<DateTime.pm> can provide a different value.
 
-=item * $dt->add_duration( $duration_object )
+=head3 $dt->add_duration( $duration_object )
 
 This method adds a C<DateTime::Duration> to the current datetime. See
 the L<DateTime::Duration|DateTime::Duration> docs for more details.
 
-=item * $dt->add( DateTime::Duration->new parameters )
+=head3 $dt->add( DateTime::Duration->new parameters )
 
 This method is syntactic sugar around the C<add_duration()> method. It
 simply creates a new C<DateTime::Duration> object using the parameters
 given, and then calls the C<add_duration()> method.
 
-=item * $dt->subtract_duration( $duration_object )
+=head3 $dt->subtract_duration( $duration_object )
 
 When given a C<DateTime::Duration> object, this method simply calls
 C<invert()> on that object and passes that new duration to the
 C<add_duration> method.
 
-=item * $dt->subtract( DateTime::Duration->new parameters )
+=head3 $dt->subtract( DateTime::Duration->new parameters )
 
 Like C<add()>, this is syntactic sugar for the C<subtract_duration()>
 method.
 
-=item * $dt->subtract_datetime( $datetime )
+=head3 $dt->subtract_datetime( $datetime )
 
 This method returns a new C<DateTime::Duration> object representing
 the difference between the two dates. The duration is B<relative> to
@@ -2986,9 +2972,9 @@ as well as due to the presence of leap seconds.
 The returned duration may have deltas for months, days, minutes,
 seconds, and nanoseconds.
 
-=item * $dt->delta_md( $datetime )
+=head3 $dt->delta_md( $datetime )
 
-=item * $dt->delta_days( $datetime )
+=head3 $dt->delta_days( $datetime )
 
 Each of these methods returns a new C<DateTime::Duration> object
 representing some portion of the difference between two datetimes.
@@ -3004,14 +2990,14 @@ effectively ignore the time zone.
 Unlike the subtraction methods, B<these methods always return a
 positive (or zero) duration>.
 
-=item * $dt->delta_ms( $datetime )
+=head3 $dt->delta_ms( $datetime )
 
 Returns a duration which contains only minutes and seconds. Any day
 and month differences to minutes are converted to minutes and
 seconds. This method also B<always return a positive (or zero)
 duration>.
 
-=item * $dt->subtract_datetime_absolute( $datetime )
+=head3 $dt->subtract_datetime_absolute( $datetime )
 
 This method returns a new C<DateTime::Duration> object representing
 the difference between the two dates in seconds and nanoseconds. This
@@ -3019,20 +3005,14 @@ is the only way to accurately measure the absolute amount of time
 between two datetimes, since units larger than a second do not
 represent a fixed number of seconds.
 
-=back
+=head2 Class Methods
 
-=head3 Class Methods
-
-=over 4
-
-=item * DateTime->DefaultLocale( $locale )
+=head3 DateTime->DefaultLocale( $locale )
 
 This can be used to specify the default locale to be used when
 creating DateTime objects. If unset, then "en_US" is used.
 
-=item * DateTime->compare( $dt1, $dt2 )
-
-=item * DateTime->compare_ignore_floating( $dt1, $dt2 )
+=head3 DateTime->compare( $dt1, $dt2 ), DateTime->compare_ignore_floating( $dt1, $dt2 )
 
   $cmp = DateTime->compare( $dt1, $dt2 );
 
@@ -3067,8 +3047,6 @@ is equivalent to this:
 
 DateTime objects can be compared to any other calendar class that
 implements the C<utc_rd_values()> method.
-
-=back
 
 =head2 How DateTime Math Works
 

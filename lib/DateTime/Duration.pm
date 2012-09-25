@@ -375,9 +375,7 @@ mutator methods in order to make method chaining possible.
 
 C<DateTime::Duration> has the following methods:
 
-=over 4
-
-=item * new( ... )
+=head2 DateTime::Duration->new( ... )
 
 This method takes the parameters "years", "months", "weeks", "days",
 "hours", "minutes", "seconds", "nanoseconds", and "end_of_month". All
@@ -412,12 +410,12 @@ For positive durations, the "end_of_month" parameter defaults to wrap.
 For negative durations, the default is "limit". This should match how
 most people "intuitively" expect datetime math to work.
 
-=item * clone
+=head2 $dur->clone()
 
 Returns a new object with the same properties as the object on which
 this method was called.
 
-=item * in_units( ... )
+=head2 $dur->in_units( ... )
 
 Returns the length of the duration in the units (any of those that can
 be passed to C<new>) given as arguments. All lengths are integral,
@@ -461,32 +459,32 @@ still computes in terms of all given units).
 If you need more flexibility in presenting information about
 durations, please take a look a C<DateTime::Format::Duration>.
 
-=item * is_positive, is_zero, is_negative
+=head2 $dur->is_positive(), $dur->is_zero(), $dur->is_negative()
 
 Indicates whether or not the duration is positive, zero, or negative.
 
 If the duration contains both positive and negative units, then it
 will return false for B<all> of these methods.
 
-=item * is_wrap_mode, is_limit_mode, is_preserve_mode
+=head2 $dur->is_wrap_mode(), $dur->is_limit_mode(), $dur->is_preserve_mode()
 
 Indicates what mode is used for end of month wrapping.
 
-=item * end_of_month_mode
+=head2 $dur->end_of_month_mode()
 
 Returns one of "wrap", "limit", or "preserve".
 
-=item * calendar_duration
+=head2 $dur->calendar_duration()
 
 Returns a new object with the same I<calendar> delta (months and days
 only) and end of month mode as the current object.
 
-=item * clock_duration
+=head2 $dur->clock_duration()
 
 Returns a new object with the same I<clock> deltas (minutes, seconds,
 and nanoseconds) and end of month mode as the current object.
 
-=item * inverse( ... )
+=head2 $dur->inverse( ... )
 
 Returns a new object with the same deltas as the current object, but
 multiple by -1. The end of month mode for the new object will be the
@@ -496,21 +494,21 @@ is positive or negative.
 You can set the end of month mode in the inverted duration explicitly by
 passing "end_of_month => ..." to the C<inverse()> method.
 
-=item * add_duration( $duration_object ), subtract_duration( $duration_object )
+=head2 $dur->add_duration( $duration_object ), $dur->subtract_duration( $duration_object )
 
 Adds or subtracts one duration from another.
 
-=item * add( ... ), subtract( ... )
+=head2 $dur->add( ... ), $dur->subtract( ... )
 
 Syntactic sugar for addition and subtraction. The parameters given to
 these methods are used to create a new object, which is then passed to
 C<add_duration()> or C<subtract_duration()>, as appropriate.
 
-=item * multiply( $number )
+=head2 $dur->multiply( $number )
 
 Multiplies each unit in the by the specified number.
 
-=item * DateTime::Duration->compare( $duration1, $duration2, $base_datetime )
+=head2 DateTime::Duration->compare( $duration1, $duration2, $base_datetime )
 
 This is a class method that can be used to compare or sort durations.
 Comparison is done by adding each duration to the specified
@@ -530,19 +528,19 @@ unit (months I<or> days I<or> hours, etc.), and each duration contains
 the same type of unit, then the results of the comparison will be
 repeatable.
 
-=item * delta_months, delta_days, delta_minutes, delta_seconds, delta_nanoseconds
+=head2 $dur->delta_months(), $dur->delta_days(), $dur->delta_minutes(), $dur->delta_seconds(), $dur->delta_nanoseconds()
 
 These methods provide the information C<DateTime.pm> needs for doing date
 math. The numbers returned may be positive or negative. This is mostly useful
 for doing date math in L<DateTime>.
 
-=item * deltas
+=head2 $dur->deltas()
 
 Returns a hash with the keys "months", "days", "minutes", "seconds", and
 "nanoseconds", containing all the delta information for the object. This is
 mostly useful for doing date math in L<DateTime>.
 
-=item * years, months, weeks, days, hours, minutes, seconds, nanoseconds
+=head2 $dur->years(), $dur->months(), $dur->weeks(), $dur->days(), $dur->hours(), $dur->minutes(), $dur->seconds(), $dur->nanoseconds()
 
 These methods return numbers indicating how many of the given unit the
 object represents, after having done a conversion to any larger units.
@@ -565,8 +563,6 @@ C<in_units()> method to specify exactly what you want.
 
 Better yet, if you are trying to generate output suitable for humans,
 use the C<DateTime::Format::Duration> module.
-
-=back
 
 =head2 Overloading
 
