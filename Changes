@@ -1,5 +1,20 @@
 {{$NEXT}}
 
+- Reverted the change to round nanoseconds up or down in various
+  situtations. Now we always round down. This avoids the case where rounding
+  up would require us to then increment the second value (which could then
+  require us to increment the minute, which could then require us to increment
+  the hour, which could then ...).
+
+  In other words, we don't want to round 2011-12-31T23:59:59.999999 up to
+  2012-01-01T00:00:00, because that would be insane.
+
+  This applies to the return values for ->microsecond, ->millisecond, and the
+  %N specifier for strftime.
+
+  Patch by Martin Hasch. RT #79845.
+
+
 0.77   2012-09-25
 
 - POD changes that should make the documentation look better, especially on

@@ -41,9 +41,9 @@ use DateTime::Duration;
 use DateTime::Helpers;
 use DateTime::Locale 0.41;
 use DateTime::TimeZone 1.09;
-use Math::Round qw( nearest round );
 use Params::Validate 0.76
     qw( validate validate_pos UNDEF SCALAR BOOLEAN HASHREF OBJECT );
+use POSIX qw(floor);
 
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
@@ -821,9 +821,9 @@ sub nanosecond {
     return $_[0]->{rd_nanosecs};
 }
 
-sub millisecond { round( $_[0]->{rd_nanosecs} / 1000000 ) }
+sub millisecond { floor( $_[0]->{rd_nanosecs} / 1000000 ) }
 
-sub microsecond { round( $_[0]->{rd_nanosecs} / 1000 ) }
+sub microsecond { floor( $_[0]->{rd_nanosecs} / 1000 ) }
 
 sub leap_seconds {
     my $self = shift;
@@ -1301,7 +1301,7 @@ sub _format_nanosecs {
 
     return sprintf(
         '%0' . $precision . 'u',
-        round( $self->{rd_nanosecs} / $divide_by )
+        floor( $self->{rd_nanosecs} / $divide_by )
     );
 }
 
@@ -2620,13 +2620,16 @@ Returns the fractional part of the second as milliseconds (1E-3 seconds).
 
 Half a second is 500 milliseconds.
 
+This value will always be rounded down to the nearest integer.
+
 =head3 $dt->microsecond()
 
 Returns the fractional part of the second as microseconds (1E-6
-seconds). This value will be rounded to an integer.
+seconds).
 
-Half a second is 500_000 microseconds. This value will be rounded to
-an integer.
+Half a second is 500_000 microseconds.
+
+This value will always be rounded down to the nearest integer.
 
 =head3 $dt->nanosecond()
 
@@ -3925,6 +3928,8 @@ The fractional seconds digits. Default is 9 digits (nanoseconds).
   %3N   milliseconds (3 digits)
   %6N   microseconds (6 digits)
   %9N   nanoseconds  (9 digits)
+
+This value will always be rounded down to the nearest integer.
 
 =item * %p
 

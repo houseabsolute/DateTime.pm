@@ -260,14 +260,14 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     $dt->set( nanosecond => 500_000_500 );
 
     is( $dt->nanosecond,  500_000_500, 'nanosecond is 500,000,500' );
-    is( $dt->microsecond, 500_001,     'microsecond is 500,001' );
+    is( $dt->microsecond, 500_000,     'microsecond is 500,001' );
     is( $dt->millisecond, 500,         'millisecond is 500' );
 
     $dt->set( nanosecond => 499_999_999 );
 
     is( $dt->nanosecond,  499_999_999, 'nanosecond is 499,999,999' );
-    is( $dt->microsecond, 500_000,     'microsecond is 500,000' );
-    is( $dt->millisecond, 500,         'millisecond is 500' );
+    is( $dt->microsecond, 499_999,     'microsecond is 499,999' );
+    is( $dt->millisecond, 499,         'millisecond is 499' );
 
     $dt->set( nanosecond => 450_000_001 );
 
@@ -279,7 +279,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
     is( $dt->nanosecond,  450_500_000, 'nanosecond is 450,500,000' );
     is( $dt->microsecond, 450_500,     'microsecond is 450,500' );
-    is( $dt->millisecond, 451,         'millisecond is 451' );
+    is( $dt->millisecond, 450,         'millisecond is 450' );
 }
 
 {
