@@ -2404,7 +2404,7 @@ By default, the returned object will be in the UTC time zone.
 
 This class method is equivalent to:
 
-  DateTime->now->truncate( to => 'day' );
+  DateTime->now(@_)->truncate( to => 'day' );
 
 =head3 DateTime->from_object( object => $object, ... )
 
