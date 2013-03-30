@@ -307,10 +307,11 @@ it
 year => 2012, month => 1, day => 1
 %U => '01'
 %W => '00'
+%j => '001'
 year => 2012, month => 1, day => 10
 %U => '02'
 %W => '02'
-
+%j => '010'
 year => 1999, month => 9, day => 7, hour => 13, minute => 2, second => 42, nanosecond => 00012345678
 %N => '012345678'
 %3N => '012'

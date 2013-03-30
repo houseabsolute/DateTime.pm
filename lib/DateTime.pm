@@ -989,7 +989,7 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
         'G' => sub { $_[0]->week_year },
         'H' => sub { sprintf( '%02d', $_[0]->hour ) },
         'I' => sub { sprintf( '%02d', $_[0]->hour_12 ) },
-        'j' => sub { $_[0]->day_of_year },
+        'j' => sub { sprintf( '%03d', $_[0]->day_of_year ) },
         'k' => sub { sprintf( '%2d', $_[0]->hour ) },
         'l' => sub { sprintf( '%2d', $_[0]->hour_12 ) },
         'm' => sub { sprintf( '%02d', $_[0]->month ) },
