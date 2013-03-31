@@ -4,6 +4,7 @@ use warnings;
 use Test::More;
 
 use DateTime;
+use DateTime::Locale;
 
 my $pos        = DateTime::Infinite::Future->new;
 my $neg        = DateTime::Infinite::Past->new;
@@ -121,10 +122,14 @@ my $neg_as_string = $neginf . '';
 {
     my $now = DateTime->now;
 
-    is( DateTime->compare( $pos, $now ), 1,
-        'positive infinite is greater than now' );
-    is( DateTime->compare( $neg, $now ), -1,
-        'negative infinite is less than now' );
+    is(
+        DateTime->compare( $pos, $now ), 1,
+        'positive infinite is greater than now'
+    );
+    is(
+        DateTime->compare( $neg, $now ), -1,
+        'negative infinite is less than now'
+    );
 }
 
 {
@@ -148,10 +153,40 @@ my $neg_as_string = $neginf . '';
 }
 
 {
-    cmp_ok( "$pos", 'eq', $posinf,
-        'stringified infinity (datetime) eq infinity (number)' );
-    cmp_ok( "$neg", 'eq', $neginf,
-        'stringified neg infinity (datetime) eq neg infinity (number)' );
+    cmp_ok(
+        "$pos", 'eq', $posinf,
+        'stringified infinity (datetime) eq infinity (number)'
+    );
+    cmp_ok(
+        "$neg", 'eq', $neginf,
+        'stringified neg infinity (datetime) eq neg infinity (number)'
+    );
+}
+
+{
+    is(
+        $pos->day_name(),
+        undef,
+        'day_name returns undef',
+    );
+
+    is(
+        $pos->am_or_pm(),
+        undef,
+        'am_or_pm returns undef'
+    );
+
+    is(
+        $pos->locale()->name(),
+        'Fake locale for Infinite DateTime objects',
+        'locale name for fake locale'
+    );
+
+    is(
+        $pos->locale()->datetime_format_long(),
+        DateTime::Locale->load('en_US')->datetime_format_long(),
+        'fake locale returns same format as en_US'
+    );
 }
 
 done_testing();
