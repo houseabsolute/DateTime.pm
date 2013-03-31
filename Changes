@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- The %j specifier for strftime was not zero-padding 1 and 2 digit numbers. RT
+  #84310. Fixed by Christian Hansen.
+
+
 0.78   2012-11-16
 
 - Reverted the change to round nanoseconds up or down in various
