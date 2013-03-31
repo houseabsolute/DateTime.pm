@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Bumped the version to 1.00. This is mostly because my prior use of both X.YY
+  and X.YYYY versions causes trouble for some packaging systems. Plus after 10
+  years it's probably ready to be called 1.00. Requested by Adam. RT #82800. 
+
 - The %j specifier for strftime was not zero-padding 1 and 2 digit numbers. RT
   #84310. Fixed by Christian Hansen.
 
