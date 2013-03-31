@@ -8,6 +8,10 @@
   would accept the parameter but then not actually truncate the object. RT
   #84229.
 
+- Previously, if a call to $dt->set_time_zone() failed it would still change
+  the time zone of the object, leaving it in a broken state. RT
+  #83940. Reported by Bill Moseley.
+
 
 0.78   2012-11-16
 

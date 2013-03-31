@@ -1952,16 +1952,28 @@ sub set_time_zone {
 
     my $was_floating = $self->{tz}->is_floating;
 
+    my $old_tz = $self->{tz};
     $self->{tz} = ref $tz ? $tz : DateTime::TimeZone->new( name => $tz );
 
     $self->_handle_offset_modifier( $self->second, 1 );
 
-    # if it either was or now is floating (but not both)
-    if ( $self->{tz}->is_floating xor $was_floating ) {
-        $self->_calc_utc_rd;
-    }
-    elsif ( !$was_floating ) {
-        $self->_calc_local_rd;
+    local $@;
+    eval {
+        # if it either was or now is floating (but not both)
+        if ( $self->{tz}->is_floating xor $was_floating ) {
+            $self->_calc_utc_rd;
+        }
+        elsif ( !$was_floating ) {
+            $self->_calc_local_rd;
+        }
+    };
+
+    # If we can't recalc the RD values then we shouldn't keep the new TZ. RT
+    # #83940
+    my $e = $@;
+    if ($e) {
+        $self->{tz} = $old_tz;
+        die $e;
     }
 
     return $self;
