@@ -1908,7 +1908,7 @@ sub set_formatter  { $_[0]->set( formatter  => $_[1] ) }
     );
     my $re = join '|', 'year', 'week',
         grep { $_ ne 'nanosecond' } keys %TruncateDefault;
-    my $spec = { to => { regex => qr/^(?:$re)/ } };
+    my $spec = { to => { regex => qr/^(?:$re)$/ } };
 
     sub truncate {
         my $self = shift;
