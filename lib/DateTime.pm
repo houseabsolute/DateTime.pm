@@ -1981,7 +1981,7 @@ sub STORABLE_freeze {
     }
 
     # not used yet, but may be handy in the future.
-    $serialized .= "version:$DateTime::VERSION";
+    $serialized .= 'version:' . ( $DateTime::VERSION || 'git' );
 
     # Formatter needs to be returned as a reference since it may be
     # undef or a class name, and Storable will complain if extra
