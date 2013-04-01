@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.01   2013-04-01
+
 - Fixed test failures on older Perls.
 
 
