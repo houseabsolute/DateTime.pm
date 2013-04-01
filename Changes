@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Fixed test failures on older Perls.
+
+
 1.00   2013-03-31
 
 - Bumped the version to 1.00. This is mostly because my prior use of both X.YY
