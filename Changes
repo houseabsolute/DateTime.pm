@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- When a constructor method like new() or today() was called on an object,
+  you'd get an error message like 'Can't locate object method
+  "_normalize_nanoseconds" via package "2013-04-15T00:00:00"'. This has been
+  fixed to provide a sane error message. Patch by Doug Bell.
+
+
 1.01   2013-04-01
 
 - Fixed test failures on older Perls.
