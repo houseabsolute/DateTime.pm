@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.02   2013-04-15
+
 - When a constructor method like new() or today() was called on an object,
   you'd get an error message like 'Can't locate object method
   "_normalize_nanoseconds" via package "2013-04-15T00:00:00"'. This has been
