@@ -207,6 +207,7 @@ sub new {
 
 sub _new {
     my $class = shift;
+    Carp::croak( 'Constructor called with reference, we expected a package' ) if ref $class;
     my %p     = @_;
 
     # If this method is called from somewhere other than new(), then some of

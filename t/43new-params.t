@@ -82,4 +82,12 @@ like(
     'nanosecond must be an integer'
 );
 
+like(
+    exception {
+        DateTime->new( year => 10, month => 2, day => 12 )->today;
+    },
+    qr/called with reference/,
+    'constructors must be called as class methods, not object methods'
+);
+
 done_testing();
