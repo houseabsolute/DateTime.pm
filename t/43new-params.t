@@ -87,7 +87,15 @@ like(
         DateTime->new( year => 10, month => 2, day => 12 )->today;
     },
     qr/called with reference/,
-    'constructors must be called as class methods, not object methods'
+    'today must be called as a class method, not an object method'
+);
+
+like(
+    exception {
+        DateTime->new( year => 10, month => 2, day => 12 )->now;
+    },
+    qr/called with reference/,
+    'now must be called as a class method, not an object method'
 );
 
 done_testing();
