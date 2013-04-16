@@ -209,6 +209,9 @@ sub _new {
     my $class = shift;
     my %p     = @_;
 
+    Carp::croak('Constructor called with reference, we expected a package')
+        if ref $class;
+
     # If this method is called from somewhere other than new(), then some of
     # these default may not get applied.
     $p{month}      = 1          unless exists $p{month};
