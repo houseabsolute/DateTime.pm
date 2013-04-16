@@ -1953,6 +1953,8 @@ sub set_time_zone {
     # are singletons, and if it doesn't work all we lose is a little
     # bit of speed.
     return $self if $self->{tz} eq $tz;
+    # Also short-circuit if a name is provided and the time zone hasn't changed
+    return $self  if $self->{tz}->name eq $tz;
 
     my $was_floating = $self->{tz}->is_floating;
 
