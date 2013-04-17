@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.03   2013-04-17
+
 - The set_time_zone() method was not returning the object when caalled with a
   name that matched the current zone. Reported by Noel Maddy. RT #84699.
 
