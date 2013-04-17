@@ -61,4 +61,18 @@ use DateTime;
     );
 }
 
+{
+    my $dt = DateTime->now( time_zone => 'America/Chicago' );
+
+    ok(
+        $dt->set_time_zone('America/Chicago'),
+        'set_time_zone returns object when time zone name is same as current'
+    );
+
+    ok(
+        $dt->set_time_zone( $dt->time_zone() ),
+        'set_time_zone returns object when time zone object is same as current'
+    );
+}
+
 done_testing();

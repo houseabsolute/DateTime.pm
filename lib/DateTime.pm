@@ -1956,7 +1956,7 @@ sub set_time_zone {
         return $self if $self->{tz} eq $tz;
     }
     else {
-        return if $self->{tz}->name() eq $tz;
+        return $self if $self->{tz}->name() eq $tz;
     }
 
     my $was_floating = $self->{tz}->is_floating;

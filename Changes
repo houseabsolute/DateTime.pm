@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- The set_time_zone() method was not returning the object when caalled with a
+  name that matched the current zone. Reported by Noel Maddy. RT #84699.
+
+
 1.02   2013-04-15
 
 - When a constructor method like new() or today() was called on an object,
