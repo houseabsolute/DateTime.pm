@@ -3715,11 +3715,11 @@ The week of the month, from C<< $dt->week_of_month() >>.
 
 =item * d{1,2}
 
-The numeric day of of the month.
+The numeric day of the month.
 
 =item * D{1,3}
 
-The numeric day of of the year.
+The numeric day of the year.
 
 =item * F
 
