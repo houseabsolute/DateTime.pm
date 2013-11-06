@@ -124,6 +124,33 @@ my %vals = (
 }
 
 {
+    my $dt = DateTime->new( year => 2003, month => 11, day => 16 );
+
+    for ( 1 .. 6 ) {
+        my $trunc = $dt->clone->add( days => $_ )->truncate( to => 'local_week' );
+
+        is( $trunc->day, 16,
+            'truncate to local_week returns correct date' );
+    }
+
+    {
+        my $trunc = $dt->clone->add( days => 7 )->truncate( to => 'local_week' );
+
+        is( $trunc->day, 23,
+            'truncate to local_week returns correct date' );
+    }
+
+    {
+        my $dt = DateTime->new( year => 2003, month => 10, day => 2 )
+            ->truncate( to => 'local_week' );
+
+        is( $dt->year,  2003, 'truncation to local_week across month boundary' );
+        is( $dt->month, 9,    'truncation to local_week across month boundary' );
+        is( $dt->day,   28,   'truncation to local_week across month boundary' );
+    }
+}
+
+{
     my $dt = DateTime->new(%vals);
 
     for my $bad (qw( seconds minutes year_foo month_bar )) {
