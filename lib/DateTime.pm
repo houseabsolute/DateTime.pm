@@ -1947,7 +1947,7 @@ sub set_formatter {
         second     => 0,
         nanosecond => 0,
     );
-    my $re = join '|', 'year', 'week',
+    my $re = join '|', 'year', 'week', 'local_week',
         grep { $_ ne 'nanosecond' } keys %TruncateDefault;
     my $spec = { to => { regex => qr/^(?:$re)$/ } };
 
@@ -1956,8 +1956,12 @@ sub set_formatter {
         my %p = validate( @_, $spec );
 
         my %new;
-        if ( $p{to} eq 'week' ) {
-            my $day_diff = $self->day_of_week - 1;
+        if ( $p{to} eq 'week' || $p{to} eq 'local_week' ) {
+            my $first_day_of_week = ($p{to} eq 'local_week')
+                ? $self->{locale}->first_day_of_week
+                : 1;
+
+            my $day_diff = ($self->day_of_week - $first_day_of_week) % 7;
 
             if ($day_diff) {
                 $self->add( days => -1 * $day_diff );
