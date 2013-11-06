@@ -894,7 +894,7 @@ sub _weeks_in_year {
 
     my $dow = $self->_ymd2rd( $year, 1, 1 ) % 7;
 
-    # Tears starting with a Thursday and leap years starting with a Wednesday
+    # Years starting with a Thursday and leap years starting with a Wednesday
     # have 53 weeks.
     return ( $dow == 4 || ( $dow == 3 && $self->_is_leap_year($year) ) )
         ? 53
