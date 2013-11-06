@@ -728,14 +728,7 @@ sub day_of_week_0 { $_[0]->{local_c}{day_of_week} - 1 }
 
 sub local_day_of_week {
     my $self = shift;
-
-    my $day = $self->day_of_week();
-
-    my $local_first_day = $self->{locale}->first_day_of_week();
-
-    my $d = ( ( 8 - $local_first_day ) + $day ) % 7;
-
-    return $d == 0 ? 7 : $d;
+    return 1 + ($self->day_of_week - $self->{locale}->first_day_of_week) % 7;
 }
 
 sub day_name { $_[0]->{locale}->day_format_wide->[ $_[0]->day_of_week_0() ] }
