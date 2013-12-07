@@ -6,7 +6,8 @@ use Test::More;
 use DateTime;
 
 {
-    package Formatter;
+    package
+        Formatter;
 
     sub new {
         return bless {}, __PACKAGE__;
