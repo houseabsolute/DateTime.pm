@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.04   2013-12-07
+
 - Calling set_locale() or set_formatter() on an object with an ambiguous local
   time could change the underlying UTC time for that object. Reported by Marta
   Cuaresma Saturio. RT #90583.
