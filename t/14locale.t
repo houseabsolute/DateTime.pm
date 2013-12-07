@@ -43,4 +43,28 @@ is( $@, '', 'make sure constructor accepts locale parameter as object' );
 DateTime->DefaultLocale('it');
 is( DateTime->now->locale->id, 'it', 'default locale should now be "it"' );
 
+{
+    my $dt = DateTime->new(
+        year      => 2013, month => 10, day => 27, hour => 0,
+        time_zone => 'UTC'
+    );
+
+    my $after_zone = $dt->clone()->set_time_zone('Europe/Rome');
+
+    is(
+        $after_zone->offset(),
+        '7200',
+        'offset is 7200 after set_time_zone()'
+    );
+
+    my $after_locale
+        = $dt->clone()->set_time_zone('Europe/Rome')->set_locale('en_GB');
+
+    is(
+        $after_locale->offset(),
+        '7200',
+        'offset is 7200 after set_time_zone() and set_locale()'
+    );
+}
+
 done_testing();
