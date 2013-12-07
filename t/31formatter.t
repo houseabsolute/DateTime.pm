@@ -3,19 +3,21 @@ use warnings;
 
 use Test::More;
 
-BEGIN {
-    eval "use DateTime::Format::Strptime 1.2000";
-    if ($@) {
-        plan skip_all => "DateTime::Format::Strptime 1.2000+ not installed";
+use DateTime;
+
+{
+    package Formatter;
+
+    sub new {
+        return bless {}, __PACKAGE__;
+    }
+
+    sub format_datetime {
+        $_[1]->strftime('%Y%m%d %T');
     }
 }
 
-use DateTime;
-
-my $formatter = DateTime::Format::Strptime->new(
-    pattern => '%Y%m%d %T',
-    locale  => 'en_US',
-);
+my $formatter = Formatter->new();
 
 my $dt = DateTime->from_epoch( epoch => time(), formatter => $formatter );
 ok( $dt, "Constructor (from_epoch) : $@" );
