@@ -289,9 +289,12 @@ sub _new_from_self {
     my $self = shift;
     my %p    = @_;
 
-    my %old = map { $_ => $self->$_() }
-        qw( year month day hour minute second nanosecond
-        locale time_zone );
+    my %old = map { $_ => $self->$_() } qw(
+        year month day
+        hour minute second
+        nanosecond
+        locale time_zone
+    );
     $old{formatter} = $self->formatter()
         if defined $self->formatter();
 
