@@ -99,9 +99,7 @@ BEGIN {
         if (@_) {
             my $lang = shift;
 
-            DateTime::Locale->load($lang);
-
-            $DefaultLocale = $lang;
+            $DefaultLocale = DateTime::Locale->load($lang);
         }
 
         return $DefaultLocale;
@@ -225,14 +223,8 @@ sub _new {
     my $self = bless {}, $class;
 
     $p{locale} = delete $p{language} if exists $p{language};
-    $p{locale} = $class->DefaultLocale unless defined $p{locale};
 
-    if ( ref $p{locale} ) {
-        $self->{locale} = $p{locale};
-    }
-    else {
-        $self->{locale} = DateTime::Locale->load( $p{locale} );
-    }
+    $self->_set_locale( $p{locale} );
 
     $self->{tz} = (
         ref $p{time_zone}
@@ -281,6 +273,23 @@ sub _new {
     }
 
     return $self;
+}
+
+sub _set_locale {
+    my $self   = shift;
+    my $locale = shift;
+
+    if ( defined $locale && ref $locale ) {
+        $self->{locale} = $locale;
+    }
+    else {
+        $self->{locale}
+            = $locale
+            ? DateTime::Locale->load($locale)
+            : $self->DefaultLocale();
+    }
+
+    return;
 }
 
 # This method exists for the benefit of internal methods which create
@@ -1901,8 +1910,29 @@ sub set_hour       { $_[0]->set( hour       => $_[1] ) }
 sub set_minute     { $_[0]->set( minute     => $_[1] ) }
 sub set_second     { $_[0]->set( second     => $_[1] ) }
 sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
-sub set_locale     { $_[0]->set( locale     => $_[1] ) }
-sub set_formatter  { $_[0]->set( formatter  => $_[1] ) }
+
+# These two are special cased because ... if the local time is the hour of a
+# DST change where the same local time occurs twice then passing it through
+# _new() can actually change the underlying UTC time, which is bad.
+
+sub set_locale {
+    my $self = shift;
+
+    my ($locale) = validate_pos( @_, $BasicValidate->{locale} );
+
+    $self->_set_locale($locale);
+
+    return $self;
+}
+
+sub set_formatter {
+    my $self = shift;
+    my ($formatter) = validate_pos( @_, $BasicValidate->{formatter} );
+
+    $self->{formatter} = $formatter;
+
+    return $self;
+}
 
 {
     my %TruncateDefault = (
