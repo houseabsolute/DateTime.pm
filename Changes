@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+- Add ZZZZZ formatter, which is like ZZZ but inserts a colon.
+
 1.04   2013-12-07
 
 - Calling set_locale() or set_formatter() on an object with an ambiguous local
