@@ -1226,6 +1226,10 @@ sub mjd { $_[0]->jd - 2_400_000.5 }
 
         qr/zzzz/   => sub { $_[0]->time_zone_long_name() },
         qr/z{1,3}/ => sub { $_[0]->time_zone_short_name() },
+        qr/ZZZZZ/  => sub {
+          substr(my $z = DateTime::TimeZone->offset_as_string(
+                $_[0]->offset() ), -2, 0, ":"); $z
+        },
         qr/ZZZZ/   => sub {
             $_[0]->time_zone_short_name()
                 . DateTime::TimeZone->offset_as_string( $_[0]->offset() );
@@ -3859,6 +3863,11 @@ The time zone offset.
 
 The time zone short name and the offset as one string, so something
 like "CDT-0500".
+
+=item * ZZZZZ
+
+The time zone offset as a sexagesimal number, so something like "-05:00".
+(This is useful for W3C format.)
 
 =item * v{1,3}
 

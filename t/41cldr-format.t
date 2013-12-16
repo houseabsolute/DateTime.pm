@@ -135,6 +135,7 @@ binmode $_, ':encoding(UTF-8)'
         'vvv'  => 'CDT',
         'VVVV' => 'America/Chicago',
         'VVV'  => 'CDT',
+        'ZZZZZ' => '-05:00',
 
         q{'one fine day'} => 'one fine day',
         q{'yy''yy' yyyy}  => q{yy'yy 1976},
