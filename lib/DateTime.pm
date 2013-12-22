@@ -740,14 +740,7 @@ sub day_of_week_0 { $_[0]->{local_c}{day_of_week} - 1 }
 
 sub local_day_of_week {
     my $self = shift;
-
-    my $day = $self->day_of_week();
-
-    my $local_first_day = $self->{locale}->first_day_of_week();
-
-    my $d = ( ( 8 - $local_first_day ) + $day ) % 7;
-
-    return $d == 0 ? 7 : $d;
+    return 1 + ($self->day_of_week - $self->{locale}->first_day_of_week) % 7;
 }
 
 sub day_name { $_[0]->{locale}->day_format_wide->[ $_[0]->day_of_week_0() ] }
@@ -913,7 +906,7 @@ sub _weeks_in_year {
 
     my $dow = $self->_ymd2rd( $year, 1, 1 ) % 7;
 
-    # Tears starting with a Thursday and leap years starting with a Wednesday
+    # Years starting with a Thursday and leap years starting with a Wednesday
     # have 53 weeks.
     return ( $dow == 4 || ( $dow == 3 && $self->_is_leap_year($year) ) )
         ? 53
@@ -1947,7 +1940,7 @@ sub set_formatter {
         second     => 0,
         nanosecond => 0,
     );
-    my $re = join '|', 'year', 'week',
+    my $re = join '|', 'year', 'week', 'local_week',
         grep { $_ ne 'nanosecond' } keys %TruncateDefault;
     my $spec = { to => { regex => qr/^(?:$re)$/ } };
 
@@ -1956,8 +1949,12 @@ sub set_formatter {
         my %p = validate( @_, $spec );
 
         my %new;
-        if ( $p{to} eq 'week' ) {
-            my $day_diff = $self->day_of_week - 1;
+        if ( $p{to} eq 'week' || $p{to} eq 'local_week' ) {
+            my $first_day_of_week = ($p{to} eq 'local_week')
+                ? $self->{locale}->first_day_of_week
+                : 1;
+
+            my $day_diff = ($self->day_of_week - $first_day_of_week) % 7;
 
             if ($day_diff) {
                 $self->add( days => -1 * $day_diff );
