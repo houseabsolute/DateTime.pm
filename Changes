@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.05   2013-12-22
+
 - Added a new CLDR ZZZZZ specifier, which is like ZZZ but inserts a
   colon. Patch by Ricardo Signes.
 
