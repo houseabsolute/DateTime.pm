@@ -67,6 +67,7 @@ Tsai
 UTC
 VVVV
 ZZZZ
+ZZZZZ
 afterwards
 bian
 ccc
@@ -96,6 +97,7 @@ other's
 proleptic
 qqq
 qqqq
+sexagesimal
 subclasses
 uu
 vvvv
