@@ -3,7 +3,9 @@
 - Added a new CLDR ZZZZZ specifier, which is like ZZZ but inserts a
   colon. Patch by Ricardo Signes.
 
-
+- Added a new option for the truncate() method to truncate to the
+  "local_week". This truncates to the locale's notion of the first day of the
+  week, rather than always truncating to Monday. Patch by Christian Hansen.
 
 
 1.04   2013-12-07
