@@ -128,7 +128,10 @@ my %vals = (
 }
 
 {
-    my $dt = DateTime->new( year => 2003, month => 11, day => 16 );
+    my $dt = DateTime->new(
+        year   => 2013, month => 12, day => 16,
+        locale => 'fr_FR'
+    );
 
     for ( 1 .. 6 ) {
         my $trunc
@@ -136,7 +139,7 @@ my %vals = (
 
         is(
             $trunc->day, 16,
-            'truncate to local_week returns correct date'
+            'truncate to local_week returns correct date - locale start is Monday'
         );
     }
 
@@ -146,20 +149,75 @@ my %vals = (
 
         is(
             $trunc->day, 23,
-            'truncate to local_week returns correct date'
+            'truncate to local_week returns correct date - locale start is Monday'
         );
     }
 
     {
-        my $dt = DateTime->new( year => 2003, month => 10, day => 2 )
-            ->truncate( to => 'local_week' );
+        my $dt = DateTime->new(
+            year   => 2013, month => 11, day => 2,
+            locale => 'fr_FR'
+        )->truncate( to => 'local_week' );
 
         is(
-            $dt->year, 2003,
-            'truncation to local_week across month boundary'
+            $dt->year, 2013,
+            'truncation to local_week across month boundary - locale start is Monday'
         );
-        is( $dt->month, 9, 'truncation to local_week across month boundary' );
-        is( $dt->day, 28, 'truncation to local_week across month boundary' );
+        is(
+            $dt->month, 10,
+            'truncation to local_week across month boundary - locale start is Monday'
+        );
+        is(
+            $dt->day, 28,
+            'truncation to local_week across month boundary - locale start is Monday'
+        );
+    }
+}
+
+{
+    my $dt = DateTime->new(
+        year   => 2013, month => 12, day => 15,
+        locale => 'en_US'
+    );
+
+    for ( 1 .. 6 ) {
+        my $trunc
+            = $dt->clone->add( days => $_ )->truncate( to => 'local_week' );
+
+        is(
+            $trunc->day, 15,
+            'truncate to local_week returns correct date - locale start is Sunday'
+        );
+    }
+
+    {
+        my $trunc
+            = $dt->clone->add( days => 7 )->truncate( to => 'local_week' );
+
+        is(
+            $trunc->day, 22,
+            'truncate to local_week returns correct date - locale start is Sunday'
+        );
+    }
+
+    {
+        my $dt = DateTime->new(
+            year   => 2013, month => 11, day => 2,
+            locale => 'en_US'
+        )->truncate( to => 'local_week' );
+
+        is(
+            $dt->year, 2013,
+            'truncation to local_week across month boundary - locale start is Sunday'
+        );
+        is(
+            $dt->month, 10,
+            'truncation to local_week across month boundary - locale start is Sunday'
+        );
+        is(
+            $dt->day, 27,
+            'truncation to local_week across month boundary - locale start is Sunday'
+        );
     }
 }
 
