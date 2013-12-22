@@ -1,7 +1,9 @@
 {{$NEXT}}
 
-- Add ZZZZZ formatter, which is like ZZZ but inserts a colon. Patch by Ricardo
-  Signes.
+- Added a new CLDR ZZZZZ specifier, which is like ZZZ but inserts a
+  colon. Patch by Ricardo Signes.
+
+
 
 
 1.04   2013-12-07
