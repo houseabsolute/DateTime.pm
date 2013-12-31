@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.06   2013-12-31
+
 - DateTime's attempt to generate infinity by calculating 9**9**9 actually got
   a number on some platforms, like powerpcspe. Reported by Gregor Hermann. RT
   #91696.
