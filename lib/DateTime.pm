@@ -69,8 +69,8 @@ require DateTime::Infinite;
 
 use constant MAX_NANOSECONDS => 1_000_000_000;    # 1E9 = almost 32 bits
 
-use constant INFINITY     => ( 9**9**9 );
-use constant NEG_INFINITY => -1 * ( 9**9**9 );
+use constant INFINITY     => ( 100**100**100**100 );
+use constant NEG_INFINITY => -1 * ( 100**100**100**100 );
 use constant NAN          => INFINITY - INFINITY;
 
 use constant SECONDS_PER_DAY => 86400;
