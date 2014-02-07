@@ -2855,6 +2855,16 @@ portion of the value represents the nanosecond value of the object.
 This method is provided for compatibility with the C<Time::HiRes>
 module.
 
+Note that this method suffers from the imprecision of floating point numbers,
+and the result may end up rounded to an arbitrary degree depending on your
+platform.
+
+    my $dt = DateTime->new( year => 2012, nanosecond => 4 );
+    say $dt->hires_repoch();
+
+On my system, this simply prints C<1325376000> because adding C<0.000000004>
+to C<1325376000> returns C<1325376000>.
+
 =head3 $dt->is_finite(), $dt->is_infinite()
 
 These methods allow you to distinguish normal datetime objects from
