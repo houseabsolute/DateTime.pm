@@ -18,13 +18,13 @@
 /* This is a temporary hack until a better solution can be found to
    get the finite() function on Win32 */
 #ifndef WIN32
-#include <math.h>
-#ifndef isfinite
-#ifdef finite
-#define finite isfinite
-#endif /* ifdef finite */
-#endif /* ifndef isfinite */
-#endif /* ifndef WIN32 */
+#  include <math.h>
+#  ifndef isfinite
+#    ifdef finite
+#      define finite isfinite
+#    endif
+#  endif
+#endif
 
 /* 2 ** 28 - 307 */
 #define RANGE_CUTOFF        (268435456 - 307)
