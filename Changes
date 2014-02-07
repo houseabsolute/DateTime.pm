@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.07   2014-02-06
+
 - Added a hack to get this module working on Android. RT #92671.
 
 
