@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Added a hack to get this module working on Android. RT #92671.
+
+
 1.06   2013-12-31
 
 - DateTime's attempt to generate infinity by calculating 9**9**9 actually got
