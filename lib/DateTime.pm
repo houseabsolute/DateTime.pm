@@ -536,8 +536,15 @@ sub _utc_hms {
     }
 }
 
+sub now {
+    my $class = shift;
+    return $class->from_epoch( epoch => $class->_core_time(), @_ );
+}
+
 # use scalar time in case someone's loaded Time::Piece
-sub now { shift->from_epoch( epoch => ( scalar time ), @_ ) }
+sub _core_time {
+    return scalar time;
+}
 
 sub today { shift->now(@_)->truncate( to => 'day' ) }
 
@@ -3144,6 +3151,23 @@ is equivalent to this:
 
 DateTime objects can be compared to any other calendar class that
 implements the C<utc_rd_values()> method.
+
+=head2 Testing Code That Uses DateTime
+
+If you are trying to test code that calls uses DateTime, you may want to be
+able to explicitly set the value returned by Perl's C<time()> builtin. This
+builtin is called by C<< DateTime->now() >> and C<< DateTime->today() >>.
+
+You can  override C<CORE::GLOBAL::time()>, but this  will only work if  you do
+this B<before> loading  DateTime. If doing this is inconvenient,  you can also
+override C<DateTime::_core_time()>:
+
+    no warnings 'redefine';
+    local *DateTime::_core_time = sub { return 42 };
+
+DateTime is guaranteed to core this subroutine to get the current C<time()>
+value. You can also override the C<_core_time()> sub in a subclass of DateTime
+and use that.
 
 =head2 How DateTime Math Works
 
