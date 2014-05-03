@@ -3,6 +3,12 @@
 - A call to ->truncate( to => 'week' ) could fail but leave the object
   changed. RT #93347.
 
+- The value of ->jd() is now calculated based on ->mjd() instead of the other
+  way around. This reduces floating point errors a bit when calculating MJD,
+  and should have a neglible impact on the accuracy of JD. Reported by Anye
+  Li. RT #92972. See the ticket for a more detailed description of what this
+  fixes.
+
 
 1.08   2014-03-11
 

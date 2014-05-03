@@ -986,20 +986,20 @@ sub local_rd_as_seconds {
     ( $_[0]->{local_rd_days} * SECONDS_PER_DAY ) + $_[0]->{local_rd_secs};
 }
 
-# RD 1 is JD 1,721,424.5 - a simple offset
-sub jd {
+# RD 1 is MJD 678,576 - a simple offset
+sub mjd {
     my $self = shift;
 
-    my $jd = $self->{utc_rd_days} + 1_721_424.5;
+    my $mjd = $self->{utc_rd_days} - 678_576;
 
     my $day_length = $self->_day_length( $self->{utc_rd_days} );
 
-    return (  $jd
+    return (  $mjd
             + ( $self->{utc_rd_secs} / $day_length )
             + ( $self->{rd_nanosecs} / $day_length / MAX_NANOSECONDS ) );
 }
 
-sub mjd { $_[0]->jd - 2_400_000.5 }
+sub jd { $_[0]->mjd + 2_400_000.5 }
 
 {
     my %strftime_patterns = (
