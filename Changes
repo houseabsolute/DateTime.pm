@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.09   2014-05-03
+
 - A call to ->truncate( to => 'week' ) could fail but leave the object
   changed. RT #93347.
 
