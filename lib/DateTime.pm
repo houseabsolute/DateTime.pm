@@ -5,12 +5,21 @@ use 5.008001;
 use strict;
 use warnings;
 
+use Carp;
+use DateTime::Duration;
+use DateTime::Helpers;
+use DateTime::Locale 0.41;
+use DateTime::TimeZone 1.09;
+use Params::Validate 0.76
+    qw( validate validate_pos UNDEF SCALAR BOOLEAN HASHREF OBJECT );
+use POSIX qw(floor);
+use Try::Tiny;
+
 {
     my $loaded = 0;
 
     unless ( $ENV{PERL_DATETIME_PP} ) {
-        local $@;
-        eval {
+        try {
             require XSLoader;
             XSLoader::load(
                 __PACKAGE__,
@@ -20,11 +29,12 @@ use warnings;
             );
 
             $DateTime::IsPurePerl = 0;
+        }
+        catch {
+            die $_ if $_ && $_ !~ /object version|loadable object/;
+
+            $loaded = 1 unless $_;
         };
-
-        die $@ if $@ && $@ !~ /object version|loadable object/;
-
-        $loaded = 1 unless $@;
     }
 
     if ($loaded) {
@@ -35,16 +45,6 @@ use warnings;
         require DateTimePP;
     }
 }
-
-use Carp;
-use DateTime::Duration;
-use DateTime::Helpers;
-use DateTime::Locale 0.41;
-use DateTime::TimeZone 1.09;
-use Params::Validate 0.76
-    qw( validate validate_pos UNDEF SCALAR BOOLEAN HASHREF OBJECT );
-use POSIX qw(floor);
-use Try::Tiny;
 
 # for some reason, overloading doesn't work unless fallback is listed
 # early.
@@ -1432,8 +1432,7 @@ sub subtract_datetime {
             if (
             $bigger->is_dst
             && do {
-                local $@;
-                my $prev_day = eval { $bigger->clone->subtract( days => 1 ) };
+                my $prev_day = try { $bigger->clone->subtract( days => 1 ) };
                 $prev_day && !$prev_day->is_dst ? 1 : 0;
             }
             );
@@ -1444,8 +1443,7 @@ sub subtract_datetime {
             if (
             !$bigger->is_dst
             && do {
-                local $@;
-                my $prev_day = eval { $bigger->clone->subtract( days => 1 ) };
+                my $prev_day = try { $bigger->clone->subtract( days => 1 ) };
                 $prev_day && $prev_day->is_dst ? 1 : 0;
             }
             );
