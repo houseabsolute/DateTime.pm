@@ -5,6 +5,7 @@ use Test::Fatal;
 use Test::More 0.88;
 
 use DateTime;
+use Try::Tiny;
 
 my %vals = (
     year       => 50,
@@ -231,6 +232,43 @@ my %vals = (
             "bad truncate parameter ($bad) throws an error"
         );
     }
+}
+
+{
+    my $dt = DateTime->new(
+        year      => 2010,
+        month     => 3,
+        day       => 25,
+        hour      => 1,
+        minute    => 5,
+        time_zone => 'Asia/Tehran',
+    );
+
+    is(
+        $dt->day_of_week(),
+        4,
+        'day of week is Thursday'
+    );
+
+    my $error;
+    try {
+        $dt->truncate( to => 'week' );
+    }
+    catch {
+        $error = $_;
+    };
+
+    like(
+        $error,
+        qr/Invalid local time for date/,
+        'truncate operation threw an error because of an invalid local datetime'
+    );
+
+    is(
+        $dt->day_of_week(),
+        4,
+        'day of week does not change after failed truncate() call'
+    );
 }
 
 done_testing();

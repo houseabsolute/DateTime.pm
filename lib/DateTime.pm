@@ -1992,7 +1992,16 @@ sub set_formatter {
                 $self->add( days => -1 * $day_diff );
             }
 
-            return $self->truncate( to => 'day' );
+            # This can fail if the truncate ends up giving us an invalid local
+            # date time. If that happens we need to reverse the addition we
+            # just did. See https://rt.cpan.org/Ticket/Display.html?id=93347.
+            try {
+                $self->truncate( to => 'day' );
+            }
+            catch {
+                $self->add( days => $day_diff );
+                die $_;
+            };
         }
         else {
             my $truncate;

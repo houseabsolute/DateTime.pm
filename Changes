@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- A call to ->truncate( to => 'week' ) could fail but leave the object
+  changed. RT #93347.
+
+
 1.08   2014-03-11
 
 - DateTime now calls DateTime->_core_time() instead of calling Perl's time()
