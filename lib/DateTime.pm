@@ -29,12 +29,11 @@ use Try::Tiny;
                 : 42
             );
 
+            $loaded               = 1;
             $DateTime::IsPurePerl = 0;
         }
         catch {
             die $_ if $_ && $_ !~ /object version|loadable object/;
-
-            $loaded = 1 unless $_;
         };
     }
 
