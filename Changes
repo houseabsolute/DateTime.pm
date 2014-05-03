@@ -9,6 +9,11 @@
   Li. RT #92972. See the ticket for a more detailed description of what this
   fixes.
 
+- Attempting to construct a DateTime object with a year >= 5000 and a time
+  zone other than floating or DST now issues a warning. This warning may go
+  away once DateTime::TimeZone is made much faster. Inspired by a bug report
+  from Lloyd Fournier. RT #92655.
+
 
 1.08   2014-03-11
 

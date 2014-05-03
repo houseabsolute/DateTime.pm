@@ -4,6 +4,7 @@ use 5.008001;
 
 use strict;
 use warnings;
+use warnings::register;
 
 use Carp;
 use DateTime::Duration;
@@ -254,6 +255,8 @@ sub _new {
     # as its equal or greater to the correct number, so we fudge by
     # adding one to the local year given to the constructor.
     $self->{utc_year} = $p{year} + 1;
+
+    $self->_maybe_future_dst_warning( $p{year}, $p{time_zone} );
 
     $self->_calc_utc_rd;
 
@@ -530,6 +533,9 @@ sub _utc_hms {
 
         my $self = $class->_new( %p, %args, time_zone => 'UTC' );
 
+        my $tz = $p{time_zone};
+        $self->_maybe_future_dst_warning( $self->year(), $p{time_zone} );
+
         $self->set_time_zone( $p{time_zone} ) if exists $p{time_zone};
 
         return $self;
@@ -539,6 +545,22 @@ sub _utc_hms {
 sub now {
     my $class = shift;
     return $class->from_epoch( epoch => $class->_core_time(), @_ );
+}
+
+sub _maybe_future_dst_warning {
+    shift;
+    my $year = shift;
+    my $tz   = shift;
+
+    return unless $year >= 5000 && $tz;
+
+    my $tz_name = ref $tz ? $tz->name() : $tz;
+    return if $tz_name eq 'floating' || $tz_name eq 'UTC';
+
+    warnings::warnif(
+        "You are creating a DateTime object with a far future year ($year) and a time zone ($tz_name)."
+            . ' If the time zone you specified has future DST changes this will be very slow.'
+    );
 }
 
 # use scalar time in case someone's loaded Time::Piece
@@ -2305,13 +2327,13 @@ datetimes.
 If you are going to be using doing date math, please read the section L<How
 DateTime Math Works>.
 
-=head2 Time Zone Warnings
+=head2 Determining the Local Time Zone Can Be Slow
 
-Determining the local time zone for a system can be slow. If C<$ENV{TZ}> is
-not set, it may involve reading a number of files in F</etc> or elsewhere. If
-you know that the local time zone won't change while your code is running, and
-you need to make many objects for the local time zone, it is strongly
-recommended that you retrieve the local time zone once and cache it:
+If C<$ENV{TZ}> is not set, it may involve reading a number of files in F</etc>
+or elsewhere. If you know that the local time zone won't change while your
+code is running, and you need to make many objects for the local time zone, it
+is strongly recommended that you retrieve the local time zone once and cache
+it:
 
   our $App::LocalTZ = DateTime::TimeZone->new( name => 'local' );
 
@@ -2337,6 +2359,22 @@ based on what they do (constructor, accessors, modifiers, etc.).
 =head2 Constructors
 
 All constructors can die when invalid parameters are given.
+
+=head3 Warnings
+
+Currently, constructors will warn if you try to create a far future DateTime
+(year >= 5000) with any time zone besides floating or UTC. This can be very
+slow if the time zone has future DST transitions that need to be
+calculated. If the date is sufficiently far in the future this can be
+I<really> slow (minutes).
+
+All warnings from DateTime use the C<DateTime> category and can be suppressed
+with:
+
+    no warnings 'DateTime';
+
+This warning may be removed in the future if L<DateTime::TimeZone> is made
+much faster.
 
 =head3 DateTime->new( ... )
 
