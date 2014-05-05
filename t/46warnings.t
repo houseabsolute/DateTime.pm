@@ -8,17 +8,37 @@ use DateTime;
 
 my $year_5001_epoch = 95649120000;
 
+SKIP:
 {
-    like(
-        warning {
-            DateTime->from_epoch(
-                epoch     => $year_5001_epoch,
-                time_zone => 'Asia/Taipei',
-            );
-        },
-        qr{\QYou are creating a DateTime object with a far future year (5001) and a time zone (Asia/Taipei).},
-        'got a warning when calling ->from_epoch with a far future epoch and a time_zone'
-    );
+    skip 'These tests require a 64-bit Perl', 2
+        unless ( gmtime($year_5001_epoch) )[5] == 3101;
+
+    {
+        like(
+            warning {
+                DateTime->from_epoch(
+                    epoch     => $year_5001_epoch,
+                    time_zone => 'Asia/Taipei',
+                );
+            },
+            qr{\QYou are creating a DateTime object with a far future year (5001) and a time zone (Asia/Taipei).},
+            'got a warning when calling ->from_epoch with a far future epoch and a time_zone'
+        );
+    }
+
+    {
+        no warnings 'DateTime';
+        is_deeply(
+            warning {
+                DateTime->from_epoch(
+                    epoch     => $year_5001_epoch,
+                    time_zone => 'Asia/Taipei',
+                );
+            },
+            [],
+            'no warning when calling ->from_epoch with a far future epoch and a time_zone with DateTime warnings category suppressed'
+        );
+    }
 }
 
 {
@@ -31,20 +51,6 @@ my $year_5001_epoch = 95649120000;
         },
         qr{\QYou are creating a DateTime object with a far future year (5001) and a time zone (Asia/Taipei).},
         'got a warning when calling ->new with a far future year and a time_zone'
-    );
-}
-
-{
-    no warnings 'DateTime';
-    is_deeply(
-        warning {
-            DateTime->from_epoch(
-                epoch     => $year_5001_epoch,
-                time_zone => 'Asia/Taipei',
-            );
-        },
-        [],
-        'no warning when calling ->from_epoch with a far future epoch and a time_zone with DateTime warnings category suppressed'
     );
 }
 

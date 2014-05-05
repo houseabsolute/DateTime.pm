@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Some tests added in 1.09 would fail on a Perl without a 64-bit
+  gmtime(). Reported by Jerome Eteve. RT #95345.
+
+
 1.09   2014-05-03
 
 - A call to ->truncate( to => 'week' ) could fail but leave the object
