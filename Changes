@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.10   2014-05-05
+
 - Some tests added in 1.09 would fail on a Perl without a 64-bit
   gmtime(). Reported by Jerome Eteve. RT #95345.
 
