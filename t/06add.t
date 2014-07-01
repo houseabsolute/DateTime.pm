@@ -363,4 +363,16 @@ is( $new->date, '1998-12-01', 'test + overloading' );
     is( $dt->second, 59, 'second is 59' );
 }
 
+{
+    my $dt = DateTime->new(
+        year      => 2014,
+        month     => 7,
+        day       => 1,
+        time_zone => 'floating',
+    );
+
+    $dt->add( days => 2 );
+    is( $dt->date, '2014-07-03', 'adding 2 days to a floating datetime' );
+}
+
 done_testing();
