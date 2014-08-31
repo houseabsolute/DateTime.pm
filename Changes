@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- The last release had the wrong repo info in the metadata.
+
+
 1.11   2014-08-31
 
 - The latest historical changes in DateTime::TimeZone 1.74 caused some tests
