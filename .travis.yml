@@ -26,4 +26,4 @@ install:
 script:
   - perl Makefile.PL
   - make
-  - prove -br -j$(test-jobs) t/ xt/
+  - prove -br -j$(test-jobs) $(test-files)
