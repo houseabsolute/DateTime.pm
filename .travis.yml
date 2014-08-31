@@ -1,0 +1,30 @@
+language: perl
+perl:
+    #- dev
+    - "blead"
+    #- stable
+    - "5.20"
+    - "5.18"
+    - "5.16"
+    - "5.14"
+    - "5.12"
+    - "5.10"
+    - "5.8"
+env:
+  global:
+    - RELEASE_TESTING=1
+    - AUTHOR_TESTING=1
+before_install:
+  - git clone git://github.com/haarg/perl-travis-helper ~/perl-travis-helper
+  - source ~/perl-travis-helper/init
+  - build-perl
+  - perl -V
+  - build-dist
+  - cd $BUILD_DIR
+install:
+  - cpan-install ExtUtils::MakeMaker~6.68 --deps
+  - cpan-install --coverage
+script:
+  - perl Makefile.PL
+  - make
+  - prove -br -j$(test-jobs) t/ xt/
