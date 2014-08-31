@@ -21,21 +21,25 @@ use DateTime;
 # DT::TZ
 {
     my $dt = DateTime->new(
-        year      => 1934, month  => 2,  day    => 26,
-        hour      => 0,    minute => 59, second => 59,
+        year      => 1922, month  => 8,  day    => 31,
+        hour      => 23,   minute => 59, second => 59,
         time_zone => 'UTC',
     );
-    $dt->set_time_zone('Africa/Niamey');
+    $dt->set_time_zone('Africa/Accra');
 
-    is( $dt->year,  1934, 'local year should be 1934 (1934-02-25 23:59:59)' );
-    is( $dt->month, 2,    'local month should be 2 (1934-02-25 23:59:59)' );
-    is( $dt->day,   25,   'local day should be 25 (1934-02-25 23:59:59)' );
-    is( $dt->hour,  23,   'local hour should be 23 (1934-02-25 23:59:59)' );
-    is( $dt->minute, 59, 'local minute should be 59 (1934-02-25 23:59:59)' );
-    is( $dt->second, 59, 'local second should be 59 (1934-02-25 23:59:59)' );
+    is( $dt->year,  1922, 'local year should be 1922 (1922-08-31 23:59:59)' );
+    is( $dt->month, 8,    'local month should be 8 (1922-08-31 23:59:59)' );
+    is( $dt->day,   31,   'local day should be 31 (1922-08-31 23:59:59)' );
+    is( $dt->hour,  23,   'local hour should be 23 (1922-08-31 23:59:59)' );
+    is( $dt->minute, 59, 'local minute should be 59 (1922-08-31 23:59:59)' );
+    is( $dt->second, 59, 'local second should be 59 (1922-08-31 23:59:59)' );
 
-    ok( !$dt->is_dst, 'is_dst should be false (1934-02-25 23:59:59)' );
-    is( $dt->offset, -3600, 'offset should be -3600 (1934-02-25 23:59:59)' );
+    is( $dt->is_dst, 0, 'is_dst should be 0 (1922-08-31 23:59:59)' );
+    is( $dt->offset, 0, 'offset should be 0 (1922-08-31 23:59:59)' );
+    is(
+        $dt->time_zone_short_name, 'GMT',
+        'short name should be GMT (1922-08-31 23:59:59)'
+    );
 }
 
 {
