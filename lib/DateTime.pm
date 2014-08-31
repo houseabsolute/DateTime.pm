@@ -2163,7 +2163,7 @@ sub time_zone { $_[0]->{tz} }
 
 1;
 
-# ABSTRACT: A date and time object
+# ABSTRACT: A date and time object for Perl
 
 __END__
 
