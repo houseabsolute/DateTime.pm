@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.11   2014-08-31
+
 - The latest historical changes in DateTime::TimeZone 1.74 caused some tests
   to fail. Reported by Slaven Rezic. RT #98483.
 
