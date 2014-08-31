@@ -19,10 +19,11 @@ before_install:
   - source ~/perl-travis-helper/init
   - build-perl
   - perl -V
+  - cpan-install Dist::Zilla::Plugin::PodWeaver
   - build-dist
   - cd $BUILD_DIR
 install:
-  - cpan-install ExtUtils::MakeMaker~6.68 Dist::Zilla::Plugin::PodWeaver --deps
+  - cpan-install ExtUtils::MakeMaker~6.68 --deps
 script:
   - perl Makefile.PL
   - make
