@@ -1,10 +1,10 @@
 # NAME
 
-DateTime - A date and time object
+DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.11
+version 1.12
 
 # SYNOPSIS
 
