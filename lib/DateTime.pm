@@ -909,6 +909,21 @@ sub hms {
 sub iso8601 { join 'T', $_[0]->ymd('-'), $_[0]->hms(':') }
 *datetime = \&iso8601;
 
+sub iso8601_with_tz {
+    my $self = shift;
+
+    my $offset = $self->{tz}
+        ? DateTime::TimeZone->offset_as_string( $self->offset )
+        : '+0000';
+    $offset =~ s/^([\+\-])?(\d\d?)(\d\d)/$1$2:$3/;
+
+    return sprintf(
+        '%s%s',
+        $self->iso8601,
+        $offset
+    );
+}
+
 sub is_leap_year { $_[0]->_is_leap_year( $_[0]->year ) }
 
 sub week {
@@ -2785,6 +2800,14 @@ This method is equivalent to:
   $dt->ymd('-') . 'T' . $dt->hms(':')
 
 Also available as C<< $dt->iso8601() >>.
+
+=head3 $dt->iso8601_with_tz()
+
+This method is equivalent to:
+
+  $dt->iso8601() . DateTime::TimeZone->offset_as_string( $dt->offset() )
+
+Except that the offset includes a colon separator.
 
 =head3 $dt->is_leap_year()
 

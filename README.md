@@ -621,6 +621,14 @@ This method is equivalent to:
 
 Also available as `$dt->iso8601()`.
 
+### $dt->iso8601\_with\_tz()
+
+This method is equivalent to:
+
+    $dt->iso8601() . DateTime::TimeZone->offset_as_string( $dt->offset() )
+
+Except that the offset includes a colon separator.
+
 ### $dt->is\_leap\_year()
 
 This method returns a true or false indicating whether or not the
