@@ -2167,6 +2167,10 @@ sub time_zone { $_[0]->{tz} }
 
 __END__
 
+=pod
+
+=encoding UTF-8
+
 =head1 SYNOPSIS
 
   use DateTime;
