@@ -24,6 +24,7 @@ before_install:
 install:
   - cpan-install ExtUtils::MakeMaker~6.68 --deps
 script:
+  - perl ./tools/leap_seconds_header.pl
   - perl Build.PL
   - ./Build
   - prove -br -j$(test-jobs) $(test-files)
