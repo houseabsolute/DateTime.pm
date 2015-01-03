@@ -4301,8 +4301,12 @@ L<http://www.urth.org/~autarch/fs-donation.html>
 
 =head1 SEE ALSO
 
-datetime@perl.org mailing list
+L<A Date with
+Perl|http://www.houseabsolute.com/presentations/a-date-with-perl/> - a talk
+I've given at a few YAPCs.
 
-http://datetime.perl.org/
+L<datetime@perl.org mailing list|http://lists.perl.org/list/datetime.html>
+
+L<http://datetime.perl.org/>
 
 =cut
