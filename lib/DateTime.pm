@@ -2915,7 +2915,7 @@ and the result may end up rounded to an arbitrary degree depending on your
 platform.
 
     my $dt = DateTime->new( year => 2012, nanosecond => 4 );
-    say $dt->hires_repoch();
+    say $dt->hires_epoch();
 
 On my system, this simply prints C<1325376000> because adding C<0.000000004>
 to C<1325376000> returns C<1325376000>.
