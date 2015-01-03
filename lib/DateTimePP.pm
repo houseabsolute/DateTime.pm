@@ -45,11 +45,18 @@ sub _rd2ymd {
     my $yadj = 0;
     my ( $c, $y, $m );
 
-    # add 306 days to make relative to Mar 1, 0
-    if ( ( $d += 306 ) <= 0 ) {
+    # add 306 days to make relative to Mar 1, 0; also adjust $d to be
+    # within a range (1..2**28-1) where our calculations will work
+    # with 32bit ints
+    if ( $d > 2**28 - 307 ) {
 
-        # avoid ambiguity in C division of negatives
-        $yadj = -( -$d / 146097 + 1 );
+        # avoid overflow if $d close to maxint
+        $yadj = ( $d - 146097 + 306 ) / 146097 + 1;
+        $d -= $yadj * 146097 - 306;
+    }
+    elsif ( ( $d += 306 ) <= 0 ) {
+        $yadj = -( -$d / 146097 + 1 )
+            ;    # avoid ambiguity in C division of negatives
         $d -= $yadj * 146097;
     }
 

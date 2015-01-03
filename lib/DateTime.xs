@@ -89,11 +89,16 @@ _rd2ymd(self, d, extra = 0)
      PPCODE:
         rd_days = d;
 
-        d += MARCH_1;
+        if (d > RANGE_CUTOFF) {
+          yadj = (d - DAYS_PER_400_YEARS + MARCH_1 ) / DAYS_PER_400_YEARS + 1;
+          d -= (yadj * DAYS_PER_400_YEARS) - MARCH_1;
+        } else {
+          d += MARCH_1;
 
-        if (d <= 0) {
-          yadj = -1 * (((-1 * d) / DAYS_PER_400_YEARS) + 1);
-          d -= yadj * DAYS_PER_400_YEARS;
+          if (d <= 0) {
+            yadj = -1 * (((-1 * d) / DAYS_PER_400_YEARS) + 1);
+            d -= yadj * DAYS_PER_400_YEARS;
+          }
         }
 
         /* c is century */

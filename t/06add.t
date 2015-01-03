@@ -2,7 +2,6 @@ use strict;
 use warnings;
 
 use Test::More;
-use Test::Fatal;
 
 use DateTime;
 
@@ -374,24 +373,6 @@ is( $new->date, '1998-12-01', 'test + overloading' );
 
     $dt->add( days => 2 );
     is( $dt->date, '2014-07-03', 'adding 2 days to a floating datetime' );
-}
-
-{
-    my $dt = DateTime->new( year => 0, month => 1, day => 1 );
-    my $dt2;
-    is(
-        exception { $dt2 = $dt->clone->add( days => 268_526_345 ) },
-        undef,
-        'no exception adding 268,526,345 days to 0000-01-01'
-    );
-
-    if ($dt2) {
-        is(
-            $dt2->ymd(),
-            '735200-02-29',
-            'adding 268,526,345 days produces 735200-02-29'
-        );
-    }
 }
 
 done_testing();
