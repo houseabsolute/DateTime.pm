@@ -1,6 +1,11 @@
 {{$NEXT}}
 
-1.13   2015-01-03
+- Accidentally release 1.13 as a non-TRIAL release. Releasing 1.13 minus the
+  integer change so there's a known-safe stable release on CPAN for people to
+  install.
+
+
+1.13 2015-01-03
 
 - Experimental fix for adding very large numbers of days. Previously, trying
   to add more than around 2^28 days could cause errors if the result ended up
