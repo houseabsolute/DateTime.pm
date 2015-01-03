@@ -3157,6 +3157,9 @@ is the only way to accurately measure the absolute amount of time
 between two datetimes, since units larger than a second do not
 represent a fixed number of seconds.
 
+Note that because of leap seconds, this may not return the same result as
+doing this math based on the value returned by C<< $dt->epoch() >>.
+
 =head2 Class Methods
 
 =head3 DateTime->DefaultLocale( $locale )
