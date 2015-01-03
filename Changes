@@ -1,5 +1,12 @@
 {{$NEXT}}
 
+- Trying this again ... Experimental fix for adding very large numbers of
+  days. Previously, trying to add more than around 2^28 days could cause
+  errors if the result ended up in a leap year. This is being released as a
+  trial release because I'm not sure how this change will behave on a 32-bit
+  Perl. Reported by KMX. RT #97046.
+
+
 1.14   2015-01-03
 
 - Accidentally release 1.13 as a non-TRIAL release. Releasing 1.13 minus the
