@@ -9,7 +9,7 @@
 
 1.14   2015-01-03
 
-- Accidentally release 1.13 as a non-TRIAL release. Releasing 1.13 minus the
+- Accidentally released 1.13 as a non-TRIAL release. Releasing 1.13 minus the
   integer change so there's a known-safe stable release on CPAN for people to
   install.
 
