@@ -6,6 +6,8 @@
   sure how this change will behave on a 32-bit Perl. Reported by KMX. RT
   #97046.
 
+- Various small doc chances to address RT #96958, #98733, and #101262.
+
 
 1.12   2014-08-31
 
