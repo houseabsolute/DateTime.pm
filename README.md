@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.12
+version 1.13
 
 # SYNOPSIS
 
@@ -746,7 +746,7 @@ and the result may end up rounded to an arbitrary degree depending on your
 platform.
 
     my $dt = DateTime->new( year => 2012, nanosecond => 4 );
-    say $dt->hires_repoch();
+    say $dt->hires_epoch();
 
 On my system, this simply prints `1325376000` because adding `0.000000004`
 to `1325376000` returns `1325376000`.
@@ -976,6 +976,9 @@ the difference between the two dates in seconds and nanoseconds. This
 is the only way to accurately measure the absolute amount of time
 between two datetimes, since units larger than a second do not
 represent a fixed number of seconds.
+
+Note that because of leap seconds, this may not return the same result as
+doing this math based on the value returned by `$dt->epoch()`.
 
 ## Class Methods
 
@@ -2105,17 +2108,35 @@ the button on this page:
 
 # SEE ALSO
 
-datetime@perl.org mailing list
+[A Date with
+Perl](http://www.houseabsolute.com/presentations/a-date-with-perl/) - a talk
+I've given at a few YAPCs.
 
-http://datetime.perl.org/
+[datetime@perl.org mailing list](http://lists.perl.org/list/datetime.html)
+
+[http://datetime.perl.org/](http://datetime.perl.org/)
 
 # AUTHOR
 
 Dave Rolsky <autarch@urth.org>
 
+# CONTRIBUTORS
+
+- Ben Bennett <fiji@limey.net>
+- Christian Hansen <chansen@cpan.org>
+- Daisuke Maki <dmaki@cpan.org>
+- David E. Wheeler <david@justatheory.com>
+- Doug Bell <madcityzen@gmail.com>
+- Flávio Soibelmann Glock <fglock@gmail.com>
+- Iain Truskett <deceased>
+- Joshua Hoblitt <jhoblitt@cpan.org>
+- Ricardo Signes <rjbs@cpan.org>
+- Richard Bowen <bowen@cpan.org>
+- Ron Hill <rkhill@cpan.org>
+
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2014 by Dave Rolsky.
+This software is Copyright (c) 2015 by Dave Rolsky.
 
 This is free software, licensed under:
 
