@@ -55,7 +55,7 @@ for (
 
 # test first and last day of each month from Jan -4800..Dec 4800
 # this test bails after the first failure with a not ok.
-# if it comlpetes successfully, only one ok is issued.
+# if it completes successfully, only one ok is issued.
 
 my @mlen = ( 0, 31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
 my ( $dno, $y, $m, $dno2, $y2, $m2, $d2, $mlen ) = ( -1753530, -4800, 1 );
