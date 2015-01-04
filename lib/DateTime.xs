@@ -111,9 +111,9 @@ _rd2ymd(self, d, extra = 0)
         }
 
         EXTEND(SP, extra ? 7 : 3);
-        PUSHs(sv_2mortal(newSViv(y)));
-        PUSHs(sv_2mortal(newSViv(m)));
-        PUSHs(sv_2mortal(newSViv(d)));
+        mPUSHi(y);
+        mPUSHi(m);
+        mPUSHi(d);
 
         if (extra) {
             quarter = ( ( 1.0 / 3.1 ) * m ) + 1;
@@ -123,7 +123,7 @@ _rd2ymd(self, d, extra = 0)
                 dow += 7;
             }
 
-            PUSHs(sv_2mortal(newSViv(dow)));
+            mPUSHi(dow);
 
             if (_real_is_leap_year(y)) {
                 doy = PREVIOUS_MONTH_DOLY[m - 1] + d;
@@ -133,9 +133,9 @@ _rd2ymd(self, d, extra = 0)
                 doq = doy - PREVIOUS_MONTH_DOY[ (3 * quarter ) - 3 ];
             }
 
-            PUSHs(sv_2mortal(newSViv(doy)));
-            PUSHs(sv_2mortal(newSViv(quarter)));
-            PUSHs(sv_2mortal(newSViv(doq)));
+            mPUSHi(doy);
+            mPUSHi(quarter);
+            mPUSHi(doq);
         }
 
 void
@@ -169,7 +169,7 @@ _ymd2rd(self, y, m, d)
             4 + (y / 100 * 36524 + y / 400) - MARCH_1;
 
         EXTEND(SP, 1);
-        PUSHs(sv_2mortal(newSViv(d)));
+        mPUSHi(d);
 
 void
 _seconds_as_components(self, secs, utc_secs = 0, secs_modifier = 0)
@@ -207,9 +207,9 @@ _seconds_as_components(self, secs, utc_secs = 0, secs_modifier = 0)
         }
 
         EXTEND(SP, 3);
-        PUSHs(sv_2mortal(newSViv(h)));
-        PUSHs(sv_2mortal(newSViv(m)));
-        PUSHs(sv_2mortal(newSViv(s)));
+        mPUSHi(h);
+        mPUSHi(m);
+        mPUSHi(s);
 
 #ifdef isfinite
 void
@@ -276,7 +276,7 @@ _time_as_seconds(self, h, m, s)
 
     PPCODE:
         EXTEND(SP, 1);
-        PUSHs(sv_2mortal(newSViv(h * 3600 + m * 60 + s)));
+        mPUSHi(h * 3600 + m * 60 + s);
 
 void
 _is_leap_year(self, y)
@@ -284,7 +284,7 @@ _is_leap_year(self, y)
 
     PPCODE:
         EXTEND(SP, 1);
-        PUSHs(sv_2mortal(newSViv(_real_is_leap_year(y))));
+        mPUSHi(_real_is_leap_year(y));
 
 void
 _day_length(self, utc_rd)
@@ -295,7 +295,7 @@ _day_length(self, utc_rd)
         SET_DAY_LENGTH(utc_rd, day_length);
 
         EXTEND(SP, 1);
-        PUSHs(sv_2mortal(newSViv(day_length)));
+        mPUSHi(day_length);
 
 void
 _day_has_leap_second(self, utc_rd)
@@ -306,7 +306,7 @@ _day_has_leap_second(self, utc_rd)
         SET_DAY_LENGTH(utc_rd, day_length);
 
         EXTEND(SP, 1);
-        PUSHs(sv_2mortal(newSViv(day_length > 86400 ? 1 : 0)));
+        mPUSHi(day_length > 86400 ? 1 : 0);
 
 void
 _accumulated_leap_seconds(self, utc_rd)
@@ -317,4 +317,4 @@ _accumulated_leap_seconds(self, utc_rd)
         SET_LEAP_SECONDS(utc_rd, leap_seconds);
 
         EXTEND(SP, 1);
-        PUSHs(sv_2mortal(newSViv(leap_seconds)));
+        mPUSHi(leap_seconds);
