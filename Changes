@@ -2,7 +2,7 @@
 
 1.16   2015-01-04 (TRIAL RELEASE)
 
-- Test fix for systems with where IVs are 4 bytes long.
+- Test fix for systems where IVs are 4 bytes long.
 
 
 1.15   2015-01-03 (TRIAL RELEASE)
