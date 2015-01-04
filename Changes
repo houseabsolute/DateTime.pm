@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Test fix for systems with where IVs are 4 bytes long.
+
+
 1.15   2015-01-03 (TRIAL RELEASE)
 
 - Trying this again ... Experimental fix for adding very large numbers of
