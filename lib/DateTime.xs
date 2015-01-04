@@ -26,8 +26,6 @@
 #  endif
 #endif
 
-/* 2 ** 28 - 307 */
-#define RANGE_CUTOFF        (268435456 - 307)
 #define DAYS_PER_400_YEARS  146097
 #define DAYS_PER_4_YEARS    1461
 #define MARCH_1             306
