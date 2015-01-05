@@ -2352,6 +2352,16 @@ implementation of C<DateTime::TimeZone> will use a huge amount of
 memory calculating all the DST changes from now until the future
 date. Use UTC or the floating time zone and you will be safe.
 
+=head2 Upper and Lower Bounds
+
+Internally, dates are represented the number of days before or after
+0001-01-01. This is stored as an integer, meaning that the upper and lower
+bounds are based on your Perl's integer size (C<$Config{ivsize}).
+
+The limit on 32-bit systems is around 2^29 days, which gets you to year
+(+/-)1,469,903. On a 64-bit system you get 2^62 days,
+(+/-)12,626,367,463,883,278 (12.626 quadrillion).
+
 =head1 METHODS
 
 DateTime provide many methods. The documentation breaks them down into groups
