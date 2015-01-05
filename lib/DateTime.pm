@@ -2325,8 +2325,8 @@ datetimes.
 
 =head2 Math
 
-If you are going to be using doing date math, please read the section L<How
-DateTime Math Works>.
+If you are going to be doing date math, please read the section L<How DateTime
+Math Works>.
 
 =head2 Determining the Local Time Zone Can Be Slow
 
