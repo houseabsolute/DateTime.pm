@@ -2356,7 +2356,7 @@ date. Use UTC or the floating time zone and you will be safe.
 
 Internally, dates are represented the number of days before or after
 0001-01-01. This is stored as an integer, meaning that the upper and lower
-bounds are based on your Perl's integer size (C<$Config{ivsize}).
+bounds are based on your Perl's integer size (C<$Config{ivsize}>).
 
 The limit on 32-bit systems is around 2^29 days, which gets you to year
 (+/-)1,469,903. On a 64-bit system you get 2^62 days,
