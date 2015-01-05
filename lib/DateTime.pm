@@ -2300,11 +2300,9 @@ or C<epoch()>, will never die.
 
 =head2 Locales
 
-All the object methods which return names or abbreviations return data
-based on a locale. This is done by setting the locale when
-constructing a DateTime object. There is also a C<DefaultLocale()>
-class method which may be used to set the default locale for all
-DateTime objects created. If this is not set, then "en_US" is used.
+All the object methods which return names or abbreviations return data based
+on a locale. This is done by setting the locale when constructing a DateTime
+object. If this is not set, then "en_US" is used.
 
 =head2 Floating DateTimes
 
