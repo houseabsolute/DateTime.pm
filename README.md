@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.16
+version 1.17
 
 # SYNOPSIS
 
@@ -135,11 +135,9 @@ or `epoch()`, will never die.
 
 ## Locales
 
-All the object methods which return names or abbreviations return data
-based on a locale. This is done by setting the locale when
-constructing a DateTime object. There is also a `DefaultLocale()`
-class method which may be used to set the default locale for all
-DateTime objects created. If this is not set, then "en\_US" is used.
+All the object methods which return names or abbreviations return data based
+on a locale. This is done by setting the locale when constructing a DateTime
+object. If this is not set, then "en\_US" is used.
 
 ## Floating DateTimes
 
@@ -162,8 +160,8 @@ datetimes.
 
 ## Math
 
-If you are going to be using doing date math, please read the section ["How
-DateTime Math Works"](#how-datetime-math-works).
+If you are going to be doing date math, please read the section ["How DateTime
+Math Works"](#how-datetime-math-works).
 
 ## Determining the Local Time Zone Can Be Slow
 
@@ -188,6 +186,16 @@ very far in the future (thousands of years). The current
 implementation of `DateTime::TimeZone` will use a huge amount of
 memory calculating all the DST changes from now until the future
 date. Use UTC or the floating time zone and you will be safe.
+
+## Upper and Lower Bounds
+
+Internally, dates are represented the number of days before or after
+0001-01-01. This is stored as an integer, meaning that the upper and lower
+bounds are based on your Perl's integer size (`$Config{ivsize}`).
+
+The limit on 32-bit systems is around 2^29 days, which gets you to year
+(+/-)1,469,903. On a 64-bit system you get 2^62 days,
+(+/-)12,626,367,463,883,278 (12.626 quadrillion).
 
 # METHODS
 
