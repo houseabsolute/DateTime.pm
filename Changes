@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- No code changes from the 1.16 release.
+
+
 1.16   2015-01-04 (TRIAL RELEASE)
 
 - Test fix for systems where IVs are 4 bytes long.
