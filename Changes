@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- If you compared a DateTime object to an undef value, you might have received
+  a warning pointing to code inside DateTime.pm, instead of in your own
+  code. Fixed by Jason McIntosh. GH #7.
+
+
 1.18   2015-01-05
 
 - There will be a new leap second on June 30, 2015.
