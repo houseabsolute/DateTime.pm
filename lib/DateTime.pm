@@ -1829,12 +1829,9 @@ sub _compare_overload {
     # note: $_[1]->compare( $_[0] ) is an error when $_[1] is not a
     # DateTime (such as the INFINITY value)
 
-    if ( defined $_[0] && defined $_[1] ) {
-        return $_[2] ? -$_[0]->compare( $_[1] ) : $_[0]->compare( $_[1] );
-    }
-    else {
-        return $_[2] ? $_[0]->compare( $_[1] ) : $_[0]->compare( $_[1] );
-    }
+    return undef unless defined $_[1];
+
+    return $_[2] ? -$_[0]->compare( $_[1] ) : $_[0]->compare( $_[1] );
 }
 
 sub _string_compare_overload {
