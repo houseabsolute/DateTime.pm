@@ -2,6 +2,7 @@ use strict;
 use warnings;
 
 use Test::More;
+use Test::Warnings 0.005 ':all';
 
 use DateTime;
 
@@ -110,13 +111,9 @@ use DateTime;
         'Cannot compare a DateTime object to a FooBar object'
     );
 
-    my $saw_undef_cmp_warning = 0;
-    $SIG{__WARN__} =
-        sub { $saw_undef_cmp_warning = 1 if $_[0] =~ /uninitialized value in numeric/ };
-    { my $x = undef > $dt; }
-    $SIG{__WARN__} = undef;
-    ok(
-        $saw_undef_cmp_warning,
+    like(
+        warning { my $x = undef > $dt; },
+        qr/uninitialized value in numeric/,
         'Comparing undef to a DateTime object generates a Perl warning'
     );
 
