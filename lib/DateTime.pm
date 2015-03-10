@@ -3797,7 +3797,7 @@ This is a special case. It always produces a two-digit year, so "1976" becomes
 
 =item * Y{1,}
 
-The week of the year, from C<< $dt->week_year() >>.
+The year in "week of the year" calendars, from C<< $dt->week_year() >>.
 
 =item * u{1,}
 
