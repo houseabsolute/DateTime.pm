@@ -814,7 +814,7 @@ sub ymd {
     $sep = '-' unless defined $sep;
 
     return sprintf(
-        "%0.4d%s%0.2d%s%0.2d",
+        '%0.4d%s%0.2d%s%0.2d',
         $self->year,             $sep,
         $self->{local_c}{month}, $sep,
         $self->{local_c}{day}
@@ -827,7 +827,7 @@ sub mdy {
     $sep = '-' unless defined $sep;
 
     return sprintf(
-        "%0.2d%s%0.2d%s%0.4d",
+        '%0.2d%s%0.2d%s%0.4d',
         $self->{local_c}{month}, $sep,
         $self->{local_c}{day},   $sep,
         $self->year
@@ -839,7 +839,7 @@ sub dmy {
     $sep = '-' unless defined $sep;
 
     return sprintf(
-        "%0.2d%s%0.2d%s%0.4d",
+        '%0.2d%s%0.2d%s%0.4d',
         $self->{local_c}{day},   $sep,
         $self->{local_c}{month}, $sep,
         $self->year
@@ -898,7 +898,7 @@ sub hms {
     $sep = ':' unless defined $sep;
 
     return sprintf(
-        "%0.2d%s%0.2d%s%0.2d",
+        '%0.2d%s%0.2d%s%0.2d',
         $self->{local_c}{hour},   $sep,
         $self->{local_c}{minute}, $sep,
         $self->{local_c}{second}
@@ -1269,7 +1269,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
             substr(
                 my $z
                     = DateTime::TimeZone->offset_as_string( $_[0]->offset() ),
-                -2, 0, ":"
+                -2, 0, ':'
             );
             $z;
         },
@@ -1650,7 +1650,7 @@ sub _add_overload {
         my $dt_string = overload::StrVal($dt);
 
         Carp::croak( "Cannot add $dur to a $class object ($dt_string).\n"
-                . " Only a DateTime::Duration object can "
+                . ' Only a DateTime::Duration object can '
                 . " be added to a $class object." );
     }
 
@@ -1678,7 +1678,7 @@ sub _subtract_overload {
 
         Carp::croak(
             "Cannot subtract $date2 from a $class object ($dt_string).\n"
-                . " Only a DateTime::Duration or DateTime object can "
+                . ' Only a DateTime::Duration or DateTime object can '
                 . " be subtracted from a $class object." );
     }
 }
@@ -1869,7 +1869,7 @@ sub _compare {
         my $dt1_string = overload::StrVal($dt1);
         my $dt2_string = overload::StrVal($dt2);
 
-        Carp::croak( "A DateTime object can only be compared to"
+        Carp::croak( 'A DateTime object can only be compared to'
                 . " another DateTime object ($dt1_string, $dt2_string)." );
     }
 
