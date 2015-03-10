@@ -1,0 +1,58 @@
+severity = 3
+verbose = 11
+theme = core + pbp + bugs + maintenance + cosmetic + complexity + security + tests + moose
+
+exclude = Subroutines::ProhibitCallsToUndeclaredSubs
+
+[BuiltinFunctions::ProhibitStringySplit]
+severity = 3
+
+[CodeLayout::RequireTrailingCommas]
+severity = 3
+
+[ControlStructures::ProhibitCStyleForLoops]
+severity = 3
+
+[InputOutput::RequireCheckedSyscalls]
+functions = :builtins
+exclude_functions = sleep
+severity = 3
+
+[RegularExpressions::ProhibitComplexRegexes]
+max_characters = 200
+
+[RegularExpressions::ProhibitUnusualDelimiters]
+severity = 3
+
+[Subroutines::ProhibitUnusedPrivateSubroutines]
+private_name_regex = _(?!build)\w+
+
+[TestingAndDebugging::ProhibitNoWarnings]
+allow = redefine
+
+[ValuesAndExpressions::ProhibitEmptyQuotes]
+severity = 3
+
+[ValuesAndExpressions::ProhibitInterpolationOfLiterals]
+severity = 3
+
+[ValuesAndExpressions::RequireUpperCaseHeredocTerminator]
+severity = 3
+
+[Variables::ProhibitPackageVars]
+add_packages = Carp Test::Builder
+
+[-Subroutines::RequireFinalReturn]
+
+[-ErrorHandling::RequireCarping]
+
+# No need for /xsm everywhere
+[-RegularExpressions::RequireDotMatchAnything]
+[-RegularExpressions::RequireExtendedFormatting]
+[-RegularExpressions::RequireLineBoundaryMatching]
+
+# http://stackoverflow.com/questions/2275317/why-does-perlcritic-dislike-using-shift-to-populate-subroutine-variables
+[-Subroutines::RequireArgUnpacking]
+
+# "use v5.14" is more readable than "use 5.014"
+[-ValuesAndExpressions::ProhibitVersionStrings]
