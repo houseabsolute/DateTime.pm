@@ -33,7 +33,8 @@ while ( defined( my $line = <DATA> ) ) {
     $res =~ s/^\'|\'$//g;
 
     if ( $fmt eq '%A' && $locale eq 'it' && $] >= 5.006 && $] <= 5.008 ) {
-        ok( 1,
+        ok(
+            1,
             "Perl 5.6.0 & 5.6.1 cannot handle Unicode characters in the DATA filehandle properly"
         );
         next;
@@ -67,46 +68,74 @@ while ( defined( my $line = <DATA> ) ) {
         minute => 0
     );
 
-    is( $dt->strftime('%I %M %p'), '12 00 AM',
-        'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), '12 00 AM',
-        'formatting of hours as 1-12' );
+    is(
+        $dt->strftime('%I %M %p'), '12 00 AM',
+        'formatting of hours as 1-12'
+    );
+    is(
+        $dt->strftime('%l %M %p'), '12 00 AM',
+        'formatting of hours as 1-12'
+    );
 
     $dt->set( hour => 1 );
-    is( $dt->strftime('%I %M %p'), '01 00 AM',
-        'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), ' 1 00 AM',
-        'formatting of hours as 1-12' );
+    is(
+        $dt->strftime('%I %M %p'), '01 00 AM',
+        'formatting of hours as 1-12'
+    );
+    is(
+        $dt->strftime('%l %M %p'), ' 1 00 AM',
+        'formatting of hours as 1-12'
+    );
 
     $dt->set( hour => 11 );
-    is( $dt->strftime('%I %M %p'), '11 00 AM',
-        'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), '11 00 AM',
-        'formatting of hours as 1-12' );
+    is(
+        $dt->strftime('%I %M %p'), '11 00 AM',
+        'formatting of hours as 1-12'
+    );
+    is(
+        $dt->strftime('%l %M %p'), '11 00 AM',
+        'formatting of hours as 1-12'
+    );
 
     $dt->set( hour => 12 );
-    is( $dt->strftime('%I %M %p'), '12 00 PM',
-        'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), '12 00 PM',
-        'formatting of hours as 1-12' );
+    is(
+        $dt->strftime('%I %M %p'), '12 00 PM',
+        'formatting of hours as 1-12'
+    );
+    is(
+        $dt->strftime('%l %M %p'), '12 00 PM',
+        'formatting of hours as 1-12'
+    );
 
     $dt->set( hour => 13 );
-    is( $dt->strftime('%I %M %p'), '01 00 PM',
-        'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), ' 1 00 PM',
-        'formatting of hours as 1-12' );
+    is(
+        $dt->strftime('%I %M %p'), '01 00 PM',
+        'formatting of hours as 1-12'
+    );
+    is(
+        $dt->strftime('%l %M %p'), ' 1 00 PM',
+        'formatting of hours as 1-12'
+    );
 
     $dt->set( hour => 23 );
-    is( $dt->strftime('%I %M %p'), '11 00 PM',
-        'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), '11 00 PM',
-        'formatting of hours as 1-12' );
+    is(
+        $dt->strftime('%I %M %p'), '11 00 PM',
+        'formatting of hours as 1-12'
+    );
+    is(
+        $dt->strftime('%l %M %p'), '11 00 PM',
+        'formatting of hours as 1-12'
+    );
 
     $dt->set( hour => 0 );
-    is( $dt->strftime('%I %M %p'), '12 00 AM',
-        'formatting of hours as 1-12' );
-    is( $dt->strftime('%l %M %p'), '12 00 AM',
-        'formatting of hours as 1-12' );
+    is(
+        $dt->strftime('%I %M %p'), '12 00 AM',
+        'formatting of hours as 1-12'
+    );
+    is(
+        $dt->strftime('%l %M %p'), '12 00 AM',
+        'formatting of hours as 1-12'
+    );
 }
 
 {
@@ -124,8 +153,10 @@ while ( defined( my $line = <DATA> ) ) {
     );
 
     # Should print '%{day_name}', prints '30onday'!
-    is( $dt->strftime('%%{day_name}%n'), "%{day_name}\n",
-        '%%{day_name}%n bug' );
+    is(
+        $dt->strftime('%%{day_name}%n'), "%{day_name}\n",
+        '%%{day_name}%n bug'
+    );
 
     # Should print '%6N', prints '123456'
     is( $dt->strftime('%%6N%n'), "%6N\n", '%%6N%n bug' );
@@ -162,11 +193,14 @@ while ( defined( my $line = <DATA> ) ) {
 {
     my $dt = DateTime->new( year => 2011 );
 
-    for my $i (1..9) {
-        my $spec = '%' . $i . 'N';
-        my $expect = '0' x$i;
+    for my $i ( 1 .. 9 ) {
+        my $spec   = '%' . $i . 'N';
+        my $expect = '0' x $i;
 
-        is( $dt->strftime($spec), $expect, "strftime $spec with 0 nanoseconds" );
+        is(
+            $dt->strftime($spec), $expect,
+            "strftime $spec with 0 nanoseconds"
+        );
     }
 }
 

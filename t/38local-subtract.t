@@ -296,8 +296,10 @@ use DateTime;
     is( $deltas2{minutes},     -3, 'delta_minutes is 3' );
     is( $deltas2{seconds},     0,  'delta_seconds is 0' );
     is( $deltas2{nanoseconds}, 0,  'delta_nanoseconds is 0' );
-    is( $dt2->clone->add_duration($dur2)->datetime, '2003-04-05T02:58:00',
-        'dt2 + dur2 != dt1' );
+    is(
+        $dt2->clone->add_duration($dur2)->datetime, '2003-04-05T02:58:00',
+        'dt2 + dur2 != dt1'
+    );
     is(
         DateTime->compare(
             $dt2->clone->add_duration( $dur2->clock_duration )
@@ -427,11 +429,15 @@ use DateTime;
 
     my $dur    = $dt2->subtract_datetime($dt1);
     my %deltas = $dur->deltas;
-    is( $deltas{months}, 3,
-        '3 months between two local times over DST change' );
+    is(
+        $deltas{months}, 3,
+        '3 months between two local times over DST change'
+    );
     is( $deltas{days}, 0, '0 days between two local times over DST change' );
-    is( $deltas{minutes}, 0,
-        '0 minutes between two local times over DST change' );
+    is(
+        $deltas{minutes}, 0,
+        '0 minutes between two local times over DST change'
+    );
 }
 
 # same as previous but without hours overflow
@@ -448,11 +454,15 @@ use DateTime;
 
     my $dur    = $dt2->subtract_datetime($dt1);
     my %deltas = $dur->deltas;
-    is( $deltas{months}, 3,
-        '3 months between two local times over DST change' );
+    is(
+        $deltas{months}, 3,
+        '3 months between two local times over DST change'
+    );
     is( $deltas{days}, 0, '0 days between two local times over DST change' );
-    is( $deltas{minutes}, 0,
-        '0 minutes between two local times over DST change' );
+    is(
+        $deltas{minutes}, 0,
+        '0 minutes between two local times over DST change'
+    );
 }
 
 # another docs example
@@ -468,11 +478,15 @@ use DateTime;
     my $dur = $dt2->subtract_datetime($dt1);
 
     my %deltas = $dur->deltas;
-    is( $deltas{months}, 0,
-        '0 months between two local times over DST change' );
+    is(
+        $deltas{months}, 0,
+        '0 months between two local times over DST change'
+    );
     is( $deltas{days}, 0, '0 days between two local times over DST change' );
-    is( $deltas{minutes}, 60,
-        '60 minutes between two local times over DST change' );
+    is(
+        $deltas{minutes}, 60,
+        '60 minutes between two local times over DST change'
+    );
 
     is(
         DateTime->compare( $dt1->clone->add_duration($dur), $dt2 ), 0,
@@ -498,11 +512,15 @@ use DateTime;
     my $dur = $dt2->subtract_datetime($dt1);
 
     my %deltas = $dur->deltas;
-    is( $deltas{months}, 0,
-        '0 months between two local times over DST change' );
+    is(
+        $deltas{months}, 0,
+        '0 months between two local times over DST change'
+    );
     is( $deltas{days}, 0, '0 days between two local times over DST change' );
-    is( $deltas{minutes}, 60,
-        '60 minutes between two local times over DST change' );
+    is(
+        $deltas{minutes}, 60,
+        '60 minutes between two local times over DST change'
+    );
 
     is(
         DateTime->compare( $dt1->clone->add_duration($dur), $dt2 ), 0,
@@ -532,14 +550,20 @@ use DateTime;
     my $dur = $dt2->subtract_datetime($dt1);
     my ( $minutes, $seconds ) = $dur->in_units( 'minutes', 'seconds' );
 
-    is( $minutes, 60,
-        'subtraction of two dates on a DST change date, minutes == 60' );
-    is( $seconds, 0,
-        'subtraction of two dates on a DST change date, seconds == 0' );
+    is(
+        $minutes, 60,
+        'subtraction of two dates on a DST change date, minutes == 60'
+    );
+    is(
+        $seconds, 0,
+        'subtraction of two dates on a DST change date, seconds == 0'
+    );
 
     $dur = $dt1->subtract_datetime($dt1);
-    ok( $dur->is_zero,
-        'dst change date (no dst) - itself, duration is zero' );
+    ok(
+        $dur->is_zero,
+        'dst change date (no dst) - itself, duration is zero'
+    );
 }
 
 {
@@ -550,8 +574,10 @@ use DateTime;
     );
 
     my $dur = $dt1->subtract_datetime($dt1);
-    ok( $dur->is_zero,
-        'dst change date (with dst) - itself, duration is zero' );
+    ok(
+        $dur->is_zero,
+        'dst change date (with dst) - itself, duration is zero'
+    );
 }
 
 # This tests a bug where one of the datetimes is changing DST, and the

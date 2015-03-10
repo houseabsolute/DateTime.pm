@@ -1018,7 +1018,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         'l' => sub { sprintf( '%2d', $_[0]->hour_12 ) },
         'm' => sub { sprintf( '%02d', $_[0]->month ) },
         'M' => sub { sprintf( '%02d', $_[0]->minute ) },
-        'n' => sub { "\n" },                   # should this be OS-sensitive?
+        'n' => sub {"\n"},                     # should this be OS-sensitive?
         'N' => \&_format_nanosecs,
         'p' => sub { $_[0]->am_or_pm() },
         'P' => sub { lc $_[0]->am_or_pm() },
@@ -1026,7 +1026,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         'R' => sub { $_[0]->strftime('%H:%M') },
         's' => sub { $_[0]->epoch },
         'S' => sub { sprintf( '%02d', $_[0]->second ) },
-        't' => sub { "\t" },
+        't' => sub {"\t"},
         'T' => sub { $_[0]->strftime('%H:%M:%S') },
         'u' => sub { $_[0]->day_of_week },
         'U' => sub {
@@ -1052,7 +1052,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         'Y' => sub { return $_[0]->year },
         'z' => sub { DateTime::TimeZone->offset_as_string( $_[0]->offset ) },
         'Z' => sub { $_[0]->{tz}->short_name_for_datetime( $_[0] ) },
-        '%' => sub { '%' },
+        '%' => sub {'%'},
     );
 
     $strftime_patterns{h} = $strftime_patterns{b};
@@ -1315,7 +1315,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         my $self    = shift;
         my $pattern = shift;
 
-        for ( my $i = 0 ; $i < @patterns ; $i += 2 ) {
+        for ( my $i = 0; $i < @patterns; $i += 2 ) {
             if ( $pattern =~ /$patterns[$i]/ ) {
                 my $sub = $patterns[ $i + 1 ];
 
@@ -1362,8 +1362,8 @@ sub hires_epoch {
     return $epoch + $nano;
 }
 
-sub is_finite   { 1 }
-sub is_infinite { 0 }
+sub is_finite   {1}
+sub is_infinite {0}
 
 # added for benefit of DateTime::TimeZone
 sub utc_year { $_[0]->{utc_year} }

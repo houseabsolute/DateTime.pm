@@ -131,8 +131,10 @@ ok( ( $infinity <=> $date1 ) == 1, 'Comparison overload $inf <=> $a' );
         time_zone => 'floating'
     );
 
-    is( DateTime->compare( $date1, $date2 ), 0,
-        'Comparison with floating time (cmp)' );
+    is(
+        DateTime->compare( $date1, $date2 ), 0,
+        'Comparison with floating time (cmp)'
+    );
     is( ( $date1 <=> $date2 ), 0, 'Comparison with floating time (<=>)' );
     is( ( $date1 cmp $date2 ), 0, 'Comparison with floating time (cmp)' );
     is(
@@ -155,8 +157,10 @@ ok( ( $infinity <=> $date1 ) == 1, 'Comparison overload $inf <=> $a' );
         nanosecond => 200,
     );
 
-    is( DateTime->compare( $date1, $date2 ), -1,
-        'Comparison with floating time (cmp)' );
+    is(
+        DateTime->compare( $date1, $date2 ), -1,
+        'Comparison with floating time (cmp)'
+    );
     is( ( $date1 <=> $date2 ), -1, 'Comparison with floating time (<=>)' );
     is( ( $date1 cmp $date2 ), -1, 'Comparison with floating time (cmp)' );
 }
@@ -174,8 +178,10 @@ ok( ( $infinity <=> $date1 ) == 1, 'Comparison overload $inf <=> $a' );
         nanosecond => 10000,
     );
 
-    is( DateTime->compare( $date1, $date2 ), 0,
-        'Comparison with floating time (cmp)' );
+    is(
+        DateTime->compare( $date1, $date2 ), 0,
+        'Comparison with floating time (cmp)'
+    );
     is( ( $date1 <=> $date2 ), 0, 'Comparison with floating time (<=>)' );
     is( ( $date1 cmp $date2 ), 0, 'Comparison with floating time (cmp)' );
     is(

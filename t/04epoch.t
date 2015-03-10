@@ -21,8 +21,10 @@ use DateTime;
 
 {
     my $dt = DateTime->from_epoch( epoch => '3600' );
-    is( $dt->epoch, 3600,
-        'creation test from epoch = 3600 (compare to epoch)' );
+    is(
+        $dt->epoch, 3600,
+        'creation test from epoch = 3600 (compare to epoch)'
+    );
 }
 
 {
@@ -104,8 +106,10 @@ use DateTime;
 
 {
     my $dt = DateTime->from_epoch( epoch => 0.5 );
-    is( $dt->nanosecond, 500_000_000,
-        'nanosecond should be 500,000,000 with 0.5 as epoch' );
+    is(
+        $dt->nanosecond, 500_000_000,
+        'nanosecond should be 500,000,000 with 0.5 as epoch'
+    );
 
     is( $dt->epoch,       0,   'epoch should be 0' );
     is( $dt->hires_epoch, 0.5, 'hires_epoch should be 0.5' );

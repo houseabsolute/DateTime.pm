@@ -58,7 +58,7 @@ use base qw(DateTime::Infinite);
     $Pos->_calc_local_rd;
 
     sub new {$Pos}
- }
+}
 
 package DateTime::Infinite::Past;
 
@@ -132,7 +132,7 @@ my @methods = qw(
 
 for my $meth (@methods) {
     no strict 'refs';
-    *{$meth} = sub { undef };
+    *{$meth} = sub {undef};
 }
 
 # Totally arbitrary
@@ -145,6 +145,7 @@ sub prefers_24_hour_time {
 }
 
 our $AUTOLOAD;
+
 sub AUTOLOAD {
     my $self = shift;
 

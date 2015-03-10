@@ -26,8 +26,10 @@ use DateTime;
     is( $dur->delta_days,    2,  'delta_days should be 2' );
     is( $dur->delta_minutes, 64, 'delta_minutes should be 64' );
     is( $dur->delta_seconds, 20, 'delta_seconds should be 20' );
-    is( $dur->delta_nanoseconds, 999_999_995,
-        'delta_nanoseconds should be 999,999,995' );
+    is(
+        $dur->delta_nanoseconds, 999_999_995,
+        'delta_nanoseconds should be 999,999,995'
+    );
 
     is( $dur->years,       0,           'Years' );
     is( $dur->months,      1,           'Months' );
@@ -71,8 +73,10 @@ use DateTime;
 
     $dur = $date1 - $date1;
     is( $dur->delta_days, 0, 'date minus itself should have no delta days' );
-    is( $dur->delta_seconds, 0,
-        'date minus itself should have no delta seconds' );
+    is(
+        $dur->delta_seconds, 0,
+        'date minus itself should have no delta seconds'
+    );
 
     my $new = $date1 - DateTime::Duration->new( years => 2 );
     is( $new->datetime, '1999-05-10T04:03:02', 'test - overloading' );
@@ -95,8 +99,10 @@ use DateTime;
     );
 
     ok( defined $d2, 'Defined' );
-    is( $d2->datetime, '2001-10-11T04:00:00',
-        'Subtract and get the right thing' );
+    is(
+        $d2->datetime, '2001-10-11T04:00:00',
+        'Subtract and get the right thing'
+    );
 }
 
 # based on bug report from Eric Cholet
@@ -173,8 +179,10 @@ use DateTime;
     is( $dur->delta_days,    0,    'delta_days is 0' );
     is( $dur->delta_minutes, 1439, 'delta_minutes is 1439' );
     is( $dur->delta_seconds, 59,   'delta_seconds is 59' );
-    is( $dur->delta_nanoseconds, 999_999_999,
-        'delta_nanoseconds is 999,999,999' );
+    is(
+        $dur->delta_nanoseconds, 999_999_999,
+        'delta_nanoseconds is 999,999,999'
+    );
     ok( $dur->is_positive, 'duration is positive' );
 }
 
@@ -267,8 +275,10 @@ use DateTime;
 
     is( $dur->delta_days,    0,   'days is 0' );
     is( $dur->delta_seconds, -59, 'seconds is -59' );
-    is( $dur->delta_nanoseconds, -999_999_990,
-        'nanoseconds is -999,999,990' );
+    is(
+        $dur->delta_nanoseconds, -999_999_990,
+        'nanoseconds is -999,999,990'
+    );
     ok( $dur->is_negative, 'duration is negative' );
 }
 
@@ -318,8 +328,10 @@ use DateTime;
     is( $dur->delta_months,  0,         'delta_months is 0' );
     is( $dur->delta_minutes, 0,         'delta_minutes is 0' );
     is( $dur->delta_seconds, 2_855_060, 'delta_seconds is 2,855,060' );
-    is( $dur->delta_nanoseconds, 999_999_995,
-        'delta_seconds is 999,999,995' );
+    is(
+        $dur->delta_nanoseconds, 999_999_995,
+        'delta_seconds is 999,999,995'
+    );
 }
 
 {
@@ -463,7 +475,10 @@ use DateTime;
     );
 
     $dt->subtract( days => 2 );
-    is( $dt->date, '2014-07-01', 'subtracting 2 days from a floating datetime' );
+    is(
+        $dt->date, '2014-07-01',
+        'subtracting 2 days from a floating datetime'
+    );
 }
 
 done_testing();

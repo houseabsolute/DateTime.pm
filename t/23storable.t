@@ -83,7 +83,7 @@ unless ( eval { require Storable; 1 } ) {
 {
     package Formatter;
 
-    sub format_datetime {};
+    sub format_datetime { }
 }
 
 {

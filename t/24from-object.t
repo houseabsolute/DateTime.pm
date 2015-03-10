@@ -14,23 +14,28 @@ is( $dt1->hour,       1,    'hour is 1' );
 is( $dt1->nanosecond, 100,  'nanosecond is 100' );
 
 {
-    my $t1 = DateTime::Calendar::_Test::WithoutTZ->new( rd_days => 1,
-        rd_secs => 0 );
+    my $t1 = DateTime::Calendar::_Test::WithoutTZ->new(
+        rd_days => 1,
+        rd_secs => 0
+    );
 
     # Tests creating objects from other calendars (without time zones)
     my $t2 = DateTime->from_object( object => $t1 );
 
     isa_ok( $t2, 'DateTime' );
-    is( $t2->datetime, '0001-01-01T00:00:00',
-        'convert from object without tz' );
+    is(
+        $t2->datetime, '0001-01-01T00:00:00',
+        'convert from object without tz'
+    );
     ok( $t2->time_zone->is_floating, 'time_zone is floating' );
 }
 
 {
     my $tz = DateTime::TimeZone->new( name => 'America/Chicago' );
-    my $t1
-        = DateTime::Calendar::_Test::WithTZ->new( rd_days => 1, rd_secs => 0,
-        time_zone => $tz );
+    my $t1 = DateTime::Calendar::_Test::WithTZ->new(
+        rd_days   => 1, rd_secs => 0,
+        time_zone => $tz
+    );
 
     # Tests creating objects from other calendars (with time zones)
     my $t2 = DateTime->from_object( object => $t1 );
@@ -41,14 +46,18 @@ is( $dt1->nanosecond, 100,  'nanosecond is 100' );
 
 {
     my $tz = DateTime::TimeZone->new( name => 'UTC' );
-    my $t1 = DateTime::Calendar::_Test::WithTZ->new( rd_days => 720258,
-        rd_secs => 86400, time_zone => $tz );
+    my $t1 = DateTime::Calendar::_Test::WithTZ->new(
+        rd_days => 720258,
+        rd_secs => 86400, time_zone => $tz
+    );
 
     my $t2 = DateTime->from_object( object => $t1 );
 
     isa_ok( $t2, 'DateTime' );
-    is( $t2->second, 60,
-        'new DateTime from_object with TZ which is a leap second' );
+    is(
+        $t2->second, 60,
+        'new DateTime from_object with TZ which is a leap second'
+    );
 }
 
 done_testing();

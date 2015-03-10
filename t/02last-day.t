@@ -35,8 +35,10 @@ foreach my $month ( 1 .. 12 ) {
 
 {
     eval {
-        DateTime->last_day_of_month( year => 2000, month => 1,
-            nanosecond => 2000 );
+        DateTime->last_day_of_month(
+            year       => 2000, month => 1,
+            nanosecond => 2000
+        );
     };
     is(
         $@, '',

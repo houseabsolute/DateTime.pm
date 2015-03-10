@@ -22,10 +22,10 @@ use DateTime;
     my $after_string  = '2050-01-15T20:10:11';
 
     is( "$dt", $same_string, 'stringification overloading' );
-    ok( $dt eq $same_string, 'eq overloading true' );
+    ok( $dt eq $same_string,       'eq overloading true' );
     ok( !( $dt eq $after_string ), 'eq overloading false' );
-    ok( $dt ne $after_string, 'ne overloading true' );
-    ok( !( $dt ne $same_string ), 'ne overloading false' );
+    ok( $dt ne $after_string,      'ne overloading true' );
+    ok( !( $dt ne $same_string ),  'ne overloading false' );
 
     is( $dt cmp $same_string,  0,  'cmp overloading' );
     is( $dt cmp $after_string, -1, '  less than' );
@@ -51,8 +51,8 @@ use DateTime;
 
     ok( $dt eq $same_od, "DateTime eq non-DateTime overloaded object true" );
     ok( !( $dt eq $after_od ), "  eq false" );
-    ok( $dt ne $after_od, "  ne true" );
-    ok( !( $dt ne $same_od ), "  ne false" );
+    ok( $dt ne $after_od,      "  ne true" );
+    ok( !( $dt ne $same_od ),  "  ne false" );
 
     is( $dt cmp $same_od,  0,  'cmp overloading' );
     is( $dt cmp $after_od, -1, '  lt overloading' );

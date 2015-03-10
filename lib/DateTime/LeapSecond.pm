@@ -118,6 +118,7 @@ sub _initialize {
 __PACKAGE__->_initialize();
 
 1;
+
 # ABSTRACT: leap seconds table and utilities
 
 __END__

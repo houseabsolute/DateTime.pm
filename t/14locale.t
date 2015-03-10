@@ -30,8 +30,10 @@ is( $@, '', 'make sure constructor accepts locale parameter' );
 }
 
 eval {
-    DateTime->from_object( object => ( bless {}, 'DT::Object' ),
-        locale => 'en_US' );
+    DateTime->from_object(
+        object => ( bless {}, 'DT::Object' ),
+        locale => 'en_US'
+    );
 };
 is( $@, '', 'make sure constructor accepts locale parameter' );
 

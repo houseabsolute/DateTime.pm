@@ -37,8 +37,10 @@ $dt = DateTime->new(
 );
 
 $dt->add( minutes => 1, seconds => 12 );
-is( $dt->datetime, '1986-01-28T16:39:12',
-    "Adding durations with minutes and seconds works" );
+is(
+    $dt->datetime, '1986-01-28T16:39:12',
+    "Adding durations with minutes and seconds works"
+);
 
 $dt = DateTime->new(
     year      => 1986, month  => 1, day => 28,
@@ -47,8 +49,10 @@ $dt = DateTime->new(
 );
 
 $dt->add( seconds => 30 );
-is( $dt->datetime, '1986-01-28T16:38:30',
-    "Adding durations with seconds only works" );
+is(
+    $dt->datetime, '1986-01-28T16:38:30',
+    "Adding durations with seconds only works"
+);
 
 $dt = DateTime->new(
     year      => 1986, month  => 1, day => 28,
@@ -57,8 +61,10 @@ $dt = DateTime->new(
 );
 
 $dt->add( hours => 1, minutes => 10 );
-is( $dt->datetime, '1986-01-28T17:48:00',
-    "Adding durations with hours and minutes works" );
+is(
+    $dt->datetime, '1986-01-28T17:48:00',
+    "Adding durations with hours and minutes works"
+);
 
 $dt = DateTime->new(
     year      => 1986, month  => 1, day => 28,
@@ -67,8 +73,10 @@ $dt = DateTime->new(
 );
 
 $dt->add( days => 3 );
-is( $dt->datetime, '1986-01-31T16:38:00',
-    "Adding durations with days only works" );
+is(
+    $dt->datetime, '1986-01-31T16:38:00',
+    "Adding durations with days only works"
+);
 
 $dt = DateTime->new(
     year      => 1986, month  => 1, day => 28,
@@ -77,8 +85,10 @@ $dt = DateTime->new(
 );
 
 $dt->add( days => 3, hours => 2 );
-is( $dt->datetime, '1986-01-31T18:38:00',
-    "Adding durations with days and hours works" );
+is(
+    $dt->datetime, '1986-01-31T18:38:00',
+    "Adding durations with days and hours works"
+);
 
 $dt = DateTime->new(
     year      => 1986, month  => 1, day => 28,
@@ -87,8 +97,10 @@ $dt = DateTime->new(
 );
 
 $dt->add( days => 3, hours => 2, minutes => 20, seconds => 15 );
-is( $dt->datetime, '1986-01-31T18:58:15',
-    "Adding durations with days, hours, minutes, and seconds works" );
+is(
+    $dt->datetime, '1986-01-31T18:58:15',
+    "Adding durations with days, hours, minutes, and seconds works"
+);
 
 # Add 15M - this test failed at one point in N::I::Time
 $dt = DateTime->new(
@@ -98,7 +110,10 @@ $dt = DateTime->new(
 );
 
 $dt->add( minutes => 15 );
-is( $dt->datetime, '2001-04-05T16:15:00', "Adding minutes to an ical string" );
+is(
+    $dt->datetime, '2001-04-05T16:15:00',
+    "Adding minutes to an ical string"
+);
 
 # Subtract a duration
 $dt->add( minutes => -15 );
@@ -113,11 +128,15 @@ $dt = DateTime->new(
 );
 
 $dt->add( seconds => 60 );
-is( $dt->datetime, "1986-01-28T16:39:00",
-    "adding positive seconds with seconds works" );
+is(
+    $dt->datetime, "1986-01-28T16:39:00",
+    "adding positive seconds with seconds works"
+);
 $dt->add( seconds => -120 );
-is( $dt->datetime, "1986-01-28T16:37:00",
-    "adding negative seconds with seconds works" );
+is(
+    $dt->datetime, "1986-01-28T16:37:00",
+    "adding negative seconds with seconds works"
+);
 
 # test sub months
 $dt = DateTime->new(

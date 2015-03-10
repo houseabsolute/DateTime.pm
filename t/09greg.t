@@ -49,7 +49,10 @@ for (
     ) {
     is(
         DateTime->_ymd2rd( @{$_}[ 1 .. 3 ] ), $_->[0],
-        join( '/', @{$_}[ 1 .. 3 ] ) . " \t=> " . $_->[0] . " (normalization)"
+        join( '/', @{$_}[ 1 .. 3 ] )
+            . " \t=> "
+            . $_->[0]
+            . " (normalization)"
     );
 }
 
@@ -66,8 +69,10 @@ while ( $y <= 4800 ) {
     ++$dno;
     $dno2 = DateTime->_ymd2rd( $y, $m, 1 );
     if ( $dno != $dno2 ) {
-        is( $dno2, $dno,
-            "greg torture test: _ymd2rd($y,$m,1) should be $dno" );
+        is(
+            $dno2, $dno,
+            "greg torture test: _ymd2rd($y,$m,1) should be $dno"
+        );
         last;
     }
     ( $y2, $m2, $d2 ) = DateTime->_rd2ymd($dno);

@@ -143,8 +143,10 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     is( $dt0->era_abbr,      'AD',  'era is AD' );
     is( $dt0->year_with_era, '1AD', 'year_with_era is 1AD' );
     is( $dt0->christian_era, 'AD',  'christian_era is AD' );
-    is( $dt0->year_with_christian_era, '1AD',
-        'year_with_christian_era is 1AD' );
+    is(
+        $dt0->year_with_christian_era, '1AD',
+        'year_with_christian_era is 1AD'
+    );
     is( $dt0->secular_era,           'CE',  'secular_era is CE' );
     is( $dt0->year_with_secular_era, '1CE', 'year_with_secular_era is 1CE' );
 
@@ -155,11 +157,15 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     is( $dt0->era_abbr,      'BC',  'era is BC' );
     is( $dt0->year_with_era, '1BC', 'year_with_era is 1BC' );
     is( $dt0->christian_era, 'BC',  'christian_era is BC' );
-    is( $dt0->year_with_christian_era, '1BC',
-        'year_with_christian_era is 1BC' );
+    is(
+        $dt0->year_with_christian_era, '1BC',
+        'year_with_christian_era is 1BC'
+    );
     is( $dt0->secular_era, 'BCE', 'secular_era is BCE' );
-    is( $dt0->year_with_secular_era, '1BCE',
-        'year_with_secular_era is 1BCE' );
+    is(
+        $dt0->year_with_secular_era, '1BCE',
+        'year_with_secular_era is 1BCE'
+    );
 }
 
 {
@@ -169,8 +175,10 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
     my $dt1 = $dt_neg + DateTime::Duration->new( years => 10 );
     is( $dt1->year, 0, "year is 0 after adding ten years to year -10" );
-    is( $dt1->ce_year, -1,
-        "ce_year is -1 after adding ten years to year -10" );
+    is(
+        $dt1->ce_year, -1,
+        "ce_year is -1 after adding ten years to year -10"
+    );
 }
 
 {
@@ -215,8 +223,10 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
     );
 
     is( $dt->ymd, '-0006-02-25', 'ymd is -0006-02-25' );
-    is( $dt->iso8601, '-0006-02-25T00:00:00',
-        'iso8601 is -0005-02-25T00:00:00' );
+    is(
+        $dt->iso8601, '-0006-02-25T00:00:00',
+        'iso8601 is -0005-02-25T00:00:00'
+    );
     is( $dt->year,    -6, 'year is -6' );
     is( $dt->ce_year, -7, 'ce_year is -7' );
 }

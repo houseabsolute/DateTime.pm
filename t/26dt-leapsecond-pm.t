@@ -13,15 +13,19 @@ is( DateTime::LeapSecond::leap_seconds(100), 0, 'before 1970' );
 
 # 1972-06-30
 my $day = 720074;
-is( DateTime::LeapSecond::leap_seconds($day), 0,
-    'before leap-second transition' );
+is(
+    DateTime::LeapSecond::leap_seconds($day), 0,
+    'before leap-second transition'
+);
 
 is( DateTime::LeapSecond::extra_seconds($day) + 0, 1, 'leap day' );
 
 # 1972-07-01
 $day = 720075;
-is( DateTime::LeapSecond::leap_seconds($day), 1,
-    'day after leap-second day' );
+is(
+    DateTime::LeapSecond::leap_seconds($day), 1,
+    'day after leap-second day'
+);
 
 is( DateTime::LeapSecond::extra_seconds($day), 0, 'not a leap day' );
 

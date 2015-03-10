@@ -1,4 +1,4 @@
-package
+package    # hide from PAUSE
     DateTime;
 
 use strict;
@@ -131,7 +131,8 @@ sub _ymd2rd {
     $d
         += ( $m * 367 - 1094 ) / 12
         + $y % 100 * 1461 / 4
-        + ( $y / 100 * 36524 + $y / 400 ) - 306;
+        + ( $y / 100 * 36524 + $y / 400 )
+        - 306;
 }
 
 sub _seconds_as_components {

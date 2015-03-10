@@ -45,8 +45,10 @@ use DateTime::Duration;
     is( $dur->in_units( 'days', 'weeks' ), 4, "in_units days, weeks" );
     is( $dur->in_units('hours'), 6, "in_units hours" );
     is( $dur->in_units( 'minutes', 'hours' ), 7, "in_units minutes, hours" );
-    is( $dur->in_units('nanoseconds'), 8_000_000_009,
-        "in_units nanoseconds" );
+    is(
+        $dur->in_units('nanoseconds'), 8_000_000_009,
+        "in_units nanoseconds"
+    );
 
     my (
         $years,   $months,  $weeks, $days, $hours,
@@ -90,8 +92,10 @@ use DateTime::Duration;
     is( $calendar_dur->delta_months,  14, "date - delta_months is 14" );
     is( $calendar_dur->delta_minutes, 0,  "date - delta_minutes is 0" );
     is( $calendar_dur->delta_seconds, 0,  "date - delta_seconds is 0" );
-    is( $calendar_dur->delta_nanoseconds, 0,
-        "date - delta_nanoseconds is 0" );
+    is(
+        $calendar_dur->delta_nanoseconds, 0,
+        "date - delta_nanoseconds is 0"
+    );
     ok( $calendar_dur->is_limit_mode, "limit mode" );
 
     my $clock_dur = $dur->clock_duration;
@@ -166,13 +170,19 @@ my $leap_day = DateTime->new(
     is( $inverse->minutes, 2, 'inverse minutes should be positive' );
     is( $inverse->seconds, 3, 'inverse minutes should be positive' );
 
-    is( $inverse->delta_months, -13,
-        'inverse delta months should be negative' );
+    is(
+        $inverse->delta_months, -13,
+        'inverse delta months should be negative'
+    );
     is( $inverse->delta_days, -8, 'inverse delta months should be negative' );
-    is( $inverse->delta_minutes, -62,
-        'inverse delta minutes should be negative' );
-    is( $inverse->delta_seconds, -3,
-        'inverse delta seconds should be negative' );
+    is(
+        $inverse->delta_minutes, -62,
+        'inverse delta minutes should be negative'
+    );
+    is(
+        $inverse->delta_seconds, -3,
+        'inverse delta seconds should be negative'
+    );
 
     ok( $inverse->is_negative,  "should be negative" );
     ok( !$inverse->is_zero,     "should not be zero" );
@@ -223,8 +233,10 @@ my $leap_day = DateTime->new(
 }
 
 {
-    my $dur1 = DateTime::Duration->new( months => 6, days => 10, seconds => 3,
-        nanoseconds => 1_200_300_400 );
+    my $dur1 = DateTime::Duration->new(
+        months      => 6, days => 10, seconds => 3,
+        nanoseconds => 1_200_300_400
+    );
 
     my $dur2
         = DateTime::Duration->new( seconds => 1, nanoseconds => 500_000_000 );
@@ -235,8 +247,10 @@ my $leap_day = DateTime->new(
     my $new1 = $dur1 - $dur2;
 
     is( $new1->delta_seconds, 2, 'seconds is positive' );
-    is( $new1->delta_nanoseconds, 700_300_400,
-        'nanoseconds remainder is negative' );
+    is(
+        $new1->delta_nanoseconds, 700_300_400,
+        'nanoseconds remainder is negative'
+    );
 
     $new1->add( nanoseconds => 500_000_000 );
     is( $new1->delta_seconds,     3,           'seconds are unaffected' );
@@ -359,15 +373,19 @@ my $leap_day = DateTime->new(
     my $dur2 = $dur1->clone->subtract( nanoseconds => 5_000 );
 
     is( $dur2->delta_seconds, 0, 'normalize nanoseconds to positive' );
-    is( $dur2->delta_nanoseconds, 999_996_000,
-        'normalize nanoseconds to positive' );
+    is(
+        $dur2->delta_nanoseconds, 999_996_000,
+        'normalize nanoseconds to positive'
+    );
 
     my $dur3 = $dur1->clone->subtract( nanoseconds => 6_000 )
         ->subtract( nanoseconds => 999_999_000 );
 
     is( $dur3->delta_seconds, 0, 'normalize nanoseconds to negative' );
-    is( $dur3->delta_nanoseconds, -4_000,
-        'normalize nanoseconds to negative' );
+    is(
+        $dur3->delta_nanoseconds, -4_000,
+        'normalize nanoseconds to negative'
+    );
 
     my $dur4 = DateTime::Duration->new(
         seconds     => -1,
@@ -375,8 +393,10 @@ my $leap_day = DateTime->new(
     );
 
     is( $dur4->delta_seconds, -3, 'normalize many negative nanoseconds' );
-    is( $dur4->delta_nanoseconds, -500_000_000,
-        'normalize many negative nanoseconds' );
+    is(
+        $dur4->delta_nanoseconds, -500_000_000,
+        'normalize many negative nanoseconds'
+    );
 }
 
 {
@@ -398,8 +418,10 @@ my $leap_day = DateTime->new(
     is( $dur->in_units('days'),    0, 'in_units returns 0 for days' );
     is( $dur->in_units('hours'),   0, 'in_units returns 0 for hours' );
     is( $dur->in_units('seconds'), 0, 'in_units returns 0 for seconds' );
-    is( $dur->in_units('nanoseconds'), 0,
-        'in_units returns 0 for nanoseconds' );
+    is(
+        $dur->in_units('nanoseconds'), 0,
+        'in_units returns 0 for nanoseconds'
+    );
 }
 
 {
@@ -407,8 +429,10 @@ my $leap_day = DateTime->new(
 
     eval { DateTime::Duration->new( minutes => 50.2 ) };
 
-    like( $@, qr/is an integer/,
-        'cannot create a duration with fractional units' );
+    like(
+        $@, qr/is an integer/,
+        'cannot create a duration with fractional units'
+    );
 }
 
 done_testing();

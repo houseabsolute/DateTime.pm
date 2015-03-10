@@ -6,7 +6,7 @@ use Test::More;
 use DateTime;
 
 no warnings 'redefine';
-local *DateTime::_core_time = sub { 0 };
+local *DateTime::_core_time = sub {0};
 
 my $dt = DateTime->now;
 

@@ -6,8 +6,7 @@ use Test::More;
 use DateTime;
 
 {
-    package
-        Formatter;
+    package Formatter;
 
     sub new {
         return bless {}, __PACKAGE__;
@@ -49,20 +48,26 @@ is( $dt->_stringify, "$dt", "Stringification (with formatter)" );
 
 # check that set() and truncate() don't lose formatter
 $dt->set( hour => 3 );
-is( $dt->_stringify, '20040902 03:23:34',
-    'formatter is preserved after set()' );
+is(
+    $dt->_stringify, '20040902 03:23:34',
+    'formatter is preserved after set()'
+);
 
 $dt->truncate( to => 'minute' );
-is( $dt->_stringify, '20040902 03:23:00',
-    'formatter is preserved after truncate()' );
+is(
+    $dt->_stringify, '20040902 03:23:00',
+    'formatter is preserved after truncate()'
+);
 
 # check if the default behavior works
 $dt->set_formatter(undef);
 is( $dt->_stringify(), $dt->iso8601, 'Default iso8601 works' );
 
 # check stringification (default)
-is( $dt->_stringify, "$dt",
-    "Stringification (no formatter -> format_datetime)" );
+is(
+    $dt->_stringify, "$dt",
+    "Stringification (no formatter -> format_datetime)"
+);
 is( $dt->iso8601, "$dt", "Stringification (no formatter -> iso8601)" );
 
 done_testing();

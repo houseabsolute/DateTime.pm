@@ -1,4 +1,4 @@
-package
+package    # hide from PAUSE
     DateTime;
 
 use strict;

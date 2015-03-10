@@ -26,7 +26,7 @@ SKIP:
 
     is(
         $dt->set_formatter($formatter),
-       $dt,
+        $dt,
         'set_formatter returns the datetime object'
     );
 }
