@@ -18,6 +18,8 @@ around module_build_args => sub {
     return $args;
 };
 
+no Moose;
+
 __PACKAGE__->meta()->make_immutable();
 
 1;
