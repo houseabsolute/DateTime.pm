@@ -3,6 +3,8 @@ package DateTime::Duration;
 use strict;
 use warnings;
 
+our $VERSION = '1.19';
+
 use Carp ();
 use DateTime;
 use DateTime::Helpers;

@@ -4,6 +4,8 @@ package
 use strict;
 use warnings;
 
+our $VERSION = '1.19';
+
 $DateTime::IsPurePerl = 1;
 
 my @MonthLengths = ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );

@@ -3,6 +3,8 @@ package DateTime::Helpers;
 use strict;
 use warnings;
 
+our $VERSION = '1.19';
+
 use Scalar::Util ();
 
 sub can {

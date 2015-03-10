@@ -4,6 +4,8 @@ package
 use strict;
 use warnings;
 
+our $VERSION = '1.19';
+
 use DateTime::LeapSecond;
 
 sub _normalize_tai_seconds {

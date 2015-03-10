@@ -3,6 +3,8 @@ package DateTime::LeapSecond;
 use strict;
 use warnings;
 
+our $VERSION = '1.19';
+
 use vars qw( @RD @LEAP_SECONDS %RD_LENGTH );
 
 use DateTime;

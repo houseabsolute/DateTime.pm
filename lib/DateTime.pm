@@ -6,6 +6,8 @@ use strict;
 use warnings;
 use warnings::register;
 
+our $VERSION = '1.19';
+
 use Carp;
 use DateTime::Duration;
 use DateTime::Helpers;
