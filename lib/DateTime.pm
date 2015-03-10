@@ -471,35 +471,6 @@ sub _calc_local_components {
         );
 }
 
-sub _calc_utc_components {
-    my $self = shift;
-
-    die "Cannot get UTC components before UTC RD has been calculated\n"
-        unless defined $self->{utc_rd_days};
-
-    @{ $self->{utc_c} }{qw( year month day )}
-        = $self->_rd2ymd( $self->{utc_rd_days} );
-
-    @{ $self->{utc_c} }{qw( hour minute second )}
-        = $self->_seconds_as_components( $self->{utc_rd_secs} );
-}
-
-sub _utc_ymd {
-    my $self = shift;
-
-    $self->_calc_utc_components unless exists $self->{utc_c}{year};
-
-    return @{ $self->{utc_c} }{qw( year month day )};
-}
-
-sub _utc_hms {
-    my $self = shift;
-
-    $self->_calc_utc_components unless exists $self->{utc_c}{hour};
-
-    return @{ $self->{utc_c} }{qw( hour minute second )};
-}
-
 {
     my $spec = {
         epoch     => { regex => qr/^-?(?:\d+(?:\.\d*)?|\.\d+)$/ },
