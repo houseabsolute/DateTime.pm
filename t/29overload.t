@@ -2,6 +2,7 @@ use strict;
 use warnings;
 
 use Test::More;
+use Test::Warnings 0.005 ':all';
 
 use DateTime;
 
@@ -108,6 +109,12 @@ use DateTime;
         $@,
         qr/A DateTime object can only be compared to another DateTime object/,
         'Cannot compare a DateTime object to a FooBar object'
+    );
+
+    like(
+        warning { my $x = undef > $dt; },
+        qr/uninitialized value in numeric/,
+        'Comparing undef to a DateTime object generates a Perl warning'
     );
 
     ok(
