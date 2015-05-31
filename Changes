@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.19   2015-05-31
+
 - If you compared a DateTime object to an undef value, you might have received
   a warning pointing to code inside DateTime.pm, instead of in your own
   code. Fixed by Jason McIntosh. GH #7.
