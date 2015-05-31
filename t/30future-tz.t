@@ -37,7 +37,7 @@ use DateTime;
         ],
         ) {
 
-        my $dt = DateTime->now( time_zone => $add->[3] );
+        my $dt = DateTime->now->set( hour => 12 )->set_time_zone( $add->[3] );
 
         my $new
             = eval { $dt->clone->add( $add->[0], $add->[1] * $add->[2] ) };
