@@ -2772,7 +2772,8 @@ This method is equivalent to:
 
   $dt->ymd('-') . 'T' . $dt->hms(':')
 
-Also available as C<< $dt->iso8601() >>.
+This method is also available as C<< $dt->iso8601() >>, but it's not really a
+very good ISO8601 format, as it lacks a time zone.
 
 =head3 $dt->is_leap_year()
 
