@@ -1,5 +1,4 @@
-package    # hide from PAUSE
-    DateTime;
+package DateTime::PPExtra;
 
 use strict;
 use warnings;
@@ -9,7 +8,10 @@ our $VERSION = '1.19';
 use DateTime::LeapSecond;
 
 sub _normalize_tai_seconds {
-    return if grep { $_ == INFINITY() || $_ == NEG_INFINITY() } @_[ 1, 2 ];
+    return
+        if
+        grep { $_ == DateTime::INFINITY() || $_ == DateTime::NEG_INFINITY() }
+        @_[ 1, 2 ];
 
     # This must be after checking for infinity, because it breaks in
     # presence of use integer !
@@ -64,6 +66,16 @@ sub _normalize_leap_seconds {
         $_[2] += $day_length;
         $_[1]--;
     }
+}
+
+my @subs = qw(
+    _normalize_tai_seconds
+    _normalize_leap_seconds
+);
+
+for my $sub (@subs) {
+    no strict 'refs';
+    *{ 'DateTime::' . $sub } = __PACKAGE__->can($sub);
 }
 
 1;

@@ -1,5 +1,4 @@
-package    # hide from PAUSE
-    DateTime;
+package DateTime::PP;
 
 use strict;
 use warnings;
@@ -188,7 +187,8 @@ sub _is_leap_year {
     # According to Bjorn Tackmann, this line prevents an infinite loop
     # when running the tests under Qemu. I cannot reproduce this on
     # Ubuntu or with Strawberry Perl on Win2K.
-    return 0 if $year == INFINITY() || $year == NEG_INFINITY();
+    return 0
+        if $year == DateTime::INFINITY() || $year == DateTime::NEG_INFINITY();
     return 0 if $year % 4;
     return 1 if $year % 100;
     return 0 if $year % 400;
@@ -200,9 +200,25 @@ sub _day_length { DateTime::LeapSecond::day_length( $_[1] ) }
 
 sub _accumulated_leap_seconds { DateTime::LeapSecond::leap_seconds( $_[1] ) }
 
+my @subs = qw(
+    _time_as_seconds
+    _rd2ymd
+    _ymd2rd
+    _seconds_as_components
+    _end_of_last_month_day_of_year
+    _is_leap_year
+    _day_length
+    _accumulated_leap_seconds
+);
+
+for my $sub (@subs) {
+    no strict 'refs';
+    *{ 'DateTime::' . $sub } = __PACKAGE__->can($sub);
+}
+
 # This is down here so that _ymd2rd is available when it loads,
 # because it will load DateTime::LeapSecond, which needs
 # DateTime->_ymd2rd to be available when it is loading
-use DateTimePPExtra;
+require DateTime::PPExtra;
 
 1;

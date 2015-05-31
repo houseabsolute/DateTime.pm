@@ -40,11 +40,11 @@ use Try::Tiny;
     }
 
     if ($loaded) {
-        require DateTimePPExtra
+        require DateTime::PPExtra
             unless defined &DateTime::_normalize_tai_seconds;
     }
     else {
-        require DateTimePP;
+        require DateTime::PP;
     }
 }
 
