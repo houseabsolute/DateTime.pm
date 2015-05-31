@@ -42,8 +42,9 @@ use DateTime;
         my $new
             = eval { $dt->clone->add( $add->[0], $add->[1] * $add->[2] ) };
 
-        ok(
-            !$@,
+        is(
+            $@,
+            q{},
             "Make sure we can add $add->[1] years worth of $add->[0] in $add->[3] time zone"
         );
     }
