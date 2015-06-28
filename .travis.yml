@@ -10,7 +10,6 @@ perl:
   - blead
   - blead-thr
   - dev
-  - dev-thr
   - 5.22.0
   - 5.22.0-thr
   - 5.20.2
