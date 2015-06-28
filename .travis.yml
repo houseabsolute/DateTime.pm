@@ -32,7 +32,7 @@ matrix:
     - perl: blead
   include:
     - env: COVERAGE=1
-      perl: 5.22
+      perl: '5.22'
 env:
   global:
     - RELEASE_TESTING=1
