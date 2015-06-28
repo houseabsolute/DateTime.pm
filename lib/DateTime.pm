@@ -13,7 +13,7 @@ use DateTime::Duration;
 use DateTime::Helpers;
 use DateTime::Locale 0.41;
 use DateTime::TimeZone 1.74;
-use Params::Validate 0.76
+use Params::Validate 1.03
     qw( validate validate_pos UNDEF SCALAR BOOLEAN HASHREF OBJECT );
 use POSIX qw(floor);
 use Try::Tiny;
