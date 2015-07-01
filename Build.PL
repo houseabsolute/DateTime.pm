@@ -19,7 +19,7 @@ my %module_build_args = (
     "Dave Rolsky <autarch\@urth.org>"
   ],
   "dist_name" => "DateTime",
-  "dist_version" => "1.19",
+  "dist_version" => "1.20",
   "license" => "artistic_2",
   "module_name" => "DateTime",
   "recommends" => {},
@@ -29,7 +29,7 @@ my %module_build_args = (
     "DateTime::Locale" => "0.41",
     "DateTime::TimeZone" => "1.74",
     "POSIX" => 0,
-    "Params::Validate" => "0.76",
+    "Params::Validate" => "1.03",
     "Scalar::Util" => 0,
     "Try::Tiny" => 0,
     "XSLoader" => 0,

@@ -2,7 +2,7 @@ requires "Carp" => "0";
 requires "DateTime::Locale" => "0.41";
 requires "DateTime::TimeZone" => "1.74";
 requires "POSIX" => "0";
-requires "Params::Validate" => "0.76";
+requires "Params::Validate" => "1.03";
 requires "Scalar::Util" => "0";
 requires "Try::Tiny" => "0";
 requires "XSLoader" => "0";
@@ -40,6 +40,7 @@ on 'configure' => sub {
 
 on 'develop' => sub {
   requires "Code::TidyAll" => "0.24";
+  requires "Module::Implementation" => "0";
   requires "Perl::Critic" => "1.123";
   requires "Perl::Tidy" => "20140711";
   requires "Pod::Coverage::TrustPod" => "0";
@@ -52,4 +53,5 @@ on 'develop' => sub {
   requires "Test::Pod::Coverage" => "1.08";
   requires "Test::Spelling" => "0.12";
   requires "Test::Version" => "1";
+  requires "autodie" => "0";
 };
