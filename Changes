@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- The 1.18 release added the June 30, 2015 leap second to the XS code, but I
+  forgot to update the corresponding pure Perl implementation in
+  DateTime::LeapSecond.
+
+
 1.19   2015-05-31
 
 - If you compared a DateTime object to an undef value, you might have received
