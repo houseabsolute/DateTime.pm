@@ -29,6 +29,7 @@ perl:
 matrix:
   allow_failures:
     - perl: blead
+    - perl: blead-thr
   include:
     - env: COVERAGE=1
       perl: '5.22'
