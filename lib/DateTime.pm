@@ -3201,7 +3201,7 @@ override C<DateTime::_core_time()>:
     no warnings 'redefine';
     local *DateTime::_core_time = sub { return 42 };
 
-DateTime is guaranteed to core this subroutine to get the current C<time()>
+DateTime is guaranteed to call this subroutine to get the current C<time()>
 value. You can also override the C<_core_time()> sub in a subclass of DateTime
 and use that.
 
