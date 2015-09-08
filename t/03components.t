@@ -198,7 +198,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 # test doy in leap year
 {
     my $dt = DateTime->new(
-        year      => 2000, month => 1, day => 5,
+        year => 2000, month => 1, day => 5,
         time_zone => 'UTC',
     );
 
@@ -208,7 +208,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
 {
     my $dt = DateTime->new(
-        year      => 2000, month => 2, day => 29,
+        year => 2000, month => 2, day => 29,
         time_zone => 'UTC',
     );
 
@@ -218,7 +218,7 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
 {
     my $dt = DateTime->new(
-        year      => -6, month => 2, day => 25,
+        year => -6, month => 2, day => 25,
         time_zone => 'UTC',
     );
 

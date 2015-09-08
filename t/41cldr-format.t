@@ -6,8 +6,7 @@ use Test::More;
 
 use DateTime;
 
-binmode $_, ':encoding(UTF-8)'
-    for Test::Builder->new()->output(),
+binmode $_, ':encoding(UTF-8)' for Test::Builder->new()->output(),
     Test::Builder->new()->failure_output(),
     Test::Builder->new()->todo_output();
 

@@ -12,7 +12,7 @@ use DateTime;
 # say?"  this means it acts on the UTC components.
 {
     my $dt = DateTime->new(
-        year      => 2003, month => 4, day => 6,
+        year => 2003, month => 4, day => 6,
         time_zone => 'America/Chicago',
     );
 
@@ -44,7 +44,7 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year      => 2003, month => 10, day => 26,
+        year => 2003, month => 10, day => 26,
         time_zone => 'America/Chicago',
     );
 
@@ -89,7 +89,7 @@ use DateTime;
 # portion".  this means it acts on local components
 {
     my $dt = DateTime->new(
-        year      => 2003, month => 4, day => 6,
+        year => 2003, month => 4, day => 6,
         time_zone => 'America/Chicago',
     );
 
@@ -120,7 +120,7 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year      => 2003, month => 10, day => 26,
+        year => 2003, month => 10, day => 26,
         time_zone => 'America/Chicago',
     );
 
@@ -153,7 +153,7 @@ use DateTime;
 # First we do date, then time.
 {
     my $dt = DateTime->new(
-        year      => 2003, month => 4, day => 5,
+        year => 2003, month => 4, day => 5,
         time_zone => 'America/Chicago',
     );
 
@@ -180,7 +180,7 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year      => 2003, month => 10, day => 25,
+        year => 2003, month => 10, day => 25,
         time_zone => 'America/Chicago',
     );
 
@@ -206,8 +206,8 @@ use DateTime;
 # an example from the docs
 {
     my $dt = DateTime->new(
-        year      => 2003, month => 4, day => 5,
-        hour      => 2,
+        year => 2003, month => 4, day => 5,
+        hour => 2,
         time_zone => 'America/Chicago',
     );
 

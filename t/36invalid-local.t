@@ -19,8 +19,8 @@ my $badlt_rx = qr/Invalid local time|local time [0-9\-:T]+ does not exist/;
 
     eval {
         DateTime->new(
-            year      => 2003, month  => 4,  day    => 6,
-            hour      => 2,    minute => 59, second => 59,
+            year => 2003, month  => 4,  day    => 6,
+            hour => 2,    minute => 59, second => 59,
             time_zone => 'America/Chicago',
         );
     };
@@ -30,16 +30,16 @@ my $badlt_rx = qr/Invalid local time|local time [0-9\-:T]+ does not exist/;
 {
     eval {
         DateTime->new(
-            year      => 2003, month  => 4,  day    => 6,
-            hour      => 1,    minute => 59, second => 59,
+            year => 2003, month  => 4,  day    => 6,
+            hour => 1,    minute => 59, second => 59,
             time_zone => 'America/Chicago',
         );
     };
     ok( !$@, 'no exception for valid time' );
 
     my $dt = DateTime->new(
-        year      => 2003, month => 4, day => 5,
-        hour      => 2,
+        year => 2003, month => 4, day => 5,
+        hour => 2,
         time_zone => 'America/Chicago',
     );
 

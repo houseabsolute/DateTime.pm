@@ -7,15 +7,15 @@ use DateTime;
 
 {
     my $date1 = DateTime->new(
-        year       => 2001, month  => 5, day    => 10,
-        hour       => 4,    minute => 3, second => 2,
+        year => 2001, month  => 5, day    => 10,
+        hour => 4,    minute => 3, second => 2,
         nanosecond => 12,
         time_zone  => 'UTC'
     );
 
     my $date2 = DateTime->new(
-        year       => 2001, month  => 6, day    => 12,
-        hour       => 5,    minute => 7, second => 23,
+        year => 2001, month  => 6, day    => 12,
+        hour => 5,    minute => 7, second => 23,
         nanosecond => 7,
         time_zone  => 'UTC'
     );
@@ -108,14 +108,14 @@ use DateTime;
 # based on bug report from Eric Cholet
 {
     my $dt1 = DateTime->new(
-        year      => 2003, month  => 2, day    => 9,
-        hour      => 0,    minute => 0, second => 1,
+        year => 2003, month  => 2, day    => 9,
+        hour => 0,    minute => 0, second => 1,
         time_zone => 'UTC',
     );
 
     my $dt2 = DateTime->new(
-        year      => 2003, month  => 2,  day    => 7,
-        hour      => 23,   minute => 59, second => 59,
+        year => 2003, month  => 2,  day    => 7,
+        hour => 23,   minute => 59, second => 59,
         time_zone => 'UTC',
     );
 
@@ -162,15 +162,15 @@ use DateTime;
 # test for a bug when nanoseconds were greater in earlier datetime
 {
     my $dt1 = DateTime->new(
-        year       => 2000, month  => 1,  day    => 5,
-        hour       => 0,    minute => 10, second => 0,
+        year => 2000, month  => 1,  day    => 5,
+        hour => 0,    minute => 10, second => 0,
         nanosecond => 1,
         time_zone  => 'UTC',
     );
 
     my $dt2 = DateTime->new(
-        year       => 2000, month  => 1,  day    => 6,
-        hour       => 0,    minute => 10, second => 0,
+        year => 2000, month  => 1,  day    => 6,
+        hour => 0,    minute => 10, second => 0,
         nanosecond => 0,
         time_zone  => 'UTC',
     );
@@ -188,15 +188,15 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year       => 2000, month  => 1,  day    => 5,
-        hour       => 0,    minute => 10, second => 0,
+        year => 2000, month  => 1,  day    => 5,
+        hour => 0,    minute => 10, second => 0,
         nanosecond => 20,
         time_zone  => 'UTC',
     );
 
     my $dt2 = DateTime->new(
-        year       => 2000, month  => 1,  day    => 5,
-        hour       => 0,    minute => 10, second => 0,
+        year => 2000, month  => 1,  day    => 5,
+        hour => 0,    minute => 10, second => 0,
         nanosecond => 10,
         time_zone  => 'UTC',
     );
@@ -211,15 +211,15 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year       => 2000, month  => 1,  day    => 5,
-        hour       => 0,    minute => 11, second => 0,
+        year => 2000, month  => 1,  day    => 5,
+        hour => 0,    minute => 11, second => 0,
         nanosecond => 20,
         time_zone  => 'UTC',
     );
 
     my $dt2 = DateTime->new(
-        year       => 2000, month  => 1,  day    => 5,
-        hour       => 0,    minute => 10, second => 0,
+        year => 2000, month  => 1,  day    => 5,
+        hour => 0,    minute => 10, second => 0,
         nanosecond => 10,
         time_zone  => 'UTC',
     );
@@ -235,15 +235,15 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year       => 2000, month  => 1,  day    => 5,
-        hour       => 0,    minute => 10, second => 0,
+        year => 2000, month  => 1,  day    => 5,
+        hour => 0,    minute => 10, second => 0,
         nanosecond => 20,
         time_zone  => 'UTC',
     );
 
     my $dt2 = DateTime->new(
-        year       => 2000, month  => 1,  day    => 5,
-        hour       => 0,    minute => 11, second => 0,
+        year => 2000, month  => 1,  day    => 5,
+        hour => 0,    minute => 11, second => 0,
         nanosecond => 10,
         time_zone  => 'UTC',
     );
@@ -258,15 +258,15 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year       => 2000, month  => 1,  day    => 5,
-        hour       => 0,    minute => 11, second => 0,
+        year => 2000, month  => 1,  day    => 5,
+        hour => 0,    minute => 11, second => 0,
         nanosecond => 10,
         time_zone  => 'UTC',
     );
 
     my $dt2 = DateTime->new(
-        year       => 2000, month  => 1,  day    => 5,
-        hour       => 0,    minute => 10, second => 0,
+        year => 2000, month  => 1,  day    => 5,
+        hour => 0,    minute => 10, second => 0,
         nanosecond => 20,
         time_zone  => 'UTC',
     );
@@ -284,8 +284,8 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year       => 2000, month  => 1,  day    => 5,
-        hour       => 0,    minute => 11, second => 0,
+        year => 2000, month  => 1,  day    => 5,
+        hour => 0,    minute => 11, second => 0,
         nanosecond => 20,
         time_zone  => 'UTC',
     );
@@ -310,15 +310,15 @@ use DateTime;
 
 {
     my $date1 = DateTime->new(
-        year       => 2001, month  => 5, day    => 10,
-        hour       => 4,    minute => 3, second => 2,
+        year => 2001, month  => 5, day    => 10,
+        hour => 4,    minute => 3, second => 2,
         nanosecond => 12,
         time_zone  => 'UTC'
     );
 
     my $date2 = DateTime->new(
-        year       => 2001, month  => 6, day    => 12,
-        hour       => 5,    minute => 7, second => 23,
+        year => 2001, month  => 6, day    => 12,
+        hour => 5,    minute => 7, second => 23,
         nanosecond => 7,
         time_zone  => 'UTC'
     );
@@ -388,12 +388,12 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year      => 2005, month => 6, day => 11,
+        year => 2005, month => 6, day => 11,
         time_zone => 'UTC',
     );
 
     my $dt2 = DateTime->new(
-        year      => 2005, month => 11, day => 10,
+        year => 2005, month => 11, day => 10,
         time_zone => 'UTC',
     );
 
@@ -414,12 +414,12 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year      => 2005, month => 6, day => 11,
+        year => 2005, month => 6, day => 11,
         time_zone => 'UTC',
     );
 
     my $dt2 = DateTime->new(
-        year      => 2005, month => 11, day => 10,
+        year => 2005, month => 11, day => 10,
         time_zone => 'UTC',
     );
 

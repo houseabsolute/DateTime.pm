@@ -7,8 +7,8 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year      => 1996, month  => 11, day    => 22,
-        hour      => 18,   minute => 30, second => 20,
+        year => 1996, month  => 11, day    => 22,
+        hour => 18,   minute => 30, second => 20,
         time_zone => 'UTC',
     );
 
@@ -57,8 +57,8 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year      => 1996, month  => 11, day    => 22,
-        hour      => 18,   minute => 30, second => 20,
+        year => 1996, month  => 11, day    => 22,
+        hour => 18,   minute => 30, second => 20,
         time_zone => 'UTC',
     );
 

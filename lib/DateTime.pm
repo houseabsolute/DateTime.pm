@@ -548,8 +548,8 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
             type => OBJECT,
             can  => 'utc_rd_values',
         },
-        locale    => { type => SCALAR | OBJECT, optional => 1 },
-        language  => { type => SCALAR | OBJECT, optional => 1 },
+        locale   => { type => SCALAR | OBJECT, optional => 1 },
+        language => { type => SCALAR | OBJECT, optional => 1 },
         formatter => {
             type     => SCALAR | OBJECT, can => 'format_datetime',
             optional => 1
@@ -1115,7 +1115,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
             $y2 *= -1 if $year < 0;
             $_[0]->_zero_padded_number( 'yy', $y2 );
         },
-        qr/y/    => sub { $_[0]->year() },
+        qr/y/ => sub { $_[0]->year() },
         qr/(u+)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->year() ) },
         qr/(Y+)/ =>
             sub { $_[0]->_zero_padded_number( $1, $_[0]->week_year() ) },
@@ -1164,7 +1164,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         qr/(D{1,3})/ =>
             sub { $_[0]->_zero_padded_number( $1, $_[0]->day_of_year() ) },
 
-        qr/F/    => 'weekday_of_month',
+        qr/F/ => 'weekday_of_month',
         qr/(g+)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->mjd() ) },
 
         qr/EEEEE/ => sub {

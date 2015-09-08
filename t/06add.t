@@ -7,8 +7,8 @@ use Test::Fatal;
 use DateTime;
 
 my $dt = DateTime->new(
-    year      => 1996, month  => 11, day    => 22,
-    hour      => 18,   minute => 30, second => 20,
+    year => 1996, month  => 11, day    => 22,
+    hour => 18,   minute => 30, second => 20,
     time_zone => 'UTC',
 );
 $dt->add( weeks => 8 );
@@ -140,84 +140,84 @@ is(
 
 # test sub months
 $dt = DateTime->new(
-    year      => 2001, month => 1, day => 31,
+    year => 2001, month => 1, day => 31,
     time_zone => 'UTC',
 );
 $dt->add( days => 1 );
 is( $dt->date, '2001-02-01', 'february 1st' );
 
 $dt = DateTime->new(
-    year      => 2001, month => 2, day => 28,
+    year => 2001, month => 2, day => 28,
     time_zone => 'UTC',
 );
 $dt->add( days => 1 );
 is( $dt->date, '2001-03-01', 'march 1st' );
 
 $dt = DateTime->new(
-    year      => 2001, month => 3, day => 31,
+    year => 2001, month => 3, day => 31,
     time_zone => 'UTC',
 );
 $dt->add( days => 1 );
 is( $dt->date, '2001-04-01', 'april 1st' );
 
 $dt = DateTime->new(
-    year      => 2001, month => 4, day => 30,
+    year => 2001, month => 4, day => 30,
     time_zone => 'UTC',
 );
 $dt->add( days => 1 );
 is( $dt->date, '2001-05-01', 'may 1st' );
 
 $dt = DateTime->new(
-    year      => 2001, month => 5, day => 31,
+    year => 2001, month => 5, day => 31,
     time_zone => 'UTC',
 );
 $dt->add( days => 1 );
 is( $dt->date, '2001-06-01', 'june 1st' );
 
 $dt = DateTime->new(
-    year      => 2001, month => 6, day => 30,
+    year => 2001, month => 6, day => 30,
     time_zone => 'UTC',
 );
 $dt->add( days => 1 );
 is( $dt->date, '2001-07-01', 'july 1st' );
 
 $dt = DateTime->new(
-    year      => 2001, month => 7, day => 31,
+    year => 2001, month => 7, day => 31,
     time_zone => 'UTC',
 );
 $dt->add( days => 1 );
 is( $dt->date, '2001-08-01', 'august 1st' );
 
 $dt = DateTime->new(
-    year      => 2001, month => 8, day => 31,
+    year => 2001, month => 8, day => 31,
     time_zone => 'UTC',
 );
 $dt->add( days => 1 );
 is( $dt->date, '2001-09-01', 'september 1st' );
 
 $dt = DateTime->new(
-    year      => 2001, month => 9, day => 30,
+    year => 2001, month => 9, day => 30,
     time_zone => 'UTC',
 );
 $dt->add( days => 1 );
 is( $dt->date, '2001-10-01', 'october 1st' );
 
 $dt = DateTime->new(
-    year      => 2001, month => 10, day => 31,
+    year => 2001, month => 10, day => 31,
     time_zone => 'UTC',
 );
 $dt->add( days => 1 );
 is( $dt->date, '2001-11-01', 'november 1st' );
 
 $dt = DateTime->new(
-    year      => 2001, month => 11, day => 30,
+    year => 2001, month => 11, day => 30,
     time_zone => 'UTC',
 );
 $dt->add( days => 1 );
 is( $dt->date, '2001-12-01', 'december 1st' );
 
 $dt = DateTime->new(
-    year      => 2001, month => 12, day => 31,
+    year => 2001, month => 12, day => 31,
     time_zone => 'UTC',
 );
 $dt->add( days => 1 );
@@ -227,7 +227,7 @@ is( $dt->date, '2002-01-01', 'january 1st' );
 
 # Before leap day, not a leap year ...
 $dt = DateTime->new(
-    year      => 2001, month => 2, day => 28,
+    year => 2001, month => 2, day => 28,
     time_zone => 'UTC',
 );
 $dt->add( years => 1 );
@@ -237,7 +237,7 @@ is( $dt->date, '2019-02-28', 'Adding 17 years' );
 
 # After leap day, not a leap year ...
 $dt = DateTime->new(
-    year      => 2001, month => 3, day => 28,
+    year => 2001, month => 3, day => 28,
     time_zone => 'UTC',
 );
 $dt->add( years => 1 );
@@ -247,7 +247,7 @@ is( $dt->date, '2019-03-28', 'Adding 17 years' );
 
 # On leap day, in a leap year ...
 $dt = DateTime->new(
-    year      => 2000, month => 2, day => 29,
+    year => 2000, month => 2, day => 29,
     time_zone => 'UTC',
 );
 $dt->add( years => 1 );
@@ -257,7 +257,7 @@ is( $dt->date, '2018-03-01', 'Adding 17 years' );
 
 # Before leap day, in a leap year ...
 $dt = DateTime->new(
-    year      => 2000, month => 2, day => 28,
+    year => 2000, month => 2, day => 28,
     time_zone => 'UTC',
 );
 $dt->add( years => 1 );
@@ -267,7 +267,7 @@ is( $dt->date, '2018-02-28', 'Adding 17 years' );
 
 # After leap day, in a leap year ...
 $dt = DateTime->new(
-    year      => 2000, month => 3, day => 28,
+    year => 2000, month => 3, day => 28,
     time_zone => 'UTC',
 );
 $dt->add( years => 1 );
@@ -278,7 +278,7 @@ is( $dt->date, '2018-03-28', 'Adding 17 years' );
 # Test a bunch of years, before leap day
 for ( 1 .. 99 ) {
     $dt = DateTime->new(
-        year      => 2000, month => 2, day => 28,
+        year => 2000, month => 2, day => 28,
         time_zone => 'UTC',
     );
     $dt->add( years => $_ );
@@ -289,7 +289,7 @@ for ( 1 .. 99 ) {
 # Test a bunch of years, after leap day
 for ( 1 .. 99 ) {
     $dt = DateTime->new(
-        year      => 2000, month => 3, day => 28,
+        year => 2000, month => 3, day => 28,
         time_zone => 'UTC',
     );
     $dt->add( years => $_ );
@@ -302,7 +302,7 @@ for ( 1 .. 99 ) {
 # Test a bunch of years, before leap day
 for ( 1 .. 97 ) {
     $dt = DateTime->new(
-        year      => 2002, month => 2, day => 28,
+        year => 2002, month => 2, day => 28,
         time_zone => 'UTC',
     );
     $dt->add( years => $_ );
@@ -313,7 +313,7 @@ for ( 1 .. 97 ) {
 # Test a bunch of years, after leap day
 for ( 1 .. 97 ) {
     $dt = DateTime->new(
-        year      => 2002, month => 3, day => 28,
+        year => 2002, month => 3, day => 28,
         time_zone => 'UTC',
     );
     $dt->add( years => $_ );
@@ -324,7 +324,7 @@ for ( 1 .. 97 ) {
 # subtract years
 for ( 1 .. 97 ) {
     $dt = DateTime->new(
-        year      => 1999, month => 3, day => 1,
+        year => 1999, month => 3, day => 1,
         time_zone => 'UTC',
     );
     $dt->add( years => -$_ );
@@ -336,7 +336,7 @@ for ( 1 .. 97 ) {
 
 # bug adding months where current month + months added were > 25
 $dt = DateTime->new(
-    year      => 1997, month => 12, day => 1,
+    year => 1997, month => 12, day => 1,
     time_zone => 'UTC',
 );
 $dt->add( months => 14 );
@@ -344,7 +344,7 @@ is( $dt->date, '1999-02-01', 'Adding months--rollover year' );
 
 # bug subtracting months with year rollover
 $dt = DateTime->new(
-    year      => 1997, month => 1, day => 1,
+    year => 1997, month => 1, day => 1,
     time_zone => 'UTC',
 );
 $dt->add( months => -1 );
@@ -355,8 +355,8 @@ is( $new->date, '1998-12-01', 'test + overloading' );
 
 {
     my $dt = DateTime->new(
-        year       => 1997, month  => 1, day    => 1,
-        hour       => 1,    minute => 1, second => 59,
+        year => 1997, month  => 1, day    => 1,
+        hour => 1,    minute => 1, second => 59,
         nanosecond => 500000000,
         time_zone  => 'UTC',
     );

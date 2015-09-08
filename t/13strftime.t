@@ -147,8 +147,8 @@ while ( defined( my $line = <DATA> ) ) {
 
 {
     my $dt = DateTime->new(
-        year   => 2004, month  => 8,  day        => 16,
-        hour   => 15,   minute => 30, nanosecond => 123456789,
+        year => 2004, month  => 8,  day        => 16,
+        hour => 15,   minute => 30, nanosecond => 123456789,
         locale => 'en',
     );
 
