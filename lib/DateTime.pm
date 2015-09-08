@@ -3981,6 +3981,47 @@ The time zone long name.
 
 =back
 
+=head3 CLDR "Available Formats"
+
+The CLDR data includes pre-defined formats for various patterns such as "month
+and day" or "time of day". Using these formats lets you render information
+about a datetime in the most natural way for users from a given locale.
+
+These formats are indexed by a key that is itself a CLDR pattern. When you
+look these up, you get back a different CLDR pattern suitable for the locale.
+
+Let's look at some example We'll use C<2008-02-05T18:30:30> as our example
+datetime value, and see how this is rendered for the C<en_US> and C<fr_FR>
+locales.
+
+=over 4
+
+=item * C<MMMd>
+
+The abbreviated month and day as number. For C<en_US>, we get the pattern
+C<MMM d>, which renders as C<Feb 5>. For C<fr_FR>, we get the pattern
+C<d MMM>, which renders as C<5 févr.>.
+
+=item * C<yQQQ>
+
+The year and abbreviated quarter of year. For C<en_US>, we get the pattern
+C<QQQ y>, which renders as C<Q1 2008>. For C<fr_FR>, we get the same pattern,
+C<QQQ y>, which renders as C<T1 2008>.
+
+=item * C<hm>
+
+The 12-hour time of day without seconds.  For C<en_US>, we get the pattern
+C<h:mm a>, which renders as C<6:30 PM>. For C<fr_FR>, we get the exact same
+pattern and rendering.
+
+=back
+
+The available format for each locale are documented in the POD for that
+locale. To get back the format, you use the C<< $locale->format_for >>
+method. For example:
+
+    say $dt->format_cldr( $dt->locale->format_for('MMMd') );
+
 =head2 strftime Patterns
 
 The following patterns are allowed in the format string given to the
