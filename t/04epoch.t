@@ -128,7 +128,7 @@ use DateTime;
 
 {
     my $dt = DateTime->from_epoch( epoch => 0.1234567891 );
-    is( $dt->nanosecond, 123_456_789, 'nanosecond should be an integer ' );
+    is( $dt->nanosecond, 123_457_000, 'nanosecond should be an integer ' );
 }
 
 {
