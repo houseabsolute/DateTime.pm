@@ -2513,7 +2513,7 @@ This class method can be used to construct a new DateTime object from
 an epoch time instead of components. Just as with the C<new()>
 method, it accepts "time_zone", "locale", and "formatter" parameters.
 
-If the epoch value is a floting-point value, it will be rounded to
+If the epoch value is a floating-point value, it will be rounded to
 nearest microsecond.
 
 By default, the returned object will be in the UTC time zone.
