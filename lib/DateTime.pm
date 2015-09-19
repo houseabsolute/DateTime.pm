@@ -15,7 +15,7 @@ use DateTime::Locale 0.41;
 use DateTime::TimeZone 1.74;
 use Params::Validate 1.03
     qw( validate validate_pos UNDEF SCALAR BOOLEAN HASHREF OBJECT );
-use POSIX qw(floor);
+use POSIX qw(floor fmod);
 use Try::Tiny;
 
 {
@@ -472,8 +472,11 @@ sub _calc_local_components {
 }
 
 {
+    my $float = qr/
+         ^ -? (?: [0-9]+ (?: \.[0-9]*)? | \. [0-9]+) (?: [eE][+-]?[0-9]+)? $
+    /x;
     my $spec = {
-        epoch     => { regex => qr/^-?(?:\d+(?:\.\d*)?|\.\d+)$/ },
+        epoch     => { regex => $float                         },
         locale    => { type  => SCALAR | OBJECT, optional => 1 },
         language  => { type  => SCALAR | OBJECT, optional => 1 },
         time_zone => { type  => SCALAR | OBJECT, optional => 1 },
@@ -488,18 +491,22 @@ sub _calc_local_components {
         my %p = validate( @_, $spec );
 
         my %args;
+        if ($p{epoch} =~ /[.eE]/) {
+            my ($f, $n, $s);
 
-        # Epoch may come from Time::HiRes, so it may not be an integer.
-        my ( $int, $dec ) = $p{epoch} =~ /^(-?\d+)?(\.\d+)?/;
-        $int ||= 0;
-
-        $args{nanosecond} = int( $dec * MAX_NANOSECONDS )
-            if $dec;
+            $f = $n = fmod($p{epoch}, 1.0);
+            $s = floor($p{epoch} - $f);
+            if ($n < 0) {
+                $n += 1;
+            }
+            $p{epoch} = $s + floor($f - $n);
+            $args{nanosecond} = floor($n * 1E6 + 0.5) * 1E3;
+        }
 
         # Note, for very large negative values this may give a
         # blatantly wrong answer.
         @args{qw( second minute hour day month year )}
-            = ( gmtime($int) )[ 0 .. 5 ];
+            = ( gmtime($p{epoch}) )[ 0 .. 5 ];
         $args{year} += 1900;
         $args{month}++;
 
@@ -2506,11 +2513,8 @@ This class method can be used to construct a new DateTime object from
 an epoch time instead of components. Just as with the C<new()>
 method, it accepts "time_zone", "locale", and "formatter" parameters.
 
-If the epoch value is not an integer, the part after the decimal will
-be converted to nanoseconds. This is done in order to be compatible
-with C<Time::HiRes>. If the floating portion extends past 9 decimal
-places, it will be truncated to nine, so that 1.1234567891 will become
-1 second and 123,456,789 nanoseconds.
+If the epoch value is a floting-point value, it will be rounded to
+nearest microsecond.
 
 By default, the returned object will be in the UTC time zone.
 
