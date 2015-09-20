@@ -119,7 +119,7 @@ use DateTime;
     my $dt = DateTime->from_epoch( epoch => -0.5 );
     is(
         $dt->nanosecond, 500_000_000,
-        'nanosecond should be 500,000,000 with 0.5 as epoch'
+        'nanosecond should be 500,000,000 with -0.5 as epoch'
     );
 
     is( $dt->epoch,       -1,   'epoch should be -1' );
