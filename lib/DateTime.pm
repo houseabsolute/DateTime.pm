@@ -476,7 +476,7 @@ sub _calc_local_components {
          ^ -? (?: [0-9]+ (?: \.[0-9]*)? | \. [0-9]+) (?: [eE][+-]?[0-9]+)? $
     /x;
     my $spec = {
-        epoch     => { regex => $float                         },
+        epoch     => { regex => $float },
         locale    => { type  => SCALAR | OBJECT, optional => 1 },
         language  => { type  => SCALAR | OBJECT, optional => 1 },
         time_zone => { type  => SCALAR | OBJECT, optional => 1 },
@@ -491,22 +491,22 @@ sub _calc_local_components {
         my %p = validate( @_, $spec );
 
         my %args;
-        if ($p{epoch} =~ /[.eE]/) {
-            my ($f, $n, $s);
+        if ( $p{epoch} =~ /[.eE]/ ) {
+            my ( $f, $n, $s );
 
-            $f = $n = fmod($p{epoch}, 1.0);
-            $s = floor($p{epoch} - $f);
-            if ($n < 0) {
+            $f = $n = fmod( $p{epoch}, 1.0 );
+            $s = floor( $p{epoch} - $f );
+            if ( $n < 0 ) {
                 $n += 1;
             }
-            $p{epoch} = $s + floor($f - $n);
-            $args{nanosecond} = floor($n * 1E6 + 0.5) * 1E3;
+            $p{epoch}         = $s + floor( $f - $n );
+            $args{nanosecond} = floor( $n * 1E6 + 0.5 ) * 1E3;
         }
 
         # Note, for very large negative values this may give a
         # blatantly wrong answer.
         @args{qw( second minute hour day month year )}
-            = ( gmtime($p{epoch}) )[ 0 .. 5 ];
+            = ( gmtime( $p{epoch} ) )[ 0 .. 5 ];
         $args{year} += 1900;
         $args{month}++;
 
