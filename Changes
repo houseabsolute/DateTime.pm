@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.21   2015-09-30
+
 - Make all tests pass with both the current DateTime::Locale and the upcoming
   new version (currently still in trial releases).
 

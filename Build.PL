@@ -19,10 +19,9 @@ my %module_build_args = (
     "Dave Rolsky <autarch\@urth.org>"
   ],
   "dist_name" => "DateTime",
-  "dist_version" => "1.20",
+  "dist_version" => "1.21",
   "license" => "artistic_2",
   "module_name" => "DateTime",
-  "recommends" => {},
   "recursive_test_files" => 1,
   "requires" => {
     "Carp" => 0,
@@ -43,7 +42,6 @@ my %module_build_args = (
     "warnings" => 0,
     "warnings::register" => 0
   },
-  "script_files" => [],
   "test_requires" => {
     "ExtUtils::MakeMaker" => 0,
     "File::Spec" => 0,
@@ -74,6 +72,7 @@ unless ( eval { Module::Build->VERSION(0.4004) } ) {
 }
 
 my $build = Module::Build->new(%module_build_args);
+
 
 my $skip_xs;
 if ( grep { $_ eq '--pp' } @ARGV ) {
