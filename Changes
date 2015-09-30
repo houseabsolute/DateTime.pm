@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Make all tests pass with both the current DateTime::Locale and the upcoming
+  new version (currently still in trial releases).
+
+
 1.20   2015-07-01
 
 - The 1.18 release added the June 30, 2015 leap second to the XS code, but I

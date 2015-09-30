@@ -53,7 +53,7 @@ unless ( eval { require Storable; 1 } ) {
 }
 
 {
-    my $dt1 = DateTime->now( locale => 'en_US' );
+    my $dt1 = DateTime->now( locale => 'en-US' );
     my $dt2 = Storable::dclone($dt1);
     my $dt3 = Storable::thaw( Storable::nfreeze($dt2) );
 
@@ -66,16 +66,18 @@ unless ( eval { require Storable; 1 } ) {
         'explicit freeze and thaw produces date equal to original'
     );
 
+    # Back-compat shim for new DateTime::Locale. Remove once DT::Locale based
+    # on CLDR 28+ is released.
+    my $meth = $dt1->locale->can('code') ? 'code' : 'id';
+    my $orig_code = $dt1->locale->$meth;
     is(
-        $dt1->locale->id, 'en_US',
-        'check id of original locale object'
-    );
-    is(
-        $dt2->locale->id, 'en_US',
+        $dt2->locale->$meth,
+        $orig_code,
         'check locale id after dclone'
     );
     is(
-        $dt3->locale->id, 'en_US',
+        $dt3->locale->$meth,
+        $orig_code,
         'check locale id after explicit freeze/thaw'
     );
 }
