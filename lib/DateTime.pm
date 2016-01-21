@@ -3685,7 +3685,7 @@ Stringification> for details.
 You can optionally specify a "formatter", which is usually a
 DateTime::Format::* object/class, to control the stringification of
 the DateTime object. Stringification will occur when a DateTime object
-is concated, used in string context or serialized.
+is concatenated, used in string context or serialized.
 
 Any of the constructor methods can accept a formatter argument:
 
