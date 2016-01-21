@@ -1,6 +1,7 @@
 requires "Carp" => "0";
 requires "DateTime::Locale" => "0.41";
 requires "DateTime::TimeZone" => "1.74";
+requires "JSON::PP" => "2.27300";
 requires "POSIX" => "0";
 requires "Params::Validate" => "1.03";
 requires "Scalar::Util" => "0";

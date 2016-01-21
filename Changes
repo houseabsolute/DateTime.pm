@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Add hook for automatically returning the stringified version of the current
+  DateTime object when being encoded using the JSON module.
+
+
 1.21   2015-09-30
 
 - Make all tests pass with both the current DateTime::Locale and the upcoming

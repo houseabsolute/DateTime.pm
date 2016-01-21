@@ -2130,6 +2130,11 @@ sub STORABLE_thaw {
     return $self;
 }
 
+sub TO_JSON {
+    my $self = shift;
+    return $self->_stringify;
+}
+
 package    # hide from PAUSE
     DateTime::_Thawed;
 
@@ -3679,7 +3684,8 @@ Stringification> for details.
 
 You can optionally specify a "formatter", which is usually a
 DateTime::Format::* object/class, to control the stringification of
-the DateTime object.
+the DateTime object. Stringification will occur when a DateTime object
+is concatenated, used in string context or serialized.
 
 Any of the constructor methods can accept a formatter argument:
 
@@ -4236,6 +4242,13 @@ where "method" is a valid C<DateTime.pm> object method.
 
 DateTime implements Storable hooks in order to reduce the size of a
 serialized DateTime object.
+
+=head2 DateTime.pm and JSON
+
+DateTime implements L<JSON> hooks: Any DateTime object passed to I<encode_json>
+or I<to_json> will be stringified using the current formatter (see
+L<Formatters And Stringification>) if I<convert_blessed> is true. See
+the L<JSON> module for details.
 
 =head1 THE DATETIME PROJECT ECOSYSTEM
 
