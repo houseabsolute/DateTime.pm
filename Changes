@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.22   2016-02-21 (TRIAL RELEASE)
+
 - Fixed several issues with the handling of non-integer values passed to
   from_epoch(). This was simply broken for negative values, which would end up
   being incremented by a full second, so for example -0.5 became 0.5.
