@@ -1,5 +1,12 @@
 {{$NEXT}}
 
+- Make all DateTime::Infinite objects return the system's representation of
+  positive or negative infinity for any method which returns a number of
+  string representation (year(), month(), ymd(), iso8601(), etc.). Previously
+  some of these methods could return "Nan", "-Inf--Inf--Inf", and other
+  confusing outputs. Reported by Greg Oschwald. RT #110341.
+
+
 1.22   2016-02-21 (TRIAL RELEASE)
 
 - Fixed several issues with the handling of non-integer values passed to

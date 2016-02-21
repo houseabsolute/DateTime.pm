@@ -26,8 +26,40 @@ sub _seconds_as_components {
     return ( $_[1] ) x 3;
 }
 
+sub ymd {
+    return $_[0]->iso8601;
+}
+
+sub mdy {
+    return $_[0]->iso8601;
+}
+
+sub dmy {
+    return $_[0]->iso8601;
+}
+
+sub hms {
+    return $_[0]->iso8601;
+}
+
+sub hour_12 {
+    return $_[0]->_infinity_string;
+}
+
+sub hour_12_0 {
+    return $_[0]->_infinity_string;
+}
+
+sub iso8601 {
+    return $_[0]->_infinity_string;
+}
+
 sub _stringify {
-    $_[0]->{utc_rd_days} == DateTime::INFINITY
+    return $_[0]->_infinity_string;
+}
+
+sub _infinity_string {
+    return $_[0]->{utc_rd_days} == DateTime::INFINITY
         ? DateTime::INFINITY . ''
         : DateTime::NEG_INFINITY . '';
 }
@@ -190,10 +222,13 @@ The only constructor for these two classes is the C<new()> method, as
 shown in the L<SYNOPSIS|/SYNOPSIS>. This method takes no parameters.
 
 All "get" methods in this module simply return infinity, positive or
-negative. If the method is expected to return a string, it return the
+negative. If the method is expected to return a string, it returns the
 string representation of positive or negative infinity used by your
 system. For example, on my system calling C<year()> returns a number
-which when printed appears either "inf" or "-inf".
+which when printed appears either "Inf" or "-Inf".
+
+This also applies to methods that are compound stringifications, which return
+the same strings even for things like C<ymd()> or C<iso8601()>
 
 The object is not mutable, so the C<set()>, C<set_time_zone()>, and
 C<truncate()> methods are all do-nothing methods that simply return

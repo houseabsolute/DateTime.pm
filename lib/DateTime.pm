@@ -901,10 +901,10 @@ sub hms {
 }
 
 # don't want to override CORE::time()
-*DateTime::time = \&hms;
+*DateTime::time = sub { $_[0]->hms };
 
 sub iso8601 { join 'T', $_[0]->ymd('-'), $_[0]->hms(':') }
-*datetime = \&iso8601;
+*datetime = sub { $_[0]->iso8601 };
 
 sub is_leap_year { $_[0]->_is_leap_year( $_[0]->year ) }
 

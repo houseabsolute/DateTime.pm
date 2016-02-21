@@ -19,6 +19,25 @@ my $nan_string = DateTime::NAN;
     ok( !$pos->is_finite,  'positive infinity should not be finite' );
     ok( !$neg->is_finite,  'negative infinity should not be finite' );
 
+    # These methods produce numbers or strings - we want to make sure they all
+    # return Inf or -Inf as expected.
+    my @ification_methods = qw(
+        ymd mdy dmy hms time iso8601 datetime
+        year ce_year month day day_of_week
+        quarter
+        hour hour_1 hour_12 hour_12_0 minute second
+        fractional_second
+        week week_year week_number
+        mjd jd
+        nanosecond millisecond microsecond
+        epoch
+    );
+
+    for my $meth (@ification_methods) {
+        is( $pos->$meth, $posinf, "+Infinity $meth returns $posinf" );
+        is( $neg->$meth, $neginf, "-Infinity $meth returns $neginf" );
+    }
+
     # that's a long time ago!
     my $long_ago = DateTime->new( year => -100_000 );
 
