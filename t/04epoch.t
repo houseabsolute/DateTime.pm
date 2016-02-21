@@ -116,8 +116,19 @@ use DateTime;
 }
 
 {
+    my $dt = DateTime->from_epoch( epoch => -0.5 );
+    is(
+        $dt->nanosecond, 500_000_000,
+        'nanosecond should be 500,000,000 with -0.5 as epoch'
+    );
+
+    is( $dt->epoch,       -1,   'epoch should be -1' );
+    is( $dt->hires_epoch, -0.5, 'hires_epoch should be -0.5' );
+}
+
+{
     my $dt = DateTime->from_epoch( epoch => 0.1234567891 );
-    is( $dt->nanosecond, 123_456_789, 'nanosecond should be an integer ' );
+    is( $dt->nanosecond, 123_457_000, 'nanosecond should be an integer ' );
 }
 
 {
