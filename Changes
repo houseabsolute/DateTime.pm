@@ -1,5 +1,19 @@
 {{$NEXT}}
 
+- Fixed several issues with the handling of non-integer values passed to
+  from_epoch(). This was simply broken for negative values, which would end up
+  being incremented by a full second, so for example -0.5 became 0.5.
+
+  The method did not accept all valid float values. Specifically, it did not
+  accept values in scientific notation.
+
+  Finally, this method now rounds all non-integer values to the nearest
+  millisecond. This matches the precision we can expect from Perl itself (53
+  bits) in most cases.
+
+  Patch by Christian Hansen. GitHub #11.
+
+
 1.21   2015-09-30
 
 - Make all tests pass with both the current DateTime::Locale and the upcoming
