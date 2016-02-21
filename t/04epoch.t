@@ -128,7 +128,18 @@ use DateTime;
 
 {
     my $dt = DateTime->from_epoch( epoch => 0.1234567891 );
-    is( $dt->nanosecond, 123_457_000, 'nanosecond should be an integer ' );
+    is(
+        $dt->nanosecond, 123_457_000,
+        'nanosecond should be rounded to 123,457,000 when given 0.1234567891'
+    );
+}
+
+{
+    my $dt = DateTime->from_epoch( epoch => -0.1234567891 );
+    is(
+        $dt->nanosecond, 876_543_000,
+        'nanosecond should be rounded to 876,543,000 when given -0.1234567891'
+    );
 }
 
 {

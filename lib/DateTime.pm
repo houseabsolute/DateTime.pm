@@ -491,16 +491,33 @@ sub _calc_local_components {
         my %p = validate( @_, $spec );
 
         my %args;
-        if ( $p{epoch} =~ /[.eE]/ ) {
-            my ( $f, $n, $s );
 
-            $f = $n = fmod( $p{epoch}, 1.0 );
-            $s = floor( $p{epoch} - $f );
-            if ( $n < 0 ) {
-                $n += 1;
+        # This does two things. First, if given a negative non-integer epoch,
+        # it will round the epoch _down_ to the next second and then adjust
+        # the nanoseconds to be positive. In other words, -0.5 corresponds to
+        # a second of -1 and a nanosecond value of 500,000. Before this code
+        # was implemented our handling of negative non-integer epochs was
+        # quite broken, and would end up rounding some values up, so that -0.5
+        # become 0.5 (which is obviously wrong!).
+        #
+        # Second, it rounds any decimal values to the nearest millisecond
+        # (1E6). Here's what Christian Hanse, who wrote this patch, says:
+        #
+        #     Perl is typically compiled with NV as a double. A double with a
+        #     significand precision of 53 bits can only represent a nanosecond
+        #     epoch without loss of precision if the duration from zero epoch
+        #     is less than ≈ ±104 days. With microseconds the duration is
+        #     ±104,000 days, which is ~ ±285 years.
+        if ( $p{epoch} =~ /[.eE]/ ) {
+            my ( $floor, $nano, $second );
+
+            $floor = $nano = fmod( $p{epoch}, 1.0 );
+            $second = floor( $p{epoch} - $floor );
+            if ( $nano < 0 ) {
+                $nano += 1;
             }
-            $p{epoch}         = $s + floor( $f - $n );
-            $args{nanosecond} = floor( $n * 1E6 + 0.5 ) * 1E3;
+            $p{epoch}         = $second + floor( $floor - $nano );
+            $args{nanosecond} = floor( $nano * 1E6 + 0.5 ) * 1E3;
         }
 
         # Note, for very large negative values this may give a
