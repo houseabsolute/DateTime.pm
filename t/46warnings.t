@@ -10,8 +10,9 @@ my $year_5001_epoch = 95649120000;
 
 SKIP:
 {
+    my $year = ( gmtime($year_5001_epoch) )[5];
     skip 'These tests require a 64-bit Perl', 2
-        unless ( gmtime($year_5001_epoch) )[5] == 3101;
+        unless defined $year && $year == 3101;
 
     {
         like(
