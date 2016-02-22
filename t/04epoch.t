@@ -9,14 +9,14 @@ use DateTime;
 
     # Tests creating objects from epoch time
     my $t1 = DateTime->from_epoch( epoch => 0 );
-    is( $t1->epoch, 0, "epoch should be 0" );
+    is( $t1->epoch, 0, 'epoch should be 0' );
 
-    is( $t1->second, 0,    "seconds are correct on epoch 0" );
-    is( $t1->minute, 0,    "minutes are correct on epoch 0" );
-    is( $t1->hour,   0,    "hours are correct on epoch 0" );
-    is( $t1->day,    1,    "days are correct on epoch 0" );
-    is( $t1->month,  1,    "months are correct on epoch 0" );
-    is( $t1->year,   1970, "year is correct on epoch 0" );
+    is( $t1->second, 0,    'seconds are correct on epoch 0' );
+    is( $t1->minute, 0,    'minutes are correct on epoch 0' );
+    is( $t1->hour,   0,    'hours are correct on epoch 0' );
+    is( $t1->day,    1,    'days are correct on epoch 0' );
+    is( $t1->month,  1,    'months are correct on epoch 0' );
+    is( $t1->year,   1970, 'year is correct on epoch 0' );
 }
 
 {
@@ -33,9 +33,9 @@ use DateTime;
     my $now      = time;
     my $nowtest  = DateTime->now();
     my $nowtest2 = DateTime->from_epoch( epoch => $now );
-    is( $nowtest->hour,   $nowtest2->hour,   "Hour: Create without args" );
-    is( $nowtest->month,  $nowtest2->month,  "Month : Create without args" );
-    is( $nowtest->minute, $nowtest2->minute, "Minute: Create without args" );
+    is( $nowtest->hour,   $nowtest2->hour,   'Hour: Create without args' );
+    is( $nowtest->month,  $nowtest2->month,  'Month : Create without args' );
+    is( $nowtest->minute, $nowtest2->minute, 'Minute: Create without args' );
 }
 
 {
@@ -43,10 +43,10 @@ use DateTime;
 
     is(
         $epochtest->epoch, 997121000,
-        "epoch method returns correct value"
+        'epoch method returns correct value'
     );
-    is( $epochtest->hour, 18, "hour" );
-    is( $epochtest->min,  3,  "minute" );
+    is( $epochtest->hour, 18, 'hour' );
+    is( $epochtest->min,  3,  'minute' );
 }
 
 {
@@ -90,13 +90,13 @@ use DateTime;
         $epochtest->epoch, $expected,
         "epoch method returns correct value ($expected)"
     );
-    is( $epochtest->hour, 1,  "hour" );
-    is( $epochtest->min,  30, "minute" );
+    is( $epochtest->hour, 1,  'hour' );
+    is( $epochtest->min,  30, 'minute' );
 
     $epochtest->add( hours => 2 );
     $expected += 2 * 60 * 60;
 
-    is( $epochtest->hour, 3, "adjusted hour" );
+    is( $epochtest->hour, 3, 'adjusted hour' );
     is(
         $epochtest->epoch, $expected,
         "epoch method returns correct adjusted value ($expected)"
@@ -145,7 +145,7 @@ use DateTime;
 {
     is(
         DateTime->new( year => 1904 )->epoch, -2082844800,
-        "epoch should work back to at least 1904"
+        'epoch should work back to at least 1904'
     );
 
     my $dt = DateTime->from_epoch( epoch => -2082844800 );
@@ -175,7 +175,7 @@ use DateTime;
 
     package Number::Overloaded;
     use overload
-        "0+" => sub { $_[0]->{num} },
+        '0+' => sub { $_[0]->{num} },
         fallback => 1;
 
     sub new { bless { num => $_[1] }, $_[0] }
