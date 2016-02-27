@@ -146,14 +146,14 @@ ok( ( $infinity <=> $date1 ) == 1, 'Comparison overload $inf <=> $a' );
 # sub-second
 {
     my $date1 = DateTime->new(
-        year => 1997, month  => 10, day    => 24,
-        hour => 12,   minute => 0,  second => 0,
+        year       => 1997, month  => 10, day    => 24,
+        hour       => 12,   minute => 0,  second => 0,
         nanosecond => 100,
     );
 
     my $date2 = DateTime->new(
-        year => 1997, month  => 10, day    => 24,
-        hour => 12,   minute => 0,  second => 0,
+        year       => 1997, month  => 10, day    => 24,
+        hour       => 12,   minute => 0,  second => 0,
         nanosecond => 200,
     );
 
@@ -167,14 +167,14 @@ ok( ( $infinity <=> $date1 ) == 1, 'Comparison overload $inf <=> $a' );
 
 {
     my $date1 = DateTime->new(
-        year => 2000, month  => 10, day    => 24,
-        hour => 12,   minute => 0,  second => 0,
+        year       => 2000, month  => 10, day    => 24,
+        hour       => 12,   minute => 0,  second => 0,
         nanosecond => 10000,
     );
 
     my $date2 = DateTime->new(
-        year => 2000, month  => 10, day    => 24,
-        hour => 12,   minute => 0,  second => 0,
+        year       => 2000, month  => 10, day    => 24,
+        hour       => 12,   minute => 0,  second => 0,
         nanosecond => 10000,
     );
 

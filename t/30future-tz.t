@@ -18,18 +18,18 @@ use DateTime;
     # Each iteration needs to use a different zone, because if it
     # works once, the generated spans are cached.
     for my $add (
-        [ years => 50, 1,   'America/New_York' ],
-        [ days  => 50, 365, 'America/Chicago' ],
-        [ minutes => 50, 365 * 1440, 'America/Denver', ],
+        [ years   => 50, 1,               'America/New_York' ],
+        [ days    => 50, 365,             'America/Chicago' ],
+        [ minutes => 50, 365 * 1440,      'America/Denver', ],
         [ seconds => 50, 365 * 1440 * 60, 'America/Los_Angeles' ],
         [
             nanoseconds => 50, 365 * 1440 * 60 * 1_000_000_000,
             'America/North_Dakota/Center'
         ],
 
-        [ years => 750, 1,   'Europe/Paris' ],
-        [ days  => 750, 365, 'Europe/London' ],
-        [ minutes => 750, 365 * 1440, 'Europe/Brussels', ],
+        [ years   => 750, 1,               'Europe/Paris' ],
+        [ days    => 750, 365,             'Europe/London' ],
+        [ minutes => 750, 365 * 1440,      'Europe/Brussels', ],
         [ seconds => 750, 365 * 1440 * 60, 'Europe/Vienna' ],
         [
             nanoseconds => 750, 365 * 1440 * 60 * 1_000_000_000,

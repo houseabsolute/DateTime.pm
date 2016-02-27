@@ -21,8 +21,8 @@ use DateTime;
 # DT::TZ
 {
     my $dt = DateTime->new(
-        year => 1922, month  => 8,  day    => 31,
-        hour => 23,   minute => 59, second => 59,
+        year      => 1922, month  => 8,  day    => 31,
+        hour      => 23,   minute => 59, second => 59,
         time_zone => 'UTC',
     );
     $dt->set_time_zone('Africa/Accra');

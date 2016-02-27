@@ -118,7 +118,7 @@ use DateTime::Duration;
 }
 
 my $leap_day = DateTime->new(
-    year => 2004, month => 2, day => 29,
+    year      => 2004, month => 2, day => 29,
     time_zone => 'UTC',
 );
 

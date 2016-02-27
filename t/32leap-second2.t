@@ -7,8 +7,8 @@ use DateTime;
 
 {
     my $t = DateTime->new(
-        year => 1972, month  => 7,  day    => 1,
-        hour => 0,    minute => 59, second => 58,
+        year      => 1972, month  => 7,  day    => 1,
+        hour      => 0,    minute => 59, second => 58,
         time_zone => '+0100',
     );
 
@@ -35,8 +35,8 @@ use DateTime;
 
 {
     my $t = DateTime->new(
-        year => 1972, month  => 7,  day    => 1,
-        hour => 0,    minute => 59, second => 59,
+        year      => 1972, month  => 7,  day    => 1,
+        hour      => 0,    minute => 59, second => 59,
         time_zone => '+0100',
     );
 
@@ -63,8 +63,8 @@ use DateTime;
 {
     my $t = eval {
         DateTime->new(
-            year => 1972, month  => 7,  day    => 1,
-            hour => 0,    minute => 59, second => 60,
+            year      => 1972, month  => 7,  day    => 1,
+            hour      => 0,    minute => 59, second => 60,
             time_zone => '+0100',
         );
     };
@@ -99,8 +99,8 @@ SKIP:
 
 {
     my $t = DateTime->new(
-        year => 1972, month  => 7, day    => 1,
-        hour => 1,    minute => 0, second => 0,
+        year      => 1972, month  => 7, day    => 1,
+        hour      => 1,    minute => 0, second => 0,
         time_zone => '+0100',
     );
 
@@ -126,8 +126,8 @@ SKIP:
 
 {
     my $t = DateTime->new(
-        year => 1972, month  => 7, day    => 1,
-        hour => 1,    minute => 0, second => 1,
+        year      => 1972, month  => 7, day    => 1,
+        hour      => 1,    minute => 0, second => 1,
         time_zone => '+0100',
     );
 
@@ -153,8 +153,8 @@ SKIP:
 
 {
     my $t = DateTime->new(
-        year => 1972, month  => 7,  day    => 1,
-        hour => 23,   minute => 59, second => 59,
+        year      => 1972, month  => 7,  day    => 1,
+        hour      => 23,   minute => 59, second => 59,
         time_zone => '+0100',
     );
 
@@ -180,8 +180,8 @@ SKIP:
 
 {
     my $t = DateTime->new(
-        year => 1972, month  => 6,  day    => 30,
-        hour => 22,   minute => 59, second => 58,
+        year      => 1972, month  => 6,  day    => 30,
+        hour      => 22,   minute => 59, second => 58,
         time_zone => '-0100',
     );
 
@@ -208,8 +208,8 @@ SKIP:
 
 {
     my $t = DateTime->new(
-        year => 1972, month  => 6,  day    => 30,
-        hour => 22,   minute => 59, second => 59,
+        year      => 1972, month  => 6,  day    => 30,
+        hour      => 22,   minute => 59, second => 59,
         time_zone => '-0100',
     );
 
@@ -237,8 +237,8 @@ SKIP:
 {
     my $t = eval {
         DateTime->new(
-            year => 1972, month  => 6,  day    => 30,
-            hour => 22,   minute => 59, second => 60,
+            year      => 1972, month  => 6,  day    => 30,
+            hour      => 22,   minute => 59, second => 60,
             time_zone => '-0100',
         );
     };
@@ -274,8 +274,8 @@ SKIP:
 
 {
     my $t = DateTime->new(
-        year => 1972, month  => 6, day    => 30,
-        hour => 23,   minute => 0, second => 0,
+        year      => 1972, month  => 6, day    => 30,
+        hour      => 23,   minute => 0, second => 0,
         time_zone => '-0100',
     );
 
@@ -302,8 +302,8 @@ SKIP:
 
 {
     my $t = DateTime->new(
-        year => 1972, month  => 6, day    => 30,
-        hour => 23,   minute => 0, second => 1,
+        year      => 1972, month  => 6, day    => 30,
+        hour      => 23,   minute => 0, second => 1,
         time_zone => '-0100',
     );
 

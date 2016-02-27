@@ -10,12 +10,12 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year => 2003, month => 5, day => 6,
+        year      => 2003, month => 5, day => 6,
         time_zone => 'America/Chicago',
     );
 
     my $dt2 = DateTime->new(
-        year => 2003, month => 11, day => 6,
+        year      => 2003, month => 11, day => 6,
         time_zone => 'America/Chicago',
     );
 
@@ -84,12 +84,12 @@ use DateTime;
 # are handled correctly.
 {
     my $dt1 = DateTime->new(
-        year => 2003, month => 5, day => 6, hour => 18,
+        year      => 2003, month => 5, day => 6, hour => 18,
         time_zone => 'America/Chicago',
     );
 
     my $dt2 = DateTime->new(
-        year => 2003, month => 11, day => 6, hour => 18,
+        year      => 2003, month => 11, day => 6, hour => 18,
         time_zone => 'America/Chicago',
     );
 
@@ -106,12 +106,12 @@ use DateTime;
 # where we lose an hour
 {
     my $dt1 = DateTime->new(
-        year => 2003, month => 11, day => 6,
+        year      => 2003, month => 11, day => 6,
         time_zone => 'America/Chicago',
     );
 
     my $dt2 = DateTime->new(
-        year => 2004, month => 5, day => 6,
+        year      => 2004, month => 5, day => 6,
         time_zone => 'America/Chicago',
     );
 
@@ -136,12 +136,12 @@ use DateTime;
 # the docs say use UTC to guarantee reversibility
 {
     my $dt1 = DateTime->new(
-        year => 2003, month => 5, day => 6,
+        year      => 2003, month => 5, day => 6,
         time_zone => 'America/Chicago',
     );
 
     my $dt2 = DateTime->new(
-        year => 2003, month => 11, day => 6,
+        year      => 2003, month => 11, day => 6,
         time_zone => 'America/Chicago',
     );
 
@@ -165,12 +165,12 @@ use DateTime;
 # of subtraction done.
 {
     my $dt1 = DateTime->new(
-        year => 2003, month => 5, day => 6,
+        year      => 2003, month => 5, day => 6,
         time_zone => 'America/Chicago',
     );
 
     my $dt2 = DateTime->new(
-        year => 2003, month => 11, day => 6,
+        year      => 2003, month => 11, day => 6,
         time_zone => 'America/Chicago',
     );
 
@@ -213,14 +213,14 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year => 2003, month  => 4, day => 6,
-        hour => 1,    minute => 58,
+        year      => 2003, month  => 4, day => 6,
+        hour      => 1,    minute => 58,
         time_zone => 'America/Chicago',
     );
 
     my $dt2 = DateTime->new(
-        year => 2003, month  => 4, day => 6,
-        hour => 3,    minute => 1,
+        year      => 2003, month  => 4, day => 6,
+        hour      => 3,    minute => 1,
         time_zone => 'America/Chicago',
     );
 
@@ -245,14 +245,14 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year => 2003, month  => 4, day => 5,
-        hour => 1,    minute => 58,
+        year      => 2003, month  => 4, day => 5,
+        hour      => 1,    minute => 58,
         time_zone => 'America/Chicago',
     );
 
     my $dt2 = DateTime->new(
-        year => 2003, month  => 4, day => 6,
-        hour => 3,    minute => 1,
+        year      => 2003, month  => 4, day => 6,
+        hour      => 3,    minute => 1,
         time_zone => 'America/Chicago',
     );
 
@@ -320,14 +320,14 @@ use DateTime;
 # they're the smaller operand
 {
     my $dt1 = DateTime->new(
-        year => 2003, month  => 4, day => 6,
-        hour => 3,    minute => 1,
+        year      => 2003, month  => 4, day => 6,
+        hour      => 3,    minute => 1,
         time_zone => 'America/Chicago',
     );
 
     my $dt2 = DateTime->new(
-        year => 2003, month  => 4, day => 7,
-        hour => 3,    minute => 2,
+        year      => 2003, month  => 4, day => 7,
+        hour      => 3,    minute => 2,
         time_zone => 'America/Chicago',
     );
 
@@ -353,14 +353,14 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year => 2003, month  => 4, day => 5,
-        hour => 1,    minute => 58,
+        year      => 2003, month  => 4, day => 5,
+        hour      => 1,    minute => 58,
         time_zone => 'America/Chicago',
     );
 
     my $dt2 = DateTime->new(
-        year => 2003, month  => 4, day => 7,
-        hour => 2,    minute => 1,
+        year      => 2003, month  => 4, day => 7,
+        hour      => 2,    minute => 1,
         time_zone => 'America/Chicago',
     );
 
@@ -386,12 +386,12 @@ use DateTime;
 # from example in docs
 {
     my $dt1 = DateTime->new(
-        year => 2003, month => 5, day => 6,
+        year      => 2003, month => 5, day => 6,
         time_zone => 'America/Chicago',
     );
 
     my $dt2 = DateTime->new(
-        year => 2003, month => 11, day => 6,
+        year      => 2003, month => 11, day => 6,
         time_zone => 'America/Chicago',
     );
 
@@ -418,12 +418,12 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year => 2005, month => 8,
+        year      => 2005, month => 8,
         time_zone => 'Europe/London',
     );
 
     my $dt2 = DateTime->new(
-        year => 2005, month => 11,
+        year      => 2005, month => 11,
         time_zone => 'Europe/London',
     );
 
@@ -443,12 +443,12 @@ use DateTime;
 # same as previous but without hours overflow
 {
     my $dt1 = DateTime->new(
-        year => 2005, month => 8, hour => 12,
+        year      => 2005, month => 8, hour => 12,
         time_zone => 'Europe/London',
     );
 
     my $dt2 = DateTime->new(
-        year => 2005, month => 11, hour => 12,
+        year      => 2005, month => 11, hour => 12,
         time_zone => 'Europe/London',
     );
 
@@ -468,8 +468,8 @@ use DateTime;
 # another docs example
 {
     my $dt2 = DateTime->new(
-        year => 2003, month => 10, day => 26,
-        hour => 1,
+        year      => 2003, month => 10, day => 26,
+        hour      => 1,
         time_zone => 'America/Chicago',
     );
 
@@ -500,12 +500,12 @@ use DateTime;
 
 {
     my $dt1 = DateTime->new(
-        year => 2003, month => 5, day => 6,
+        year      => 2003, month => 5, day => 6,
         time_zone => 'America/New_York',
     );
 
     my $dt2 = DateTime->new(
-        year => 2003, month => 5, day => 6,
+        year      => 2003, month => 5, day => 6,
         time_zone => 'America/Chicago',
     );
 

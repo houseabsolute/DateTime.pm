@@ -7,8 +7,8 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year => 1870, month  => 10, day    => 21,
-        hour => 12,   minute => 10, second => 45,
+        year       => 1870, month  => 10, day    => 21,
+        hour       => 12,   minute => 10, second => 45,
         nanosecond => 123456,
         time_zone  => 'UTC'
     );

@@ -29,14 +29,14 @@ sub new {
     my $class = shift;
     my %p     = validate(
         @_, {
-            years       => { type => SCALAR, default => 0 },
-            months      => { type => SCALAR, default => 0 },
-            weeks       => { type => SCALAR, default => 0 },
-            days        => { type => SCALAR, default => 0 },
-            hours       => { type => SCALAR, default => 0 },
-            minutes     => { type => SCALAR, default => 0 },
-            seconds     => { type => SCALAR, default => 0 },
-            nanoseconds => { type => SCALAR, default => 0 },
+            years        => { type => SCALAR, default => 0 },
+            months       => { type => SCALAR, default => 0 },
+            weeks        => { type => SCALAR, default => 0 },
+            days         => { type => SCALAR, default => 0 },
+            hours        => { type => SCALAR, default => 0 },
+            minutes      => { type => SCALAR, default => 0 },
+            seconds      => { type => SCALAR, default => 0 },
+            nanoseconds  => { type => SCALAR, default => 0 },
             end_of_month => {
                 type  => SCALAR, default => undef,
                 regex => qr/^(?:wrap|limit|preserve)$/

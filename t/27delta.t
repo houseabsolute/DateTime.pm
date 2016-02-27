@@ -7,15 +7,15 @@ use DateTime;
 
 {
     my $date1 = DateTime->new(
-        year => 2001, month  => 5, day    => 10,
-        hour => 4,    minute => 3, second => 2,
+        year       => 2001, month  => 5, day    => 10,
+        hour       => 4,    minute => 3, second => 2,
         nanosecond => 12,
         time_zone  => 'UTC'
     );
 
     my $date2 = DateTime->new(
-        year => 2001, month  => 6, day    => 12,
-        hour => 5,    minute => 7, second => 23,
+        year       => 2001, month  => 6, day    => 12,
+        hour       => 5,    minute => 7, second => 23,
         nanosecond => 7,
         time_zone  => 'UTC'
     );
