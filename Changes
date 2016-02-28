@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.23   2016-02-28
+
 - Make all DateTime::Infinite objects return the system's representation of
   positive or negative infinity for any method which returns a number of
   string representation (year(), month(), ymd(), iso8601(), etc.). Previously
