@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.24   2016-02-29
+
 - The last release partially broke $dt->time. If you passed a value to use as
   unit separator, this was ignored. Reported by Sergiy Zuban. RT #112585.
 
