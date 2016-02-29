@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- The last release partially broke $dt->time. If you passed a value to use as
+  unit separator, this was ignored. Reported by Sergiy Zuban. RT #112585.
+
+
 1.23   2016-02-28
 
 - Make all DateTime::Infinite objects return the system's representation of

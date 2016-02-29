@@ -815,7 +815,7 @@ sub ymd {
         $self->{local_c}{day}
     );
 }
-*date = \&ymd;
+*date = sub { shift->ymd(@_) };
 
 sub mdy {
     my ( $self, $sep ) = @_;
@@ -901,7 +901,7 @@ sub hms {
 }
 
 # don't want to override CORE::time()
-*DateTime::time = sub { $_[0]->hms };
+*DateTime::time = sub { shift->hms(@_) };
 
 sub iso8601 { join 'T', $_[0]->ymd('-'), $_[0]->hms(':') }
 *datetime = sub { $_[0]->iso8601 };
