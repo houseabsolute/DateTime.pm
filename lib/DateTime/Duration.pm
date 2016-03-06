@@ -3,7 +3,7 @@ package DateTime::Duration;
 use strict;
 use warnings;
 
-our $VERSION = '1.25';
+our $VERSION = '1.26';
 
 use Carp ();
 use DateTime;
