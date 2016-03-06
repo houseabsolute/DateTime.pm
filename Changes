@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.25   2016-03-06
+
 - DateTime->from_object would die if given a DateTime::Infinite object. Now it
   returns another DateTime::Infinite object. Reported by Greg Oschwald. RT
   #112712.

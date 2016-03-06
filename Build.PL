@@ -19,7 +19,7 @@ my %module_build_args = (
     "Dave Rolsky <autarch\@urth.org>"
   ],
   "dist_name" => "DateTime",
-  "dist_version" => "1.24",
+  "dist_version" => "1.25",
   "license" => "artistic_2",
   "module_name" => "DateTime",
   "recursive_test_files" => 1,
