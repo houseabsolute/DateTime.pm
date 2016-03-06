@@ -586,6 +586,10 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
 
         my $object = delete $p{object};
 
+        if ( $object->isa('DateTime::Infinite') ) {
+            return $object->clone;
+        }
+
         my ( $rd_days, $rd_secs, $rd_nanosecs ) = $object->utc_rd_values;
 
         # A kludge because until all calendars are updated to return all

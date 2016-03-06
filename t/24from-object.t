@@ -60,6 +60,17 @@ is( $dt1->nanosecond, 100,  'nanosecond is 100' );
     );
 }
 
+{
+    for my $class (qw( DateTime::Infinite::Past DateTime::Infinite::Future ))
+    {
+        isa_ok(
+            DateTime->from_object( object => $class->new ),
+            $class,
+            "from_object($class)"
+        );
+    }
+}
+
 done_testing();
 
 # Set up two simple test packages
