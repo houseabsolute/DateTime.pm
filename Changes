@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Switched from Module::Build to ExtUtils::MakeMaker. Implementation by Karen
+  Etheridge. GitHub #13.
+
+
 1.25   2016-03-06
 
 - DateTime->from_object would die if given a DateTime::Infinite object. Now it
