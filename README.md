@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.18
+version 1.26
 
 # SYNOPSIS
 
@@ -361,11 +361,8 @@ This class method can be used to construct a new DateTime object from
 an epoch time instead of components. Just as with the `new()`
 method, it accepts "time\_zone", "locale", and "formatter" parameters.
 
-If the epoch value is not an integer, the part after the decimal will
-be converted to nanoseconds. This is done in order to be compatible
-with `Time::HiRes`. If the floating portion extends past 9 decimal
-places, it will be truncated to nine, so that 1.1234567891 will become
-1 second and 123,456,789 nanoseconds.
+If the epoch value is a floating-point value, it will be rounded to
+nearest microsecond.
 
 By default, the returned object will be in the UTC time zone.
 
@@ -627,7 +624,8 @@ This method is equivalent to:
 
     $dt->ymd('-') . 'T' . $dt->hms(':')
 
-Also available as `$dt->iso8601()`.
+This method is also available as `$dt->iso8601()`, but it's not really a
+very good ISO8601 format, as it lacks a time zone.
 
 ### $dt->is\_leap\_year()
 
@@ -1044,7 +1042,7 @@ override `DateTime::_core_time()`:
     no warnings 'redefine';
     local *DateTime::_core_time = sub { return 42 };
 
-DateTime is guaranteed to core this subroutine to get the current `time()`
+DateTime is guaranteed to call this subroutine to get the current `time()`
 value. You can also override the `_core_time()` sub in a subclass of DateTime
 and use that.
 
@@ -1610,7 +1608,7 @@ CLDR provides the following patterns:
 
 - Y{1,}
 
-    The week of the year, from `$dt->week_year()`.
+    The year in "week of the year" calendars, from `$dt->week_year()`.
 
 - u{1,}
 
@@ -1814,6 +1812,43 @@ CLDR provides the following patterns:
 - VVVV
 
     The time zone long name.
+
+### CLDR "Available Formats"
+
+The CLDR data includes pre-defined formats for various patterns such as "month
+and day" or "time of day". Using these formats lets you render information
+about a datetime in the most natural way for users from a given locale.
+
+These formats are indexed by a key that is itself a CLDR pattern. When you
+look these up, you get back a different CLDR pattern suitable for the locale.
+
+Let's look at some example We'll use `2008-02-05T18:30:30` as our example
+datetime value, and see how this is rendered for the `en_US` and `fr_FR`
+locales.
+
+- `MMMd`
+
+    The abbreviated month and day as number. For `en_US`, we get the pattern
+    `MMM d`, which renders as `Feb 5`. For `fr_FR`, we get the pattern
+    `d MMM`, which renders as `5 févr.`.
+
+- `yQQQ`
+
+    The year and abbreviated quarter of year. For `en_US`, we get the pattern
+    `QQQ y`, which renders as `Q1 2008`. For `fr_FR`, we get the same pattern,
+    `QQQ y`, which renders as `T1 2008`.
+
+- `hm`
+
+    The 12-hour time of day without seconds.  For `en_US`, we get the pattern
+    `h:mm a`, which renders as `6:30 PM`. For `fr_FR`, we get the exact same
+    pattern and rendering.
+
+The available format for each locale are documented in the POD for that
+locale. To get back the format, you use the `$locale->format_for`
+method. For example:
+
+    say $dt->format_cldr( $dt->locale->format_for('MMMd') );
 
 ## strftime Patterns
 
@@ -2084,36 +2119,6 @@ platform/compiler/phase of moon dependent.
 If you don't plan to use infinite datetimes you can probably ignore
 this. This will be fixed (perhaps) in future versions.
 
-# SUPPORT
-
-Support for this module is provided via the datetime@perl.org email list. See
-http://datetime.perl.org/wiki/datetime/page/Mailing\_List for details.
-
-Please submit bugs to the CPAN RT system at
-http://rt.cpan.org/NoAuth/Bugs.html?Dist=DateTime or via email at
-bug-datetime@rt.cpan.org.
-
-# DONATIONS
-
-If you'd like to thank me for the work I've done on this module,
-please consider making a "donation" to me via PayPal. I spend a lot of
-free time creating free software, and would appreciate any support
-you'd care to offer.
-
-Please note that **I am not suggesting that you must do this** in order
-for me to continue working on this particular software. I will
-continue to do so, inasmuch as I have in the past, for as long as it
-interests me.
-
-Similarly, a donation made in this way will probably not make me work
-on this software much more, unless I get so many donations that I can
-consider working on free software full time, which seems unlikely at
-best.
-
-To donate, log into PayPal and send money to autarch@urth.org or use
-the button on this page:
-[http://www.urth.org/~autarch/fs-donation.html](http://www.urth.org/~autarch/fs-donation.html)
-
 # SEE ALSO
 
 [A Date with
@@ -2124,27 +2129,58 @@ I've given at a few YAPCs.
 
 [http://datetime.perl.org/](http://datetime.perl.org/)
 
+# SUPPORT
+
+Bugs may be submitted through [the RT bug tracker](http://rt.cpan.org/Public/Dist/Display.html?Name=DateTime)
+(or [bug-datetime@rt.cpan.org](mailto:bug-datetime@rt.cpan.org)).
+
+There is a mailing list available for users of this distribution, 
+[datetime@perl.org](https://metacpan.org/pod/datetime@perl.org).
+
+I am also usually active on IRC as 'drolsky' on `irc://irc.perl.org`.
+
+# DONATIONS
+
+If you'd like to thank me for the work I've done on this module, please
+consider making a "donation" to me via PayPal. I spend a lot of free time
+creating free software, and would appreciate any support you'd care to offer.
+
+Please note that **I am not suggesting that you must do this** in order for me
+to continue working on this particular software. I will continue to do so,
+inasmuch as I have in the past, for as long as it interests me.
+
+Similarly, a donation made in this way will probably not make me work on this
+software much more, unless I get so many donations that I can consider working
+on free software full time (let's all have a chuckle at that together).
+
+To donate, log into PayPal and send money to autarch@urth.org, or use the
+button at [http://www.urth.org/~autarch/fs-donation.html](http://www.urth.org/~autarch/fs-donation.html).
+
 # AUTHOR
 
-Dave Rolsky <autarch@urth.org>
+Dave Rolsky &lt;autarch@urth.org>
 
 # CONTRIBUTORS
 
-- Ben Bennett <fiji@limey.net>
-- Christian Hansen <chansen@cpan.org>
-- Daisuke Maki <dmaki@cpan.org>
-- David E. Wheeler <david@justatheory.com>
-- Doug Bell <madcityzen@gmail.com>
-- Flávio Soibelmann Glock <fglock@gmail.com>
-- Iain Truskett <deceased>
-- Joshua Hoblitt <jhoblitt@cpan.org>
-- Ricardo Signes <rjbs@cpan.org>
-- Richard Bowen <bowen@cpan.org>
-- Ron Hill <rkhill@cpan.org>
+- Ben Bennett &lt;fiji@limey.net>
+- Christian Hansen &lt;chansen@cpan.org>
+- Daisuke Maki &lt;dmaki@cpan.org>
+- David E. Wheeler &lt;david@justatheory.com>
+- Doug Bell &lt;madcityzen@gmail.com>
+- Flávio Soibelmann Glock &lt;fglock@gmail.com>
+- Gregory Oschwald &lt;oschwald@gmail.com>
+- Iain Truskett &lt;deceased>
+- Jason McIntosh &lt;jmac@jmac.org>
+- Joshua Hoblitt &lt;jhoblitt@cpan.org>
+- Karen Etheridge &lt;ether@cpan.org>
+- Nick Tonkin <1nickt@users.noreply.github.com>
+- Ricardo Signes &lt;rjbs@cpan.org>
+- Richard Bowen &lt;bowen@cpan.org>
+- Ron Hill &lt;rkhill@cpan.org>
 
-# COPYRIGHT AND LICENSE
+# COPYRIGHT AND LICENCE
 
-This software is Copyright (c) 2015 by Dave Rolsky.
+This software is Copyright (c) 2016 by Dave Rolsky.
 
 This is free software, licensed under:
 
