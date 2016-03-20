@@ -131,7 +131,7 @@ EOF
 */
 EOF
 
-    open my $fh, '>', 'c/leap_seconds.h';
+    open my $fh, '>', 'leap_seconds.h';
 
     print $fh (
         $header,

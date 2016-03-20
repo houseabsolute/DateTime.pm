@@ -16,10 +16,6 @@ requires "vars" => "0";
 requires "warnings" => "0";
 requires "warnings::register" => "0";
 
-on 'build' => sub {
-  requires "Module::Build" => "0.28";
-};
-
 on 'test' => sub {
   requires "ExtUtils::MakeMaker" => "0";
   requires "File::Spec" => "0";
@@ -35,7 +31,7 @@ on 'test' => sub {
 };
 
 on 'configure' => sub {
-  requires "Module::Build" => "0.28";
+  requires "ExtUtils::MakeMaker" => "0";
 };
 
 on 'configure' => sub {
