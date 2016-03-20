@@ -2,6 +2,7 @@
 .\#*
 .build
 /.tidyall.d
+Build.PL
 Build
 DateTime-*
 Debian_CPANTS.txt
@@ -19,7 +20,7 @@ _build
 blib*
 c/leap_seconds.h
 cover_db*
-lib/*.c
-lib/*.o
+/*\.c
+/*\.o
 pm_to_blib*
 t/author-pp-*
