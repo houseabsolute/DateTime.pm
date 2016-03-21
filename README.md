@@ -2134,8 +2134,8 @@ I've given at a few YAPCs.
 Bugs may be submitted through [the RT bug tracker](http://rt.cpan.org/Public/Dist/Display.html?Name=DateTime)
 (or [bug-datetime@rt.cpan.org](mailto:bug-datetime@rt.cpan.org)).
 
-There is a mailing list available for users of this distribution, 
-[datetime@perl.org](https://metacpan.org/pod/datetime@perl.org).
+There is a mailing list available for users of this distribution,
+[mailto:datetime@perl.org](mailto:datetime@perl.org).
 
 I am also usually active on IRC as 'drolsky' on `irc://irc.perl.org`.
 

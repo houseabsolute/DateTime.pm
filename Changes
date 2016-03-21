@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.26   2016-03-21
+
 - Switched from Module::Build to ExtUtils::MakeMaker. Implementation by Karen
   Etheridge. GitHub #13.
 
