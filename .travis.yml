@@ -39,16 +39,4 @@ env:
     - RELEASE_TESTING=1
     - AUTHOR_TESTING=1
 before_install:
-  - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
-  - source ~/travis-perl-helpers/init
-  - build-perl
-  - perl -V
-  - build-dist
-  - cd $BUILD_DIR
-install:
-  - cpan-install ExtUtils::MakeMaker~6.68 --deps
-script:
-  - perl ./tools/leap_seconds_header.pl
-  - perl Build.PL
-  - ./Build
-  - prove -br -j$(test-jobs) $(test-files)
+  - eval $(curl https://travis-perl.github.io/init) --auto
