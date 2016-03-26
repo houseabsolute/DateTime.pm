@@ -113,13 +113,13 @@ use DateTime;
 
     like(
         warning { my $x = undef; $dt > $x; },
-        qr/uninitialized value in numeric gt .+ at .*t.(release-pp-)?29overload\.t/,
+        qr/uninitialized value in numeric gt .+ at .*t.(author-pp-)?29overload\.t/,
         'Comparing undef to a DateTime object generates a Perl warning at the right spot ($dt > undef)'
     );
 
     like(
         warning { my $x = undef; $x > $dt; },
-        qr/uninitialized value in numeric gt .+ at .*t.(release-pp-)?29overload\.t/,
+        qr/uninitialized value in numeric gt .+ at .*t.(author-pp-)?29overload\.t/,
         'Comparing undef to a DateTime object generates a Perl warning at the right spot (undef > $dt)'
     );
 
