@@ -187,8 +187,8 @@ my $BasicValidate = {
 my $NewValidate = {
     %$BasicValidate,
     time_zone => {
-        type    => SCALAR | OBJECT,
-        default => 'floating'
+        type     => SCALAR | OBJECT,
+        optional => 1,
     },
 };
 
@@ -213,14 +213,14 @@ sub _new {
         if ref $class;
 
     # If this method is called from somewhere other than new(), then some of
-    # these default may not get applied.
-    $p{month}      = 1          unless exists $p{month};
-    $p{day}        = 1          unless exists $p{day};
-    $p{hour}       = 0          unless exists $p{hour};
-    $p{minute}     = 0          unless exists $p{minute};
-    $p{second}     = 0          unless exists $p{second};
-    $p{nanosecond} = 0          unless exists $p{nanosecond};
-    $p{time_zone}  = 'floating' unless exists $p{time_zone};
+    # these defaults may not get applied.
+    $p{month}      = 1                          unless exists $p{month};
+    $p{day}        = 1                          unless exists $p{day};
+    $p{hour}       = 0                          unless exists $p{hour};
+    $p{minute}     = 0                          unless exists $p{minute};
+    $p{second}     = 0                          unless exists $p{second};
+    $p{nanosecond} = 0                          unless exists $p{nanosecond};
+    $p{time_zone}  = $class->_default_time_zone unless exists $p{time_zone};
 
     my $self = bless {}, $class;
 
@@ -279,6 +279,12 @@ sub _new {
     }
 
     return $self;
+}
+
+# Warning: do not use this environment variable unless you have no choice in
+# the matter.
+sub _default_time_zone {
+    return $ENV{PERL_DATETIME_DEFAULT_TZ} || 'floating';
 }
 
 sub _set_locale {
@@ -622,7 +628,7 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
             $new->set_time_zone( $object->time_zone );
         }
         else {
-            $new->set_time_zone('floating');
+            $new->set_time_zone( $class->_default_time_zone );
         }
 
         return $new;

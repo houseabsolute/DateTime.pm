@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Added an environment variable PERL_DATETIME_DEFAULT_TZ to globally set the
+  default time zone. Using this is very dangerous! Be careful!. Patch by
+  Ovid. GitHub #14.
+
+
 1.26   2016-03-21
 
 - Switched from Module::Build to ExtUtils::MakeMaker. Implementation by Karen
