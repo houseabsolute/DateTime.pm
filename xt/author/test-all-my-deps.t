@@ -12,7 +12,7 @@ BEGIN {
 
 use Test::DependentModules qw( test_all_dependents );
 
-$ENV{PERL_TEST_DM_LOG_DIR} = abs_path('.');
+local $ENV{PERL_TEST_DM_LOG_DIR} = abs_path('.');
 
 my $exclude = $ENV{DATETIME_TEST_DEPS} eq 'all'
     ? qr/(?:^App-)
