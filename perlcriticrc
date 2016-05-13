@@ -1,6 +1,7 @@
 severity = 3
 verbose = 11
 theme = core + pbp + bugs + maintenance + cosmetic + complexity + security + tests + moose
+program-extensions = pl psgi t
 
 exclude = Subroutines::ProhibitCallsToUndeclaredSubs
 
@@ -44,6 +45,9 @@ add_packages = Carp Test::Builder
 
 [-Subroutines::RequireFinalReturn]
 
+# This incorrectly thinks signatures are prototypes.
+[-Subroutines::ProhibitSubroutinePrototypes]
+
 [-ErrorHandling::RequireCarping]
 
 # No need for /xsm everywhere
@@ -56,3 +60,8 @@ add_packages = Carp Test::Builder
 
 # "use v5.14" is more readable than "use 5.014"
 [-ValuesAndExpressions::ProhibitVersionStrings]
+
+# Explicitly returning undef is a _good_ thing in many cases, since it
+# prevents very common errors when using a sub in list context to construct a
+# hash and ending up with a missing value or key.
+[-Subroutines::ProhibitExplicitReturnUndef]

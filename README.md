@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.26
+version 1.27
 
 # SYNOPSIS
 
@@ -106,8 +106,8 @@ For infinite datetimes, please see the
 
 ## 0-based Versus 1-based Numbers
 
-The DateTime.pm module follows a simple consistent logic for
-determining whether or not a given number is 0-based or 1-based.
+The DateTime.pm module follows a simple logic for determining whether or not a
+given number is 0-based or 1-based.
 
 Month, day of month, day of week, and day of year are 1-based. Any
 method that is 1-based also has an equivalent 0-based method ending in
@@ -186,6 +186,24 @@ very far in the future (thousands of years). The current
 implementation of `DateTime::TimeZone` will use a huge amount of
 memory calculating all the DST changes from now until the future
 date. Use UTC or the floating time zone and you will be safe.
+
+## Globally Setting a Default Time Zone
+
+**Warning: This is very dangerous. Do this at your own risk!**
+
+By default, `DateTime` uses either the floating time zone or UTC for newly
+created objects, depending on the constructor.
+
+You can force `DateTime` to use a different time zone by setting the
+`PERL_DATETIME_DEFAULT_TZ` environment variable.
+
+As noted above, this is very dangerous, as it affects all code that creates a
+`DateTime` object, including modules from CPAN. If those modules expect the
+normal default, then setting this can cause confusing breakage or subtly
+broken data. Before setting this variable, you are strongly encouraged to
+audit your CPAN dependencies to see how they use `DateTime`. Try running the
+test suite for each dependency with this environment variable set before using
+this in production.
 
 ## Upper and Lower Bounds
 
@@ -1133,6 +1151,13 @@ the nitty-gritty of datetime math, I have several recommendations:
     regardless of the timezone of the objects involved, as does using
     `subtract_datetime_absolute()`. Other methods of subtraction are not
     always reversible.
+
+- never do math on two objects where only is in the floating time zone
+
+    The date math code accounts for leap seconds whenever the `DateTime` object
+    is not in the floating time zone. If you try to do math where one object is in
+    the floating zone and the other isn't, the results will be confusing and
+    wrong.
 
 ### Adding a Duration to a Datetime
 
@@ -2174,6 +2199,7 @@ Dave Rolsky &lt;autarch@urth.org>
 - Joshua Hoblitt &lt;jhoblitt@cpan.org>
 - Karen Etheridge &lt;ether@cpan.org>
 - Nick Tonkin <1nickt@users.noreply.github.com>
+- Ovid &lt;curtis\_ovid\_poe@yahoo.com>
 - Ricardo Signes &lt;rjbs@cpan.org>
 - Richard Bowen &lt;bowen@cpan.org>
 - Ron Hill &lt;rkhill@cpan.org>
