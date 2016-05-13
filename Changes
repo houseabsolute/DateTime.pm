@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.27   2016-05-13
+
 - Added an environment variable PERL_DATETIME_DEFAULT_TZ to globally set the
   default time zone. Using this is very dangerous! Be careful!. Patch by
   Ovid. GitHub #14.
