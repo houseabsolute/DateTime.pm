@@ -2281,8 +2281,8 @@ L<DateTime::Infinite|DateTime::Infinite> module.
 
 =head2 0-based Versus 1-based Numbers
 
-The DateTime.pm module follows a simple consistent logic for
-determining whether or not a given number is 0-based or 1-based.
+The DateTime.pm module follows a simple logic for determining whether or not a
+given number is 0-based or 1-based.
 
 Month, day of month, day of week, and day of year are 1-based. Any
 method that is 1-based also has an equivalent 0-based method ending in
@@ -2361,6 +2361,24 @@ very far in the future (thousands of years). The current
 implementation of C<DateTime::TimeZone> will use a huge amount of
 memory calculating all the DST changes from now until the future
 date. Use UTC or the floating time zone and you will be safe.
+
+=head2 Globally Setting a Default Time Zone
+
+B<Warning: This is very dangerous. Do this at your own risk!>
+
+By default, C<DateTime> uses either the floating time zone or UTC for newly
+created objects, depending on the constructor.
+
+You can force C<DateTime> to use a different time zone by setting the
+C<PERL_DATETIME_DEFAULT_TZ> environment variable.
+
+As noted above, this is very dangerous, as it affects all code that creates a
+C<DateTime> object, including modules from CPAN. If those modules expect the
+normal default, then setting this can cause confusing breakage or subtly
+broken data. Before setting this variable, you are strongly encouraged to
+audit your CPAN dependencies to see how they use C<DateTime>. Try running the
+test suite for each dependency with this environment variable set before using
+this in production.
 
 =head2 Upper and Lower Bounds
 
