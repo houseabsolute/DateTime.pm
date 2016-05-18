@@ -127,6 +127,16 @@ use DateTime;
 }
 
 {
+    my $dt = DateTime->from_epoch( epoch => 1609459199.999999 );
+    is(
+        $dt->nanosecond, 999999000,
+        'nanosecond should be 999,999,000 with 1609459199.999999 as epoch'
+    );
+
+    is( $dt->epoch, 1609459199, 'epoch should be 1609459199' );
+}
+
+{
     my $dt = DateTime->from_epoch( epoch => 0.1234567891 );
     is(
         $dt->nanosecond, 123_457_000,
