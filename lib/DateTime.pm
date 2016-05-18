@@ -514,7 +514,7 @@ sub _calc_local_components {
         #     epoch without loss of precision if the duration from zero epoch
         #     is less than ≈ ±104 days. With microseconds the duration is
         #     ±104,000 days, which is ≈ ±285 years.
-        if ( $p{epoch} =~ /[.eE]/ ) {
+        if ( int $p{epoch} != $p{epoch} ) {
             my ( $floor, $nano, $second );
 
             $floor = $nano = fmod( $p{epoch}, 1.0 );
