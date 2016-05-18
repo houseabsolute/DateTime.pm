@@ -506,14 +506,14 @@ sub _calc_local_components {
         # quite broken, and would end up rounding some values up, so that -0.5
         # become 0.5 (which is obviously wrong!).
         #
-        # Second, it rounds any decimal values to the nearest millisecond
-        # (1E6). Here's what Christian Hanse, who wrote this patch, says:
+        # Second, it rounds any decimal values to the nearest microsecond
+        # (1E6). Here's what Christian Hansen, who wrote this patch, says:
         #
         #     Perl is typically compiled with NV as a double. A double with a
         #     significand precision of 53 bits can only represent a nanosecond
         #     epoch without loss of precision if the duration from zero epoch
         #     is less than ≈ ±104 days. With microseconds the duration is
-        #     ±104,000 days, which is ~ ±285 years.
+        #     ±104,000 days, which is ≈ ±285 years.
         if ( $p{epoch} =~ /[.eE]/ ) {
             my ( $floor, $nano, $second );
 
