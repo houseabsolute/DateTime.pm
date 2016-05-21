@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.27
+version 1.28
 
 # SYNOPSIS
 
@@ -2183,26 +2183,26 @@ button at [http://www.urth.org/~autarch/fs-donation.html](http://www.urth.org/~a
 
 # AUTHOR
 
-Dave Rolsky &lt;autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
 # CONTRIBUTORS
 
-- Ben Bennett &lt;fiji@limey.net>
-- Christian Hansen &lt;chansen@cpan.org>
-- Daisuke Maki &lt;dmaki@cpan.org>
-- David E. Wheeler &lt;david@justatheory.com>
-- Doug Bell &lt;madcityzen@gmail.com>
-- Flávio Soibelmann Glock &lt;fglock@gmail.com>
-- Gregory Oschwald &lt;oschwald@gmail.com>
+- Ben Bennett <fiji@limey.net>
+- Christian Hansen <chansen@cpan.org>
+- Daisuke Maki <dmaki@cpan.org>
+- David E. Wheeler <david@justatheory.com>
+- Doug Bell <madcityzen@gmail.com>
+- Flávio Soibelmann Glock <fglock@gmail.com>
+- Gregory Oschwald <oschwald@gmail.com>
 - Iain Truskett &lt;deceased>
-- Jason McIntosh &lt;jmac@jmac.org>
-- Joshua Hoblitt &lt;jhoblitt@cpan.org>
-- Karen Etheridge &lt;ether@cpan.org>
+- Jason McIntosh <jmac@jmac.org>
+- Joshua Hoblitt <jhoblitt@cpan.org>
+- Karen Etheridge <ether@cpan.org>
 - Nick Tonkin <1nickt@users.noreply.github.com>
 - Ovid &lt;curtis\_ovid\_poe@yahoo.com>
-- Ricardo Signes &lt;rjbs@cpan.org>
-- Richard Bowen &lt;bowen@cpan.org>
-- Ron Hill &lt;rkhill@cpan.org>
+- Ricardo Signes <rjbs@cpan.org>
+- Richard Bowen <bowen@cpan.org>
+- Ron Hill <rkhill@cpan.org>
 
 # COPYRIGHT AND LICENCE
 

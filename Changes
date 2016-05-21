@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.28   2016-05-21
+
 - Fixed handling of some floating point epochs. Because DateTime treated the
   epoch like a string instead of a number, certain epochs with a non-integer
   value ended up treated like integers (Perl is weird). Patch by Christian
