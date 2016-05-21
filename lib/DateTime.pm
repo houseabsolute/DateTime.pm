@@ -96,7 +96,7 @@ BEGIN {
     my $DefaultLocale;
 
     sub DefaultLocale {
-        my $class = shift;
+        shift;
 
         if (@_) {
             my $lang = shift;
@@ -535,7 +535,6 @@ sub _calc_local_components {
 
         my $self = $class->_new( %p, %args, time_zone => 'UTC' );
 
-        my $tz = $p{time_zone};
         $self->_maybe_future_dst_warning( $self->year(), $p{time_zone} );
 
         $self->set_time_zone( $p{time_zone} ) if exists $p{time_zone};
@@ -1864,7 +1863,7 @@ sub compare_ignore_floating {
 }
 
 sub _compare {
-    my ( $class, $dt1, $dt2, $consistent ) = ref $_[0] ? ( undef, @_ ) : @_;
+    my ( undef, $dt1, $dt2, $consistent ) = ref $_[0] ? ( undef, @_ ) : @_;
 
     return undef unless defined $dt2;
 
@@ -2096,8 +2095,7 @@ sub set_time_zone {
 }
 
 sub STORABLE_freeze {
-    my $self    = shift;
-    my $cloning = shift;
+    my $self = shift;
 
     my $serialized = '';
     foreach my $key (
@@ -2118,8 +2116,8 @@ sub STORABLE_freeze {
 }
 
 sub STORABLE_thaw {
-    my $self       = shift;
-    my $cloning    = shift;
+    my $self = shift;
+    shift;
     my $serialized = shift;
 
     my %serialized = map { split /:/ } split /\|/, $serialized;
