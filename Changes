@@ -1,5 +1,12 @@
 {{$NEXT}}
 
+- Fixed handling of some floating point epochs. Because DateTime treated the
+  epoch like a string instead of a number, certain epochs with a non-integer
+  value ended up treated like integers (Perl is weird). Patch by Christian
+  Hansen. GitHub #15. This also addresses the problem that GitHub #6 brought
+  up.
+
+
 1.27   2016-05-13
 
 - Added an environment variable PERL_DATETIME_DEFAULT_TZ to globally set the
