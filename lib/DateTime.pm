@@ -1297,14 +1297,6 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         return sprintf( "%0${size}d", $val );
     }
 
-    sub _space_padded_string {
-        my $self = shift;
-        my $size = length shift;
-        my $val  = shift;
-
-        return sprintf( "% ${size}s", $val );
-    }
-
     sub format_cldr {
         my $self = shift;
 
