@@ -19,13 +19,13 @@ foreach my $p (
     ) {
     eval { DateTime->new(%$p) };
     like(
-        $@, qr/did not pass/,
+        $@, qr/Validation failed/,
         "Parameters outside valid range should fail in call to new()"
     );
 
     eval { DateTime->new( year => 2000 )->set(%$p) };
     like(
-        $@, qr/did not pass/,
+        $@, qr/Validation failed/,
         "Parameters outside valid range should fail in call to set()"
     );
 }
@@ -33,13 +33,13 @@ foreach my $p (
 {
     eval { DateTime->last_day_of_month( year => 2000, month => 13 ) };
     like(
-        $@, qr/did not pass/,
+        $@, qr/Validation failed/,
         "Parameters outside valid range should fail in call to last_day_of_month()"
     );
 
     eval { DateTime->last_day_of_month( year => 2000, month => 0 ) };
     like(
-        $@, qr/did not pass/,
+        $@, qr/Validation failed/,
         "Parameters outside valid range should fail in call to last_day_of_month()"
     );
 }

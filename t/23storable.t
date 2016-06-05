@@ -16,7 +16,7 @@ unless ( eval { require Storable; 1 } ) {
             hour       => 1,
             nanosecond => 1,
             time_zone  => 'America/Chicago',
-            language   => 'German'
+            locale     => 'de'
         ),
         DateTime::Infinite::Past->new,
         DateTime::Infinite::Future->new,

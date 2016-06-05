@@ -2,6 +2,7 @@ use strict;
 use warnings;
 
 use Test::More;
+use Test::Fatal;
 
 use DateTime;
 
@@ -217,10 +218,9 @@ use DateTime;
     );
 
     for my $test (@tests) {
-        eval { DateTime->from_epoch( epoch => $test ); };
-
         like(
-            $@, qr/did not pass regex check/,
+            exception { DateTime->from_epoch( epoch => $test ) },
+            qr/Validation failed for type named Num/,
             qq{'$test' is not a valid epoch value}
         );
     }

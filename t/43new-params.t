@@ -8,24 +8,24 @@ use DateTime;
 
 like(
     exception { DateTime->new( year => 10.5 ) },
-    qr/is an integer/,
+    qr/Validation failed for type named Year/,
     'year must be an integer'
 );
 like(
     exception { DateTime->new( year => -10.5 ) },
-    qr/is an integer/,
+    qr/Validation failed for type named Year/,
     'year must be an integer'
 );
 
 like(
     exception { DateTime->new( year => 10, month => 2.5 ) },
-    qr/an integer/,
+    qr/Validation failed for type named Month/,
     'month must be an integer'
 );
 
 like(
     exception { DateTime->new( year => 10, month => 2, day => 12.4 ) },
-    qr/an integer/,
+    qr/Validation failed for type named DayOfMonth/,
     'day must be an integer'
 );
 
@@ -33,7 +33,7 @@ like(
     exception {
         DateTime->new( year => 10, month => 2, day => 12, hour => 4.1 );
     },
-    qr/an integer/,
+    qr/Validation failed for type named Hour/,
     'hour must be an integer'
 );
 
@@ -47,7 +47,7 @@ like(
             minute => 12.2
         );
     },
-    qr/an integer/,
+    qr/Validation failed for type named Minute/,
     'minute must be an integer'
 );
 
@@ -62,7 +62,7 @@ like(
             second => 51.8
         );
     },
-    qr/an integer/,
+    qr/Validation failed for type named Second/,
     'second must be an integer'
 );
 
@@ -78,7 +78,7 @@ like(
             nanosecond => 124512.12412
         );
     },
-    qr/positive integer/,
+    qr/Validation failed for type named Nanosecond/,
     'nanosecond must be an integer'
 );
 

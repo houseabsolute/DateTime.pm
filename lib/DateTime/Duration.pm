@@ -8,7 +8,8 @@ our $VERSION = '1.29';
 use Carp ();
 use DateTime;
 use DateTime::Helpers;
-use Params::Validate qw( validate SCALAR );
+use DateTime::Types;
+use Params::CheckCompiler qw( compile );
 
 use overload (
     fallback => 1,
@@ -23,54 +24,69 @@ use constant MAX_NANOSECONDS => 1_000_000_000;    # 1E9 = almost 32 bits
 
 my @all_units = qw( months days minutes seconds nanoseconds );
 
-# XXX - need to reject non-integers but accept infinity, NaN, &
-# 1.56e+18
-sub new {
-    my $class = shift;
-    my %p     = validate(
-        @_, {
-            years        => { type => SCALAR, default => 0 },
-            months       => { type => SCALAR, default => 0 },
-            weeks        => { type => SCALAR, default => 0 },
-            days         => { type => SCALAR, default => 0 },
-            hours        => { type => SCALAR, default => 0 },
-            minutes      => { type => SCALAR, default => 0 },
-            seconds      => { type => SCALAR, default => 0 },
-            nanoseconds  => { type => SCALAR, default => 0 },
+{
+    my %units = map {
+        $_ => {
+
+            # XXX - what we really want is to accept an integer, Inf, -Inf,
+            # and NaN, but I can't figure out how to accept NaN since it never
+            # compares to anything.
+            type    => t('Defined'),
+            default => 0,
+            }
+        } qw(
+        years
+        months
+        weeks
+        days
+        hours
+        minutes
+        seconds
+        nanoseconds
+    );
+
+    my $check = compile(
+        params => {
+            %units,
             end_of_month => {
-                type  => SCALAR, default => undef,
-                regex => qr/^(?:wrap|limit|preserve)$/
+                type     => t('EndOfMonthMode'),
+                optional => 1,
             },
+        },
+    );
+
+    sub new {
+        my $class = shift;
+        my %p     = $check->(@_);
+
+        my $self = bless {}, $class;
+
+        $self->{months} = ( $p{years} * 12 ) + $p{months};
+
+        $self->{days} = ( $p{weeks} * 7 ) + $p{days};
+
+        $self->{minutes} = ( $p{hours} * 60 ) + $p{minutes};
+
+        $self->{seconds} = $p{seconds};
+
+        if ( $p{nanoseconds} ) {
+            $self->{nanoseconds} = $p{nanoseconds};
+            $self->_normalize_nanoseconds;
         }
-    );
+        else {
 
-    my $self = bless {}, $class;
+            # shortcut - if they don't need nanoseconds
+            $self->{nanoseconds} = 0;
+        }
 
-    $self->{months} = ( $p{years} * 12 ) + $p{months};
+        $self->{end_of_month} = (
+              defined $p{end_of_month} ? $p{end_of_month}
+            : $self->{months} < 0      ? 'preserve'
+            :                            'wrap'
+        );
 
-    $self->{days} = ( $p{weeks} * 7 ) + $p{days};
-
-    $self->{minutes} = ( $p{hours} * 60 ) + $p{minutes};
-
-    $self->{seconds} = $p{seconds};
-
-    if ( $p{nanoseconds} ) {
-        $self->{nanoseconds} = $p{nanoseconds};
-        $self->_normalize_nanoseconds;
+        return $self;
     }
-    else {
-
-        # shortcut - if they don't need nanoseconds
-        $self->{nanoseconds} = 0;
-    }
-
-    $self->{end_of_month} = (
-          defined $p{end_of_month} ? $p{end_of_month}
-        : $self->{months} < 0      ? 'preserve'
-        :                            'wrap'
-    );
-
-    return $self;
 }
 
 # make the signs of seconds, nanos the same; 0 < abs(nanos) < MAX_NANOS

@@ -11,7 +11,7 @@ my $dt = DateTime->now;
 
 like(
     exception { $dt->set_formatter('Invalid::Formatter') },
-    qr/can format_datetime/,
+    qr/\QValidation failed for type named Maybe[Formatter]/,
     'set_format is validated'
 );
 

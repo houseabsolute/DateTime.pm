@@ -228,7 +228,7 @@ my %vals = (
     for my $bad (qw( seconds minutes year_foo month_bar )) {
         like(
             exception { $dt->truncate( to => $bad ) },
-            qr/\QThe 'to' parameter/,
+            qr/Validation failed for type named TruncationLevel/,
             "bad truncate parameter ($bad) throws an error"
         );
     }
