@@ -111,6 +111,7 @@ __PACKAGE__->DefaultLocale('en_US');
 
 {
     my $check = compile(
+        name   => '_check_new_params',
         params => {
             year  => { type => t('Year') },
             month => {
@@ -438,6 +439,7 @@ sub _calc_local_components {
 
 {
     my $check = compile(
+        name   => '_check_from_epoch_params',
         params => {
             epoch     => { type => t('Num') },
             formatter => {
@@ -536,6 +538,7 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
 
 {
     my $check = compile(
+        name   => '_check_from_object_params',
         params => {
             object => { type => t('ConvertibleObject') },
             locale => {
@@ -600,6 +603,7 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
 
 {
     my $check = compile(
+        name   => '_check_last_day_of_month_params',
         params => {
             year  => { type => t('Year') },
             month => { type => t('Month') },
@@ -658,6 +662,7 @@ sub _month_length {
 
 {
     my $check = compile(
+        name   => '_check_from_day_of_year_params',
         params => {
             year        => { type => t('Year') },
             day_of_year => { type => t('DayOfYear') },
@@ -1715,6 +1720,7 @@ sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
 {
     my $check = compile(
+        name   => '_check_add_duration_params',
         params => [
             { type => t('Duration') },
         ],
@@ -1947,6 +1953,7 @@ sub _normalize_nanoseconds {
 
 {
     my $check = compile(
+        name   => '_check_set_params',
         params => {
             year => {
                 type     => t('Year'),
@@ -2005,6 +2012,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 
 {
     my $check = compile(
+        name   => '_check_set_locale_params',
         params => [
             { type => t( 'Maybe', of => t('Locale') ) },
         ],
@@ -2022,6 +2030,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 
 {
     my $check = compile(
+        name   => '_check_set_formatter_params',
         params => [
             { type => t( 'Maybe', of => t('Formatter') ) },
         ],
@@ -2048,6 +2057,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
     );
 
     my $check = compile(
+        name   => '_check_truncate_params',
         params => {
             to => { type => t('TruncationLevel') },
         },

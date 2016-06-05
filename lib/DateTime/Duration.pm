@@ -46,6 +46,7 @@ my @all_units = qw( months days minutes seconds nanoseconds );
     );
 
     my $check = compile(
+        name   => '_check_new_params',
         params => {
             %units,
             end_of_month => {
