@@ -90,7 +90,7 @@ Once installed, here are some dzil commands you might try:
 
 You can learn more about Dist::Zilla at http://dzil.org/.
 
-The code for this distribution is [hosted at GitHub](https://github.com/autarch/DateTime.pm).
+The code for this distribution is [hosted at GitHub](https://github.com/houseabsolute/DateTime.pm).
 
 You can submit code changes by forking the repository, pushing your code
 changes to your clone, and then submitting a pull request. Detailed
@@ -133,4 +133,4 @@ wish to be listed under a different name or address, you should submit a pull
 request to the .mailmap file to contain the correct mapping.
 
 This file was generated via Dist::Zilla::Plugin::GenerateFile::FromShareDir 0.009 from a
-template file originating in Dist-Zilla-PluginBundle-DROLSKY-0.55.
+template file originating in Dist-Zilla-PluginBundle-DROLSKY-0.63.
