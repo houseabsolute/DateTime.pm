@@ -3,6 +3,8 @@ package DateTime::Types;
 use strict;
 use warnings;
 
+our $VERSION = '1.29';
+
 use parent 'Specio::Exporter';
 
 use Specio 0.18;
