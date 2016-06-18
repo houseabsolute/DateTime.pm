@@ -53,6 +53,7 @@ my $locale_object = declare(
     'LocaleObject',
     parent => t('Object'),
     inline => sub {
+
         # Can't use $_[1] directly because 5.8 gives very weird errors
         my $var = $_[1];
         <<"EOF";
@@ -150,3 +151,17 @@ declare(
 );
 
 1;
+
+# ABSTRACT: Types used for parameter checking DateTime
+
+__END__
+
+=pod
+
+=for Pod::Coverage .*
+
+=head1 DESCRIPTION
+
+This module has no user-facing parts.
+
+=cut
