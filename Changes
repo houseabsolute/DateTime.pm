@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.30   2016-06-18 (TRIAL RELEASE)
+
 - Require the latest version of Params::CheckCompiler (0.06). Tests failed
   with 0.01.
 
