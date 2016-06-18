@@ -53,10 +53,12 @@ my $locale_object = declare(
     'LocaleObject',
     parent => t('Object'),
     inline => sub {
+        # Can't use $_[1] directly because 5.8 gives very weird errors
+        my $var = $_[1];
         <<"EOF";
 (
-    $_[1]->isa('DateTime::Locale::FromData')
-    || $_[1]->isa('DateTime::Locale::Base')
+    $var->isa('DateTime::Locale::FromData')
+    || $var->isa('DateTime::Locale::Base')
 )
 EOF
     },
