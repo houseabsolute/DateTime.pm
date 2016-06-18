@@ -1944,6 +1944,11 @@ sub set {
     my $self = shift;
     my %p = validate( @_, $SetValidate );
 
+    if ( $p{locale} ) {
+        carp 'You passed a locale to the set() method.'
+            . ' You should use set_locale() instead, as using set() may alter the local time near a DST bounday.';
+    }
+
     my $new_dt = $self->_new_from_self(%p);
 
     %$self = %$new_dt;

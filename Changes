@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- When you pass a locale to $dt->set you will now get a warning suggested you
+  should use $dt->set_locale instead.
+
+
 1.28   2016-05-21
 
 - Fixed handling of some floating point epochs. Because DateTime treated the
