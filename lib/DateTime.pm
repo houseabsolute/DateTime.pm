@@ -1983,12 +1983,21 @@ sub _normalize_nanoseconds {
                 type     => t('Nanosecond'),
                 optional => 1,
             },
+            locale => {
+                type     => t('Locale'),
+                optional => 1,
+            },
         },
     );
 
     sub set {
         my $self = shift;
         my %p    = $check->(@_);
+
+        if ( $p{locale} ) {
+            carp 'You passed a locale to the set() method.'
+                . ' You should use set_locale() instead, as using set() may alter the local time near a DST bounday.';
+        }
 
         my $new_dt = $self->_new_from_self(%p);
 
