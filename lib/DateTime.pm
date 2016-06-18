@@ -1,3 +1,4 @@
+## no critic (Modules::ProhibitExcessMainComplexity)
 package DateTime;
 
 use 5.008004;
@@ -20,6 +21,9 @@ use Params::ValidationCompiler 0.13 qw( validation_for );
 use Scalar::Util qw( blessed );
 use Try::Tiny;
 
+## no critic (Variables::ProhibitPackageVars)
+our $IsPurePerl;
+
 {
     my $loaded = 0;
 
@@ -33,8 +37,8 @@ use Try::Tiny;
                 : 42
             );
 
-            $loaded               = 1;
-            $DateTime::IsPurePerl = 0;
+            $loaded     = 1;
+            $IsPurePerl = 0;
         }
         catch {
             die $_ if $_ && $_ !~ /object version|loadable object/;
@@ -42,6 +46,7 @@ use Try::Tiny;
     }
 
     if ($loaded) {
+        ## no critic (Variables::ProtectPrivateVars)
         require DateTime::PPExtra
             unless defined &DateTime::_normalize_tai_seconds;
     }
@@ -71,11 +76,10 @@ use overload (
 # or else weird crashes ensue
 require DateTime::Infinite;
 
-sub MAX_NANOSECONDS () {1_000_000_000}    # 1E9 = almost 32 bits
-
-sub INFINITY ()     { 100**100**100**100 }
-sub NEG_INFINITY () { -1 * ( 100**100**100**100 ) }
-sub NAN ()          { INFINITY - INFINITY }
+sub MAX_NANOSECONDS () {1_000_000_000}                  # 1E9 = almost 32 bits
+sub INFINITY ()        { 100**100**100**100 }
+sub NEG_INFINITY ()    { -1 * ( 100**100**100**100 ) }
+sub NAN ()             { INFINITY - INFINITY }
 
 sub SECONDS_PER_DAY () {86400}
 
@@ -913,7 +917,7 @@ sub leap_seconds {
 
     return 0 if $self->{tz}->is_floating;
 
-    return DateTime->_accumulated_leap_seconds( $self->{utc_rd_days} );
+    return $self->_accumulated_leap_seconds( $self->{utc_rd_days} );
 }
 
 sub _stringify {
@@ -1169,7 +1173,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         # yy is a weird special case, where it must be exactly 2 digits
         qr/yy/ => sub {
             my $year = $_[0]->year();
-            my $y2 = substr( $year, -2, 2 ) if length $year > 2;
+            my $y2 = length $year > 2 ? substr( $year, -2, 2 ) : $year;
             $y2 *= -1 if $year < 0;
             $_[0]->_zero_padded_number( 'yy', $y2 );
         },
@@ -1326,10 +1330,10 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         my $self = shift;
 
         # make a copy or caller's scalars get munged
-        my @patterns = @_;
+        my @p = @_;
 
         my @r;
-        foreach my $p (@patterns) {
+        foreach my $p (@p) {
             $p =~ s/\G
                     (?:
                       '((?:[^']|'')*)' # quote escaped bit of text
@@ -1365,6 +1369,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         my $self    = shift;
         my $pattern = shift;
 
+        ## no critic (ControlStructures::ProhibitCStyleForLoops)
         for ( my $i = 0; $i < @patterns; $i += 2 ) {
             if ( $pattern =~ /$patterns[$i]/ ) {
                 my $sub = $patterns[ $i + 1 ];
@@ -1531,7 +1536,8 @@ sub subtract_datetime {
     );
 }
 
-sub _adjust_for_positive_difference {
+sub _adjust_for_positive_difference
+{    ## no critic (Subroutines::ProhibitManyArgs)
     my (
         $self,
         $month1, $month2,
@@ -1579,12 +1585,11 @@ sub subtract_datetime_absolute {
     my $dt   = shift;
 
     my $utc_rd_secs1 = $self->utc_rd_as_seconds;
-    $utc_rd_secs1
-        += DateTime->_accumulated_leap_seconds( $self->{utc_rd_days} )
+    $utc_rd_secs1 += $self->_accumulated_leap_seconds( $self->{utc_rd_days} )
         if !$self->time_zone->is_floating;
 
     my $utc_rd_secs2 = $dt->utc_rd_as_seconds;
-    $utc_rd_secs2 += DateTime->_accumulated_leap_seconds( $dt->{utc_rd_days} )
+    $utc_rd_secs2 += $self->_accumulated_leap_seconds( $dt->{utc_rd_days} )
         if !$dt->time_zone->is_floating;
 
     my $seconds     = $utc_rd_secs1 - $utc_rd_secs2;
@@ -1749,6 +1754,7 @@ sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
         ],
     );
 
+    ## no critic (Subroutines::ProhibitExcessComplexity)
     sub add_duration {
         my $self = shift;
         my ($dur) = $validator->(@_);
@@ -2014,6 +2020,7 @@ sub _normalize_nanoseconds {
         },
     );
 
+    ## no critic (NamingConventions::ProhibitAmbiguousNames)
     sub set {
         my $self = shift;
         my %p    = $validator->(@_);
@@ -2103,6 +2110,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
         grep { $_ ne 'nanosecond' } keys %TruncateDefault;
     my $spec = { to => { regex => qr/^(?:$re)$/ } };
 
+    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     sub truncate {
         my $self = shift;
         my %p    = $validator->(@_);
@@ -2139,7 +2147,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
                 hour       => 0,
                 minute     => 0,
                 second     => 0,
-                nanosecond => 0
+                nanosecond => 0,
             );
         }
         else {
@@ -2208,7 +2216,7 @@ sub set_time_zone {
 sub STORABLE_freeze {
     my $self = shift;
 
-    my $serialized = '';
+    my $serialized = q{};
     foreach my $key (
         qw( utc_rd_days
         utc_rd_secs
@@ -2269,6 +2277,7 @@ sub STORABLE_thaw {
     return $self;
 }
 
+## no critic (Modules::ProhibitMultiplePackages)
 package    # hide from PAUSE
     DateTime::_Thawed;
 

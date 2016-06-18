@@ -1,3 +1,4 @@
+## no critic (Modules::ProhibitMultiplePackages)
 use strict;
 use warnings;
 

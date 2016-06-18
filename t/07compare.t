@@ -18,7 +18,7 @@ my $date2 = DateTime->new(
 
 # make sure that comparing to itself eq 0
 my $identity = $date1->compare($date2);
-ok( $identity == 0, "Identity comparison" );
+ok( $identity == 0, 'Identity comparison' );
 
 $date2 = DateTime->new(
     year      => 1997, month  => 10, day    => 24,
@@ -120,72 +120,72 @@ ok( ( $infinity <=> $date1 ) == 1, 'Comparison overload $inf <=> $a' );
 
 # comparison with floating time
 {
-    my $date1 = DateTime->new(
+    my $dt1 = DateTime->new(
         year      => 1997, month  => 10, day    => 24,
         hour      => 12,   minute => 0,  second => 0,
         time_zone => 'America/Chicago'
     );
-    my $date2 = DateTime->new(
+    my $dt2 = DateTime->new(
         year      => 1997, month  => 10, day    => 24,
         hour      => 12,   minute => 0,  second => 0,
         time_zone => 'floating'
     );
 
     is(
-        DateTime->compare( $date1, $date2 ), 0,
+        DateTime->compare( $dt1, $dt2 ), 0,
         'Comparison with floating time (cmp)'
     );
-    is( ( $date1 <=> $date2 ), 0, 'Comparison with floating time (<=>)' );
-    is( ( $date1 cmp $date2 ), 0, 'Comparison with floating time (cmp)' );
+    is( ( $dt1 <=> $dt2 ), 0, 'Comparison with floating time (<=>)' );
+    is( ( $dt1 cmp $dt2 ), 0, 'Comparison with floating time (cmp)' );
     is(
-        DateTime->compare_ignore_floating( $date1, $date2 ), 1,
+        DateTime->compare_ignore_floating( $dt1, $dt2 ), 1,
         'Comparison with floating time (cmp)'
     );
 }
 
 # sub-second
 {
-    my $date1 = DateTime->new(
+    my $dt1 = DateTime->new(
         year       => 1997, month  => 10, day    => 24,
         hour       => 12,   minute => 0,  second => 0,
         nanosecond => 100,
     );
 
-    my $date2 = DateTime->new(
+    my $dt2 = DateTime->new(
         year       => 1997, month  => 10, day    => 24,
         hour       => 12,   minute => 0,  second => 0,
         nanosecond => 200,
     );
 
     is(
-        DateTime->compare( $date1, $date2 ), -1,
+        DateTime->compare( $dt1, $dt2 ), -1,
         'Comparison with floating time (cmp)'
     );
-    is( ( $date1 <=> $date2 ), -1, 'Comparison with floating time (<=>)' );
-    is( ( $date1 cmp $date2 ), -1, 'Comparison with floating time (cmp)' );
+    is( ( $dt1 <=> $dt2 ), -1, 'Comparison with floating time (<=>)' );
+    is( ( $dt1 cmp $dt2 ), -1, 'Comparison with floating time (cmp)' );
 }
 
 {
-    my $date1 = DateTime->new(
+    my $dt1 = DateTime->new(
         year       => 2000, month  => 10, day    => 24,
         hour       => 12,   minute => 0,  second => 0,
         nanosecond => 10000,
     );
 
-    my $date2 = DateTime->new(
+    my $dt2 = DateTime->new(
         year       => 2000, month  => 10, day    => 24,
         hour       => 12,   minute => 0,  second => 0,
         nanosecond => 10000,
     );
 
     is(
-        DateTime->compare( $date1, $date2 ), 0,
+        DateTime->compare( $dt1, $dt2 ), 0,
         'Comparison with floating time (cmp)'
     );
-    is( ( $date1 <=> $date2 ), 0, 'Comparison with floating time (<=>)' );
-    is( ( $date1 cmp $date2 ), 0, 'Comparison with floating time (cmp)' );
+    is( ( $dt1 <=> $dt2 ), 0, 'Comparison with floating time (<=>)' );
+    is( ( $dt1 cmp $dt2 ), 0, 'Comparison with floating time (cmp)' );
     is(
-        DateTime->compare_ignore_floating( $date1, $date2 ), 0,
+        DateTime->compare_ignore_floating( $dt1, $dt2 ), 0,
         'Comparison with compare_ignore_floating (cmp)'
     );
 }
@@ -194,7 +194,10 @@ ok( ( $infinity <=> $date1 ) == 1, 'Comparison overload $inf <=> $a' );
 
     package DT::Test;
 
-    sub new { shift; bless [@_] }
+    sub new {
+        my $class = shift;
+        return bless [@_], $class;
+    }
 
     sub utc_rd_values { @{ $_[0] } }
 }

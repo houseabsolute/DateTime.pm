@@ -8,6 +8,7 @@ use DateTime;
 
 my $year_5001_epoch = 95649120000;
 
+## no critic (TestingAndDebugging::ProhibitNoWarnings)
 SKIP:
 {
     my $year = ( gmtime($year_5001_epoch) )[5];

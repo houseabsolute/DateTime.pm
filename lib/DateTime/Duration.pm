@@ -308,7 +308,7 @@ sub _subtract_overload {
     ( $d1, $d2 ) = ( $d2, $d1 ) if $rev;
 
     Carp::croak(
-        "Cannot subtract a DateTime object from a DateTime::Duration object")
+        'Cannot subtract a DateTime object from a DateTime::Duration object')
         if DateTime::Helpers::isa( $d2, 'DateTime' );
 
     return $d1->clone->subtract_duration($d2);

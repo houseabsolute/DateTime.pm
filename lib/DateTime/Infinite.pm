@@ -1,3 +1,4 @@
+## no critic (Modules::ProhibitMultiplePackages)
 package DateTime::Infinite;
 
 use strict;
@@ -12,6 +13,7 @@ use DateTime::TimeZone;
 use base qw(DateTime);
 
 foreach my $m (qw( set set_time_zone truncate )) {
+    ## no critic (TestingAndDebugging::ProhibitNoStrict)
     no strict 'refs';
     *{"DateTime::Infinite::$m"} = sub { return $_[0] };
 }
@@ -19,6 +21,7 @@ foreach my $m (qw( set set_time_zone truncate )) {
 sub is_finite   {0}
 sub is_infinite {1}
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _rd2ymd {
     return $_[2] ? ( $_[1] ) x 7 : ( $_[1] ) x 3;
 }
@@ -61,8 +64,8 @@ sub _stringify {
 
 sub _infinity_string {
     return $_[0]->{utc_rd_days} == DateTime::INFINITY
-        ? DateTime::INFINITY . ''
-        : DateTime::NEG_INFINITY . '';
+        ? DateTime::INFINITY . q{}
+        : DateTime::NEG_INFINITY . q{};
 }
 
 sub STORABLE_freeze {return}
@@ -164,6 +167,7 @@ my @methods = qw(
 );
 
 for my $meth (@methods) {
+    ## no critic (TestingAndDebugging::ProhibitNoStrict)
     no strict 'refs';
     *{$meth} = sub {undef};
 }
@@ -179,6 +183,7 @@ sub prefers_24_hour_time {
 
 our $AUTOLOAD;
 
+## no critic (ClassHierarchies::ProhibitAutoloading)
 sub AUTOLOAD {
     my $self = shift;
 

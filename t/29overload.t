@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 
+use Test::Fatal;
 use Test::More;
 use Test::Warnings 0.005 ':all';
 
@@ -50,10 +51,10 @@ use DateTime;
     my $after_od  = Other::Date->new($after_string);
     my $before_od = Other::Date->new($before_string);
 
-    ok( $dt eq $same_od, "DateTime eq non-DateTime overloaded object true" );
-    ok( !( $dt eq $after_od ), "  eq false" );
-    ok( $dt ne $after_od,      "  ne true" );
-    ok( !( $dt ne $same_od ),  "  ne false" );
+    ok( $dt eq $same_od, 'DateTime eq non-DateTime overloaded object true' );
+    ok( !( $dt eq $after_od ), '  eq false' );
+    ok( $dt ne $after_od,      '  ne true' );
+    ok( !( $dt ne $same_od ),  '  ne false' );
 
     is( $dt cmp $same_od,  0,  'cmp overloading' );
     is( $dt cmp $after_od, -1, '  lt overloading' );
@@ -70,43 +71,41 @@ use DateTime;
             map { $_ . ' - ' . ( ref $_ || 'no ref' ) } $before_string,
             $before_od, $same_string, $dt, $same_od, $after_string, $after_od
         ],
-        "eq sort"
+        'eq sort'
     );
 
-    eval { my $x = $dt + 1 };
     like(
-        $@, qr/Cannot add 1 to a DateTime object/,
+        exception { my $x = $dt + 1 },
+        qr/Cannot add 1 to a DateTime object/,
         'Cannot add plain scalar to a DateTime object'
     );
 
-    eval { my $x = $dt + bless {}, 'FooBar' };
     like(
-        $@, qr/Cannot add FooBar=HASH\([^\)]+\) to a DateTime object/,
+        exception { my $x = $dt + bless {}, 'FooBar' },
+        qr/Cannot add FooBar=HASH\([^\)]+\) to a DateTime object/,
         'Cannot add plain FooBar object to a DateTime object'
     );
 
-    eval { my $x = $dt - 1 };
     like(
-        $@, qr/Cannot subtract 1 from a DateTime object/,
+        exception { my $x = $dt - 1 },
+        qr/Cannot subtract 1 from a DateTime object/,
         'Cannot subtract plain scalar from a DateTime object'
     );
 
-    eval { my $x = $dt - bless {}, 'FooBar' };
     like(
-        $@, qr/Cannot subtract FooBar=HASH\([^\)]+\) from a DateTime object/,
+        exception { my $x = $dt - bless {}, 'FooBar' },
+        qr/Cannot subtract FooBar=HASH\([^\)]+\) from a DateTime object/,
         'Cannot subtract plain FooBar object from a DateTime object'
     );
 
-    eval { my $x = $dt > 1 };
     like(
-        $@,
+        exception { my $x = $dt > 1 },
         qr/A DateTime object can only be compared to another DateTime object/,
         'Cannot compare a DateTime object to a scalar'
     );
 
-    eval { my $x = $dt > bless {}, 'FooBar' };
     like(
-        $@,
+        exception { my $x = $dt > bless {}, 'FooBar' },
         qr/A DateTime object can only be compared to another DateTime object/,
         'Cannot compare a DateTime object to a FooBar object'
     );

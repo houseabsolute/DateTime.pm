@@ -4,8 +4,10 @@
 use strict;
 use warnings;
 
+use Test::Fatal;
 use Test::More;
 
+## no critic (TestingAndDebugging::ProhibitNoWarnings)
 no warnings 'once', 'redefine';
 
 require XSLoader;
@@ -23,8 +25,11 @@ my $sub = sub {
 
 *XSLoader::load = $sub;
 
-eval { require DateTime };
-is( $@, '', 'No error loading DateTime without DateTime.so file' );
+is(
+    exception { require DateTime },
+    undef,, 'No error loading DateTime without DateTime.so file'
+);
+## no critic (Variables::ProhibitPackageVars)
 ok( $DateTime::IsPurePerl, '$DateTime::IsPurePerl is true' );
 
 ok(

@@ -6,9 +6,14 @@ use Test::More;
 
 use DateTime;
 
-binmode $_, ':encoding(UTF-8)' for Test::Builder->new()->output(),
-    Test::Builder->new()->failure_output(),
-    Test::Builder->new()->todo_output();
+for my $o (
+    Test::Builder->new->output,
+    Test::Builder->new->failure_output,
+    Test::Builder->new->todo_output
+    ) {
+
+    binmode $o, ':encoding(UTF-8)' or die $!;
+}
 
 {
     my $dt = DateTime->new(

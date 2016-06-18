@@ -1,18 +1,19 @@
 use strict;
 use warnings;
 
+use Test::Fatal;
 use Test::More;
 
 use DateTime;
 
-my @last = ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
-my @leap_last = @last;
-$leap_last[1]++;
+my @last_day = ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
+my @leap_last_day = @last_day;
+$leap_last_day[1]++;
 
 {
     my $doy = 15;
     foreach my $month ( 1 .. 12 ) {
-        $doy += $last[ $month - 2 ] if $month > 1;
+        $doy += $last_day[ $month - 2 ] if $month > 1;
 
         my $dt = DateTime->from_day_of_year(
             year        => 2001,
@@ -30,7 +31,7 @@ $leap_last[1]++;
 {
     my $doy = 15;
     foreach my $month ( 1 .. 12 ) {
-        $doy += $leap_last[ $month - 2 ] if $month > 1;
+        $doy += $leap_last_day[ $month - 2 ] if $month > 1;
 
         my $dt = DateTime->from_day_of_year(
             year        => 2004,
@@ -46,14 +47,21 @@ $leap_last[1]++;
 }
 
 {
-    eval { DateTime->from_day_of_year( year => 2001, day_of_year => 366 ) };
     like(
-        $@, qr/2001 is not a leap year/,
-        "Cannot give day of year 366 in non-leap years"
+        exception {
+            DateTime->from_day_of_year( year => 2001, day_of_year => 366 )
+        },
+        qr/2001 is not a leap year/,
+        'Cannot give day of year 366 in non-leap years'
     );
 
-    eval { DateTime->from_day_of_year( year => 2004, day_of_year => 366 ) };
-    ok( !$@, "Day of year 366 should work in leap years" );
+    is(
+        exception {
+            DateTime->from_day_of_year( year => 2004, day_of_year => 366 )
+        },
+        undef,
+        'Day of year 366 should work in leap years'
+    );
 }
 
 done_testing();

@@ -47,7 +47,7 @@ foreach my $test (@tests) {
 
     my ( $year, $week ) = $dt->week();
 
-    is( "$year-W$week", "$results[0]-W$results[1]" );
+    is( "$year-W$week", "$results[0]-W$results[1]", 'week for ' . $dt->ymd );
 }
 
 done_testing();

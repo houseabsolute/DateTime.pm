@@ -1,3 +1,4 @@
+## no critic (Modules::ProhibitExcessMainComplexity)
 use strict;
 use warnings;
 
@@ -117,15 +118,15 @@ my %vals = (
             'truncate to week should always truncate to monday of week'
         );
     }
+}
 
-    {
-        my $dt = DateTime->new( year => 2003, month => 10, day => 2 )
-            ->truncate( to => 'week' );
+{
+    my $dt = DateTime->new( year => 2003, month => 10, day => 2 )
+        ->truncate( to => 'week' );
 
-        is( $dt->year,  2003, 'truncation to week across month boundary' );
-        is( $dt->month, 9,    'truncation to week across month boundary' );
-        is( $dt->day,   29,   'truncation to week across month boundary' );
-    }
+    is( $dt->year,  2003, 'truncation to week across month boundary' );
+    is( $dt->month, 9,    'truncation to week across month boundary' );
+    is( $dt->day,   29,   'truncation to week across month boundary' );
 }
 
 {
@@ -153,26 +154,26 @@ my %vals = (
             'truncate to local_week returns correct date - locale start is Monday'
         );
     }
+}
 
-    {
-        my $dt = DateTime->new(
-            year   => 2013, month => 11, day => 2,
-            locale => 'fr_FR'
-        )->truncate( to => 'local_week' );
+{
+    my $dt = DateTime->new(
+        year   => 2013, month => 11, day => 2,
+        locale => 'fr_FR'
+    )->truncate( to => 'local_week' );
 
-        is(
-            $dt->year, 2013,
-            'truncation to local_week across month boundary - locale start is Monday'
-        );
-        is(
-            $dt->month, 10,
-            'truncation to local_week across month boundary - locale start is Monday'
-        );
-        is(
-            $dt->day, 28,
-            'truncation to local_week across month boundary - locale start is Monday'
-        );
-    }
+    is(
+        $dt->year, 2013,
+        'truncation to local_week across month boundary - locale start is Monday'
+    );
+    is(
+        $dt->month, 10,
+        'truncation to local_week across month boundary - locale start is Monday'
+    );
+    is(
+        $dt->day, 28,
+        'truncation to local_week across month boundary - locale start is Monday'
+    );
 }
 
 {
@@ -200,26 +201,26 @@ my %vals = (
             'truncate to local_week returns correct date - locale start is Sunday'
         );
     }
+}
 
-    {
-        my $dt = DateTime->new(
-            year   => 2013, month => 11, day => 2,
-            locale => 'en_US'
-        )->truncate( to => 'local_week' );
+{
+    my $dt = DateTime->new(
+        year   => 2013, month => 11, day => 2,
+        locale => 'en_US'
+    )->truncate( to => 'local_week' );
 
-        is(
-            $dt->year, 2013,
-            'truncation to local_week across month boundary - locale start is Sunday'
-        );
-        is(
-            $dt->month, 10,
-            'truncation to local_week across month boundary - locale start is Sunday'
-        );
-        is(
-            $dt->day, 27,
-            'truncation to local_week across month boundary - locale start is Sunday'
-        );
-    }
+    is(
+        $dt->year, 2013,
+        'truncation to local_week across month boundary - locale start is Sunday'
+    );
+    is(
+        $dt->month, 10,
+        'truncation to local_week across month boundary - locale start is Sunday'
+    );
+    is(
+        $dt->day, 27,
+        'truncation to local_week across month boundary - locale start is Sunday'
+    );
 }
 
 {

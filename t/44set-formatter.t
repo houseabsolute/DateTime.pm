@@ -17,8 +17,9 @@ like(
 
 SKIP:
 {
+    ## no critic (BuiltinFunctions::ProhibitStringyEval)
     skip 'This test requires DateTime::Format::Strptime 1.2000+', 1
-        unless eval "use DateTime::Format::Strptime 1.2000; 1;";
+        unless eval 'use DateTime::Format::Strptime 1.2000; 1;';
 
     my $formatter = DateTime::Format::Strptime->new(
         pattern => '%Y%m%d %T',
