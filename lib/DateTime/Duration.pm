@@ -255,7 +255,7 @@ sub multiply {
 }
 
 sub compare {
-    my ( $class, $dur1, $dur2, $dt ) = @_;
+    my ( undef, $dur1, $dur2, $dt ) = @_;
 
     $dt ||= DateTime->now;
 
