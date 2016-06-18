@@ -1,5 +1,12 @@
 {{$NEXT}}
 
+- Replaced Params::Validate with Params::CheckCompiler and Specio. In my
+  benchmarks this makes constructing a new DateTime object about 14%
+  faster. However, it slows down module load time by about 100 milliseconds
+  (1/10 of a second) on my desktop system with a primed cache (so really
+  measuring compile time, not disk load time).
+
+
 1.28   2016-05-21
 
 - Fixed handling of some floating point epochs. Because DateTime treated the
