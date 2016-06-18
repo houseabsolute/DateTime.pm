@@ -90,8 +90,6 @@ sub _header {
 EOF
 
     for ( my $x = 1; $x < @{$rd}; $x++ ) {
-        my $else = $x == 1 ? '' : 'else ';
-
         my $condition
             = $x == @{$rd}
             ? "utc_rd < $rd->[$x]"
