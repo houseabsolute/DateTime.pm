@@ -14,7 +14,7 @@ use DateTime::Helpers;
 use DateTime::Locale 0.41;
 use DateTime::TimeZone 1.74;
 use DateTime::Types;
-use Params::CheckCompiler qw( compile );
+use Params::CheckCompiler 0.06 qw( compile );
 use POSIX qw(floor fmod);
 use Try::Tiny;
 
