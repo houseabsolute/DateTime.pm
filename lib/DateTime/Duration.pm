@@ -9,7 +9,7 @@ use Carp ();
 use DateTime;
 use DateTime::Helpers;
 use DateTime::Types;
-use Params::CheckCompiler qw( compile );
+use Params::CheckCompiler qw( validation_for );
 
 use overload (
     fallback => 1,
@@ -45,7 +45,7 @@ my @all_units = qw( months days minutes seconds nanoseconds );
         nanoseconds
     );
 
-    my $check = compile(
+    my $check = validation_for(
         name   => '_check_new_params',
         params => {
             %units,

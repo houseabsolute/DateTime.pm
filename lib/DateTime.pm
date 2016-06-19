@@ -14,7 +14,7 @@ use DateTime::Helpers;
 use DateTime::Locale 0.41;
 use DateTime::TimeZone 1.74;
 use DateTime::Types;
-use Params::CheckCompiler 0.06 qw( compile );
+use Params::CheckCompiler 0.07 qw( validation_for );
 use POSIX qw(floor fmod);
 use Try::Tiny;
 
@@ -110,7 +110,7 @@ BEGIN {
 __PACKAGE__->DefaultLocale('en_US');
 
 {
-    my $check = compile(
+    my $check = validation_for(
         name   => '_check_new_params',
         params => {
             year  => { type => t('Year') },
@@ -438,7 +438,7 @@ sub _calc_local_components {
 }
 
 {
-    my $check = compile(
+    my $check = validation_for(
         name   => '_check_from_epoch_params',
         params => {
             epoch     => { type => t('Num') },
@@ -537,7 +537,7 @@ sub _core_time {
 sub today { shift->now(@_)->truncate( to => 'day' ) }
 
 {
-    my $check = compile(
+    my $check = validation_for(
         name   => '_check_from_object_params',
         params => {
             object => { type => t('ConvertibleObject') },
@@ -602,7 +602,7 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
 }
 
 {
-    my $check = compile(
+    my $check = validation_for(
         name   => '_check_last_day_of_month_params',
         params => {
             year  => { type => t('Year') },
@@ -661,7 +661,7 @@ sub _month_length {
 }
 
 {
-    my $check = compile(
+    my $check = validation_for(
         name   => '_check_from_day_of_year_params',
         params => {
             year        => { type => t('Year') },
@@ -1719,7 +1719,7 @@ sub subtract {
 sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
 {
-    my $check = compile(
+    my $check = validation_for(
         name   => '_check_add_duration_params',
         params => [
             { type => t('Duration') },
@@ -1952,7 +1952,7 @@ sub _normalize_nanoseconds {
 }
 
 {
-    my $check = compile(
+    my $check = validation_for(
         name   => '_check_set_params',
         params => {
             year => {
@@ -2020,7 +2020,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 # _new() can actually change the underlying UTC time, which is bad.
 
 {
-    my $check = compile(
+    my $check = validation_for(
         name   => '_check_set_locale_params',
         params => [
             { type => t( 'Maybe', of => t('Locale') ) },
@@ -2038,7 +2038,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 }
 
 {
-    my $check = compile(
+    my $check = validation_for(
         name   => '_check_set_formatter_params',
         params => [
             { type => t( 'Maybe', of => t('Formatter') ) },
@@ -2065,7 +2065,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
         nanosecond => 0,
     );
 
-    my $check = compile(
+    my $check = validation_for(
         name   => '_check_truncate_params',
         params => {
             to => { type => t('TruncationLevel') },
