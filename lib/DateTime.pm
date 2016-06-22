@@ -1996,7 +1996,7 @@ sub set_formatter {
         second     => 0,
         nanosecond => 0,
     );
-    my $re = join '|', 'year', 'week', 'local_week',
+    my $re = join '|', 'year', 'week', 'local_week', 'quarter',
         grep { $_ ne 'nanosecond' } keys %TruncateDefault;
     my $spec = { to => { regex => qr/^(?:$re)$/ } };
 
@@ -2027,6 +2027,17 @@ sub set_formatter {
                 $self->add( days => $day_diff );
                 die $_;
             };
+        }
+        elsif ( $p{to} eq 'quarter' ) {
+            %new = (
+                year       => $self->year,
+                month      => int( ( $self->month - 1 ) / 3 ) * 3 + 1,
+                day        => 1,
+                hour       => 0,
+                minute     => 0,
+                second     => 0,
+                nanosecond => 0
+            );
         }
         else {
             my $truncate;
@@ -3047,9 +3058,11 @@ take a single parameter.
 
 This method allows you to reset some of the local time components in the
 object to their "zero" values. The "to" parameter is used to specify which
-values to truncate, and it may be one of "year", "month", "week", "local_week"
-"day", "hour", "minute", or "second". For example, if "month" is specified,
-then the local day becomes 1, and the hour, minute, and second all become 0.
+values to truncate, and it may be one of "year", "quarter", "month", "week",
+"local_week", "day", "hour", "minute", or "second".
+
+For example, if "month" is specified, then the local day becomes 1, and the
+hour, minute, and second all become 0.
 
 If "week" is given, then the datetime is set to the Monday of the week in
 which it occurs, and the time components are all set to 0. If you truncate to
