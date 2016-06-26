@@ -1996,7 +1996,7 @@ sub set_formatter {
         second     => 0,
         nanosecond => 0,
     );
-    my $re = join '|', 'year', 'week', 'local_week',
+    my $re = join '|', 'year', 'week', 'local_week', 'quarter',
         grep { $_ ne 'nanosecond' } keys %TruncateDefault;
     my $spec = { to => { regex => qr/^(?:$re)$/ } };
 
