@@ -2029,9 +2029,9 @@ sub set_formatter {
             };
         }
         elsif ( $p{to} eq 'quarter' ) {
-            %new= (
+            %new = (
                 year       => $self->year,
-                month      => int(($self->month - 1) / 3) * 3 + 1,
+                month      => int( ( $self->month - 1 ) / 3 ) * 3 + 1,
                 day        => 1,
                 hour       => 0,
                 minute     => 0,

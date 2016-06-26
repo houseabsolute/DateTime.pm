@@ -225,17 +225,17 @@ my %vals = (
 {
     # Test quarter truncation to the behavior of the ->quarter attribute,
     # rather then re-creating the logic here.
-    for my $month (1 .. 12) {
-        my $date= DateTime->new(%vals, month => $month);
-        my $trunc= $date->clone->truncate(to => 'quarter');
+    for my $month ( 1 .. 12 ) {
+        my $date = DateTime->new( %vals, month => $month );
+        my $trunc = $date->clone->truncate( to => 'quarter' );
         is(
             $date->quarter,
             $trunc->quarter,
             'truncated to correct quarter'
         );
         is(
-            $trunc->clone->subtract(nanoseconds => 1)->quarter,
-            $date->quarter > 1? $date->quarter - 1 : 4,
+            $trunc->clone->subtract( nanoseconds => 1 )->quarter,
+            $date->quarter > 1 ? $date->quarter - 1 : 4,
             'and is the start of the quarter'
         );
     }
