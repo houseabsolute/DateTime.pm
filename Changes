@@ -4,7 +4,9 @@
   releases.
 
 - When you pass a locale to $dt->set you will now get a warning suggested you
-  should use $dt->set_locale instead.
+  should use $dt->set_locale instead. If you have DateTime::Format::Mail
+  installed you should upgrade to 0.0403 or later, since that module will
+  trigger this warning.
 
 - Added support for $dt->truncate( to => 'quarter' ). Implemented by Michael
   Conrad. GitHub #17.
