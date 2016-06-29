@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.28
+version 1.32
 
 # SYNOPSIS
 
@@ -862,9 +862,11 @@ take a single parameter.
 
 This method allows you to reset some of the local time components in the
 object to their "zero" values. The "to" parameter is used to specify which
-values to truncate, and it may be one of "year", "month", "week", "local\_week"
-"day", "hour", "minute", or "second". For example, if "month" is specified,
-then the local day becomes 1, and the hour, minute, and second all become 0.
+values to truncate, and it may be one of "year", "quarter", "month", "week",
+"local\_week", "day", "hour", "minute", or "second".
+
+For example, if "month" is specified, then the local day becomes 1, and the
+hour, minute, and second all become 0.
 
 If "week" is given, then the datetime is set to the Monday of the week in
 which it occurs, and the time components are all set to 0. If you truncate to
@@ -2198,11 +2200,13 @@ Dave Rolsky <autarch@urth.org>
 - Jason McIntosh <jmac@jmac.org>
 - Joshua Hoblitt <jhoblitt@cpan.org>
 - Karen Etheridge <ether@cpan.org>
+- Michael Conrad <mike@nrdvana.net>
 - Nick Tonkin <1nickt@users.noreply.github.com>
 - Ovid &lt;curtis\_ovid\_poe@yahoo.com>
 - Ricardo Signes <rjbs@cpan.org>
 - Richard Bowen <bowen@cpan.org>
 - Ron Hill <rkhill@cpan.org>
+- viviparous &lt;viviparous@prc>
 
 # COPYRIGHT AND LICENCE
 

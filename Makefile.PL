@@ -5,11 +5,13 @@ use warnings;
 use 5.008001;
 
 use ExtUtils::MakeMaker;
+check_conflicts();
 
 my %WriteMakefileArgs = (
   "ABSTRACT" => "A date and time object for Perl",
   "AUTHOR" => "Dave Rolsky <autarch\@urth.org>",
   "CONFIGURE_REQUIRES" => {
+    "Dist::CheckConflicts" => "0.02",
     "ExtUtils::MakeMaker" => 0
   },
   "DISTNAME" => "DateTime",
@@ -20,6 +22,7 @@ my %WriteMakefileArgs = (
     "Carp" => 0,
     "DateTime::Locale" => "0.41",
     "DateTime::TimeZone" => "1.74",
+    "Dist::CheckConflicts" => "0.02",
     "POSIX" => 0,
     "Params::Validate" => "1.03",
     "Scalar::Util" => 0,
@@ -35,6 +38,8 @@ my %WriteMakefileArgs = (
     "warnings::register" => 0
   },
   "TEST_REQUIRES" => {
+    "CPAN::Meta::Check" => "0.011",
+    "CPAN::Meta::Requirements" => 0,
     "ExtUtils::MakeMaker" => 0,
     "File::Spec" => 0,
     "Storable" => 0,
@@ -51,9 +56,12 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
+  "CPAN::Meta::Check" => "0.011",
+  "CPAN::Meta::Requirements" => 0,
   "Carp" => 0,
   "DateTime::Locale" => "0.41",
   "DateTime::TimeZone" => "1.74",
+  "Dist::CheckConflicts" => "0.02",
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,
   "POSIX" => 0,
@@ -87,3 +95,34 @@ delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
 
 WriteMakefile(%WriteMakefileArgs);
+
+sub check_conflicts {
+    if ( eval { require 'lib/DateTime/Conflicts.pm'; 1; } ) {
+        if ( eval { DateTime::Conflicts->check_conflicts; 1 } ) {
+            return;
+        }
+        else {
+            my $err = $@;
+            $err =~ s/^/    /mg;
+            warn "***\n$err***\n";
+        }
+    }
+    else {
+        print <<'EOF';
+***
+    Your toolchain doesn't support configure_requires, so Dist::CheckConflicts
+    hasn't been installed yet. You should check for conflicting modules
+    manually by examining the list of conflicts in DateTime::Conflicts once the installation
+    finishes.
+***
+EOF
+    }
+
+    return if $ENV{AUTOMATED_TESTING} || $ENV{NONINTERACTIVE_TESTING};
+
+    # More or less copied from Module::Build
+    return if $ENV{PERL_MM_USE_DEFAULT};
+    return unless -t STDIN && ( -t STDOUT || !( -f STDOUT || -c STDOUT ) );
+
+    sleep 4;
+}

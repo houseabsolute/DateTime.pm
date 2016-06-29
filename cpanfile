@@ -1,6 +1,7 @@
 requires "Carp" => "0";
 requires "DateTime::Locale" => "0.41";
 requires "DateTime::TimeZone" => "1.74";
+requires "Dist::CheckConflicts" => "0.02";
 requires "POSIX" => "0";
 requires "Params::Validate" => "1.03";
 requires "Scalar::Util" => "0";
@@ -17,6 +18,8 @@ requires "warnings" => "0";
 requires "warnings::register" => "0";
 
 on 'test' => sub {
+  requires "CPAN::Meta::Check" => "0.011";
+  requires "CPAN::Meta::Requirements" => "0";
   requires "ExtUtils::MakeMaker" => "0";
   requires "File::Spec" => "0";
   requires "Storable" => "0";
@@ -31,6 +34,7 @@ on 'test' => sub {
 };
 
 on 'configure' => sub {
+  requires "Dist::CheckConflicts" => "0.02";
   requires "ExtUtils::MakeMaker" => "0";
 };
 
@@ -39,6 +43,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "Code::TidyAll::Plugin::Test::Vars" => "0.02";
   requires "Cwd" => "0";
   requires "Devel::PPPort" => "3.23";
   requires "Module::Implementation" => "0";
@@ -59,7 +64,9 @@ on 'develop' => sub {
   requires "Test::Pod" => "1.41";
   requires "Test::Pod::Coverage" => "1.08";
   requires "Test::Pod::LinkCheck" => "0";
+  requires "Test::Portability::Files" => "0";
   requires "Test::Spelling" => "0.12";
+  requires "Test::Vars" => "0.009";
   requires "Test::Version" => "1";
   requires "Test::Warnings" => "0.005";
   requires "autodie" => "0";
