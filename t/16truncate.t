@@ -223,21 +223,72 @@ my %vals = (
 }
 
 {
-    # Test quarter truncation to the behavior of the ->quarter attribute,
-    # rather then re-creating the logic here.
-    for my $month ( 1 .. 12 ) {
-        my $date = DateTime->new( %vals, month => $month );
-        my $trunc = $date->clone->truncate( to => 'quarter' );
-        is(
-            $date->quarter,
-            $trunc->quarter,
-            'truncated to correct quarter'
-        );
-        is(
-            $trunc->clone->subtract( nanoseconds => 1 )->quarter,
-            $date->quarter > 1 ? $date->quarter - 1 : 4,
-            'and is the start of the quarter'
-        );
+    my %months_to_quarter = (
+        1  => 1,
+        2  => 1,
+        3  => 1,
+        4  => 4,
+        5  => 4,
+        6  => 4,
+        7  => 7,
+        8  => 7,
+        9  => 7,
+        10 => 10,
+        11 => 10,
+        12 => 10,
+    );
+
+    for my $year ( -1, 100, 2016 ) {
+        for my $month ( sort keys %months_to_quarter ) {
+            for my $day ( 1, 15, 27 ) {
+                my $dt = DateTime->new(
+                    year  => $year,
+                    month => $month,
+                    day   => $day,
+                );
+                subtest(
+                    'truncate to quarter - ' . $dt->ymd,
+                    sub {
+                        $dt->truncate( to => 'quarter' );
+                        is(
+                            $dt->year,
+                            $year,
+                            'year is unchanged'
+                        );
+                        is(
+                            $dt->month,
+                            $months_to_quarter{$month},
+                            "month $month becomes month $months_to_quarter{$month}"
+                        );
+                        is(
+                            $dt->day,
+                            1,
+                            'day is always 1'
+                        );
+                        is(
+                            $dt->hour,
+                            0,
+                            'hour is always 0'
+                        );
+                        is(
+                            $dt->minute,
+                            0,
+                            'minute is always 0'
+                        );
+                        is(
+                            $dt->second,
+                            0,
+                            'second is always 0'
+                        );
+                        is(
+                            $dt->nanosecond,
+                            0,
+                            'nanosecond is always 0'
+                        );
+                    }
+                );
+            }
+        }
     }
 }
 
