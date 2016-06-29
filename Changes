@@ -1,7 +1,13 @@
 {{$NEXT}}
 
+- This release *does not* include any of the changes in the 1.29-1.31 TRIAL
+  releases.
+
 - When you pass a locale to $dt->set you will now get a warning suggested you
   should use $dt->set_locale instead.
+
+- Added support for $dt->truncate( to => 'quarter' ). Implemented by Michael
+  Conrad. GitHub #17.
 
 
 1.28   2016-05-21
