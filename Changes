@@ -1,5 +1,13 @@
 {{$NEXT}}
 
+- Fixed the $dt->set docs to say that you cannot pass a locale (even though
+  you can but you'll get a warning) and added more docs for $dt->set_locale.
+
+- Require DateTime::Locale 1.05.
+
+- Require DateTime::TimeZone 2.00.
+
+
 1.32   2016-06-28
 
 - This release *does not* include any of the changes in the 1.29-1.30 TRIAL
