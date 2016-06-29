@@ -1,6 +1,6 @@
 {{$NEXT}}
 
-- This release *does not* include any of the changes in the 1.29-1.31 TRIAL
+- This release *does not* include any of the changes in the 1.29-1.30 TRIAL
   releases.
 
 - When you pass a locale to $dt->set you will now get a warning suggested you
