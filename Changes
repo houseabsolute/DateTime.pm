@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.33   2016-06-29
+
 - Fixed the $dt->set docs to say that you cannot pass a locale (even though
   you can but you'll get a warning) and added more docs for $dt->set_locale.
 
