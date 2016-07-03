@@ -1,8 +1,32 @@
 {{$NEXT}}
 
+1.33   2016-06-29
+
+- Fixed the $dt->set docs to say that you cannot pass a locale (even though
+  you can but you'll get a warning) and added more docs for $dt->set_locale.
+
+- Require DateTime::Locale 1.05.
+
+- Require DateTime::TimeZone 2.00.
+
+
+1.32   2016-06-28
+
+- This release *does not* include any of the changes in the 1.29-1.30 TRIAL
+  releases.
+
+- When you pass a locale to $dt->set you will now get a warning suggesting you
+  should use $dt->set_locale instead. If you have DateTime::Format::Mail
+  installed you should upgrade to 0.0403 or later, since that module will
+  trigger this warning.
+
+- Added support for $dt->truncate( to => 'quarter' ). Implemented by Michael
+  Conrad. GitHub #17.
+
+
 1.31   2016-06-18 (TRIAL RELEASE)
 
-- When you pass a locale to $dt->set you will now get a warning suggested you
+- When you pass a locale to $dt->set you will now get a warning suggesting you
   should use $dt->set_locale instead. The previous trial releases didn't allow
   locale to be passed at all, which broke a lot of modules. I've sent PRs, but
   for now the parameter should be allowed (but discouraged). Reported by

@@ -1,6 +1,7 @@
 requires "Carp" => "0";
-requires "DateTime::Locale" => "0.41";
-requires "DateTime::TimeZone" => "1.74";
+requires "DateTime::Locale" => "1.05";
+requires "DateTime::TimeZone" => "2.00";
+requires "Dist::CheckConflicts" => "0.02";
 requires "POSIX" => "0";
 requires "Params::CheckCompiler" => "0.06";
 requires "Scalar::Util" => "0";
@@ -24,6 +25,8 @@ requires "warnings" => "0";
 requires "warnings::register" => "0";
 
 on 'test' => sub {
+  requires "CPAN::Meta::Check" => "0.011";
+  requires "CPAN::Meta::Requirements" => "0";
   requires "ExtUtils::MakeMaker" => "0";
   requires "File::Spec" => "0";
   requires "Storable" => "0";
@@ -38,6 +41,7 @@ on 'test' => sub {
 };
 
 on 'configure' => sub {
+  requires "Dist::CheckConflicts" => "0.02";
   requires "ExtUtils::MakeMaker" => "0";
 };
 

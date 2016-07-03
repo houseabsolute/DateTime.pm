@@ -3,7 +3,7 @@ package DateTime::PP;
 use strict;
 use warnings;
 
-our $VERSION = '1.32';
+our $VERSION = '1.34';
 
 $DateTime::IsPurePerl = 1;
 

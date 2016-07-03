@@ -6,15 +6,15 @@ use strict;
 use warnings;
 use warnings::register;
 
-our $VERSION = '1.32';
+our $VERSION = '1.34';
 
 use Carp;
 use DateTime::Duration;
 use DateTime::Helpers;
-use DateTime::Locale 0.41;
-use DateTime::TimeZone 1.74;
-use DateTime::Types;
+use DateTime::Locale 1.05;
+use DateTime::TimeZone 2.00;
 use Params::CheckCompiler 0.07 qw( validation_for );
+use DateTime::Types;
 use POSIX qw(floor fmod);
 use Try::Tiny;
 
@@ -107,7 +107,7 @@ BEGIN {
         return $DefaultLocale;
     }
 }
-__PACKAGE__->DefaultLocale('en_US');
+__PACKAGE__->DefaultLocale('en-US');
 
 {
     my $check = validation_for(
@@ -2072,7 +2072,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
         },
     );
 
-    my $re = join '|', 'year', 'week', 'local_week',
+    my $re = join '|', 'year', 'week', 'local_week', 'quarter',
         grep { $_ ne 'nanosecond' } keys %TruncateDefault;
     my $spec = { to => { regex => qr/^(?:$re)$/ } };
 
@@ -2103,6 +2103,17 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
                 $self->add( days => $day_diff );
                 die $_;
             };
+        }
+        elsif ( $p{to} eq 'quarter' ) {
+            %new = (
+                year       => $self->year,
+                month      => int( ( $self->month - 1 ) / 3 ) * 3 + 1,
+                day        => 1,
+                hour       => 0,
+                minute     => 0,
+                second     => 0,
+                nanosecond => 0
+            );
         }
         else {
             my $truncate;
@@ -2379,7 +2390,7 @@ or C<epoch()>, will never die.
 
 All the object methods which return names or abbreviations return data based
 on a locale. This is done by setting the locale when constructing a DateTime
-object. If this is not set, then "en_US" is used.
+object. If this is not set, then "en-US" is used.
 
 =head2 Floating DateTimes
 
@@ -2544,16 +2555,15 @@ All of the parameters are optional except for "year". The "month" and
 "day" parameters both default to 1, while the "hour", "minute",
 "second", and "nanosecond" parameters all default to 0.
 
-The "locale" parameter should be a string matching one of the valid
-locales, or a C<DateTime::Locale> object. See the
-L<DateTime::Locale|DateTime::Locale> documentation for details.
+The "locale" parameter should be a string containing a locale code, like
+"en-US" or "zh-Hant-TW", or an object returned by C<< DateTime::Locale->load
+>>. See the L<DateTime::Locale|DateTime::Locale> documentation for details.
 
-The time_zone parameter can be either a scalar or a
-C<DateTime::TimeZone> object. A string will simply be passed to the
-C<< DateTime::TimeZone->new >> method as its "name" parameter. This
-string may be an Olson DB time zone name ("America/Chicago"), an
-offset string ("+0630"), or the words "floating" or "local". See the
-C<DateTime::TimeZone> documentation for more details.
+The "time_zone" parameter can be either a string or a C<DateTime::TimeZone>
+object. A string will simply be passed to the C<< DateTime::TimeZone->new >>
+method as its "name" parameter. This string may be an Olson DB time zone name
+("America/Chicago"), an offset string ("+0630"), or the words "floating" or
+"local". See the C<DateTime::TimeZone> documentation for more details.
 
 The default time zone is "floating".
 
@@ -3076,13 +3086,12 @@ possible. For example:
 
 =head3 $dt->set( .. )
 
-This method can be used to change the local components of a date time,
-or its locale. This method accepts any parameter allowed by the
-C<new()> method except for "time_zone". Time zones may be set using
-the C<set_time_zone()> method.
+This method can be used to change the local components of a date time. This
+method accepts any parameter allowed by the C<new()> method except for
+"locale" or "time_zone". Use C<set_locale()> and C<set_time_zone()> for those
+instead.
 
-This method performs parameters validation just as is done in the
-C<new()> method.
+This method performs parameter validation just like the C<new()> method.
 
 B<Do not use this method to do date math. Use the C<add()> and C<subtract()>
 methods instead.>
@@ -3108,8 +3117,6 @@ constructor:
 
 =item * $dt->set_nanosecond()
 
-=item * $dt->set_locale()
-
 =back
 
 These are shortcuts to calling C<set()> with a single key. They all
@@ -3119,14 +3126,21 @@ take a single parameter.
 
 This method allows you to reset some of the local time components in the
 object to their "zero" values. The "to" parameter is used to specify which
-values to truncate, and it may be one of "year", "month", "week", "local_week"
-"day", "hour", "minute", or "second". For example, if "month" is specified,
-then the local day becomes 1, and the hour, minute, and second all become 0.
+values to truncate, and it may be one of "year", "quarter", "month", "week",
+"local_week", "day", "hour", "minute", or "second".
+
+For example, if "month" is specified, then the local day becomes 1, and the
+hour, minute, and second all become 0.
 
 If "week" is given, then the datetime is set to the Monday of the week in
 which it occurs, and the time components are all set to 0. If you truncate to
 "local_week", then the first day of the week is locale-dependent. For example,
-in the C<en_US> locale, the first day of the week is Sunday.
+in the C<en-US> locale, the first day of the week is Sunday.
+
+=head3 $dt->set_locale( $locale )
+
+Sets the object's locale. You can provide either a locale code like "en-US" or
+an object returned by C<< DateTime::Locale->load >>.
 
 =head3 $dt->set_time_zone( $tz )
 
@@ -3266,7 +3280,7 @@ doing this math based on the value returned by C<< $dt->epoch() >>.
 =head3 DateTime->DefaultLocale( $locale )
 
 This can be used to specify the default locale to be used when
-creating DateTime objects. If unset, then "en_US" is used.
+creating DateTime objects. If unset, then "en-US" is used.
 
 =head3 DateTime->compare( $dt1, $dt2 ), DateTime->compare_ignore_floating( $dt1, $dt2 )
 
@@ -4114,32 +4128,32 @@ These formats are indexed by a key that is itself a CLDR pattern. When you
 look these up, you get back a different CLDR pattern suitable for the locale.
 
 Let's look at some example We'll use C<2008-02-05T18:30:30> as our example
-datetime value, and see how this is rendered for the C<en_US> and C<fr_FR>
+datetime value, and see how this is rendered for the C<en-US> and C<fr-FR>
 locales.
 
 =over 4
 
 =item * C<MMMd>
 
-The abbreviated month and day as number. For C<en_US>, we get the pattern
-C<MMM d>, which renders as C<Feb 5>. For C<fr_FR>, we get the pattern
+The abbreviated month and day as number. For C<en-US>, we get the pattern
+C<MMM d>, which renders as C<Feb 5>. For C<fr-FR>, we get the pattern
 C<d MMM>, which renders as C<5 févr.>.
 
 =item * C<yQQQ>
 
-The year and abbreviated quarter of year. For C<en_US>, we get the pattern
-C<QQQ y>, which renders as C<Q1 2008>. For C<fr_FR>, we get the same pattern,
+The year and abbreviated quarter of year. For C<en-US>, we get the pattern
+C<QQQ y>, which renders as C<Q1 2008>. For C<fr-FR>, we get the same pattern,
 C<QQQ y>, which renders as C<T1 2008>.
 
 =item * C<hm>
 
-The 12-hour time of day without seconds.  For C<en_US>, we get the pattern
-C<h:mm a>, which renders as C<6:30 PM>. For C<fr_FR>, we get the exact same
+The 12-hour time of day without seconds.  For C<en-US>, we get the pattern
+C<h:mm a>, which renders as C<6:30 PM>. For C<fr-FR>, we get the exact same
 pattern and rendering.
 
 =back
 
-The available format for each locale are documented in the POD for that
+The available formats for each locale are documented in the POD for that
 locale. To get back the format, you use the C<< $locale->format_for >>
 method. For example:
 

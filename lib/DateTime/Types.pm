@@ -136,6 +136,7 @@ enum(
     values => [
         qw(
             year
+            quarter
             month
             day hour
             minute
