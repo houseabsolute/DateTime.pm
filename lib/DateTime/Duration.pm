@@ -9,7 +9,7 @@ use Carp ();
 use DateTime;
 use DateTime::Helpers;
 use DateTime::Types;
-use Params::CheckCompiler qw( validation_for );
+use Params::ValidationCompiler qw( validation_for );
 
 use overload (
     fallback => 1,

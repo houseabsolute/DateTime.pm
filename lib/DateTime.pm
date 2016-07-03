@@ -13,9 +13,9 @@ use DateTime::Duration;
 use DateTime::Helpers;
 use DateTime::Locale 1.05;
 use DateTime::TimeZone 2.00;
-use Params::CheckCompiler 0.07 qw( validation_for );
 use DateTime::Types;
 use POSIX qw(floor fmod);
+use Params::ValidationCompiler 0.08 qw( validation_for );
 use Try::Tiny;
 
 {

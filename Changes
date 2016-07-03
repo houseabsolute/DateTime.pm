@@ -35,13 +35,13 @@
 
 1.30   2016-06-18 (TRIAL RELEASE)
 
-- Require the latest version of Params::CheckCompiler (0.06). Tests failed
+- Require the latest version of Params::ValidationCompiler (0.06). Tests failed
   with 0.01.
 
 
 1.29   2016-06-17 (TRIAL RELEASE)
 
-- Replaced Params::Validate with Params::CheckCompiler and Specio. In my
+- Replaced Params::Validate with Params::ValidationCompiler and Specio. In my
   benchmarks this makes constructing a new DateTime object about 14%
   faster. However, it slows down module load time by about 100 milliseconds
   (1/10 of a second) on my desktop system with a primed cache (so really
