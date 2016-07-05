@@ -1946,7 +1946,7 @@ sub set {
 
     if ( $p{locale} ) {
         carp 'You passed a locale to the set() method.'
-            . ' You should use set_locale() instead, as using set() may alter the local time near a DST bounday.';
+            . ' You should use set_locale() instead, as using set() may alter the local time near a DST boundary.';
     }
 
     my $new_dt = $self->_new_from_self(%p);
