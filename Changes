@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Added the leap second coming on December 31, 2016.
+
+
 1.33   2016-06-29
 
 - Fixed the $dt->set docs to say that you cannot pass a locale (even though
