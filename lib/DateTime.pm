@@ -19,6 +19,11 @@ use POSIX qw(floor fmod);
 use Params::ValidationCompiler 0.08 qw( validation_for );
 use Try::Tiny;
 
+BEGIN {
+    my $has = eval { require Sub::Name; 1 };
+    sub HAS_SUB_NAME () {$has}
+}
+
 {
     my $loaded = 0;
 
@@ -112,7 +117,7 @@ __PACKAGE__->DefaultLocale('en-US');
 
 {
     my $validator = validation_for(
-        name   => '_check_new_params',
+        ( HAS_SUB_NAME ? ( name => '_check_new_params' ) : () ),
         params => {
             year  => { type => t('Year') },
             month => {
@@ -440,7 +445,7 @@ sub _calc_local_components {
 
 {
     my $validator = validation_for(
-        name   => '_check_from_epoch_params',
+        ( HAS_SUB_NAME ? ( name => '_check_from_epoch_params' ) : () ),
         params => {
             epoch     => { type => t('Num') },
             formatter => {
@@ -539,7 +544,7 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
 
 {
     my $validator = validation_for(
-        name   => '_check_from_object_params',
+        ( HAS_SUB_NAME ? ( name => '_check_from_object_params' ) : () ),
         params => {
             object => { type => t('ConvertibleObject') },
             locale => {
@@ -604,7 +609,7 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
 
 {
     my $validator = validation_for(
-        name   => '_check_last_day_of_month_params',
+        ( HAS_SUB_NAME ? ( name => '_check_last_day_of_month_params' ) : () ),
         params => {
             year  => { type => t('Year') },
             month => { type => t('Month') },
@@ -663,7 +668,7 @@ sub _month_length {
 
 {
     my $validator = validation_for(
-        name   => '_check_from_day_of_year_params',
+        ( HAS_SUB_NAME ? ( name => '_check_from_day_of_year_params' ) : () ),
         params => {
             year        => { type => t('Year') },
             day_of_year => { type => t('DayOfYear') },
@@ -1721,7 +1726,7 @@ sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
 {
     my $validator = validation_for(
-        name   => '_check_add_duration_params',
+        ( HAS_SUB_NAME ? ( name => '_check_add_duration_params' ) : () ),
         params => [
             { type => t('Duration') },
         ],
@@ -1954,7 +1959,7 @@ sub _normalize_nanoseconds {
 
 {
     my $validator = validation_for(
-        name   => '_check_set_params',
+        ( HAS_SUB_NAME ? ( name => '_check_set_params' ) : () ),
         params => {
             year => {
                 type     => t('Year'),
@@ -2022,7 +2027,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 
 {
     my $validator = validation_for(
-        name   => '_check_set_locale_params',
+        ( HAS_SUB_NAME ? ( name => '_check_set_locale_params' ) : () ),
         params => [
             { type => t( 'Maybe', of => t('Locale') ) },
         ],
@@ -2040,7 +2045,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 
 {
     my $validator = validation_for(
-        name   => '_check_set_formatter_params',
+        ( HAS_SUB_NAME ? ( name => '_check_set_formatter_params' ) : () ),
         params => [
             { type => t( 'Maybe', of => t('Formatter') ) },
         ],
@@ -2067,7 +2072,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
     );
 
     my $validator = validation_for(
-        name   => '_check_truncate_params',
+        ( HAS_SUB_NAME ? ( name => '_check_truncate_params' ) : () ),
         params => {
             to => { type => t('TruncationLevel') },
         },

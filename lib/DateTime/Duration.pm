@@ -12,6 +12,11 @@ use DateTime::Helpers;
 use DateTime::Types;
 use Params::ValidationCompiler qw( validation_for );
 
+BEGIN {
+    my $has = eval { require Sub::Name; 1 };
+    sub HAS_SUB_NAME () {$has}
+}
+
 use overload (
     fallback => 1,
     '+'      => '_add_overload',
@@ -47,7 +52,7 @@ my @all_units = qw( months days minutes seconds nanoseconds );
     );
 
     my $check = validation_for(
-        name   => '_check_new_params',
+        ( HAS_SUB_NAME ? ( name => '_check_new_params' ) : () ),
         params => {
             %units,
             end_of_month => {
