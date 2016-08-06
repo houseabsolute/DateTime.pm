@@ -2,10 +2,11 @@ package DateTime::LeapSecond;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 our $VERSION = '1.34';
 
-use vars qw( @RD @LEAP_SECONDS %RD_LENGTH );
+our ( @RD, @LEAP_SECONDS, %RD_LENGTH );
 
 use DateTime;
 
@@ -109,6 +110,7 @@ sub _initialize {
             2009  Jan. 1  +1
             2012  Jun. 1  +1
             2015  Jul. 1  +1
+            2017  Jan. 1  +1
             )
     );
 }
