@@ -111,7 +111,7 @@ BEGIN {
 __PACKAGE__->DefaultLocale('en-US');
 
 {
-    my $check = validation_for(
+    my $validator = validation_for(
         name   => '_check_new_params',
         params => {
             year  => { type => t('Year') },
@@ -156,7 +156,7 @@ __PACKAGE__->DefaultLocale('en-US');
 
     sub new {
         my $class = shift;
-        my %p     = $check->(@_);
+        my %p     = $validator->(@_);
 
         Carp::croak(
             "Invalid day of month (day = $p{day} - month = $p{month} - year = $p{year})\n"
@@ -439,7 +439,7 @@ sub _calc_local_components {
 }
 
 {
-    my $check = validation_for(
+    my $validator = validation_for(
         name   => '_check_from_epoch_params',
         params => {
             epoch     => { type => t('Num') },
@@ -460,7 +460,7 @@ sub _calc_local_components {
 
     sub from_epoch {
         my $class = shift;
-        my %p     = $check->(@_);
+        my %p     = $validator->(@_);
 
         my %args;
 
@@ -538,7 +538,7 @@ sub _core_time {
 sub today { shift->now(@_)->truncate( to => 'day' ) }
 
 {
-    my $check = validation_for(
+    my $validator = validation_for(
         name   => '_check_from_object_params',
         params => {
             object => { type => t('ConvertibleObject') },
@@ -555,7 +555,7 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
 
     sub from_object {
         my $class = shift;
-        my %p     = $check->(@_);
+        my %p     = $validator->(@_);
 
         my $object = delete $p{object};
 
@@ -603,7 +603,7 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
 }
 
 {
-    my $check = validation_for(
+    my $validator = validation_for(
         name   => '_check_last_day_of_month_params',
         params => {
             year  => { type => t('Year') },
@@ -645,7 +645,7 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
 
     sub last_day_of_month {
         my $class = shift;
-        my %p     = $check->(@_);
+        my %p     = $validator->(@_);
 
         my $day = $class->_month_length( $p{year}, $p{month} );
 
@@ -662,7 +662,7 @@ sub _month_length {
 }
 
 {
-    my $check = validation_for(
+    my $validator = validation_for(
         name   => '_check_from_day_of_year_params',
         params => {
             year        => { type => t('Year') },
@@ -700,7 +700,7 @@ sub _month_length {
 
     sub from_day_of_year {
         my $class = shift;
-        my %p     = $check->(@_);
+        my %p     = $validator->(@_);
 
         Carp::croak("$p{year} is not a leap year.\n")
             if $p{day_of_year} == 366 && !$class->_is_leap_year( $p{year} );
@@ -1720,7 +1720,7 @@ sub subtract {
 sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
 {
-    my $check = validation_for(
+    my $validator = validation_for(
         name   => '_check_add_duration_params',
         params => [
             { type => t('Duration') },
@@ -1729,7 +1729,7 @@ sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
     sub add_duration {
         my $self = shift;
-        my ($dur) = $check->(@_);
+        my ($dur) = $validator->(@_);
 
         # simple optimization
         return $self if $dur->is_zero;
@@ -1953,7 +1953,7 @@ sub _normalize_nanoseconds {
 }
 
 {
-    my $check = validation_for(
+    my $validator = validation_for(
         name   => '_check_set_params',
         params => {
             year => {
@@ -1993,7 +1993,7 @@ sub _normalize_nanoseconds {
 
     sub set {
         my $self = shift;
-        my %p    = $check->(@_);
+        my %p    = $validator->(@_);
 
         if ( $p{locale} ) {
             carp 'You passed a locale to the set() method.'
@@ -2021,7 +2021,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 # _new() can actually change the underlying UTC time, which is bad.
 
 {
-    my $check = validation_for(
+    my $validator = validation_for(
         name   => '_check_set_locale_params',
         params => [
             { type => t( 'Maybe', of => t('Locale') ) },
@@ -2030,7 +2030,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 
     sub set_locale {
         my $self = shift;
-        my ($locale) = $check->(@_);
+        my ($locale) = $validator->(@_);
 
         $self->_set_locale($locale);
 
@@ -2039,7 +2039,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 }
 
 {
-    my $check = validation_for(
+    my $validator = validation_for(
         name   => '_check_set_formatter_params',
         params => [
             { type => t( 'Maybe', of => t('Formatter') ) },
@@ -2048,7 +2048,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 
     sub set_formatter {
         my $self = shift;
-        my ($formatter) = $check->(@_);
+        my ($formatter) = $validator->(@_);
 
         $self->{formatter} = $formatter;
 
@@ -2066,7 +2066,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
         nanosecond => 0,
     );
 
-    my $check = validation_for(
+    my $validator = validation_for(
         name   => '_check_truncate_params',
         params => {
             to => { type => t('TruncationLevel') },
@@ -2079,7 +2079,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 
     sub truncate {
         my $self = shift;
-        my %p    = $check->(@_);
+        my %p    = $validator->(@_);
 
         my %new;
         if ( $p{to} eq 'week' || $p{to} eq 'local_week' ) {
