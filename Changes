@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.35   2016-08-05
+
 - Use namespace::autoclean in all packages which import anything. Without
   cleaning the namespace, DateTime ends up with "methods" like try and catch
   (from Try::Tiny), which can lead to very confusing bugs. Reported by Mischa

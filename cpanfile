@@ -16,11 +16,11 @@ requires "XSLoader" => "0";
 requires "base" => "0";
 requires "constant" => "0";
 requires "integer" => "0";
+requires "namespace::autoclean" => "0";
 requires "overload" => "0";
 requires "parent" => "0";
 requires "perl" => "5.008001";
 requires "strict" => "0";
-requires "vars" => "0";
 requires "warnings" => "0";
 requires "warnings::register" => "0";
 
