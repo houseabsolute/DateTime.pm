@@ -31,9 +31,9 @@ my %WriteMakefileArgs = (
     "base" => 0,
     "constant" => 0,
     "integer" => 0,
+    "namespace::autoclean" => 0,
     "overload" => 0,
     "strict" => 0,
-    "vars" => 0,
     "warnings" => 0,
     "warnings::register" => 0
   },
@@ -48,7 +48,7 @@ my %WriteMakefileArgs = (
     "Test::Warnings" => "0.005",
     "utf8" => 0
   },
-  "VERSION" => "1.34",
+  "VERSION" => "1.35",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -76,10 +76,10 @@ my %FallbackPrereqs = (
   "base" => 0,
   "constant" => 0,
   "integer" => 0,
+  "namespace::autoclean" => 0,
   "overload" => 0,
   "strict" => 0,
   "utf8" => 0,
-  "vars" => 0,
   "warnings" => 0,
   "warnings::register" => 0
 );
