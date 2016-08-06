@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- Use namespace::autoclean in all packages which import anything. Without
+  cleaning the namespace, DateTime ends up with "methods" like try and catch
+  (from Try::Tiny), which can lead to very confusing bugs. Reported by Mischa
+  Schwieger. RT #115983.
+
+
 1.34   2016-07-06
 
 - Added the leap second coming on December 31, 2016.

@@ -2,10 +2,11 @@ package DateTime::LeapSecond;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 our $VERSION = '1.34';
 
-use vars qw( @RD @LEAP_SECONDS %RD_LENGTH );
+our ( @RD, @LEAP_SECONDS, %RD_LENGTH );
 
 use DateTime;
 

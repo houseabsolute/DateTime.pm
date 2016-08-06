@@ -5,6 +5,7 @@ use 5.008001;
 use strict;
 use warnings;
 use warnings::register;
+use namespace::autoclean;
 
 our $VERSION = '1.34';
 

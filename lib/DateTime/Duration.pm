@@ -2,6 +2,7 @@ package DateTime::Duration;
 
 use strict;
 use warnings;
+use namespace::autoclean;
 
 our $VERSION = '1.34';
 
