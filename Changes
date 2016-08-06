@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Require namespace::autoclean 0.19.
+
+
 1.35   2016-08-05
 
 - Use namespace::autoclean in all packages which import anything. Without
