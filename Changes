@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.37   2016-08-14 (TRIAL RELEASE)
+
 - Require the latest Params::ValidationCompiler.
 
 
