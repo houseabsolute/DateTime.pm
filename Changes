@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Require the latest Params::ValidationCompiler.
+
+
 1.36   2016-08-06
 
 - Require namespace::autoclean 0.19.
