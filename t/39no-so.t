@@ -1,4 +1,5 @@
 # no pp test
+# HARNESS-NO-PRELOAD
 
 use strict;
 use warnings;
