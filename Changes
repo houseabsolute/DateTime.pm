@@ -56,7 +56,7 @@
   should use $dt->set_locale instead. The previous trial releases didn't allow
   locale to be passed at all, which broke a lot of modules. I've sent PRs, but
   for now the parameter should be allowed (but discouraged). Reported by
-  Slaven Resic. RT #115420.
+  Slaven Rezić. RT #115420.
 
 
 1.30   2016-06-18 (TRIAL RELEASE)
