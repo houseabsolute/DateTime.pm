@@ -96,7 +96,7 @@
   epoch like a string instead of a number, certain epochs with a non-integer
   value ended up treated like integers (Perl is weird). Patch by Christian
   Hansen. GitHub #15. This also addresses the problem that GitHub #6 brought
-  up.
+  up. Addresses RT #96452, reported by Slaven Rezić.
 
 
 1.27   2016-05-13
@@ -174,7 +174,7 @@
 - The 30future-tz.t could fail if run at certain very specific times. This
   should now be much less likely, unless a time zone being tested implements a
   DST change at noon (which would even more insane than DST already is by a
-  huge factor). Reported by Karen Etheridge and diagnosed by Slaven Rezic. RT
+  huge factor). Reported by Karen Etheridge and diagnosed by Slaven Rezić. RT
   #102925.
 
 
@@ -230,7 +230,7 @@
 1.11   2014-08-31
 
 - The latest historical changes in DateTime::TimeZone 1.74 caused some tests
-  to fail. Reported by Slaven Rezic. RT #98483.
+  to fail. Reported by Slaven Rezić. RT #98483.
 
 - This release of DateTime.pm now requires the DateTime::TimeZone 1.74.
 
