@@ -1,6 +1,20 @@
 {{$NEXT}}
 
-- Require the latest Params::ValidationCompiler (0.13).
+- This release includes changes from past trial releases to switch from
+  Params::Validate and Params::ValidationCompiler. Relevant release notes from
+  those trial releases are repeated here for clarity.
+
+- Replaced Params::Validate with Params::ValidationCompiler and Specio. In my
+  benchmarks this makes constructing a new DateTime object about 14%
+  faster. However, it slows down module load time by about 100 milliseconds
+  (1/10 of a second) on my desktop system with a primed cache (so really
+  measuring compile time, not disk load time).
+
+- When you pass a locale to $dt->set you will now get a warning suggesting you
+  should use $dt->set_locale instead. The previous trial releases didn't allow
+  locale to be passed at all, which broke a lot of modules. I've sent PRs, but
+  for now the parameter should be allowed (but discouraged). Reported by
+  Slaven Rezić. RT #115420.
 
 
 1.37   2016-08-14 (TRIAL RELEASE)
