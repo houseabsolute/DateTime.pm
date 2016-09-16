@@ -20,11 +20,11 @@ my %WriteMakefileArgs = (
   "NAME" => "DateTime",
   "PREREQ_PM" => {
     "Carp" => 0,
-    "DateTime::Locale" => "1.05",
-    "DateTime::TimeZone" => "2.00",
+    "DateTime::Locale" => "1.06",
+    "DateTime::TimeZone" => "2.02",
     "Dist::CheckConflicts" => "0.02",
     "POSIX" => 0,
-    "Params::ValidationCompiler" => "0.11",
+    "Params::ValidationCompiler" => "0.13",
     "Scalar::Util" => 0,
     "Specio" => "0.18",
     "Specio::Declare" => 0,
@@ -66,13 +66,13 @@ my %FallbackPrereqs = (
   "CPAN::Meta::Check" => "0.011",
   "CPAN::Meta::Requirements" => 0,
   "Carp" => 0,
-  "DateTime::Locale" => "1.05",
-  "DateTime::TimeZone" => "2.00",
+  "DateTime::Locale" => "1.06",
+  "DateTime::TimeZone" => "2.02",
   "Dist::CheckConflicts" => "0.02",
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,
   "POSIX" => 0,
-  "Params::ValidationCompiler" => "0.11",
+  "Params::ValidationCompiler" => "0.13",
   "Scalar::Util" => 0,
   "Specio" => "0.18",
   "Specio::Declare" => 0,
@@ -111,7 +111,7 @@ delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
 WriteMakefile(%WriteMakefileArgs);
 
 sub check_conflicts {
-    if ( eval { require 'lib/DateTime/Conflicts.pm'; 1; } ) {
+    if ( eval { require './lib/DateTime/Conflicts.pm'; 1; } ) {
         if ( eval { DateTime::Conflicts->check_conflicts; 1 } ) {
             return;
         }
