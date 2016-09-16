@@ -1,8 +1,11 @@
 {{$NEXT}}
 
+- Require the latest Params::ValidationCompiler (0.13).
+
+
 1.37   2016-08-14 (TRIAL RELEASE)
 
-- Require the latest Params::ValidationCompiler.
+- Require the latest Params::ValidationCompiler (0.11).
 
 
 1.36   2016-08-06

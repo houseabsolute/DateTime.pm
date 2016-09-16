@@ -16,13 +16,8 @@ use DateTime::Locale 1.05;
 use DateTime::TimeZone 2.00;
 use DateTime::Types;
 use POSIX qw(floor fmod);
-use Params::ValidationCompiler 0.11 qw( validation_for );
+use Params::ValidationCompiler 0.13 qw( validation_for );
 use Try::Tiny;
-
-BEGIN {
-    my $has = eval { require Sub::Util; 1 };
-    sub HAS_SUB_UTIL () {$has}
-}
 
 {
     my $loaded = 0;
@@ -117,8 +112,9 @@ __PACKAGE__->DefaultLocale('en-US');
 
 {
     my $validator = validation_for(
-        ( HAS_SUB_UTIL ? ( name => '_check_new_params' ) : () ),
-        params => {
+        name             => '_check_new_params',
+        name_is_optional => 1,
+        params           => {
             year  => { type => t('Year') },
             month => {
                 type    => t('Month'),
@@ -445,8 +441,9 @@ sub _calc_local_components {
 
 {
     my $validator = validation_for(
-        ( HAS_SUB_UTIL ? ( name => '_check_from_epoch_params' ) : () ),
-        params => {
+        name             => '_check_from_epoch_params',
+        name_is_optional => 1,
+        params           => {
             epoch     => { type => t('Num') },
             formatter => {
                 type     => t('Formatter'),
@@ -544,8 +541,9 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
 
 {
     my $validator = validation_for(
-        ( HAS_SUB_UTIL ? ( name => '_check_from_object_params' ) : () ),
-        params => {
+        name             => '_check_from_object_params',
+        name_is_optional => 1,
+        params           => {
             object => { type => t('ConvertibleObject') },
             locale => {
                 type     => t('Locale'),
@@ -609,8 +607,9 @@ sub today { shift->now(@_)->truncate( to => 'day' ) }
 
 {
     my $validator = validation_for(
-        ( HAS_SUB_UTIL ? ( name => '_check_last_day_of_month_params' ) : () ),
-        params => {
+        name             => '_check_last_day_of_month_params',
+        name_is_optional => 1,
+        params           => {
             year  => { type => t('Year') },
             month => { type => t('Month') },
             day   => {
@@ -668,8 +667,9 @@ sub _month_length {
 
 {
     my $validator = validation_for(
-        ( HAS_SUB_UTIL ? ( name => '_check_from_day_of_year_params' ) : () ),
-        params => {
+        name             => '_check_from_day_of_year_params',
+        name_is_optional => 1,
+        params           => {
             year        => { type => t('Year') },
             day_of_year => { type => t('DayOfYear') },
             hour        => {
@@ -1726,8 +1726,9 @@ sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
 {
     my $validator = validation_for(
-        ( HAS_SUB_UTIL ? ( name => '_check_add_duration_params' ) : () ),
-        params => [
+        name             => '_check_add_duration_params',
+        name_is_optional => 1,
+        params           => [
             { type => t('Duration') },
         ],
     );
@@ -1959,8 +1960,9 @@ sub _normalize_nanoseconds {
 
 {
     my $validator = validation_for(
-        ( HAS_SUB_UTIL ? ( name => '_check_set_params' ) : () ),
-        params => {
+        name             => '_check_set_params',
+        name_is_optional => 1,
+        params           => {
             year => {
                 type     => t('Year'),
                 optional => 1,
@@ -2027,8 +2029,9 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 
 {
     my $validator = validation_for(
-        ( HAS_SUB_UTIL ? ( name => '_check_set_locale_params' ) : () ),
-        params => [
+        name             => '_check_set_locale_params',
+        name_is_optional => 1,
+        params           => [
             { type => t( 'Maybe', of => t('Locale') ) },
         ],
     );
@@ -2045,8 +2048,9 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
 
 {
     my $validator = validation_for(
-        ( HAS_SUB_UTIL ? ( name => '_check_set_formatter_params' ) : () ),
-        params => [
+        name             => '_check_set_formatter_params',
+        name_is_optional => 1,
+        params           => [
             { type => t( 'Maybe', of => t('Formatter') ) },
         ],
     );
@@ -2072,8 +2076,9 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
     );
 
     my $validator = validation_for(
-        ( HAS_SUB_UTIL ? ( name => '_check_truncate_params' ) : () ),
-        params => {
+        name             => '_check_truncate_params',
+        name_is_optional => 1,
+        params           => {
             to => { type => t('TruncationLevel') },
         },
     );
