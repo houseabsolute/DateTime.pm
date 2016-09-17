@@ -26,7 +26,7 @@ use overload (
     'cmp'    => '_compare_overload',
 );
 
-use constant MAX_NANOSECONDS => 1_000_000_000;    # 1E9 = almost 32 bits
+sub MAX_NANOSECONDS () {1_000_000_000}    # 1E9 = almost 32 bits
 
 my @all_units = qw( months days minutes seconds nanoseconds );
 
