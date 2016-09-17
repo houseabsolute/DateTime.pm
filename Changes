@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Bump minimum required Perl to 5.8.4 from 5.8.1. Looking at CPAN Testers,
+  this distro hasn't actually passed with earlier Perl versions since
+  1.35. I'm not explicitly testing with anything earlier than 5.8.8
+
+
 1.38   2016-09-16
 
 - This release includes changes from past trial releases to switch from

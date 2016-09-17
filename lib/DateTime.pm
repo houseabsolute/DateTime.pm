@@ -1,6 +1,6 @@
 package DateTime;
 
-use 5.008001;
+use 5.008004;
 
 use strict;
 use warnings;
