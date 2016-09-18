@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use 5.008001;
+use 5.008004;
 
 use ExtUtils::MakeMaker;
 check_conflicts();
@@ -16,7 +16,7 @@ my %WriteMakefileArgs = (
   },
   "DISTNAME" => "DateTime",
   "LICENSE" => "artistic_2",
-  "MIN_PERL_VERSION" => "5.008001",
+  "MIN_PERL_VERSION" => "5.008004",
   "NAME" => "DateTime",
   "PREREQ_PM" => {
     "Carp" => 0,
@@ -35,7 +35,6 @@ my %WriteMakefileArgs = (
     "Try::Tiny" => 0,
     "XSLoader" => 0,
     "base" => 0,
-    "constant" => 0,
     "integer" => 0,
     "namespace::autoclean" => "0.19",
     "overload" => 0,
@@ -87,7 +86,6 @@ my %FallbackPrereqs = (
   "Try::Tiny" => 0,
   "XSLoader" => 0,
   "base" => 0,
-  "constant" => 0,
   "integer" => 0,
   "namespace::autoclean" => "0.19",
   "overload" => 0,
