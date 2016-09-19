@@ -3215,7 +3215,7 @@ C<DateTime.pm> can provide a different value.
 This method adds a C<DateTime::Duration> to the current datetime. See
 the L<DateTime::Duration|DateTime::Duration> docs for more details.
 
-=head3 $dt->add( DateTime::Duration->new parameters )
+=head3 $dt->add( parameters for DateTime::Duration )
 
 This method is syntactic sugar around the C<add_duration()> method. It
 simply creates a new C<DateTime::Duration> object using the parameters
