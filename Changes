@@ -25,6 +25,12 @@
   for now the parameter should be allowed (but discouraged). Reported by
   Slaven Rezić. RT #115420.
 
+- Removed the long-deprecated DateTime->DefaultLanguage method. Use
+  DefaultLocale instead.
+
+- Removed the long-deprecated "language" constructor parameter. Use "locale"
+  instead.
+
 
 1.37   2016-08-14 (TRIAL RELEASE)
 
