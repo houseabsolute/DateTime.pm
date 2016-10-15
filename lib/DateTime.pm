@@ -3436,7 +3436,7 @@ regardless of the timezone of the objects involved, as does using
 C<subtract_datetime_absolute()>. Other methods of subtraction are not
 always reversible.
 
-=item * never do math on two objects where only is in the floating time zone
+=item * never do math on two objects where only one is in the floating time zone
 
 The date math code accounts for leap seconds whenever the C<DateTime> object
 is not in the floating time zone. If you try to do math where one object is in
