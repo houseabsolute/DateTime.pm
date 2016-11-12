@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Switched from RT to the GitHub issue tracker.
+
+
 1.39   2016-09-17
 
 - Bump minimum required Perl to 5.8.4 from 5.8.1. Looking at CPAN Testers,
