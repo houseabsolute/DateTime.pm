@@ -940,6 +940,22 @@ sub hms {
 sub iso8601 { join 'T', $_[0]->ymd('-'), $_[0]->hms(':') }
 *datetime = sub { $_[0]->iso8601 };
 
+sub TO_JSON {
+    my $self = shift;
+
+    my $stamp = $self->iso8601;
+
+    my $tz = $self->time_zone;
+    unless ( $tz->is_floating ) {
+        $stamp .=
+            $self->time_zone->is_utc
+            ? 'Z'
+            : DateTime::TimeZone->offset_as_string( $self->offset );
+    }
+
+    return $stamp;
+}
+
 sub is_leap_year { $_[0]->_is_leap_year( $_[0]->year ) }
 
 sub week {
