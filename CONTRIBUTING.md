@@ -99,8 +99,8 @@ instructions for doing that is available here:
 https://help.github.com/articles/creating-a-pull-request
 
 If you have found a bug, but do not have an accompanying patch to fix it, you
-can submit an issue report [via the web](http://rt.cpan.org/Public/Dist/Display.html?Name=DateTime)
-or [via email](bug-datetime@rt.cpan.org.
+can submit an issue report [via the web](https://github.com/houseabsolute/DateTime.pm/issues)
+).
 
 There is a mailing list available for users of this distribution,
 datetime@perl.org
@@ -133,4 +133,4 @@ wish to be listed under a different name or address, you should submit a pull
 request to the .mailmap file to contain the correct mapping.
 
 This file was generated via Dist::Zilla::Plugin::GenerateFile::FromShareDir 0.012 from a
-template file originating in Dist-Zilla-PluginBundle-DROLSKY-0.71.
+template file originating in Dist-Zilla-PluginBundle-DROLSKY-0.76.

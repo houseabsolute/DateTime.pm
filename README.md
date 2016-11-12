@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.39
+version 1.40
 
 # SYNOPSIS
 
@@ -936,7 +936,7 @@ This returns `DateTime::Duration`, but exists so that a subclass of
 This method adds a `DateTime::Duration` to the current datetime. See
 the [DateTime::Duration](https://metacpan.org/pod/DateTime::Duration) docs for more details.
 
-### $dt->add( DateTime::Duration->new parameters )
+### $dt->add( parameters for DateTime::Duration )
 
 This method is syntactic sugar around the `add_duration()` method. It
 simply creates a new `DateTime::Duration` object using the parameters
@@ -2159,8 +2159,7 @@ I've given at a few YAPCs.
 
 # SUPPORT
 
-Bugs may be submitted through [the RT bug tracker](http://rt.cpan.org/Public/Dist/Display.html?Name=DateTime)
-(or [bug-datetime@rt.cpan.org](mailto:bug-datetime@rt.cpan.org)).
+Bugs may be submitted through [https://github.com/houseabsolute/DateTime.pm/issues](https://github.com/houseabsolute/DateTime.pm/issues).
 
 There is a mailing list available for users of this distribution,
 [mailto:datetime@perl.org](mailto:datetime@perl.org).
