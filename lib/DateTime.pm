@@ -1711,11 +1711,14 @@ sub add {
 
 sub subtract {
     my $self = shift;
-    my %p    = @_;
 
     my %eom;
-    $eom{end_of_month} = delete $p{end_of_month}
-        if exists $p{end_of_month};
+    if (@_ % 2 == 0) {
+        my %p    = @_;
+
+        $eom{end_of_month} = delete $p{end_of_month}
+            if exists $p{end_of_month};
+    }
 
     my $dur = $self->duration_class->new(@_)->inverse(%eom);
 
