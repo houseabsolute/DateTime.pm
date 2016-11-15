@@ -15,9 +15,9 @@ use DateTime::Helpers;
 use DateTime::Locale 1.06;
 use DateTime::TimeZone 2.02;
 use DateTime::Types;
-use POSIX qw(floor fmod);
+use POSIX qw( floor fmod );
 use Params::ValidationCompiler 0.13 qw( validation_for );
-use Scalar::Util qw(blessed);
+use Scalar::Util qw( blessed );
 use Try::Tiny;
 
 {
