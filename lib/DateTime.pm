@@ -1713,8 +1713,8 @@ sub subtract {
     my $self = shift;
 
     my %eom;
-    if (@_ % 2 == 0) {
-        my %p    = @_;
+    if ( @_ % 2 == 0 ) {
+        my %p = @_;
 
         $eom{end_of_month} = delete $p{end_of_month}
             if exists $p{end_of_month};
