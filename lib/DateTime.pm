@@ -3240,6 +3240,10 @@ This method is syntactic sugar around the C<add_duration()> method. It
 simply creates a new C<DateTime::Duration> object using the parameters
 given, and then calls the C<add_duration()> method.
 
+=head3 $dt->add( $duration_object )
+
+A synonym of C<< $dt->add_duration( $duration_object ) >>.
+
 =head3 $dt->subtract_duration( $duration_object )
 
 When given a C<DateTime::Duration> object, this method simply calls
@@ -3250,6 +3254,10 @@ C<add_duration> method.
 
 Like C<add()>, this is syntactic sugar for the C<subtract_duration()>
 method.
+
+=head3 $dt->subtract( $duration_object )
+
+A synonym of C<< $dt->subtract_duration( $duration_object ) >>.
 
 =head3 $dt->subtract_datetime( $datetime )
 
