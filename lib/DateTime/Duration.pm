@@ -64,7 +64,7 @@ my @all_units = qw( months days minutes seconds nanoseconds );
 
     sub new {
         my $class = shift;
-        my %p     = $check->( ref($_[0]) eq $class ? %{ $_[0] } : @_);
+        my %p     = $check->( @_ );
 
         my $self = bless {}, $class;
 
