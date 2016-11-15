@@ -17,6 +17,7 @@ use DateTime::TimeZone 2.02;
 use DateTime::Types;
 use POSIX qw(floor fmod);
 use Params::ValidationCompiler 0.13 qw( validation_for );
+use Scalar::Util qw(blessed);
 use Try::Tiny;
 
 {
@@ -1706,7 +1707,7 @@ sub _subtract_overload {
 sub add {
     my $self = shift;
 
-    return $self->add_duration( $self->duration_class->new(@_) );
+    return $self->add_duration( $self->_duration_object_from_args(@_) );
 }
 
 sub subtract {
@@ -1720,9 +1721,24 @@ sub subtract {
             if exists $p{end_of_month};
     }
 
-    my $dur = $self->duration_class->new(@_)->inverse(%eom);
+    my $dur = $self->_duration_object_from_args(@_)->inverse(%eom);
 
     return $self->add_duration($dur);
+}
+
+# Syntactic sugar for add and subtract: use a duration object if it's
+# supplied, otherwise build a new one from the arguments.
+
+sub _duration_object_from_args {
+    my $self = shift;
+
+    my $duration;
+    if (@_ == 1 && blessed($_[0]) && $_[0]->isa( $self->duration_class ) ) {
+        $duration = shift;
+    } else {
+        $duration = $self->duration_class->new(@_);
+    }
+    return $duration;
 }
 
 sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
