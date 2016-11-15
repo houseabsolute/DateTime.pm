@@ -127,13 +127,13 @@ $dt = DateTime->new(
     hour      => 17,
     time_zone => 'UTC'
 );
-my $duration = DateTime::Duration->new(years => 1);
+my $duration = DateTime::Duration->new( years => 1 );
 $dt->add($duration);
 is(
     $dt->datetime, '2017-11-11T17:00:00',
     'Adding a Duration object via ->add works',
 );
-$duration = DateTime::Duration->new(months => 5, days => 1);
+$duration = DateTime::Duration->new( months => 5, days => 1 );
 $dt->subtract($duration);
 is(
     $dt->datetime, '2017-06-10T17:00:00',
