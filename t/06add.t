@@ -119,8 +119,6 @@ is(
 $dt->add( minutes => -15 );
 is( $dt->datetime, '2001-04-05T16:00:00', "Back where we started" );
 
-undef $dt;
-
 # Syntactic sugar works as well
 $dt = DateTime->new(
     year      => 2016, month => 11, day => 11,
