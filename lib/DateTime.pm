@@ -1733,7 +1733,8 @@ sub _duration_object_from_args {
     my $self = shift;
 
     my $duration;
-    if ( @_ == 1 && blessed( $_[0] ) && $_[0]->isa( $self->duration_class ) ) {
+    if ( @_ == 1 && blessed( $_[0] ) && $_[0]->isa( $self->duration_class ) )
+    {
         $duration = shift;
     }
     else {
