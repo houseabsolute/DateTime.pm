@@ -119,7 +119,24 @@ is(
 $dt->add( minutes => -15 );
 is( $dt->datetime, '2001-04-05T16:00:00', "Back where we started" );
 
-undef $dt;
+# Syntactic sugar works as well
+$dt = DateTime->new(
+    year      => 2016, month => 11, day => 11,
+    hour      => 17,
+    time_zone => 'UTC'
+);
+my $duration = DateTime::Duration->new( years => 1 );
+$dt->add($duration);
+is(
+    $dt->datetime, '2017-11-11T17:00:00',
+    'Adding a Duration object via ->add works',
+);
+$duration = DateTime::Duration->new( months => 5, days => 1 );
+$dt->subtract($duration);
+is(
+    $dt->datetime, '2017-06-10T17:00:00',
+    'Subtracting a Duration object via ->subtract works',
+);
 
 $dt = DateTime->new(
     year      => 1986, month  => 1, day => 28,

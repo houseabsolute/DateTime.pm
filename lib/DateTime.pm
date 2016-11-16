@@ -15,8 +15,9 @@ use DateTime::Helpers;
 use DateTime::Locale 1.06;
 use DateTime::TimeZone 2.02;
 use DateTime::Types;
-use POSIX qw(floor fmod);
+use POSIX qw( floor fmod );
 use Params::ValidationCompiler 0.13 qw( validation_for );
+use Scalar::Util qw( blessed );
 use Try::Tiny;
 
 {
@@ -1706,20 +1707,35 @@ sub _subtract_overload {
 sub add {
     my $self = shift;
 
-    return $self->add_duration( $self->duration_class->new(@_) );
+    return $self->add_duration( $self->_duration_object_from_args(@_) );
 }
 
 sub subtract {
     my $self = shift;
-    my %p    = @_;
 
     my %eom;
-    $eom{end_of_month} = delete $p{end_of_month}
-        if exists $p{end_of_month};
+    if ( @_ % 2 == 0 ) {
+        my %p = @_;
 
-    my $dur = $self->duration_class->new(@_)->inverse(%eom);
+        $eom{end_of_month} = delete $p{end_of_month}
+            if exists $p{end_of_month};
+    }
+
+    my $dur = $self->_duration_object_from_args(@_)->inverse(%eom);
 
     return $self->add_duration($dur);
+}
+
+# Syntactic sugar for add and subtract: use a duration object if it's
+# supplied, otherwise build a new one from the arguments.
+
+sub _duration_object_from_args {
+    my $self = shift;
+
+    return $_[0]
+        if @_ == 1 && blessed( $_[0] ) && $_[0]->isa( $self->duration_class );
+
+    return $self->duration_class->new(@_);
 }
 
 sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
@@ -3221,6 +3237,10 @@ This method is syntactic sugar around the C<add_duration()> method. It
 simply creates a new C<DateTime::Duration> object using the parameters
 given, and then calls the C<add_duration()> method.
 
+=head3 $dt->add( $duration_object )
+
+A synonym of C<< $dt->add_duration( $duration_object ) >>.
+
 =head3 $dt->subtract_duration( $duration_object )
 
 When given a C<DateTime::Duration> object, this method simply calls
@@ -3231,6 +3251,10 @@ C<add_duration> method.
 
 Like C<add()>, this is syntactic sugar for the C<subtract_duration()>
 method.
+
+=head3 $dt->subtract( $duration_object )
+
+A synonym of C<< $dt->subtract_duration( $duration_object ) >>.
 
 =head3 $dt->subtract_datetime( $datetime )
 
