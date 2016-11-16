@@ -942,6 +942,10 @@ This method is syntactic sugar around the `add_duration()` method. It
 simply creates a new `DateTime::Duration` object using the parameters
 given, and then calls the `add_duration()` method.
 
+### $dt->add( $duration\_object )
+
+A synonym of `$dt->add_duration( $duration_object )`.
+
 ### $dt->subtract\_duration( $duration\_object )
 
 When given a `DateTime::Duration` object, this method simply calls
@@ -952,6 +956,10 @@ When given a `DateTime::Duration` object, this method simply calls
 
 Like `add()`, this is syntactic sugar for the `subtract_duration()`
 method.
+
+### $dt->subtract( $duration\_object )
+
+A synonym of `$dt->subtract_duration( $duration_object )`.
 
 ### $dt->subtract\_datetime( $datetime )
 
@@ -1155,7 +1163,7 @@ the nitty-gritty of datetime math, I have several recommendations:
     `subtract_datetime_absolute()`. Other methods of subtraction are not
     always reversible.
 
-- never do math on two objects where only is in the floating time zone
+- never do math on two objects where only one is in the floating time zone
 
     The date math code accounts for leap seconds whenever the `DateTime` object
     is not in the floating time zone. If you try to do math where one object is in
@@ -2164,7 +2172,7 @@ Bugs may be submitted through [https://github.com/houseabsolute/DateTime.pm/issu
 There is a mailing list available for users of this distribution,
 [mailto:datetime@perl.org](mailto:datetime@perl.org).
 
-I am also usually active on IRC as 'drolsky' on `irc://irc.perl.org`.
+I am also usually active on IRC as 'autarch' on `irc://irc.perl.org`.
 
 # DONATIONS
 
@@ -2204,9 +2212,11 @@ Dave Rolsky <autarch@urth.org>
 - Nick Tonkin <1nickt@users.noreply.github.com>
 - Olaf Alders <olaf@wundersolutions.com>
 - Ovid &lt;curtis\_ovid\_poe@yahoo.com>
+- Philippe Bruhat (BooK) <book@cpan.org>
 - Ricardo Signes <rjbs@cpan.org>
 - Richard Bowen <bowen@cpan.org>
 - Ron Hill <rkhill@cpan.org>
+- Sam Kington <github@illuminated.co.uk>
 - viviparous &lt;viviparous@prc>
 
 # COPYRIGHT AND LICENSE
