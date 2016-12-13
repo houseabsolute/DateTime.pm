@@ -108,7 +108,7 @@ sub _initialize {
             1999  Jan. 1  +1
             2006  Jan. 1  +1
             2009  Jan. 1  +1
-            2012  Jun. 1  +1
+            2012  Jul. 1  +1
             2015  Jul. 1  +1
             2017  Jan. 1  +1
             )
