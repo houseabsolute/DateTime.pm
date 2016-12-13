@@ -138,7 +138,7 @@ This module is used to calculate leap seconds for a given Rata Die
 day. It is used when DateTime.pm cannot compile the XS version of
 this code.
 
-This library is known to be accurate for dates until December 2009.
+This library is known to be accurate for dates until Jun 2017.
 
 There are no leap seconds before 1972, because that's the year this
 system was implemented.
