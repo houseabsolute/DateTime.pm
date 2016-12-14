@@ -4,6 +4,7 @@ use warnings;
 use Test::Fatal;
 use Test::More;
 use DateTime;
+use DateTime::LeapSecond;
 
 # tests using UTC times
 {
@@ -1161,9 +1162,10 @@ use DateTime;
         ) {
         my $formatted = join '-', map { sprintf( '%02d', $_ ) } @{$date};
 
+        my $dt;
         is(
             exception {
-                DateTime->new(
+                $dt = DateTime->new(
                     year      => $date->[0],
                     month     => $date->[1],
                     day       => $date->[2],
@@ -1175,6 +1177,12 @@ use DateTime;
             },
             undef,
             "We can make a DateTime object for the leap second on $formatted"
+        );
+
+        is(
+            DateTime::LeapSecond::day_length( ( $dt->utc_rd_values )[0] ),
+            86401,
+            "DateTime::LeapSecond::day_length returns 86401 for $formatted"
         );
     }
 }
