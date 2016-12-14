@@ -147,8 +147,7 @@ system was implemented.
 
 =item * leap_seconds( $rd )
 
-Returns the number of accumulated leap seconds for a given day,
-in the range 0 .. 22.
+Returns the number of accumulated leap seconds for a given day.
 
 =item * extra_seconds( $rd )
 
@@ -164,7 +163,7 @@ in the range 86398 .. 86402.
 
 =head1 SEE ALSO
 
-E<lt>http://hpiers.obspm.fr/eop-pc/earthor/utc/leapsecond.htmlE<gt>
+L<http://hpiers.obspm.fr/eop-pc/earthor/utc/leapsecond.html>
 
 http://datetime.perl.org
 
