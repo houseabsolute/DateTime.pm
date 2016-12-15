@@ -72,8 +72,9 @@ is( $d->hms('!'),  '02!12!50', q{->hms('!')} );
 is( $d->time,      '02:12:50', '->hms' );
 is( $d->time('!'), '02!12!50', q{->time('!')} );
 
-is( $d->datetime, '2001-07-05T02:12:50', '->datetime' );
-is( $d->iso8601,  '2001-07-05T02:12:50', '->iso8601' );
+is( $d->datetime,         '2001-07-05T02:12:50',       '->datetime' );
+is( $d->iso8601,          '2001-07-05T02:12:50',       '->iso8601' );
+is( $d->iso8601_with_tz,  '2001-07-05T02:12:50+00:00', '->iso8601_with_tz' );
 
 is( $d->is_leap_year, 0, '->is_leap_year' );
 
