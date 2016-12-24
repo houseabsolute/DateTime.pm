@@ -275,6 +275,23 @@ my $leap_day = DateTime->new(
 }
 
 {
+    my $dur1 = DateTime::Duration->new( seconds => 1 );
+    my $dur2 = DateTime::Duration->new( seconds => 1 );
+
+    $dur1->add($dur2);
+    is(
+        $dur1->delta_seconds, 2,
+        'add method works with a duration object'
+    );
+
+    $dur1->subtract($dur2);
+    is(
+        $dur1->delta_seconds, 1,
+        'subtract method works with a duration object'
+    );
+}
+
+{
     my $dur = DateTime::Duration->new( nanoseconds => -10 );
     is( $dur->nanoseconds,       10,  'nanoseconds is 10' );
     is( $dur->delta_nanoseconds, -10, 'delta_nanoseconds is -10' );
