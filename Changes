@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- The DateTime::Duration->add and ->subtract methods now accept
+  DateTime::Duration objects. This used to work by accident, but this is now
+  done intentionally (with docs and tests). Reported by Petr Pisar. GitHub
+  #50.
+
+
 1.41   2016-11-16
 
 - The DateTime->add and ->subtract methods now accept DateTime::Duration
