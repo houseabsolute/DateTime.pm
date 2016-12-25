@@ -5,6 +5,8 @@ use Test::More;
 
 use DateTime;
 
+## no critic (Subroutines::ProtectPrivateSubs)
+
 # test _ymd2rd and _rd2ymd for various dates
 # 2 tests are performed for each date (on _ymd2rd and _rd2ymd)
 # dates are specified as [rd,year,month,day]
@@ -52,7 +54,7 @@ for (
         join( '/', @{$_}[ 1 .. 3 ] )
             . " \t=> "
             . $_->[0]
-            . " (normalization)"
+            . ' (normalization)'
     );
 }
 
@@ -113,6 +115,6 @@ while ( $y <= 4800 ) {
     }
 }
 
-pass("greg torture test") if $y == 4801;
+pass('greg torture test') if $y == 4801;
 
 done_testing();

@@ -1,27 +1,46 @@
 use strict;
 use warnings;
 
+use Test::Fatal;
 use Test::More;
 
 use DateTime;
 use DateTime::Locale;
 
-eval { DateTime->new( year => 100, locale => 'en_US' ) };
-is( $@, '', 'make sure constructor accepts locale parameter' );
+is(
+    exception { DateTime->new( year => 100, locale => 'en_US' ) },
+    undef,
+    'make sure new accepts locale parameter'
+);
 
-eval { DateTime->now( locale => 'en_US' ) };
-is( $@, '', 'make sure constructor accepts locale parameter' );
+is(
+    exception { DateTime->now( locale => 'en_US' ) },
+    undef,
+    'make sure now accepts locale parameter'
+);
 
-eval { DateTime->today( locale => 'en_US' ) };
-is( $@, '', 'make sure constructor accepts locale parameter' );
+is(
+    exception { DateTime->today( locale => 'en_US' ) },
+    undef,
+    'make sure today accepts locale parameter'
+);
 
-eval { DateTime->from_epoch( epoch => 1, locale => 'en_US' ) };
-is( $@, '', 'make sure constructor accepts locale parameter' );
+is(
+    exception { DateTime->from_epoch( epoch => 1, locale => 'en_US' ) },
+    undef,
+    'make sure from_epoch accepts locale parameter'
+);
 
-eval {
-    DateTime->last_day_of_month( year => 100, month => 2, locale => 'en_US' );
-};
-is( $@, '', 'make sure constructor accepts locale parameter' );
+is(
+    exception {
+        DateTime->last_day_of_month(
+            year   => 100, month => 2,
+            locale => 'en_US'
+        );
+    },
+    undef,
+    'make sure last_day_of_month accepts locale parameter'
+);
 
 {
 
@@ -29,18 +48,28 @@ is( $@, '', 'make sure constructor accepts locale parameter' );
     sub utc_rd_values { ( 0, 0 ) }
 }
 
-eval {
-    DateTime->from_object(
-        object => ( bless {}, 'DT::Object' ),
-        locale => 'en_US'
-    );
-};
-is( $@, '', 'make sure constructor accepts locale parameter' );
+is(
+    exception {
+        DateTime->from_object(
+            object => ( bless {}, 'DT::Object' ),
+            locale => 'en_US'
+        );
+    },
+    undef,
+    ,
+    'make sure constructor accepts locale parameter'
+);
 
-eval {
-    DateTime->new( year => 100, locale => DateTime::Locale->load('en_US') );
-};
-is( $@, '', 'make sure constructor accepts locale parameter as object' );
+is(
+    exception {
+        DateTime->new(
+            year   => 100,
+            locale => DateTime::Locale->load('en_US')
+        );
+    },
+    undef,
+    'make sure constructor accepts locale parameter as object'
+);
 
 DateTime->DefaultLocale('it');
 is( DateTime->now->locale->id, 'it', 'default locale should now be "it"' );

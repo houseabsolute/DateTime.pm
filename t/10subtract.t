@@ -376,13 +376,13 @@ use DateTime;
         ) {
         my $pos_diff = $p->[1]->subtract_datetime( $p->[0] );
 
-        is( $pos_diff->delta_days,   1, "1 day diff at end of month" );
-        is( $pos_diff->delta_months, 0, "0 month diff at end of month" );
+        is( $pos_diff->delta_days,   1, '1 day diff at end of month' );
+        is( $pos_diff->delta_months, 0, '0 month diff at end of month' );
 
         my $neg_diff = $p->[0]->subtract_datetime( $p->[1] );
 
-        is( $neg_diff->delta_days,   -1, "-1 day diff at end of month" );
-        is( $neg_diff->delta_months, 0,  "0 month diff at end of month" );
+        is( $neg_diff->delta_days,   -1, '-1 day diff at end of month' );
+        is( $neg_diff->delta_months, 0,  '0 month diff at end of month' );
     }
 }
 

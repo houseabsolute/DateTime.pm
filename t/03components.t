@@ -4,116 +4,119 @@ use warnings;
 use Test::More;
 
 use DateTime;
+{
+    my $d = DateTime->new(
+        year      => 2001,
+        month     => 7,
+        day       => 5,
+        hour      => 2,
+        minute    => 12,
+        second    => 50,
+        time_zone => 'UTC',
+    );
 
-my $d = DateTime->new(
-    year      => 2001,
-    month     => 7,
-    day       => 5,
-    hour      => 2,
-    minute    => 12,
-    second    => 50,
-    time_zone => 'UTC',
-);
+    is( $d->year,           2001,   '->year' );
+    is( $d->ce_year,        2001,   '->ce_year' );
+    is( $d->month,          7,      '->month' );
+    is( $d->quarter,        3,      '->quarter' );
+    is( $d->month_0,        6,      '->month_0' );
+    is( $d->month_name,     'July', '->month_name' );
+    is( $d->month_abbr,     'Jul',  '->month_abbr' );
+    is( $d->day_of_month,   5,      '->day_of_month' );
+    is( $d->day_of_month_0, 4,      '->day_of_month_0' );
+    is( $d->day,            5,      '->day' );
+    is( $d->day_0,          4,      '->day_0' );
+    is( $d->mday,           5,      '->mday' );
+    is( $d->mday_0,         4,      '->mday_0' );
+    is( $d->mday,           5,      '->mday' );
+    is( $d->mday_0,         4,      '->mday_0' );
+    is( $d->hour,           2,      '->hour' );
+    is( $d->hour_1,         2,      '->hour_1' );
+    is( $d->hour_12,        2,      '->hour_12' );
+    is( $d->hour_12_0,      2,      '->hour_12_0' );
+    is( $d->minute,         12,     '->minute' );
+    is( $d->min,            12,     '->min' );
+    is( $d->second,         50,     '->second' );
+    is( $d->sec,            50,     '->sec' );
 
-is( $d->year,           2001,   '->year' );
-is( $d->ce_year,        2001,   '->ce_year' );
-is( $d->month,          7,      '->month' );
-is( $d->quarter,        3,      '->quarter' );
-is( $d->month_0,        6,      '->month_0' );
-is( $d->month_name,     'July', '->month_name' );
-is( $d->month_abbr,     'Jul',  '->month_abbr' );
-is( $d->day_of_month,   5,      '->day_of_month' );
-is( $d->day_of_month_0, 4,      '->day_of_month_0' );
-is( $d->day,            5,      '->day' );
-is( $d->day_0,          4,      '->day_0' );
-is( $d->mday,           5,      '->mday' );
-is( $d->mday_0,         4,      '->mday_0' );
-is( $d->mday,           5,      '->mday' );
-is( $d->mday_0,         4,      '->mday_0' );
-is( $d->hour,           2,      '->hour' );
-is( $d->hour_1,         2,      '->hour_1' );
-is( $d->hour_12,        2,      '->hour_12' );
-is( $d->hour_12_0,      2,      '->hour_12_0' );
-is( $d->minute,         12,     '->minute' );
-is( $d->min,            12,     '->min' );
-is( $d->second,         50,     '->second' );
-is( $d->sec,            50,     '->sec' );
+    is( $d->day_of_year,      186,        '->day_of_year' );
+    is( $d->day_of_year_0,    185,        '->day_of_year' );
+    is( $d->day_of_quarter,   5,          '->day_of_quarter' );
+    is( $d->doq,              5,          '->doq' );
+    is( $d->day_of_quarter_0, 4,          '->day_of_quarter_0' );
+    is( $d->doq_0,            4,          '->doq_0' );
+    is( $d->day_of_week,      4,          '->day_of_week' );
+    is( $d->day_of_week_0,    3,          '->day_of_week_0' );
+    is( $d->week_of_month,    1,          '->week_of_month' );
+    is( $d->weekday_of_month, 1,          '->weekday_of_month' );
+    is( $d->wday,             4,          '->wday' );
+    is( $d->wday_0,           3,          '->wday_0' );
+    is( $d->dow,              4,          '->dow' );
+    is( $d->dow_0,            3,          '->dow_0' );
+    is( $d->day_name,         'Thursday', '->day_name' );
+    is( $d->day_abbr,         'Thu',      '->day_abrr' );
 
-is( $d->day_of_year,      186,        '->day_of_year' );
-is( $d->day_of_year_0,    185,        '->day_of_year' );
-is( $d->day_of_quarter,   5,          '->day_of_quarter' );
-is( $d->doq,              5,          '->doq' );
-is( $d->day_of_quarter_0, 4,          '->day_of_quarter_0' );
-is( $d->doq_0,            4,          '->doq_0' );
-is( $d->day_of_week,      4,          '->day_of_week' );
-is( $d->day_of_week_0,    3,          '->day_of_week_0' );
-is( $d->week_of_month,    1,          '->week_of_month' );
-is( $d->weekday_of_month, 1,          '->weekday_of_month' );
-is( $d->wday,             4,          '->wday' );
-is( $d->wday_0,           3,          '->wday_0' );
-is( $d->dow,              4,          '->dow' );
-is( $d->dow_0,            3,          '->dow_0' );
-is( $d->day_name,         'Thursday', '->day_name' );
-is( $d->day_abbr,         'Thu',      '->day_abrr' );
+    is( $d->ymd,       '2001-07-05', '->ymd' );
+    is( $d->ymd('!'),  '2001!07!05', q{->ymd('!')} );
+    is( $d->date,      '2001-07-05', '->date' );
+    is( $d->date('!'), '2001!07!05', q{->date('!')} );
 
-is( $d->ymd,       '2001-07-05', '->ymd' );
-is( $d->ymd('!'),  '2001!07!05', "->ymd('!')" );
-is( $d->date,      '2001-07-05', '->date' );
-is( $d->date('!'), '2001!07!05', "->date('!')" );
+    is( $d->mdy,      '07-05-2001', '->mdy' );
+    is( $d->mdy('!'), '07!05!2001', q{->mdy('!')} );
 
-is( $d->mdy,      '07-05-2001', '->mdy' );
-is( $d->mdy('!'), '07!05!2001', "->mdy('!')" );
+    is( $d->dmy,      '05-07-2001', '->dmy' );
+    is( $d->dmy('!'), '05!07!2001', q{->dmy('!')} );
 
-is( $d->dmy,      '05-07-2001', '->dmy' );
-is( $d->dmy('!'), '05!07!2001', "->dmy('!')" );
+    is( $d->hms,       '02:12:50', '->hms' );
+    is( $d->hms('!'),  '02!12!50', q{->hms('!')} );
+    is( $d->time,      '02:12:50', '->hms' );
+    is( $d->time('!'), '02!12!50', q{->time('!')} );
 
-is( $d->hms,       '02:12:50', '->hms' );
-is( $d->hms('!'),  '02!12!50', q{->hms('!')} );
-is( $d->time,      '02:12:50', '->hms' );
-is( $d->time('!'), '02!12!50', q{->time('!')} );
+    is( $d->datetime, '2001-07-05T02:12:50', '->datetime' );
+    is( $d->iso8601,  '2001-07-05T02:12:50', '->iso8601' );
 
-is( $d->datetime, '2001-07-05T02:12:50', '->datetime' );
-is( $d->iso8601,  '2001-07-05T02:12:50', '->iso8601' );
+    is( $d->is_leap_year, 0, '->is_leap_year' );
 
-is( $d->is_leap_year, 0, '->is_leap_year' );
+    is( $d->era_abbr, 'AD',          '->era_abbr' );
+    is( $d->era,      $d->era_abbr,  '->era (deprecated)' );
+    is( $d->era_name, 'Anno Domini', '->era_abbr' );
 
-is( $d->era_abbr, 'AD',          '->era_abbr' );
-is( $d->era,      $d->era_abbr,  '->era (deprecated)' );
-is( $d->era_name, 'Anno Domini', '->era_abbr' );
+    is( $d->quarter_abbr, 'Q3',          '->quarter_abbr' );
+    is( $d->quarter_name, '3rd quarter', '->quarter_name' );
+}
+{
+    my $leap_d = DateTime->new(
+        year      => 2004,
+        month     => 7,
+        day       => 5,
+        hour      => 2,
+        minute    => 12,
+        second    => 50,
+        time_zone => 'UTC',
+    );
 
-is( $d->quarter_abbr, 'Q3',          '->quarter_abbr' );
-is( $d->quarter_name, '3rd quarter', '->quarter_name' );
+    is( $leap_d->is_leap_year, 1, '->is_leap_year' );
+}
+{
+    my $sunday = DateTime->new(
+        year      => 2003,
+        month     => 1,
+        day       => 26,
+        time_zone => 'UTC',
+    );
 
-my $leap_d = DateTime->new(
-    year      => 2004,
-    month     => 7,
-    day       => 5,
-    hour      => 2,
-    minute    => 12,
-    second    => 50,
-    time_zone => 'UTC',
-);
+    is( $sunday->day_of_week, 7, 'Sunday is day 7' );
+}
+{
+    my $monday = DateTime->new(
+        year      => 2003,
+        month     => 1,
+        day       => 27,
+        time_zone => 'UTC',
+    );
 
-is( $leap_d->is_leap_year, 1, '->is_leap_year' );
-
-my $sunday = DateTime->new(
-    year      => 2003,
-    month     => 1,
-    day       => 26,
-    time_zone => 'UTC',
-);
-
-is( $sunday->day_of_week, 7, "Sunday is day 7" );
-
-my $monday = DateTime->new(
-    year      => 2003,
-    month     => 1,
-    day       => 27,
-    time_zone => 'UTC',
-);
-
-is( $monday->day_of_week, 1, "Monday is day 1" );
-
+    is( $monday->day_of_week, 1, 'Monday is day 1' );
+}
 {
 
     # time zone offset should not affect the values returned
@@ -140,8 +143,8 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 {
     my $dt0 = DateTime->new( year => 1, time_zone => 'UTC' );
 
-    is( $dt0->year,          1,     "year 1 is year 1" );
-    is( $dt0->ce_year,       1,     "ce_year 1 is year 1" );
+    is( $dt0->year,          1,     'year 1 is year 1' );
+    is( $dt0->ce_year,       1,     'ce_year 1 is year 1' );
     is( $dt0->era_abbr,      'AD',  'era is AD' );
     is( $dt0->year_with_era, '1AD', 'year_with_era is 1AD' );
     is( $dt0->christian_era, 'AD',  'christian_era is AD' );
@@ -154,8 +157,8 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
     $dt0->subtract( years => 1 );
 
-    is( $dt0->year,          0,     "year 1 minus 1 is year 0" );
-    is( $dt0->ce_year,       -1,    "ce_year 1 minus 1 is year -1" );
+    is( $dt0->year,          0,     'year 1 minus 1 is year 0' );
+    is( $dt0->ce_year,       -1,    'ce_year 1 minus 1 is year -1' );
     is( $dt0->era_abbr,      'BC',  'era is BC' );
     is( $dt0->year_with_era, '1BC', 'year_with_era is 1BC' );
     is( $dt0->christian_era, 'BC',  'christian_era is BC' );
@@ -172,14 +175,14 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
 {
     my $dt_neg = DateTime->new( year => -10, time_zone => 'UTC', );
-    is( $dt_neg->year,    -10, "Year -10 is -10" );
-    is( $dt_neg->ce_year, -11, "year -10 is ce_year -11" );
+    is( $dt_neg->year,    -10, 'Year -10 is -10' );
+    is( $dt_neg->ce_year, -11, 'year -10 is ce_year -11' );
 
     my $dt1 = $dt_neg + DateTime::Duration->new( years => 10 );
-    is( $dt1->year, 0, "year is 0 after adding ten years to year -10" );
+    is( $dt1->year, 0, 'year is 0 after adding ten years to year -10' );
     is(
         $dt1->ce_year, -1,
-        "ce_year is -1 after adding ten years to year -10"
+        'ce_year is -1 after adding ten years to year -10'
     );
 }
 
@@ -324,8 +327,9 @@ is( $monday->day_of_week, 1, "Monday is day 1" );
 
 SKIP:
 {
+    ## no critic (BuiltinFunctions::ProhibitStringyEval)
     skip 'These tests require Test::Warn', 9
-        unless eval "use Test::Warn; 1";
+        unless eval 'use Test::Warn; 1';
 
     my $dt = DateTime->new( year => 2000 );
     warnings_like(

@@ -65,3 +65,11 @@ add_packages = Carp Test::Builder
 # prevents very common errors when using a sub in list context to construct a
 # hash and ending up with a missing value or key.
 [-Subroutines::ProhibitExplicitReturnUndef]
+
+# Sometimes I want to write "return unless $x > 4"
+[-ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions]
+
+# We've removed "second" from the forbidden list since it's pretty unambiguous
+# in DateTime
+[NamingConventions::ProhibitAmbiguousNames]
+forbid = abstract bases close contract last left no record right set

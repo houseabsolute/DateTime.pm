@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 
+use Test::Fatal;
 use Test::More;
 
 use DateTime;
@@ -22,8 +23,11 @@ use DateTime;
         'add one hour to midnight, get 1 am'
     );
 
-    eval { $dt->add( hours => 1 ) };
-    is( $@, '', 'no error adding 1 hour just before DST leap forward' );
+    is(
+        exception { $dt->add( hours => 1 ) },
+        undef,
+        'no error adding 1 hour just before DST leap forward'
+    );
     is(
         $dt->datetime, '2003-04-06T03:00:00',
         'add one hour to 1 am, get 3 am'

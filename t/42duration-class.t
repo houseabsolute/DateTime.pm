@@ -1,3 +1,4 @@
+## no critic (Modules::ProhibitMultiplePackages)
 use strict;
 use warnings;
 
@@ -5,7 +6,6 @@ use Test::More;
 use DateTime;
 
 {
-
     package DateTime::MySubclass;
     use base 'DateTime';
 

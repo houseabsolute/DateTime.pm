@@ -5,7 +5,9 @@ use warnings;
 
 our $VERSION = '1.42';
 
+## no critic (Variables::ProhibitPackageVars)
 $DateTime::IsPurePerl = 1;
+## use critic
 
 my @MonthLengths = ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
 
@@ -24,6 +26,7 @@ my @EndOfLastMonthDayOfYear;
 my @EndOfLastMonthDayOfLeapYear = @EndOfLastMonthDayOfYear;
 $EndOfLastMonthDayOfLeapYear[$_]++ for 2 .. 11;
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _time_as_seconds {
     shift;
     my ( $hour, $min, $sec ) = @_;
@@ -63,7 +66,12 @@ sub _rd2ymd {
         / 367;    # get the month (3..14 represent March through
     $d -= ( $m * 367 - 1094 ) / 12;    # February of following year)
     $y += $c * 100 + $yadj * 400;      # get the real year, which is off by
-    ++$y, $m -= 12 if $m > 12;         # one if month is January or February
+                                       # one if month is January or February
+
+    if ( $m > 12 ) {
+        ++$y;
+        $m -= 12;
+    }
 
     if ( $_[0] ) {
         my $dow;
@@ -212,6 +220,7 @@ my @subs = qw(
 );
 
 for my $sub (@subs) {
+    ## no critic (TestingAndDebugging::ProhibitNoStrict)
     no strict 'refs';
     *{ 'DateTime::' . $sub } = __PACKAGE__->can($sub);
 }

@@ -20,10 +20,10 @@ sub _make_utx {
         return $tmp;
     }
     $tmp = "${tab}if (\$val < " . $RD[ $beg + $step ] . ") {\n";
-    $tmp .= _make_utx( $beg,         $beg + $step, $tab . "    ", $op );
+    $tmp .= _make_utx( $beg,         $beg + $step, $tab . q{    }, $op );
     $tmp .= "${tab}}\n";
     $tmp .= "${tab}else {\n";
-    $tmp .= _make_utx( $beg + $step, $end,         $tab . "    ", $op );
+    $tmp .= _make_utx( $beg + $step, $end,         $tab . q{    }, $op );
     $tmp .= "${tab}}\n";
     return $tmp;
 }
@@ -37,6 +37,7 @@ sub _init {
 
         # print "$year,$mon,$mday\n";
 
+        ## no critic (Subroutines::ProtectPrivateSubs)
         my $utc_epoch
             = DateTime->_ymd2rd( $year, ( $mon =~ /Jan/i ? 1 : 7 ), $mday );
 
@@ -57,14 +58,14 @@ sub _init {
 
     $tmp = "sub leap_seconds {\n";
     $tmp .= "    my \$val = shift;\n";
-    $tmp .= _make_utx( -1, 1 + $#RD, "    ", "+" );
-    $tmp .= "}\n";
+    $tmp .= _make_utx( -1, 1 + $#RD, q{    }, '+' );
+    $tmp .= "}; 1\n";
 
     # NOTE: uncomment the line below to see the code:
     #warn $tmp;
 
-    eval $tmp;
-
+    ## no critic (BuiltinFunctions::ProhibitStringyEval)
+    eval $tmp or die $@;
 }
 
 sub extra_seconds {

@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 
+use Test::Fatal;
 use Test::More;
 
 use DateTime;
@@ -24,30 +25,30 @@ use DateTime::Duration;
         is( $dur->$unit(), $val, "$unit should be $val" );
     }
 
-    is( $dur->delta_months,      14,  "delta_months" );
-    is( $dur->delta_days,        25,  "delta_days" );
-    is( $dur->delta_minutes,     367, "delta_minutes" );
-    is( $dur->delta_seconds,     8,   "delta_seconds" );
-    is( $dur->delta_nanoseconds, 9,   "delta_nanoseconds" );
+    is( $dur->delta_months,      14,  'delta_months' );
+    is( $dur->delta_days,        25,  'delta_days' );
+    is( $dur->delta_minutes,     367, 'delta_minutes' );
+    is( $dur->delta_seconds,     8,   'delta_seconds' );
+    is( $dur->delta_nanoseconds, 9,   'delta_nanoseconds' );
 
-    is( $dur->in_units('months'),  14,  "in_units months" );
-    is( $dur->in_units('days'),    25,  "in_units days" );
-    is( $dur->in_units('minutes'), 367, "in_units minutes" );
-    is( $dur->in_units('seconds'), 8,   "in_units seconds" );
+    is( $dur->in_units('months'),  14,  'in_units months' );
+    is( $dur->in_units('days'),    25,  'in_units days' );
+    is( $dur->in_units('minutes'), 367, 'in_units minutes' );
+    is( $dur->in_units('seconds'), 8,   'in_units seconds' );
     is(
         $dur->in_units( 'nanoseconds', 'seconds' ), 9,
-        "in_units nanoseconds, seconds"
+        'in_units nanoseconds, seconds'
     );
 
-    is( $dur->in_units('years'), 1, "in_units years" );
-    is( $dur->in_units( 'months', 'years' ), 2, "in_units months, years" );
-    is( $dur->in_units('weeks'), 3, "in_units weeks" );
-    is( $dur->in_units( 'days', 'weeks' ), 4, "in_units days, weeks" );
-    is( $dur->in_units('hours'), 6, "in_units hours" );
-    is( $dur->in_units( 'minutes', 'hours' ), 7, "in_units minutes, hours" );
+    is( $dur->in_units('years'), 1, 'in_units years' );
+    is( $dur->in_units( 'months', 'years' ), 2, 'in_units months, years' );
+    is( $dur->in_units('weeks'), 3, 'in_units weeks' );
+    is( $dur->in_units( 'days', 'weeks' ), 4, 'in_units days, weeks' );
+    is( $dur->in_units('hours'), 6, 'in_units hours' );
+    is( $dur->in_units( 'minutes', 'hours' ), 7, 'in_units minutes, hours' );
     is(
         $dur->in_units('nanoseconds'), 8_000_000_009,
-        "in_units nanoseconds"
+        'in_units nanoseconds'
     );
 
     my (
@@ -59,20 +60,20 @@ use DateTime::Duration;
             minutes seconds nanoseconds )
         );
 
-    is( $years,       1, "in_units years, list context" );
-    is( $months,      2, "in_units months, list context" );
-    is( $weeks,       3, "in_units weeks, list context" );
-    is( $days,        4, "in_units days, list context" );
-    is( $hours,       6, "in_units hours, list context" );
-    is( $minutes,     7, "in_units minutes, list context" );
-    is( $seconds,     8, "in_units seconds, list context" );
-    is( $nanoseconds, 9, "in_units nanoseconds, list context" );
+    is( $years,       1, 'in_units years, list context' );
+    is( $months,      2, 'in_units months, list context' );
+    is( $weeks,       3, 'in_units weeks, list context' );
+    is( $days,        4, 'in_units days, list context' );
+    is( $hours,       6, 'in_units hours, list context' );
+    is( $minutes,     7, 'in_units minutes, list context' );
+    is( $seconds,     8, 'in_units seconds, list context' );
+    is( $nanoseconds, 9, 'in_units nanoseconds, list context' );
 
-    ok( $dur->is_positive,  "should be positive" );
-    ok( !$dur->is_zero,     "should not be zero" );
-    ok( !$dur->is_negative, "should not be negative" );
+    ok( $dur->is_positive,  'should be positive' );
+    ok( !$dur->is_zero,     'should not be zero' );
+    ok( !$dur->is_negative, 'should not be negative' );
 
-    ok( $dur->is_wrap_mode, "wrap mode" );
+    ok( $dur->is_wrap_mode, 'wrap mode' );
 }
 {
     my %pairs = (
@@ -89,32 +90,32 @@ use DateTime::Duration;
     my $dur = DateTime::Duration->new( %pairs, end_of_month => 'limit' );
 
     my $calendar_dur = $dur->calendar_duration;
-    is( $calendar_dur->delta_months,  14, "date - delta_months is 14" );
-    is( $calendar_dur->delta_minutes, 0,  "date - delta_minutes is 0" );
-    is( $calendar_dur->delta_seconds, 0,  "date - delta_seconds is 0" );
+    is( $calendar_dur->delta_months,  14, 'date - delta_months is 14' );
+    is( $calendar_dur->delta_minutes, 0,  'date - delta_minutes is 0' );
+    is( $calendar_dur->delta_seconds, 0,  'date - delta_seconds is 0' );
     is(
         $calendar_dur->delta_nanoseconds, 0,
-        "date - delta_nanoseconds is 0"
+        'date - delta_nanoseconds is 0'
     );
-    ok( $calendar_dur->is_limit_mode, "limit mode" );
+    ok( $calendar_dur->is_limit_mode, 'limit mode' );
 
     my $clock_dur = $dur->clock_duration;
-    is( $clock_dur->delta_months,  0,   "time  - delta_months is 0" );
-    is( $clock_dur->delta_minutes, 367, "time  - delta_minutes is 367" );
-    is( $clock_dur->delta_seconds, 8,   "time  - delta_seconds is 8" );
-    is( $clock_dur->delta_nanoseconds, 9, "time  - delta_nanoseconds is 9" );
-    ok( $clock_dur->is_limit_mode, "limit mode" );
+    is( $clock_dur->delta_months,  0,   'time  - delta_months is 0' );
+    is( $clock_dur->delta_minutes, 367, 'time  - delta_minutes is 367' );
+    is( $clock_dur->delta_seconds, 8,   'time  - delta_seconds is 8' );
+    is( $clock_dur->delta_nanoseconds, 9, 'time  - delta_nanoseconds is 9' );
+    ok( $clock_dur->is_limit_mode, 'limit mode' );
 }
 
 {
     my $dur = DateTime::Duration->new( days => 1, end_of_month => 'limit' );
-    ok( $dur->is_limit_mode, "limit mode" );
+    ok( $dur->is_limit_mode, 'limit mode' );
 }
 
 {
     my $dur
         = DateTime::Duration->new( days => 1, end_of_month => 'preserve' );
-    ok( $dur->is_preserve_mode, "preserve mode" );
+    ok( $dur->is_preserve_mode, 'preserve mode' );
 }
 
 my $leap_day = DateTime->new(
@@ -128,7 +129,7 @@ my $leap_day = DateTime->new(
         end_of_month => 'wrap'
     );
 
-    is( $new->date, '2005-03-01', "new date should be 2005-03-01" );
+    is( $new->date, '2005-03-01', 'new date should be 2005-03-01' );
 }
 
 {
@@ -137,7 +138,7 @@ my $leap_day = DateTime->new(
         end_of_month => 'limit'
     );
 
-    is( $new->date, '2005-02-28', "new date should be 2005-02-28" );
+    is( $new->date, '2005-02-28', 'new date should be 2005-02-28' );
 }
 
 {
@@ -146,13 +147,13 @@ my $leap_day = DateTime->new(
         end_of_month => 'preserve'
     );
 
-    is( $new->date, '2005-02-28', "new date should be 2005-02-28" );
+    is( $new->date, '2005-02-28', 'new date should be 2005-02-28' );
 
     my $new2 = $leap_day + DateTime::Duration->new(
         months       => 1,
         end_of_month => 'preserve'
     );
-    is( $new2->date, '2004-03-31', "new date should be 2004-03-31" );
+    is( $new2->date, '2004-03-31', 'new date should be 2004-03-31' );
 }
 
 {
@@ -184,9 +185,9 @@ my $leap_day = DateTime->new(
         'inverse delta seconds should be negative'
     );
 
-    ok( $inverse->is_negative,  "should be negative" );
-    ok( !$inverse->is_zero,     "should not be zero" );
-    ok( !$inverse->is_positive, "should not be positivea" );
+    ok( $inverse->is_negative,  'should be negative' );
+    ok( !$inverse->is_zero,     'should not be zero' );
+    ok( !$inverse->is_positive, 'should not be positivea' );
 
     is(
         $inverse->end_of_month_mode(), 'preserve',
@@ -289,11 +290,14 @@ my $leap_day = DateTime->new(
 }
 
 {
-    eval {
-        DateTime::Duration->new( months => 3 )->add( hours => -3 )
-            ->add( minutes => 1 );
-    };
-    ok( !$@, 'method chaining should work' );
+    is(
+        exception {
+            DateTime::Duration->new( months => 3 )->add( hours => -3 )
+                ->add( minutes => 1 );
+        },
+        undef,
+        'method chaining should work'
+    );
 }
 
 {
@@ -321,9 +325,9 @@ my $leap_day = DateTime->new(
     my $dur1 = DateTime::Duration->new( minutes => 10 );
     my $dur2 = DateTime::Duration->new( minutes => 20 );
 
-    eval { my $x = 1 if $dur1 <=> $dur2 };
     like(
-        $@, qr/does not overload comparison/,
+        exception { 1 if $dur1 <=> $dur2 },
+        qr/does not overload comparison/,
         'check error for duration comparison overload'
     );
 
@@ -427,10 +431,9 @@ my $leap_day = DateTime->new(
 {
     local $TODO = 'reject fractional units in DateTime::Duration->new';
 
-    eval { DateTime::Duration->new( minutes => 50.2 ) };
-
     like(
-        $@, qr/is an integer/,
+        exception { DateTime::Duration->new( minutes => 50.2 ) },
+        qr/is an integer/,
         'cannot create a duration with fractional units'
     );
 }

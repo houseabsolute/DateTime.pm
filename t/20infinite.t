@@ -88,7 +88,7 @@ my $nan_string = DateTime::NAN;
 
         # NaN != NaN (but should stringify the same)
         is(
-            $deltas{$_} . '', $nan_string,
+            $deltas{$_} . q{}, $nan_string,
             "infinity - infinity = nan ($_)"
         );
     }
@@ -96,29 +96,29 @@ my $nan_string = DateTime::NAN;
     my $new_pos = $pos->clone->add( days => 10 );
     ok(
         $new_pos == $pos,
-        "infinity + normal duration = infinity"
+        'infinity + normal duration = infinity'
     );
 
     my $new_pos2 = $pos->clone->subtract( days => 10 );
     ok(
         $new_pos2 == $pos,
-        "infinity - normal duration = infinity"
+        'infinity - normal duration = infinity'
     );
 
     ok(
         $pos == $posinf,
-        "infinity (datetime) == infinity (number)"
+        'infinity (datetime) == infinity (number)'
     );
 
     ok(
         $neg == $neginf,
-        "neg infinity (datetime) == neg infinity (number)"
+        'neg infinity (datetime) == neg infinity (number)'
     );
 }
 
 # This could vary across platforms
-my $pos_as_string = $posinf . '';
-my $neg_as_string = $neginf . '';
+my $pos_as_string = $posinf . q{};
+my $neg_as_string = $neginf . q{};
 
 # formatting
 {
@@ -127,12 +127,12 @@ my $neg_as_string = $neginf . '';
         microsecond millisecond nanosecond )
         ) {
         is(
-            $pos->$m() . '', $pos_as_string,
+            $pos->$m() . q{}, $pos_as_string,
             "pos $m is $pos_as_string"
         );
 
         is(
-            $neg->$m() . '', $neg_as_string,
+            $neg->$m() . q{}, $neg_as_string,
             "neg $m is $pos_as_string"
         );
     }
@@ -157,7 +157,7 @@ my $neg_as_string = $neginf . '';
 
     ok(
         $pos == $pos2,
-        "infinity (datetime) == infinity (datetime)"
+        'infinity (datetime) == infinity (datetime)'
     );
 }
 
@@ -167,7 +167,7 @@ my $neg_as_string = $neginf . '';
 
     ok(
         $neg == $neg2,
-        "-infinity (datetime) == -infinity (datetime)"
+        '-infinity (datetime) == -infinity (datetime)'
     );
 }
 
