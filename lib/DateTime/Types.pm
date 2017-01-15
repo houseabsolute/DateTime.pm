@@ -156,7 +156,7 @@ declare(
 
 1;
 
-# ABSTRACT: Types used for parameter checking DateTime
+# ABSTRACT: Types used for parameter checking in DateTime
 
 __END__
 
