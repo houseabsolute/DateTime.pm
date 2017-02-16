@@ -3035,8 +3035,7 @@ text.
 =head3 $dt->epoch()
 
 Return the UTC epoch value for the datetime object. Internally, this
-is implemented using C<Time::Local>, which uses the Unix epoch even on
-machines with a different epoch (such as MacOS). Datetimes before the
+is implemented using C<Time::Local>. Datetimes before the
 start of the epoch will be returned as a negative number.
 
 The return value from this method is always an integer.
