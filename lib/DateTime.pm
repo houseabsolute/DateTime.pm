@@ -3034,20 +3034,14 @@ text.
 
 =head3 $dt->epoch()
 
-Return the UTC epoch value for the datetime object. Internally, this
-is implemented using C<Time::Local>. Datetimes before the
-start of the epoch will be returned as a negative number.
+Return the UTC epoch value for the datetime object. Datetimes before the start
+of the epoch will be returned as a negative number.
 
 The return value from this method is always an integer.
 
 Since the epoch does not account for leap seconds, the epoch time for
 1972-12-31T23:59:60 (UTC) is exactly the same as that for
 1973-01-01T00:00:00.
-
-This module uses C<Time::Local> to calculate the epoch, which may or
-may not handle epochs before 1904 or after 2038 (depending on the size
-of your system's integers, and whether or not Perl was compiled with
-64-bit int support).
 
 =head3 $dt->hires_epoch()
 
