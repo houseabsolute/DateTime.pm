@@ -62,14 +62,15 @@ our $IsPurePerl;
 # see: "Calling conventions for binary operations" in overload docs.
 #
 use overload (
-    'fallback' => 1,
-    '<=>'      => '_compare_overload',
-    'cmp'      => '_string_compare_overload',
-    '""'       => '_stringify',
-    '-'        => '_subtract_overload',
-    '+'        => '_add_overload',
-    'eq'       => '_string_equals_overload',
-    'ne'       => '_string_not_equals_overload',
+    fallback => 1,
+    '<=>'    => '_compare_overload',
+    'cmp'    => '_string_compare_overload',
+    q{""}    => '_stringify',
+    bool     => sub {1},
+    '-'      => '_subtract_overload',
+    '+'      => '_add_overload',
+    'eq'     => '_string_equals_overload',
+    'ne'     => '_string_not_equals_overload',
 );
 
 # Have to load this after overloading is defined, after BEGIN blocks

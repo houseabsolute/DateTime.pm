@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Added a small optimization for boolification overloading. Rather than
+  relying on a fallback to stringification, we now return true directly, which
+  is a little in cases like "if ($might_be_dt) { ... }".
+
+
 1.42   2016-12-25
 
 - The DateTime::Duration->add and ->subtract methods now accept
