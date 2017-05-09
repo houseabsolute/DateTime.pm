@@ -943,8 +943,7 @@ sub hms {
 # don't want to override CORE::time()
 *DateTime::time = sub { shift->hms(@_) };
 
-sub iso8601 { join 'T', $_[0]->ymd('-'), $_[0]->hms(':') }
-
+sub iso8601 { $_[0]->datetime('T') }
 sub datetime {
     my ($self, $sep) = @_;
     $sep = 'T' if !defined $sep;
