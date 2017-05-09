@@ -944,7 +944,13 @@ sub hms {
 *DateTime::time = sub { shift->hms(@_) };
 
 sub iso8601 { join 'T', $_[0]->ymd('-'), $_[0]->hms(':') }
-*datetime = sub { $_[0]->iso8601 };
+
+sub datetime {
+    my ($self, $sep) = @_;
+    $sep = 'T' if !defined $sep;
+    return join $sep, $self->ymd('-'), $self->hms(':');
+}
+
 
 sub is_leap_year { $_[0]->_is_leap_year( $_[0]->year ) }
 
@@ -2929,14 +2935,19 @@ If no separator is specified, a colon (:) is used by default.
 
 Also available as C<< $dt->time() >>.
 
-=head3 $dt->datetime()
+=head3 $dt->datetime( $optional_separator )
 
 This method is equivalent to:
 
   $dt->ymd('-') . 'T' . $dt->hms(':')
 
+The C<$optional_separator> parameter allows you to override the separator
+between the date and time, for e.g. C<< $dt->datetime(' ') >>.
+
 This method is also available as C<< $dt->iso8601() >>, but it's not really a
-very good ISO8601 format, as it lacks a time zone.
+very good ISO8601 format, as it lacks a time zone.  If called as
+C<< $dt->iso8601() >> you cannot change the separator, as ISO8601 specifies
+that "T" must be used to separate them.
 
 =head3 $dt->is_leap_year()
 

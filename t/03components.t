@@ -72,8 +72,9 @@ use DateTime;
     is( $d->time,      '02:12:50', '->hms' );
     is( $d->time('!'), '02!12!50', q{->time('!')} );
 
-    is( $d->datetime, '2001-07-05T02:12:50', '->datetime' );
-    is( $d->iso8601,  '2001-07-05T02:12:50', '->iso8601' );
+    is( $d->datetime,      '2001-07-05T02:12:50', '->datetime' );
+    is( $d->datetime(' '), '2001-07-05 02:12:50', q{->datetime(' ')} );
+    is( $d->iso8601,       '2001-07-05T02:12:50', '->iso8601' );
 
     is( $d->is_leap_year, 0, '->is_leap_year' );
 
