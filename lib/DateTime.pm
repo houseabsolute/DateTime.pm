@@ -2941,7 +2941,7 @@ This method is equivalent to:
   $dt->ymd('-') . 'T' . $dt->hms(':')
 
 The C<$optional_separator> parameter allows you to override the separator
-between the date and time, for e.g. C<< $dt->datetime(' ') >>.
+between the date and time, for e.g. C<< $dt->datetime(q{ }) >>.
 
 This method is also available as C<< $dt->iso8601() >>, but it's not really a
 very good ISO8601 format, as it lacks a time zone.  If called as
