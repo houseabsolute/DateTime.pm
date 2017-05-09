@@ -944,12 +944,12 @@ sub hms {
 *DateTime::time = sub { shift->hms(@_) };
 
 sub iso8601 { $_[0]->datetime('T') }
+
 sub datetime {
-    my ($self, $sep) = @_;
+    my ( $self, $sep ) = @_;
     $sep = 'T' if !defined $sep;
     return join $sep, $self->ymd('-'), $self->hms(':');
 }
-
 
 sub is_leap_year { $_[0]->_is_leap_year( $_[0]->year ) }
 
