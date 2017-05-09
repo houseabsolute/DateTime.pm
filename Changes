@@ -4,6 +4,9 @@
   relying on a fallback to stringification, we now return true directly, which
   is a little in cases like "if ($might_be_dt) { ... }".
 
+- The datetime() method now accepts a single argument to use as the separate
+  between the date and time portion. This defaults to "T".
+
 
 1.42   2016-12-25
 
