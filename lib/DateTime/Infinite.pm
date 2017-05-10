@@ -54,7 +54,7 @@ sub hour_12_0 {
     return $_[0]->_infinity_string;
 }
 
-sub iso8601 {
+sub datetime {
     return $_[0]->_infinity_string;
 }
 
