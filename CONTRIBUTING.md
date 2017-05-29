@@ -102,6 +102,7 @@ If you have found a bug, but do not have an accompanying patch to fix it, you
 can submit an issue report [via the web](https://github.com/houseabsolute/DateTime.pm/issues)
 ).
 
+
 There is a mailing list available for users of this distribution,
 datetime@perl.org
 
@@ -111,7 +112,7 @@ All pull requests for this distribution will be automatically tested by
 [Travis](https://travis-ci.org/) and the build status will be reported on the
 pull request page. If your build fails, please take a look at the output.
 
-## Tidyall
+## TidyAll
 
 This distribution uses
 [Code::TidyAll](https://metacpan.org/release/Code-TidyAll) to enforce a
@@ -133,4 +134,4 @@ wish to be listed under a different name or address, you should submit a pull
 request to the .mailmap file to contain the correct mapping.
 
 This file was generated via Dist::Zilla::Plugin::GenerateFile::FromShareDir 0.013 from a
-template file originating in Dist-Zilla-PluginBundle-DROLSKY-0.78.
+template file originating in Dist-Zilla-PluginBundle-DROLSKY-0.85.

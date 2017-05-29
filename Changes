@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.43   2017-05-29
+
 - Added a small optimization for boolification overloading. Rather than
   relying on a fallback to stringification, we now return true directly, which
   is a little faster in cases like "if ($might_be_dt) { ... }".

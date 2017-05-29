@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.42
+version 1.43
 
 # SYNOPSIS
 
@@ -634,14 +634,19 @@ If no separator is specified, a colon (:) is used by default.
 
 Also available as `$dt->time()`.
 
-### $dt->datetime()
+### $dt->datetime( $optional\_separator )
 
 This method is equivalent to:
 
     $dt->ymd('-') . 'T' . $dt->hms(':')
 
+The `$optional_separator` parameter allows you to override the separator
+between the date and time, for e.g. `$dt->datetime(q{ })`.
+
 This method is also available as `$dt->iso8601()`, but it's not really a
-very good ISO8601 format, as it lacks a time zone.
+very good ISO8601 format, as it lacks a time zone.  If called as
+`$dt->iso8601()` you cannot change the separator, as ISO8601 specifies
+that "T" must be used to separate them.
 
 ### $dt->is\_leap\_year()
 
@@ -740,21 +745,14 @@ text.
 
 ### $dt->epoch()
 
-Return the UTC epoch value for the datetime object. Internally, this
-is implemented using `Time::Local`, which uses the Unix epoch even on
-machines with a different epoch (such as MacOS). Datetimes before the
-start of the epoch will be returned as a negative number.
+Return the UTC epoch value for the datetime object. Datetimes before the start
+of the epoch will be returned as a negative number.
 
 The return value from this method is always an integer.
 
 Since the epoch does not account for leap seconds, the epoch time for
 1972-12-31T23:59:60 (UTC) is exactly the same as that for
 1973-01-01T00:00:00.
-
-This module uses `Time::Local` to calculate the epoch, which may or
-may not handle epochs before 1904 or after 2038 (depending on the size
-of your system's integers, and whether or not Perl was compiled with
-64-bit int support).
 
 ### $dt->hires\_epoch()
 
@@ -2167,12 +2165,16 @@ I've given at a few YAPCs.
 
 # SUPPORT
 
-Bugs may be submitted through [https://github.com/houseabsolute/DateTime.pm/issues](https://github.com/houseabsolute/DateTime.pm/issues).
+Bugs may be submitted at [https://github.com/houseabsolute/DateTime.pm/issues](https://github.com/houseabsolute/DateTime.pm/issues).
 
 There is a mailing list available for users of this distribution,
 [mailto:datetime@perl.org](mailto:datetime@perl.org).
 
 I am also usually active on IRC as 'autarch' on `irc://irc.perl.org`.
+
+# SOURCE
+
+The source code repository for DateTime can be found at [https://github.com/houseabsolute/DateTime.pm](https://github.com/houseabsolute/DateTime.pm).
 
 # DONATIONS
 
@@ -2201,9 +2203,11 @@ Dave Rolsky <autarch@urth.org>
 - Christian Hansen <chansen@cpan.org>
 - Daisuke Maki <dmaki@cpan.org>
 - David E. Wheeler <david@justatheory.com>
+- David Precious <davidp@preshweb.co.uk>
 - Doug Bell <madcityzen@gmail.com>
 - Flávio Soibelmann Glock <fglock@gmail.com>
 - Gregory Oschwald <oschwald@gmail.com>
+- Hauke D <haukex@zero-g.net>
 - Iain Truskett &lt;deceased>
 - Jason McIntosh <jmac@jmac.org>
 - Joshua Hoblitt <jhoblitt@cpan.org>
@@ -2222,8 +2226,11 @@ Dave Rolsky <autarch@urth.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2016 by Dave Rolsky.
+This software is Copyright (c) 2003 - 2017 by Dave Rolsky.
 
 This is free software, licensed under:
 
     The Artistic License 2.0 (GPL Compatible)
+
+The full text of the license can be found in the
+`LICENSE` file included with this distribution.
