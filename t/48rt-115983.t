@@ -14,7 +14,7 @@ use DateTime;
 my $dt = DateTime->now;
 like(
     exception {
-        try {} catch {
+        try { } catch {
             $dt->truncate( to => 'hour' );
         };
     },
