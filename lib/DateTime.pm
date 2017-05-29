@@ -8,7 +8,7 @@ use warnings;
 use warnings::register;
 use namespace::autoclean 0.19;
 
-our $VERSION = '1.43';
+our $VERSION = '1.44';
 
 use Carp;
 use DateTime::Duration;
