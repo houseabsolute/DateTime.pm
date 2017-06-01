@@ -2680,6 +2680,15 @@ method, it accepts "time_zone", "locale", and "formatter" parameters.
 If the epoch value is a floating-point value, it will be rounded to
 nearest microsecond.
 
+If you pass the value from C<Time::HiRes::time>, please be aware that
+C<time> returns only 15 digits by default, so that the floating point
+portion has only 5 digits since 2001. If you want to have nanoseconds
+with C<Time::HiRes>, you have to use
+
+  DateTime->from_epoch( epoch => sprintf( "%.9f", Time::HiRes::time ), ... );
+
+See Note 2 in L<Time::HiRes::time|Time::HiRes/time> for more information.
+
 By default, the returned object will be in the UTC time zone.
 
 =head3 DateTime->now( ... )
