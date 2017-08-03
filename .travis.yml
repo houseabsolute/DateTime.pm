@@ -11,8 +11,6 @@ perl:
   - blead-thr
   - dev
   - dev-thr
-  - 5.26.0
-  - 5.26.0-thr
   - 5.24.1
   - 5.24.1-thr
   - 5.22.3
@@ -37,15 +35,10 @@ matrix:
     - perl: blead-thr
   include:
     - env: COVERAGE=1
-      perl: '5.26'
+      perl: '5.24'
 env:
   global:
-    - AUTHOR_TESTING=1
     - RELEASE_TESTING=1
+    - AUTHOR_TESTING=1
 before_install:
   - eval $(curl https://travis-perl.github.io/init) --auto
-### __app_cisetup__
-# ---
-# force_threaded_perls: 0
-
-### __app_cisetup__
