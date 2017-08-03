@@ -12,5 +12,6 @@ build_script:
 test_script:
   - prove -lrv t/
 ### __app_cisetup__
-# {}
+# --- {}
+
 ### __app_cisetup__
