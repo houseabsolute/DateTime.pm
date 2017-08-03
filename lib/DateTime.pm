@@ -921,6 +921,11 @@ sub leap_seconds {
     return $self->_accumulated_leap_seconds( $self->{utc_rd_days} );
 }
 
+sub stringify {
+    my $self = shift;
+    return q{} . $self;
+}
+
 sub _stringify {
     my $self = shift;
 
@@ -2733,6 +2738,10 @@ upon which the method is called.
 
 This class has many methods for retrieving information about an
 object.
+
+=head3 $dt->stringify()
+
+Returns a scalar, in the format specified by constructor. If no formatter specified, returns default format. See below under "Formatters and Stringification".
 
 =head3 $dt->year()
 
