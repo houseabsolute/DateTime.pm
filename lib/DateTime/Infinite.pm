@@ -58,7 +58,7 @@ sub datetime {
     return $_[0]->_infinity_string;
 }
 
-sub _stringify {
+sub stringify {
     return $_[0]->_infinity_string;
 }
 

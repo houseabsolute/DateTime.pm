@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Added a stringify() method. This does exactly the same thing as
+  stringification overloading does. GH #58.
+
+
 1.43   2017-05-29
 
 - Added a small optimization for boolification overloading. Rather than

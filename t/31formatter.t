@@ -75,31 +75,31 @@ my $formatter = Formatter->new();
         'check from_object copies formatter'
     );
 
-    is( $dt->_stringify(), '20040902 13:23:34', 'Format datetime' );
+    is( $dt->stringify(), '20040902 13:23:34', 'Format datetime' );
 
     # check stringification (with formatter)
-    is( $dt->_stringify, "$dt", 'Stringification (with formatter)' );
+    is( $dt->stringify, "$dt", 'Stringification (with formatter)' );
 
     # check that set() and truncate() don't lose formatter
     $dt->set( hour => 3 );
     is(
-        $dt->_stringify, '20040902 03:23:34',
+        $dt->stringify, '20040902 03:23:34',
         'formatter is preserved after set()'
     );
 
     $dt->truncate( to => 'minute' );
     is(
-        $dt->_stringify, '20040902 03:23:00',
+        $dt->stringify, '20040902 03:23:00',
         'formatter is preserved after truncate()'
     );
 
     # check if the default behavior works
     $dt->set_formatter(undef);
-    is( $dt->_stringify(), $dt->iso8601, 'Default iso8601 works' );
+    is( $dt->stringify(), $dt->iso8601, 'Default iso8601 works' );
 
     # check stringification (default)
     is(
-        $dt->_stringify, "$dt",
+        $dt->stringify, "$dt",
         'Stringification (no formatter -> format_datetime)'
     );
     is(
