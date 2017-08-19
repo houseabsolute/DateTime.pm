@@ -3,6 +3,9 @@
 - Added a stringify() method. This does exactly the same thing as
   stringification overloading does. GH #58.
 
+- Added an is_last_day_of_month() method to indicate whether or not an object
+  falls on the last day of its month. GH #60.
+
 
 1.43   2017-05-29
 

@@ -953,6 +953,10 @@ sub datetime {
 
 sub is_leap_year { $_[0]->_is_leap_year( $_[0]->year ) }
 
+sub is_last_day_of_month {
+    $_[0]->day == $_[0]->_month_length( $_[0]->year, $_[0]->month );
+}
+
 sub week {
     my $self = shift;
 
@@ -2958,8 +2962,13 @@ Stringification> for details.
 
 =head3 $dt->is_leap_year()
 
-This method returns a true or false indicating whether or not the
+This method returns a true or false value indicating whether or not the
 datetime object is in a leap year.
+
+=head3 $dt->is_last_day_of_month()
+
+This method returns a true or false value indicating whether or not the
+datetime object is the last day of the month.
 
 =head3 $dt->week()
 
