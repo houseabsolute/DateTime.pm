@@ -1,4 +1,4 @@
-package inc::LeapSecondsHeader;
+package LeapSecondsHeader;
 
 use strict;
 use warnings;
