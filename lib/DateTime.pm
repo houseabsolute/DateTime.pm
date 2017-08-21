@@ -2955,10 +2955,10 @@ that "T" must be used to separate them.
 =head2 $dt->stringify()
 
 This method returns a stringified version of the object. It is how
-stringification overloading is limited. If the object has a formatter, then
-it's C<format_datetime()> method is used to produce a string. Otherwise, this
-method calls C<< $dt->iso8601() >> to produce a string. See L<Formatters And
-Stringification> for details.
+stringification overloading is implemented. If the object has a formatter,
+then its C<format_datetime()> method is used to produce a string. Otherwise,
+this method calls C<< $dt->iso8601() >> to produce a string. See L<Formatters
+And Stringification> for details.
 
 =head3 $dt->is_leap_year()
 
