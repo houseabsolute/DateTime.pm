@@ -80,7 +80,8 @@ use DateTime;
         '->iso8601 ignores arguments'
     );
 
-    is( $d->is_leap_year, 0, '->is_leap_year' );
+    ok( !$d->is_leap_year,         '->is_leap_year' );
+    ok( !$d->is_last_day_of_month, '->is_last_day_of_month' );
 
     is( $d->era_abbr, 'AD',          '->era_abbr' );
     is( $d->era,      $d->era_abbr,  '->era (deprecated)' );
@@ -89,6 +90,7 @@ use DateTime;
     is( $d->quarter_abbr, 'Q3',          '->quarter_abbr' );
     is( $d->quarter_name, '3rd quarter', '->quarter_name' );
 }
+
 {
     my $leap_d = DateTime->new(
         year      => 2004,
@@ -100,8 +102,27 @@ use DateTime;
         time_zone => 'UTC',
     );
 
-    is( $leap_d->is_leap_year, 1, '->is_leap_year' );
+    ok( $leap_d->is_leap_year, '->is_leap_year' );
 }
+
+{
+    my @tests = (
+        { year => 2017, month => 8, day => 19, expect => 0 },
+        { year => 2017, month => 8, day => 31, expect => 1 },
+        { year => 2017, month => 2, day => 28, expect => 1 },
+        { year => 2016, month => 2, day => 28, expect => 0 },
+    );
+
+    for my $t (@tests) {
+        my $expect = delete $t->{expect};
+
+        my $dt = DateTime->new($t);
+
+        my $is = $dt->is_last_day_of_month;
+        ok( ( $expect ? $is : !$is ), '->is_last_day_of_month' );
+    }
+}
+
 {
     my $sunday = DateTime->new(
         year      => 2003,
@@ -112,6 +133,7 @@ use DateTime;
 
     is( $sunday->day_of_week, 7, 'Sunday is day 7' );
 }
+
 {
     my $monday = DateTime->new(
         year      => 2003,
@@ -122,8 +144,8 @@ use DateTime;
 
     is( $monday->day_of_week, 1, 'Monday is day 1' );
 }
-{
 
+{
     # time zone offset should not affect the values returned
     my $d = DateTime->new(
         year      => 2001,
