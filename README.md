@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.43
+version 1.44
 
 # SYNOPSIS
 
@@ -648,10 +648,23 @@ very good ISO8601 format, as it lacks a time zone.  If called as
 `$dt->iso8601()` you cannot change the separator, as ISO8601 specifies
 that "T" must be used to separate them.
 
+## $dt->stringify()
+
+This method returns a stringified version of the object. It is how
+stringification overloading is limited. If the object has a formatter, then
+it's `format_datetime()` method is used to produce a string. Otherwise, this
+method calls `$dt->iso8601()` to produce a string. See ["Formatters And
+Stringification"](#formatters-and-stringification) for details.
+
 ### $dt->is\_leap\_year()
 
-This method returns a true or false indicating whether or not the
+This method returns a true or false value indicating whether or not the
 datetime object is in a leap year.
+
+### $dt->is\_last\_day\_of\_month()
+
+This method returns a true or false value indicating whether or not the
+datetime object is the last day of the month.
 
 ### $dt->week()
 
