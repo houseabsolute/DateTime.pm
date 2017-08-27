@@ -965,32 +965,24 @@ sub week {
     return @{ $self->{utc_c}{week_year} }[ 0, 1 ];
 }
 
+# This algorithm comes from
+# https://en.wikipedia.org/wiki/ISO_week_date#Calculating_the_week_number_of_a_given_date
 sub _week_values {
     my $self = shift;
 
-    # This algorithm was taken from Date::Calc's DateCalc.c file
-    my $jan_one_dow_m1
-        = ( ( $self->_ymd2rd( $self->year, 1, 1 ) + 6 ) % 7 );
+    my $week
+        = int( ( ( $self->day_of_year - $self->day_of_week ) + 10 ) / 7 );
 
-    my ( $num, $year );
-    $num
-        = int( ( ( $self->day_of_year - 1 ) + $jan_one_dow_m1 ) / 7 );
-    $num++ if $jan_one_dow_m1 < 4;
-
-    if ( $num == 0 ) {
-        $year = $self->year - 1;
-        $num  = $self->_weeks_in_year($year);
+    my $year = $self->year;
+    if ( $week == 0 ) {
+        $year--;
+        return [ $year, $self->_weeks_in_year($year) ];
     }
-    elsif ($num == 53
-        && $self->_weeks_in_year( $self->year ) == 52 ) {
-        $num  = 1;
-        $year = $self->year + 1;
-    }
-    else {
-        $year = $self->year;
+    elsif ( $week == 53 && $self->_weeks_in_year($year) == 52 ) {
+        return [ $year + 1, 1 ];
     }
 
-    return [ $year, $num ];
+    return [ $year, $week ];
 }
 
 sub _weeks_in_year {
