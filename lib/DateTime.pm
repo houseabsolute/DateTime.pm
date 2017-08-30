@@ -960,32 +960,29 @@ sub is_last_day_of_month {
 sub week {
     my $self = shift;
 
-    unless ( defined $self->{local_c}{week_year} ) {
+    $self->{utc_c}{week_year} ||= $self->_week_values;
 
-        # This algorithm was taken from Date::Calc's DateCalc.c file
-        my $jan_one_dow_m1
-            = ( ( $self->_ymd2rd( $self->year, 1, 1 ) + 6 ) % 7 );
+    return @{ $self->{utc_c}{week_year} }[ 0, 1 ];
+}
 
-        $self->{local_c}{week_number}
-            = int( ( ( $self->day_of_year - 1 ) + $jan_one_dow_m1 ) / 7 );
-        $self->{local_c}{week_number}++ if $jan_one_dow_m1 < 4;
+# This algorithm comes from
+# https://en.wikipedia.org/wiki/ISO_week_date#Calculating_the_week_number_of_a_given_date
+sub _week_values {
+    my $self = shift;
 
-        if ( $self->{local_c}{week_number} == 0 ) {
-            $self->{local_c}{week_year} = $self->year - 1;
-            $self->{local_c}{week_number}
-                = $self->_weeks_in_year( $self->{local_c}{week_year} );
-        }
-        elsif ($self->{local_c}{week_number} == 53
-            && $self->_weeks_in_year( $self->year ) == 52 ) {
-            $self->{local_c}{week_number} = 1;
-            $self->{local_c}{week_year}   = $self->year + 1;
-        }
-        else {
-            $self->{local_c}{week_year} = $self->year;
-        }
+    my $week
+        = int( ( ( $self->day_of_year - $self->day_of_week ) + 10 ) / 7 );
+
+    my $year = $self->year;
+    if ( $week == 0 ) {
+        $year--;
+        return [ $year, $self->_weeks_in_year($year) ];
+    }
+    elsif ( $week == 53 && $self->_weeks_in_year($year) == 52 ) {
+        return [ $year + 1, 1 ];
     }
 
-    return @{ $self->{local_c} }{ 'week_year', 'week_number' };
+    return [ $year, $week ];
 }
 
 sub _weeks_in_year {

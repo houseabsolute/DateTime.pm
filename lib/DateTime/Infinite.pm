@@ -68,6 +68,8 @@ sub _infinity_string {
         : DateTime::NEG_INFINITY . q{};
 }
 
+sub _week_values { [ $_[0]->{utc_rd_days}, $_[0]->{utc_rd_days} ] }
+
 sub STORABLE_freeze {return}
 sub STORABLE_thaw   {return}
 
