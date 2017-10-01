@@ -31,6 +31,9 @@ perl:
   - 5.10.1-thr
   - 5.8.8
   - 5.8.8-thr
+cache:
+  directories:
+    - $HOME/perl5
 matrix:
   allow_failures:
     - perl: blead
@@ -43,9 +46,10 @@ env:
     - AUTHOR_TESTING=1
     - RELEASE_TESTING=1
 before_install:
-  - eval $(curl https://travis-perl.github.io/init) --auto
+  - eval $(curl https://travis-perl.github.io/init) --auto --always-upgrade-modules
 ### __app_cisetup__
 # ---
 # force_threaded_perls: 0
+# perl_caching: 1
 
 ### __app_cisetup__
