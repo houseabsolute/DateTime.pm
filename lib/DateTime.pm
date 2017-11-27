@@ -2949,7 +2949,7 @@ very good ISO8601 format, as it lacks a time zone.  If called as
 C<< $dt->iso8601() >> you cannot change the separator, as ISO8601 specifies
 that "T" must be used to separate them.
 
-=head2 $dt->stringify()
+=head3 $dt->stringify()
 
 This method returns a stringified version of the object. It is how
 stringification overloading is implemented. If the object has a formatter,
