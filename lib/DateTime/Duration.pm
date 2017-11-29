@@ -446,8 +446,8 @@ of the month the new date will also be. For instance, adding one
 month to Feb 29, 2000 will result in Mar 31, 2000.
 
 For positive durations, the "end_of_month" parameter defaults to wrap.
-For negative durations, the default is "limit". This should match how
-most people "intuitively" expect datetime math to work.
+For negative durations, the default is "preserve". This should match
+how most people "intuitively" expect datetime math to work.
 
 =head2 $dur->clone()
 
