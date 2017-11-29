@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.44
+version 1.45
 
 # SYNOPSIS
 
@@ -648,13 +648,13 @@ very good ISO8601 format, as it lacks a time zone.  If called as
 `$dt->iso8601()` you cannot change the separator, as ISO8601 specifies
 that "T" must be used to separate them.
 
-## $dt->stringify()
+### $dt->stringify()
 
 This method returns a stringified version of the object. It is how
-stringification overloading is limited. If the object has a formatter, then
-it's `format_datetime()` method is used to produce a string. Otherwise, this
-method calls `$dt->iso8601()` to produce a string. See ["Formatters And
-Stringification"](#formatters-and-stringification) for details.
+stringification overloading is implemented. If the object has a formatter,
+then its `format_datetime()` method is used to produce a string. Otherwise,
+this method calls `$dt->iso8601()` to produce a string. See ["Formatters
+And Stringification"](#formatters-and-stringification) for details.
 
 ### $dt->is\_leap\_year()
 
@@ -2215,6 +2215,7 @@ Dave Rolsky <autarch@urth.org>
 - Ben Bennett <fiji@limey.net>
 - Christian Hansen <chansen@cpan.org>
 - Daisuke Maki <dmaki@cpan.org>
+- Dan Book <grinnz@gmail.com>
 - David E. Wheeler <david@justatheory.com>
 - David Precious <davidp@preshweb.co.uk>
 - Doug Bell <madcityzen@gmail.com>
