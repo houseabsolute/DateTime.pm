@@ -10,13 +10,8 @@ use Carp ();
 use DateTime;
 use DateTime::Helpers;
 use DateTime::Types;
-use Params::ValidationCompiler qw( validation_for );
+use Params::ValidationCompiler 0.26 qw( validation_for );
 use Scalar::Util qw( blessed );
-
-BEGIN {
-    my $has = eval { require Sub::Util; 1 };
-    sub HAS_SUB_UTIL () {$has}
-}
 
 use overload (
     fallback => 1,
@@ -53,8 +48,9 @@ my @all_units = qw( months days minutes seconds nanoseconds );
     );
 
     my $check = validation_for(
-        ( HAS_SUB_UTIL ? ( name => '_check_new_params' ) : () ),
-        params => {
+        name             => '_check_new_params',
+        name_is_optional => 1,
+        params           => {
             %units,
             end_of_month => {
                 type     => t('EndOfMonthMode'),
