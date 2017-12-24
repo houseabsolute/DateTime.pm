@@ -86,13 +86,23 @@ sub SECONDS_PER_DAY () {86400}
 
 sub duration_class () {'DateTime::Duration'}
 
-my ( @MonthLengths, @LeapYearMonthLengths );
+my (
+    @MonthLengths,
+    @LeapYearMonthLengths,
+    @QuarterLengths,
+    @LeapYearQuarterLengths,
+);
 
 BEGIN {
     @MonthLengths = ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
 
     @LeapYearMonthLengths = @MonthLengths;
     $LeapYearMonthLengths[1]++;
+
+    @QuarterLengths = ( 90, 91, 92, 92 );
+
+    @LeapYearQuarterLengths = @QuarterLengths;
+    $LeapYearQuarterLengths[0]++;
 }
 
 {
@@ -952,6 +962,22 @@ sub datetime {
 }
 
 sub is_leap_year { $_[0]->_is_leap_year( $_[0]->year ) }
+
+sub month_length {
+    $_[0]->_month_length( $_[0]->year, $_[0]->month );
+}
+
+sub quarter_length {
+    return (
+          $_[0]->_is_leap_year( $_[0]->year )
+        ? $LeapYearQuarterLengths[ $_[0]->quarter - 1 ]
+        : $QuarterLengths[ $_[0]->quarter - 1 ]
+    );
+}
+
+sub year_length {
+    $_[0]->_is_leap_year( $_[0]->year ) ? 366 : 365;
+}
 
 sub is_last_day_of_month {
     $_[0]->day == $_[0]->_month_length( $_[0]->year, $_[0]->month );
@@ -2966,6 +2992,18 @@ datetime object is in a leap year.
 
 This method returns a true or false value indicating whether or not the
 datetime object is the last day of the month.
+
+=head3 $dt->month_length()
+
+This method returns the number of days in the current month.
+
+=head3 $dt->quarter_length()
+
+This method returns the number of days in the current quarter.
+
+=head3 $dt->year_length()
+
+This method returns the number of days in the current year.
 
 =head3 $dt->week()
 

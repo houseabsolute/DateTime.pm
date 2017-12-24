@@ -83,6 +83,10 @@ use DateTime;
     ok( !$d->is_leap_year,         '->is_leap_year' );
     ok( !$d->is_last_day_of_month, '->is_last_day_of_month' );
 
+    is( $d->month_length,   31,  '->month_length' );
+    is( $d->quarter_length, 92,  '->quarter_length' );
+    is( $d->year_length,    365, '->year_length' );
+
     is( $d->era_abbr, 'AD',          '->era_abbr' );
     is( $d->era,      $d->era_abbr,  '->era (deprecated)' );
     is( $d->era_name, 'Anno Domini', '->era_abbr' );
@@ -103,6 +107,7 @@ use DateTime;
     );
 
     ok( $leap_d->is_leap_year, '->is_leap_year' );
+    is( $leap_d->year_length, 366, '->year_length' );
 }
 
 {
@@ -120,6 +125,20 @@ use DateTime;
 
         my $is = $dt->is_last_day_of_month;
         ok( ( $expect ? $is : !$is ), '->is_last_day_of_month' );
+    }
+}
+
+{
+    my @tests = (
+        { year => 2016, month => 2, day => 1, expect => 29 },
+        { year => 2017, month => 2, day => 1, expect => 28 },
+    );
+
+    for my $t (@tests) {
+        my $expect = delete $t->{expect};
+
+        my $dt = DateTime->new($t);
+        is( $dt->month_length, $expect, '->month_length' );
     }
 }
 
@@ -264,10 +283,43 @@ use DateTime;
 }
 
 {
+    my $dt = DateTime->new( year => 1995, month => 2, day => 1 );
+
+    is( $dt->quarter,        1,  '->quarter is 1' );
+    is( $dt->day_of_quarter, 32, '->day_of_quarter' );
+    is( $dt->quarter_length, 90, '->quarter_length' );
+}
+
+{
+    my $dt = DateTime->new( year => 1995, month => 5, day => 1 );
+
+    is( $dt->quarter,        2,  '->quarter is 2' );
+    is( $dt->day_of_quarter, 31, '->day_of_quarter' );
+    is( $dt->quarter_length, 91, '->quarter_length' );
+}
+
+{
+    my $dt = DateTime->new( year => 1995, month => 8, day => 1 );
+
+    is( $dt->quarter,        3,  '->quarter is 3' );
+    is( $dt->day_of_quarter, 32, '->day_of_quarter' );
+    is( $dt->quarter_length, 92, '->quarter_length' );
+}
+
+{
+    my $dt = DateTime->new( year => 1995, month => 11, day => 1 );
+
+    is( $dt->quarter,        4,  '->quarter is 4' );
+    is( $dt->day_of_quarter, 32, '->day_of_quarter' );
+    is( $dt->quarter_length, 92, '->quarter_length' );
+}
+
+{
     my $dt = DateTime->new( year => 1996, month => 2, day => 1 );
 
     is( $dt->quarter,        1,  '->quarter is 1' );
     is( $dt->day_of_quarter, 32, '->day_of_quarter' );
+    is( $dt->quarter_length, 91, '->quarter_length' );
 }
 
 {
@@ -275,6 +327,7 @@ use DateTime;
 
     is( $dt->quarter,        2,  '->quarter is 2' );
     is( $dt->day_of_quarter, 31, '->day_of_quarter' );
+    is( $dt->quarter_length, 91, '->quarter_length' );
 }
 
 {
@@ -282,6 +335,7 @@ use DateTime;
 
     is( $dt->quarter,        3,  '->quarter is 3' );
     is( $dt->day_of_quarter, 32, '->day_of_quarter' );
+    is( $dt->quarter_length, 92, '->quarter_length' );
 }
 
 {
@@ -289,6 +343,7 @@ use DateTime;
 
     is( $dt->quarter,        4,  '->quarter is 4' );
     is( $dt->day_of_quarter, 32, '->day_of_quarter' );
+    is( $dt->quarter_length, 92, '->quarter_length' );
 }
 
 # nano, micro, and milli seconds
