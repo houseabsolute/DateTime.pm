@@ -304,8 +304,6 @@ sub en_tests {
     $c_format =~ s/\{0\}/'1:02:42 ' . $en_locale->am_pm_abbreviated->[1]/e;
 
     return {
-        '%y'        => '99',
-        '%Y'        => '1999',
         '%%'        => '%',
         '%a'        => $en_locale->day_format_abbreviated->[1],
         '%A'        => $en_locale->day_format_wide->[1],
@@ -354,8 +352,6 @@ sub en_tests {
 sub de_tests {
     my $de_locale = DateTime::Locale->load('de');
     return {
-        '%y'       => '99',
-        '%Y'       => '1999',
         '%%'       => '%',
         '%a'       => $de_locale->day_format_abbreviated->[1],
         '%A'       => $de_locale->day_format_wide->[1],
@@ -395,8 +391,6 @@ sub de_tests {
 sub it_tests {
     my $it_locale = DateTime::Locale->load('it');
     return {
-        '%y'       => '99',
-        '%Y'       => '1999',
         '%%'       => '%',
         '%a'       => $it_locale->day_format_abbreviated->[1],
         '%A'       => $it_locale->day_format_wide->[1],
