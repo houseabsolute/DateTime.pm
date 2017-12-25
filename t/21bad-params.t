@@ -17,7 +17,7 @@ foreach my $p (
     { year => 2000, month => 12, day => 10, hour => 12, minute => 60 },
     { year => 2000, month => 12, day => 10, hour => 12, second => -1 },
     { year => 2000, month => 12, day => 10, hour => 12, second => 62 },
-    ) {
+) {
     like(
         exception { DateTime->new(%$p) },
         qr/Validation failed/,

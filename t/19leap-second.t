@@ -1162,7 +1162,7 @@ use DateTime::LeapSecond;
         [ 2012, 6,  30 ],
         [ 2015, 6,  30 ],
         [ 2016, 12, 31 ],
-        ) {
+    ) {
         my $formatted = join '-', map { sprintf( '%02d', $_ ) } @{$date};
 
         my $dt;

@@ -125,7 +125,7 @@ my $neg_as_string = $neginf . q{};
     foreach my $m (
         qw( year month day hour minute second
         microsecond millisecond nanosecond )
-        ) {
+    ) {
         is(
             $pos->$m() . q{}, $pos_as_string,
             "pos $m is $pos_as_string"

@@ -35,7 +35,7 @@ use DateTime;
             nanoseconds => 750, 365 * 1440 * 60 * 1_000_000_000,
             'Europe/Prague'
         ],
-        ) {
+    ) {
 
         my $dt = DateTime->now->set( hour => 12 )->set_time_zone( $add->[3] );
 

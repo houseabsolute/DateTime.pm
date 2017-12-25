@@ -10,7 +10,7 @@ for my $o (
     Test::Builder->new->output,
     Test::Builder->new->failure_output,
     Test::Builder->new->todo_output
-    ) {
+) {
 
     binmode $o, ':encoding(UTF-8)' or die $!;
 }

@@ -51,7 +51,7 @@ use DateTime;
                 DateTime->from_day_of_year(
                     year        => $year,
                     day_of_year => $doy,
-                    )->day_of_week,
+                )->day_of_week,
                 $dow,
                 "day of week for day $doy of year $year is $dow"
             );

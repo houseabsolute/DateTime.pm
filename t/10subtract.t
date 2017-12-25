@@ -373,7 +373,7 @@ use DateTime;
         [ $date3, $date4 ],
         [ $date5, $date6 ],
         [ $date7, $date8 ],
-        ) {
+    ) {
         my $pos_diff = $p->[1]->subtract_datetime( $p->[0] );
 
         is( $pos_diff->delta_days,   1, '1 day diff at end of month' );
