@@ -241,7 +241,7 @@ sub _new {
             # If true, this means that the actual calculated leap
             # second does not occur in the second given to new()
             ( $self->{utc_rd_secs} - 86399 < $p{second} - 59 )
-            ) {
+        ) {
             Carp::croak("Invalid second value ($p{second})\n");
         }
     }
@@ -322,7 +322,7 @@ sub _handle_offset_modifier {
                 || (   $offset == 0
                     && $self->{local_rd_secs} > 86399 )
             )
-            ) {
+        ) {
             my $mod
                 = $self->_day_length( $utc_rd_days - 1 ) - SECONDS_PER_DAY;
 
@@ -2228,7 +2228,7 @@ sub STORABLE_freeze {
         qw( utc_rd_days
         utc_rd_secs
         rd_nanosecs )
-        ) {
+    ) {
         $serialized .= "$key:$self->{$key}|";
     }
 
