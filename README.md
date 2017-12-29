@@ -666,6 +666,18 @@ datetime object is in a leap year.
 This method returns a true or false value indicating whether or not the
 datetime object is the last day of the month.
 
+### $dt->month\_length()
+
+This method returns the number of days in the current month.
+
+### $dt->quarter\_length()
+
+This method returns the number of days in the current quarter.
+
+### $dt->year\_length()
+
+This method returns the number of days in the current year.
+
 ### $dt->week()
 
     ($week_year, $week_number) = $dt->week;
@@ -2216,6 +2228,7 @@ Dave Rolsky <autarch@urth.org>
 - Christian Hansen <chansen@cpan.org>
 - Daisuke Maki <dmaki@cpan.org>
 - Dan Book <grinnz@gmail.com>
+- Dan Stewart <danielandrewstewart@gmail.com>
 - David E. Wheeler <david@justatheory.com>
 - David Precious <davidp@preshweb.co.uk>
 - Doug Bell <madcityzen@gmail.com>
@@ -2228,6 +2241,7 @@ Dave Rolsky <autarch@urth.org>
 - Karen Etheridge <ether@cpan.org>
 - Michael Conrad <mike@nrdvana.net>
 - Michael R. Davis <mrdvt92@users.noreply.github.com>
+- M Somerville <dracos@users.noreply.github.com>
 - Nick Tonkin <1nickt@users.noreply.github.com>
 - Olaf Alders <olaf@wundersolutions.com>
 - Ovid &lt;curtis\_ovid\_poe@yahoo.com>

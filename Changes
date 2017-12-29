@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.45   2017-12-29
+
 1.45    2017-12-26
 
 - Added month_length(), quarter_length() and year_length()
