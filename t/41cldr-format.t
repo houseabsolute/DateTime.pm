@@ -302,4 +302,24 @@ for my $o (
     }
 }
 
+{
+    my $dt = DateTime->new(
+        year       => 1976,
+        month      => 10,
+        day        => 20,
+        hour       => 18,
+        minute     => 34,
+        second     => 55,
+        nanosecond => 999_999_999,
+        locale     => 'en',
+        time_zone  => 'UTC',
+    );
+
+    is(
+        $dt->format_cldr('ss,SSS'),
+        '55,999',
+        'milliseconds are rounded down',
+    );
+}
+
 done_testing();
