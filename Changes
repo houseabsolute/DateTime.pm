@@ -1,6 +1,10 @@
 {{$NEXT}}
 
-1.45   2017-12-29
+- Fixed the formatting for the CLDR "S" symbol. It could in some cases round
+  _up_ to 1 instead of truncating a value. For example, the "SSS" symbol would
+  format 999,999,999 nanoseconds as "1.000". Fixed by Gianni Ceccarelli. PR
+  #71.
+
 
 1.45    2017-12-26
 
