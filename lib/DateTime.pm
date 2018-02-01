@@ -1317,15 +1317,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         # I'm not sure this is what is wanted (notably the trailing
         # and leading zeros it can produce), but once again the LDML
         # spec is not all that clear.
-        qr/(S+)/ => sub {
-            my $l   = length $1;
-            my $val = sprintf(
-                "%.${l}f",
-                $_[0]->fractional_second() - $_[0]->second()
-            );
-            $val =~ s/^0\.//;
-            $val || 0;
-        },
+        qr/(S+)/ => sub { $_[0]->_format_nanosecs(length($1)) },
         qr/A+/ =>
             sub { ( $_[0]->{local_rd_secs} * 1000 ) + $_[0]->millisecond() },
 
