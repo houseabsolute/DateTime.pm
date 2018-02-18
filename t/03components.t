@@ -80,8 +80,10 @@ use DateTime;
         '->iso8601 ignores arguments'
     );
 
-    ok( !$d->is_leap_year,         '->is_leap_year' );
-    ok( !$d->is_last_day_of_month, '->is_last_day_of_month' );
+    ok( !$d->is_leap_year,           '->is_leap_year' );
+    ok( !$d->is_last_day_of_month,   '->is_last_day_of_month' );
+    ok( !$d->is_last_day_of_quarter, '->is_last_day_of_quarter' );
+    ok( !$d->is_last_day_of_year,    '->is_last_day_of_year' );
 
     is( $d->month_length,   31,  '->month_length' );
     is( $d->quarter_length, 92,  '->quarter_length' );
@@ -125,6 +127,41 @@ use DateTime;
 
         my $is = $dt->is_last_day_of_month;
         ok( ( $expect ? $is : !$is ), '->is_last_day_of_month' );
+    }
+}
+
+{
+    my @tests = (
+        { year => 2017, month => 8,  day => 19, expect => 0 },
+        { year => 2017, month => 3,  day => 31, expect => 1 },
+        { year => 2017, month => 6,  day => 30, expect => 1 },
+        { year => 2017, month => 9,  day => 30, expect => 1 },
+        { year => 2017, month => 12, day => 31, expect => 1 },
+    );
+
+    for my $t (@tests) {
+        my $expect = delete $t->{expect};
+
+        my $dt = DateTime->new($t);
+
+        my $is = $dt->is_last_day_of_quarter;
+        ok( ( $expect ? $is : !$is ), '->is_last_day_of_quarter' );
+    }
+}
+
+{
+    my @tests = (
+        { year => 2017, month => 8,  day => 19, expect => 0 },
+        { year => 2017, month => 12, day => 31, expect => 1 },
+    );
+
+    for my $t (@tests) {
+        my $expect = delete $t->{expect};
+
+        my $dt = DateTime->new($t);
+
+        my $is = $dt->is_last_day_of_year;
+        ok( ( $expect ? $is : !$is ), '->is_last_day_of_year' );
     }
 }
 

@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+1.47   2018-02-18
+
+- Added is_last_day_of_quarter() and is_last_day_of_year() methods.
+
+
 1.46   2018-02-11
 
 - Fixed the formatting for the CLDR "S" symbol. It could in some cases round

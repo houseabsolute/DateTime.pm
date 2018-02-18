@@ -983,6 +983,14 @@ sub is_last_day_of_month {
     $_[0]->day == $_[0]->_month_length( $_[0]->year, $_[0]->month );
 }
 
+sub is_last_day_of_quarter {
+    $_[0]->day_of_quarter == $_[0]->quarter_length;
+}
+
+sub is_last_day_of_year {
+    $_[0]->day_of_year == $_[0]->year_length;
+}
+
 sub week {
     my $self = shift;
 
@@ -2983,6 +2991,16 @@ datetime object is in a leap year.
 
 This method returns a true or false value indicating whether or not the
 datetime object is the last day of the month.
+
+=head3 $dt->is_last_day_of_quarter()
+
+This method returns a true or false value indicating whether or not the
+datetime object is the last day of the quarter.
+
+=head3 $dt->is_last_day_of_year()
+
+This method returns a true or false value indicating whether or not the
+datetime object is the last day of the year.
 
 =head3 $dt->month_length()
 
