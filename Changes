@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+1.47   2018-02-18
+
+- Added param validation to DateTime::Duration->multiply to only allow
+  integer multipliers.
+
+
 1.46   2018-02-11
 
 - Fixed the formatting for the CLDR "S" symbol. It could in some cases round
