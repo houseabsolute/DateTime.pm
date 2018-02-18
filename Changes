@@ -5,6 +5,9 @@
 - DateTime::Duration->multiply now only allows integer
   multipliers. Implemented by Dan Stewart. PR #73.
 
+- Added is_last_day_of_quarter() and is_last_day_of_year()
+  methods. Implemented by Dan Stewart. PR #72.
+
 
 1.46   2018-02-11
 
