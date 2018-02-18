@@ -307,6 +307,18 @@ my $leap_day = DateTime->new(
 }
 
 {
+    my $dur = DateTime::Duration->new( days => 29 );
+
+    like(
+        exception {
+            $dur * 5.3
+        },
+        qr/Validation failed/,
+        'non integer multiplication'
+    );
+}
+
+{
     is(
         exception {
             DateTime::Duration->new( months => 3 )->add( hours => -3 )
