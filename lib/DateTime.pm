@@ -3510,7 +3510,7 @@ corner cases involving subtraction of two datetimes across a DST
 change.
 
 If you can always use the floating or UTC time zones, you can skip
-ahead to L<Leap Seconds and Date Math|Leap Seconds and Date Math>
+ahead to L<Leap Seconds and Date Math>
 
 =item * date vs datetime math
 
