@@ -57,6 +57,16 @@ my $badlt_rx = qr/Invalid local time|local time [0-9\-:T]+ does not exist/;
         $badlt_rx,
         'exception for invalid time produced via add'
     );
+
+    $dt->add( days => 2 );
+
+    my $dt2 = DateTime->new(
+        year      => 2003, month => 4, day => 5,
+        hour      => 2,
+        time_zone => 'America/Chicago',
+    )->add( days => 2 );
+
+    is( $dt, $dt2, 'adding after failed addition leads to correct result' );
 }
 
 done_testing();
