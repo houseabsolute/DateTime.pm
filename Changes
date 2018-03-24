@@ -8,6 +8,11 @@
 - Added is_last_day_of_quarter() and is_last_day_of_year()
   methods. Implemented by Dan Stewart. PR #72.
 
+- When an exception was thrown while adding a duration the object could be
+  left in a broken state, with the duration partially applied. Subsequent
+  addition or subtraction would produce the wrong results. Reported by Pawel
+  Pabian. GH #74.
+
 
 1.46   2018-02-11
 
