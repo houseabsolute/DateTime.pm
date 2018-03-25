@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.46
+version 1.47
 
 # SYNOPSIS
 
@@ -666,6 +666,16 @@ datetime object is in a leap year.
 This method returns a true or false value indicating whether or not the
 datetime object is the last day of the month.
 
+### $dt->is\_last\_day\_of\_quarter()
+
+This method returns a true or false value indicating whether or not the
+datetime object is the last day of the quarter.
+
+### $dt->is\_last\_day\_of\_year()
+
+This method returns a true or false value indicating whether or not the
+datetime object is the last day of the year.
+
 ### $dt->month\_length()
 
 This method returns the number of days in the current month.
@@ -1162,7 +1172,7 @@ the nitty-gritty of datetime math, I have several recommendations:
     change.
 
     If you can always use the floating or UTC time zones, you can skip
-    ahead to [Leap Seconds and Date Math](https://metacpan.org/pod/Leap&#x20;Seconds&#x20;and&#x20;Date&#x20;Math)
+    ahead to ["Leap Seconds and Date Math"](#leap-seconds-and-date-math)
 
 - date vs datetime math
 
