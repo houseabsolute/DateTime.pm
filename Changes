@@ -2,8 +2,6 @@
 
 1.47   2018-03-25
 
-1.47   2018-02-18
-
 - DateTime::Duration->multiply now only allows integer
   multipliers. Implemented by Dan Stewart. PR #73.
 
