@@ -274,9 +274,10 @@ sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
 {
     my $check = validation_for(
-        name   => '_check_multiply_params',
-        slurpy => 1,
-        params => [
+        name             => '_check_multiply_params',
+        name_is_optional => 1,
+        slurpy           => 1,
+        params           => [
             { type => t('Int') },
         ],
     );
