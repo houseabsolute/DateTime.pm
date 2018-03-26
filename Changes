@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- The last release would die if Sub::Util was not available, but this should
+  just be an optional requirement. Fixed by Paul Howarth. Fixes GH #77. PR
+  #78.
+
+
 1.47   2018-03-25
 
 - DateTime::Duration->multiply now only allows integer
