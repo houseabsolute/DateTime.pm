@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.47
+version 1.48
 
 # SYNOPSIS
 
@@ -2256,6 +2256,7 @@ Dave Rolsky <autarch@urth.org>
 - Nick Tonkin <1nickt@users.noreply.github.com>
 - Olaf Alders <olaf@wundersolutions.com>
 - Ovid &lt;curtis\_ovid\_poe@yahoo.com>
+- Paul Howarth <paul@city-fan.org>
 - Philippe Bruhat (BooK) <book@cpan.org>
 - Ricardo Signes <rjbs@cpan.org>
 - Richard Bowen <bowen@cpan.org>

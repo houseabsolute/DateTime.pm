@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.48   2018-03-26
+
 - The last release would die if Sub::Util was not available, but this should
   just be an optional requirement. Fixed by Paul Howarth. Fixes GH #77. PR
   #78.
