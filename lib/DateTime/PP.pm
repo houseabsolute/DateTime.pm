@@ -3,7 +3,7 @@ package DateTime::PP;
 use strict;
 use warnings;
 
-our $VERSION = '1.48';
+our $VERSION = '1.49';
 
 ## no critic (Variables::ProhibitPackageVars)
 $DateTime::IsPurePerl = 1;
