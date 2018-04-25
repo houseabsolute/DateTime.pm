@@ -168,6 +168,10 @@ __PACKAGE__->DefaultLocale('en-US');
                 type     => t('TimeZone'),
                 optional => 1,
             },
+            ignore_missing_spans => {
+                type     => t('Bool'),
+                optional => 1,
+            }
         },
     );
 
@@ -203,6 +207,8 @@ sub _new {
     $p{time_zone}  = $class->_default_time_zone unless exists $p{time_zone};
 
     my $self = bless {}, $class;
+
+    $self->{ignore_missing_spans} = $p{ignore_missing_spans};
 
     $self->_set_locale( $p{locale} );
 
@@ -1049,10 +1055,16 @@ sub time_zone {
     return $_[0]->{tz};
 }
 
+sub ignore_missing_spans {
+    Carp::carp('ignore_missing_spans() is a read-only accessor') if @_ > 1;
+    return $_[0]->{ignore_missing_spans};
+}
+
 sub offset { $_[0]->{tz}->offset_for_datetime( $_[0] ) }
 
 sub _offset_for_local_datetime {
-    $_[0]->{tz}->offset_for_local_datetime( $_[0] );
+    $_[0]->{tz}
+        ->offset_for_local_datetime( $_[0], $_[0]->ignore_missing_spans );
 }
 
 sub is_dst { $_[0]->{tz}->is_dst_for_datetime( $_[0] ) }
@@ -2580,7 +2592,8 @@ much faster.
 
 This class method accepts parameters for each date and time component:
 "year", "month", "day", "hour", "minute", "second", "nanosecond".
-It also accepts "locale", "time_zone", and "formatter" parameters.
+It also accepts "locale", "time_zone", "ignore_missing_spans", and "formatter"
+parameters.
 
   my $dt = DateTime->new(
       year       => 1966,
@@ -2649,6 +2662,21 @@ method as its "name" parameter. This string may be an Olson DB time zone name
 "local". See the C<DateTime::TimeZone> documentation for more details.
 
 The default time zone is "floating".
+
+Without the "ignore_missing_spans" parameter, if a given time doesn't 
+exist in the provided "time_zone" (due to DST changes, for example),
+C<< DateTime->new() >> will throw an exception.
+
+With "ignore_missing_spans" set to a true value, C<< DateTime->new() >> will
+instead use the previous available span if the given time does not exist.
+
+This has the effect of moving the time forward whatever the difference in
+the two spans is (typically one hour for DST).
+
+For example, if you ask for a DateTime for "2018-03-11T02:00:00" in the
+"America/Denver" timezone (which doesn't exist because of DST), you'll
+get a C<$dt> object with an offset of "-0600" and a time of 
+"2018-03-11T03:00:00 America/Denver" and C<< $dt->is_dst >> will be true.
 
 The "formatter" can be either a scalar or an object, but the class
 specified by the scalar or the object must implement a
