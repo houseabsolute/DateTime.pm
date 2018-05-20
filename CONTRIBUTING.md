@@ -133,5 +133,5 @@ commit or patch), unless you specifically request for it not to be. If you
 wish to be listed under a different name or address, you should submit a pull
 request to the .mailmap file to contain the correct mapping.
 
-This file was generated via Dist::Zilla::Plugin::GenerateFile::FromShareDir 0.013 from a
-template file originating in Dist-Zilla-PluginBundle-DROLSKY-0.89.
+This file was generated via Dist::Zilla::Plugin::GenerateFile::FromShareDir 0.014 from a
+template file originating in Dist-Zilla-PluginBundle-DROLSKY-0.90.

@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.49   2018-05-20
+
 - Updated the ppport.h with the latest version of Devel::PPPort. This fixes a
   compilation warning when compiling with 5.27.11. Reported by Jim
   Keenan. Fixed GH #81.
