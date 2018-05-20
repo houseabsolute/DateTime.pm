@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '1.49';
+our $VERSION = '1.50';
 
 use DateTime;
 use DateTime::TimeZone;
