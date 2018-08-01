@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.50   2018-08-01
+
 - The %F strftime pattern incorrectly zero-padded numbers less than four
   digits. According to POSIX::strftime, this should output the year as-is
   without padding. Reported by Andy Lester. GH #83.

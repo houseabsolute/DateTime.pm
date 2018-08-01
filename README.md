@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.49
+version 1.50
 
 # SYNOPSIS
 
@@ -765,6 +765,9 @@ strftime patterns.
 
 If you give a pattern that doesn't exist, then it is simply treated as
 text.
+
+Note that any deviation from the POSIX standard is probably a bug. DateTime
+should match the output of `POSIX::strftime` for any given pattern.
 
 ### $dt->format\_cldr( $format, ... )
 
