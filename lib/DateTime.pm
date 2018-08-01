@@ -3107,6 +3107,9 @@ strftime patterns.
 If you give a pattern that doesn't exist, then it is simply treated as
 text.
 
+Note that any deviation from the POSIX standard is probably a bug. DateTime
+should match the output of C<POSIX::strftime> for any given pattern.
+
 =head3 $dt->format_cldr( $format, ... )
 
 This method implements formatting based on the CLDR date patterns. If
