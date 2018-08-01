@@ -283,6 +283,18 @@ use DateTime;
     is( $dt->hms('%s'), '03%s20%s05', 'use %s as separator in hms' );
 }
 
+{
+    my $dt = DateTime->new(
+        year  => 12345,
+        month => 2,
+        day   => 3,
+    );
+
+    is( $dt->ymd, '12345-02-03', '5 digit year in ymd' );
+    is( $dt->mdy, '02-03-12345', '5 digit year in mdy' );
+    is( $dt->dmy, '03-02-12345', '5 digit year in dmy' );
+}
+
 # test doy in leap year
 {
     my $dt = DateTime->new(

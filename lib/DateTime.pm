@@ -1111,7 +1111,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         'd' => sub { sprintf( '%02d', $_[0]->day_of_month ) },
         'D' => sub { $_[0]->strftime('%m/%d/%y') },
         'e' => sub { sprintf( '%2d', $_[0]->day_of_month ) },
-        'F' => sub { $_[0]->ymd('-') },
+        'F' => sub { $_[0]->strftime('%Y-%m-%d') },
         'g' => sub { substr( $_[0]->week_year, -2 ) },
         'G' => sub { $_[0]->week_year },
         'H' => sub { sprintf( '%02d', $_[0]->hour ) },

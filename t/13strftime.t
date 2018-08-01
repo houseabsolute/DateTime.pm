@@ -203,7 +203,7 @@ subtest(
                     '%6N'  => '012345',
                     '%10N' => '0123456780',
                 );
-                for my $fmt ( sort keys %tests ) {
+                for my $fmt ( sort { lc $a cmp lc $b } keys %tests ) {
                     is(
                         $dt->strftime($fmt), $tests{$fmt},
                         "$fmt is $tests{$fmt}"
@@ -243,7 +243,7 @@ subtest(
                     '%W' => '00',
                     '%j' => '001',
                 );
-                for my $fmt ( sort keys %tests ) {
+                for my $fmt ( sort { lc $a cmp lc $b } keys %tests ) {
                     is(
                         $dt->strftime($fmt), $tests{$fmt},
                         "$fmt is $tests{$fmt}"
@@ -261,13 +261,25 @@ subtest(
                     '%W' => '02',
                     '%j' => '010',
                 );
-                for my $fmt ( sort keys %tests ) {
+                for my $fmt ( sort { lc $a cmp lc $b } keys %tests ) {
                     is(
                         $dt->strftime($fmt), $tests{$fmt},
                         "$fmt is $tests{$fmt}"
                     );
                 }
             }
+        );
+    }
+);
+
+subtest(
+    '%F with 3 digit years',
+    sub {
+        my $dt = DateTime->new( year => 123 );
+        is(
+            $dt->strftime('%F'),
+            '123-01-01',
+            '%F does not zero-pad 3 digit year'
         );
     }
 );
@@ -293,7 +305,7 @@ sub test_strftime_for_locale {
     subtest(
         $locale,
         sub {
-            for my $fmt ( sort keys %{$tests} ) {
+            for my $fmt ( sort { lc $a cmp lc $b } keys %{$tests} ) {
                 is(
                     $dt->strftime($fmt),
                     $tests->{$fmt},
@@ -314,14 +326,22 @@ sub en_tests {
 
     return {
         '%%'        => '%',
+        '%10N'      => '1234567890',
+        '%3N'       => '123',
+        '%6N'       => '123456',
         '%a'        => $en_locale->day_format_abbreviated->[1],
         '%A'        => $en_locale->day_format_wide->[1],
         '%b'        => $en_locale->month_format_abbreviated->[8],
         '%B'        => $en_locale->month_format_wide->[8],
+        '%c'        => $c_format,
         '%C'        => '19',
         '%d'        => '07',
-        '%e'        => ' 7',
         '%D'        => '09/07/99',
+        '%e'        => ' 7',
+        '%E'        => '%E',
+        '%F'        => '1999-09-07',
+        '%G'        => '1999',
+        '%g'        => '99',
         '%h'        => $en_locale->month_format_abbreviated->[8],
         '%H'        => '13',
         '%I'        => '01',
@@ -330,31 +350,30 @@ sub en_tests {
         '%l'        => ' 1',
         '%m'        => '09',
         '%M'        => '02',
+        '%n'        => "\n",
         '%N'        => '123456789',
-        '%3N'       => '123',
-        '%6N'       => '123456',
-        '%10N'      => '1234567890',
         '%p'        => $en_locale->am_pm_abbreviated->[1],
+        '%P'        => lc $en_locale->am_pm_abbreviated->[1],
         '%r'        => '01:02:42 ' . $en_locale->am_pm_abbreviated->[1],
         '%R'        => '13:02',
         '%s'        => '936709362',
         '%S'        => '42',
+        '%t'        => "\t",
         '%T'        => '13:02:42',
+        '%u'        => '2',
         '%U'        => '36',
         '%V'        => '36',
         '%w'        => '2',
         '%W'        => '36',
+        '%x'        => $en_locale->month_format_abbreviated->[8] . ' 7, 1999',
+        '%X'        => '1:02:42 ' . $en_locale->am_pm_abbreviated->[1],
         '%y'        => '99',
         '%Y'        => '1999',
-        '%Z'        => 'UTC',
         '%z'        => '+0000',
-        '%E'        => '%E',
+        '%Z'        => 'UTC',
         '%{foobar}' => '%{foobar}',
         '%{month}'  => '9',
         '%{year}'   => '1999',
-        '%x'        => $en_locale->month_format_abbreviated->[8] . ' 7, 1999',
-        '%X'        => '1:02:42 ' . $en_locale->am_pm_abbreviated->[1],
-        '%c'        => $c_format,
     };
 }
 
@@ -368,30 +387,29 @@ sub de_tests {
         '%B'       => $de_locale->month_format_wide->[8],
         '%C'       => '19',
         '%d'       => '07',
-        '%e'       => ' 7',
         '%D'       => '09/07/99',
-        '%b'       => $de_locale->month_format_abbreviated->[8],
+        '%e'       => ' 7',
         '%H'       => '13',
         '%I'       => '01',
         '%j'       => '250',
         '%k'       => '13',
         '%l'       => ' 1',
-        '%m'       => '09',
         '%M'       => '02',
+        '%m'       => '09',
         '%p'       => $de_locale->am_pm_abbreviated->[1],
         '%r'       => '01:02:42 ' . $de_locale->am_pm_abbreviated->[1],
         '%R'       => '13:02',
-        '%s'       => '936709362',
         '%S'       => '42',
+        '%s'       => '936709362',
         '%T'       => '13:02:42',
         '%U'       => '36',
         '%V'       => '36',
         '%w'       => '2',
         '%W'       => '36',
-        '%y'       => '99',
         '%Y'       => '1999',
-        '%Z'       => 'UTC',
+        '%y'       => '99',
         '%z'       => '+0000',
+        '%Z'       => 'UTC',
         '%{month}' => '9',
         '%{year}'  => '1999',
     };
@@ -404,33 +422,33 @@ sub it_tests {
         '%a'       => $it_locale->day_format_abbreviated->[1],
         '%A'       => $it_locale->day_format_wide->[1],
         '%b'       => $it_locale->month_format_abbreviated->[8],
+        '%b'       => $it_locale->month_format_abbreviated->[8],
         '%B'       => $it_locale->month_format_wide->[8],
         '%C'       => '19',
         '%d'       => '07',
-        '%e'       => ' 7',
         '%D'       => '09/07/99',
-        '%b'       => $it_locale->month_format_abbreviated->[8],
+        '%e'       => ' 7',
         '%H'       => '13',
         '%I'       => '01',
         '%j'       => '250',
         '%k'       => '13',
         '%l'       => ' 1',
-        '%m'       => '09',
         '%M'       => '02',
+        '%m'       => '09',
         '%p'       => $it_locale->am_pm_abbreviated->[1],
         '%r'       => '01:02:42 ' . $it_locale->am_pm_abbreviated->[1],
         '%R'       => '13:02',
-        '%s'       => '936709362',
         '%S'       => '42',
+        '%s'       => '936709362',
         '%T'       => '13:02:42',
         '%U'       => '36',
         '%V'       => '36',
         '%w'       => '2',
         '%W'       => '36',
-        '%y'       => '99',
         '%Y'       => '1999',
-        '%Z'       => 'UTC',
+        '%y'       => '99',
         '%z'       => '+0000',
+        '%Z'       => 'UTC',
         '%{month}' => '9',
         '%{year}'  => '1999',
     };

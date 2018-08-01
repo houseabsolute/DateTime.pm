@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- The %F strftime pattern incorrectly zero-padded numbers less than four
+  digits. According to POSIX::strftime, this should output the year as-is
+  without padding. Reported by Andy Lester. GH #83.
+
+
 1.49   2018-05-20
 
 - Updated the ppport.h with the latest version of Devel::PPPort. This fixes a
