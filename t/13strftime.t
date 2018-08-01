@@ -8,6 +8,15 @@ use Test::More 0.96;
 use DateTime;
 use DateTime::Locale;
 
+for my $o (
+    Test::Builder->new->output,
+    Test::Builder->new->failure_output,
+    Test::Builder->new->todo_output
+) {
+
+    binmode $o, ':encoding(UTF-8)' or die $!;
+}
+
 test_strftime_for_locale( 'en-US', en_tests() );
 test_strftime_for_locale( 'de',    de_tests() );
 test_strftime_for_locale( 'it',    it_tests() );
