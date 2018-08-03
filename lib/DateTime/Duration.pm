@@ -550,7 +550,7 @@ object or an already-constructed duration object.
 
 =head2 $dur->multiply( $number )
 
-Multiplies each unit in the by the specified integer number.
+Multiplies each unit in the C<DateTime::Duration> object by the specified integer number.
 
 =head2 DateTime::Duration->compare( $duration1, $duration2, $base_datetime )
 
