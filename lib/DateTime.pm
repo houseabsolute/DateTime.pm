@@ -1684,7 +1684,16 @@ sub delta_ms {
 
     my ( $smaller, $greater ) = sort $self, $dt;
 
-    my $days = int( $greater->jd - $smaller->jd );
+    my ( $smaller_days, $smaller_secs ) = $smaller->local_rd_values;
+    my ( $greater_days, $greater_secs ) = $greater->local_rd_values;
+
+    my $days = $greater_days - $smaller_days;
+
+    # If the earlier date is later in the day then the later one, then the
+    # difference must be one day less than the day difference between their RD
+    # values. This fixes
+    # https://github.com/houseabsolute/DateTime.pm/issues/86
+    $days-- if $smaller_secs > $greater_secs;
 
     my $dur = $greater->subtract_datetime($smaller);
 
@@ -3390,6 +3399,11 @@ Returns a duration which contains only minutes and seconds. Any day
 and month differences to minutes are converted to minutes and
 seconds. This method also B<always return a positive (or zero)
 duration>.
+
+Note that for historical reasons this method produces a difference that
+effectively ignores DST transitions if the DST transition happens on a day
+between the two datetimes in question. This is not ideal but fixing this after
+so long would probably cause more problems than it would solve.
 
 =head3 $dt->subtract_datetime_absolute( $datetime )
 

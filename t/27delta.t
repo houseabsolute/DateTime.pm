@@ -101,4 +101,48 @@ use DateTime;
     is( $dur_ms->hours, 21, 'hours is 21' );
 }
 
+# This test is all about a bug in the delta_ms bug when crossing a DST jump
+# backward (25 hour
+# day). https://github.com/houseabsolute/DateTime.pm/issues/86 - Tests from
+# Steve Simms.
+{
+    my $fri_1230 = DateTime->new(
+        year      => 2018, month  => 11, day => 2,
+        hour      => 12,   minute => 30,
+        time_zone => 'America/New_York'
+    );
+    my $mon_1220 = DateTime->new(
+        year      => 2018, month  => 11, day => 5,
+        hour      => 12,   minute => 20,
+        time_zone => 'America/New_York'
+    );
+    my $mon_1230 = DateTime->new(
+        year      => 2018, month  => 11, day => 5,
+        hour      => 12,   minute => 30,
+        time_zone => 'America/New_York'
+    );
+    my $mon_1240 = DateTime->new(
+        year      => 2018, month  => 11, day => 5,
+        hour      => 12,   minute => 40,
+        time_zone => 'America/New_York'
+    );
+
+    is(
+        $fri_1230->delta_ms($mon_1230)->delta_minutes, 1440 + 1440 + 1440,
+        'Fri 12:30 -> Mon 12:30 = 4320 minutes (72 hours)'
+    );
+
+    is(
+        $fri_1230->delta_ms($mon_1220)->delta_minutes,
+        1440 + 1440 + 1440 - 10,
+        'Fri 12:30 -> Mon 12:20 = 4310 minutes'
+    );
+
+    is(
+        $fri_1230->delta_ms($mon_1240)->delta_minutes,
+        1440 + 1440 + 1440 + 10,
+        'Fri 12:30 -> Mon 12:40 = 4330 minutes'
+    );
+}
+
 done_testing();
