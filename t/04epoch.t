@@ -84,7 +84,7 @@ use DateTime;
 
 # Adding/subtracting should affect epoch
 {
-    my $expected = 1049160602;
+    my $expected  = 1049160602;
     my $epochtest = DateTime->from_epoch( epoch => $expected );
 
     is(
@@ -199,13 +199,13 @@ use DateTime;
     is( $dt->epoch, 12345, 'can pass overloaded object to from_epoch' );
 
     $time = Number::Overloaded->new(12345.1234);
-    $dt = DateTime->from_epoch( epoch => $time );
+    $dt   = DateTime->from_epoch( epoch => $time );
     is( $dt->epoch, 12345, 'decimal epoch in overloaded object' );
 }
 
 {
     my $time = Number::Overloaded->new(-12345);
-    my $dt = DateTime->from_epoch( epoch => $time );
+    my $dt   = DateTime->from_epoch( epoch => $time );
 
     is( $dt->epoch, -12345, 'negative epoch in overloaded object' );
 }

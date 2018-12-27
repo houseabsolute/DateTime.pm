@@ -501,7 +501,7 @@ sub _calc_local_components {
         if ( int $p{epoch} != $p{epoch} ) {
             my ( $floor, $nano, $second );
 
-            $floor = $nano = fmod( $p{epoch}, 1.0 );
+            $floor  = $nano = fmod( $p{epoch}, 1.0 );
             $second = floor( $p{epoch} - $floor );
             if ( $nano < 0 ) {
                 $nano += 1;
@@ -1214,7 +1214,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         # yy is a weird special case, where it must be exactly 2 digits
         qr/yy/ => sub {
             my $year = $_[0]->year();
-            my $y2 = length $year > 2 ? substr( $year, -2, 2 ) : $year;
+            my $y2   = length $year > 2 ? substr( $year, -2, 2 ) : $year;
             $y2 *= -1 if $year < 0;
             $_[0]->_zero_padded_number( 'yy', $y2 );
         },
@@ -1415,7 +1415,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
 }
 
 sub _format_nanosecs {
-    my $self = shift;
+    my $self      = shift;
     my $precision = @_ ? shift : 9;
 
     my $divide_by = 10**( 9 - $precision );
@@ -2313,7 +2313,7 @@ sub STORABLE_thaw {
         'DateTime::_Thawed';
 
     my %formatter = defined $$formatter ? ( formatter => $$formatter ) : ();
-    my $new = ( ref $self )->from_object(
+    my $new       = ( ref $self )->from_object(
         object => $object,
         locale => $locale,
         %formatter,

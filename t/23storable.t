@@ -68,7 +68,7 @@ unless ( eval { require Storable; 1 } ) {
 
     # Back-compat shim for new DateTime::Locale. Remove once DT::Locale based
     # on CLDR 28+ is released.
-    my $meth = $dt1->locale->can('code') ? 'code' : 'id';
+    my $meth      = $dt1->locale->can('code') ? 'code' : 'id';
     my $orig_code = $dt1->locale->$meth;
     is(
         $dt2->locale->$meth,

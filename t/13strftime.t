@@ -159,7 +159,7 @@ subtest(
             sub {
                 # Internally this becomes 119999885 nanoseconds (floating point math is awesome)
                 my $epoch = 1297777805.12;
-                my $dt = DateTime->from_epoch( epoch => $epoch );
+                my $dt    = DateTime->from_epoch( epoch => $epoch );
 
                 my @vals = (
                     1,
