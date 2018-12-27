@@ -4483,7 +4483,8 @@ RFC822-conformant dates (using "%a, %d %b %Y %H:%M:%S %z").
 
 =item * %Z
 
-The time zone or name or abbreviation.
+The short name for the time zone, typically an abbreviation like "EST" or
+"AEST".
 
 =item * %%
 
