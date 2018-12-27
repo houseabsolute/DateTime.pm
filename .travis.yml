@@ -1,5 +1,4 @@
 ---
-sudo: false
 addons:
   apt:
     packages:
@@ -11,6 +10,8 @@ perl:
   - blead-thr
   - dev
   - dev-thr
+  - '5.28'
+  - 5.28-thr
   - '5.26'
   - 5.26-thr
   - '5.24'
@@ -38,9 +39,12 @@ matrix:
   allow_failures:
     - perl: blead
     - perl: blead-thr
+    - perl: dev
+    - perl: dev-thr
+  fast_finish: 1
   include:
     - env: COVERAGE=1
-      perl: '5.26'
+      perl: '5.28'
 env:
   global:
     - AUTHOR_TESTING=1
