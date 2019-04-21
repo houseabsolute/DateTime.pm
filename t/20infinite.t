@@ -152,7 +152,7 @@ my $neg_as_string = $neginf . q{};
 }
 
 {
-    my $now = DateTime->now;
+    my $now  = DateTime->now;
     my $pos2 = $pos + DateTime::Duration->new( months => 1 );
 
     ok(
@@ -162,7 +162,7 @@ my $neg_as_string = $neginf . q{};
 }
 
 {
-    my $now = DateTime->now;
+    my $now  = DateTime->now;
     my $neg2 = $neg + DateTime::Duration->new( months => 1 );
 
     ok(

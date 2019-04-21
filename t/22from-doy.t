@@ -6,7 +6,7 @@ use Test::More;
 
 use DateTime;
 
-my @last_day = ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
+my @last_day      = ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
 my @leap_last_day = @last_day;
 $leap_last_day[1]++;
 

@@ -203,7 +203,7 @@ ok( ( $infinity <=> $date1 ) == 1, 'Comparison overload $inf <=> $a' );
 }
 
 {
-    my $dt = DateTime->new( year => 1950 );
+    my $dt     = DateTime->new( year => 1950 );
     my @values = $dt->utc_rd_values;
 
     $values[2] += 50;
