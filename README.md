@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.50
+version 1.51
 
 # SYNOPSIS
 
@@ -2117,7 +2117,8 @@ The following patterns are allowed in the format string given to the
 
 - %Z
 
-    The time zone or name or abbreviation.
+    The short name for the time zone, typically an abbreviation like "EST" or
+    "AEST".
 
 - %%
 
@@ -2255,6 +2256,7 @@ Dave Rolsky <autarch@urth.org>
 - Karen Etheridge <ether@cpan.org>
 - Michael Conrad <mike@nrdvana.net>
 - Michael R. Davis <mrdvt92@users.noreply.github.com>
+- Mohammad S Anwar <mohammad.anwar@yahoo.com>
 - M Somerville <dracos@users.noreply.github.com>
 - Nick Tonkin <1nickt@users.noreply.github.com>
 - Olaf Alders <olaf@wundersolutions.com>
@@ -2269,7 +2271,7 @@ Dave Rolsky <autarch@urth.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2003 - 2018 by Dave Rolsky.
+This software is Copyright (c) 2003 - 2019 by Dave Rolsky.
 
 This is free software, licensed under:
 

@@ -4,7 +4,7 @@
 /*
 ----------------------------------------------------------------------
 
-    ppport.h -- Perl/Pollution/Portability Version 3.42
+    ppport.h -- Perl/Pollution/Portability Version 3.45
 
     Automatically created by Devel::PPPort running under perl 5.026002.
 
@@ -21,7 +21,7 @@ SKIP
 
 =head1 NAME
 
-ppport.h - Perl/Pollution/Portability version 3.42
+ppport.h - Perl/Pollution/Portability version 3.45
 
 =head1 SYNOPSIS
 
@@ -389,7 +389,7 @@ use strict;
 # Disable broken TRIE-optimization
 BEGIN { eval '${^RE_TRIE_MAXBUF} = -1' if "$]" >= 5.009004 && "$]" <= 5.009005 }
 
-my $VERSION = 3.42;
+my $VERSION = 3.45;
 
 my %opt = (
   quiet     => 0,
@@ -4585,8 +4585,8 @@ typedef OP* (CPERLscope(*Perl_check_t)) (pTHX_ OP*);
 #  if ( (PERL_BCDVERSION >= 0x5008000) && (PERL_BCDVERSION < 0x5008009) ) || ( (PERL_BCDVERSION >= 0x5009000) && (PERL_BCDVERSION < 0x5010001) )
 #    define D_PPP_FIX_UTF8_ERRSV(errsv, sv)                     \
         STMT_START {                                            \
-            if (sv != ERRSV)                                    \
-                SvFLAGS(ERRSV) = (SvFLAGS(ERRSV) & ~SVf_UTF8) | \
+            if (sv != errsv)                                    \
+                SvFLAGS(errsv) = (SvFLAGS(errsv) & ~SVf_UTF8) | \
                                  (SvFLAGS(sv) & SVf_UTF8);      \
         } STMT_END
 #  else
