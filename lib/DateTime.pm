@@ -1418,11 +1418,18 @@ sub _format_nanosecs {
     my $self      = shift;
     my $precision = @_ ? shift : 9;
 
-    my $divide_by = 10**( 9 - $precision );
+    my $exponent     = 9 - $precision;
+    my $formatted_ns = floor(
+        (
+              $exponent < 0
+            ? $self->{rd_nanosecs} * 10**-$exponent
+            : $self->{rd_nanosecs} / 10**$exponent
+        )
+    );
 
     return sprintf(
         '%0' . $precision . 'u',
-        floor( $self->{rd_nanosecs} / $divide_by )
+        $formatted_ns
     );
 }
 
