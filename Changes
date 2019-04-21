@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- Fix CLDR formatting of 'S' pattern with more than 9 digits of
+  precision. While we only store nanoseconds in the DateTime object we should
+  still be able to handle an arbitrary number of digits properly. Fixed by
+  Slaven Rezić. GH #89.
+
+
 1.50   2018-08-01
 
 - The %F strftime pattern incorrectly zero-padded numbers less than four
