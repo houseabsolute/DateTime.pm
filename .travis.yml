@@ -39,8 +39,6 @@ matrix:
   allow_failures:
     - perl: blead
     - perl: blead-thr
-    - perl: dev
-    - perl: dev-thr
   fast_finish: 1
   include:
     - env: COVERAGE=1
