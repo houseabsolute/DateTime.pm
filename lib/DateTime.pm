@@ -3343,7 +3343,7 @@ A synonym of C<< $dt->add_duration( $duration_object ) >>.
 =head3 $dt->subtract_duration( $duration_object )
 
 When given a C<DateTime::Duration> object, this method simply calls
-C<invert()> on that object and passes that new duration to the
+C<inverse()> on that object and passes that new duration to the
 C<add_duration> method.
 
 =head3 $dt->subtract( DateTime::Duration->new parameters )
