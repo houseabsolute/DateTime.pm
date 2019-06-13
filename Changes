@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+- Simplify the calculation of leap seconds in XS.  Contributed by Mark Overmeer.
+
 1.51   2019-04-21
 
 - Fix CLDR formatting of 'S' pattern with more than 9 digits of
