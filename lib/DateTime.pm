@@ -3131,7 +3131,7 @@ text.
 
 =head3 $dt->epoch()
 
-Return the UTC epoch value for the datetime object. Datetimes before the start
+Return the UTC epoch value for the datetime object. DateTimes before the start
 of the epoch will be returned as a negative number.
 
 The return value from this method is always an integer.
@@ -3568,7 +3568,7 @@ wrong.
 
 =back
 
-=head3 Adding a Duration to a Datetime
+=head3 Adding a Duration to a DateTime
 
 The parts of a duration can be broken down into five parts. These are
 months, days, minutes, seconds, and nanoseconds. Adding one month to
@@ -3662,7 +3662,7 @@ different types of durations. These methods are
 C<subtract_datetime()>, C<subtract_datetime_absolute()>,
 C<delta_md()>, C<delta_days()>, and C<delta_ms()>.
 
-=head3 Datetime Subtraction
+=head3 DateTime Subtraction
 
 Date subtraction is done solely based on the two object's local
 datetimes, with one exception to handle DST changes. Also, if the two
