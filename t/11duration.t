@@ -40,11 +40,11 @@ use DateTime::Duration;
         'in_units nanoseconds, seconds'
     );
 
-    is( $dur->in_units('years'), 1, 'in_units years' );
-    is( $dur->in_units( 'months', 'years' ), 2, 'in_units months, years' );
-    is( $dur->in_units('weeks'), 3, 'in_units weeks' );
-    is( $dur->in_units( 'days', 'weeks' ), 4, 'in_units days, weeks' );
-    is( $dur->in_units('hours'), 6, 'in_units hours' );
+    is( $dur->in_units('years'),              1, 'in_units years' );
+    is( $dur->in_units( 'months', 'years' ),  2, 'in_units months, years' );
+    is( $dur->in_units('weeks'),              3, 'in_units weeks' );
+    is( $dur->in_units( 'days', 'weeks' ),    4, 'in_units days, weeks' );
+    is( $dur->in_units('hours'),              6, 'in_units hours' );
     is( $dur->in_units( 'minutes', 'hours' ), 7, 'in_units minutes, hours' );
     is(
         $dur->in_units('nanoseconds'), 8_000_000_009,

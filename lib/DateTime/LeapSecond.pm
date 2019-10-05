@@ -20,10 +20,10 @@ sub _make_utx {
         return $tmp;
     }
     $tmp = "${tab}if (\$val < " . $RD[ $beg + $step ] . ") {\n";
-    $tmp .= _make_utx( $beg,         $beg + $step, $tab . q{    }, $op );
+    $tmp .= _make_utx( $beg, $beg + $step, $tab . q{    }, $op );
     $tmp .= "${tab}}\n";
     $tmp .= "${tab}else {\n";
-    $tmp .= _make_utx( $beg + $step, $end,         $tab . q{    }, $op );
+    $tmp .= _make_utx( $beg + $step, $end, $tab . q{    }, $op );
     $tmp .= "${tab}}\n";
     return $tmp;
 }

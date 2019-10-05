@@ -21,7 +21,7 @@ use DateTime;
 }
 
 {
-    my $dt  = DateTime->new( year => 2000, month => 12 );
+    my $dt = DateTime->new( year => 2000, month => 12 );
     my $dt2 = $dt->clone->add( months => 1 )->subtract( seconds => 1 );
 
     is( $dt2->year,   2000, 'year is 2001' );

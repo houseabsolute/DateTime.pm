@@ -897,7 +897,7 @@ sub hour {
 }
 sub hour_1 { $_[0]->{local_c}{hour} == 0 ? 24 : $_[0]->{local_c}{hour} }
 
-sub hour_12   { my $h = $_[0]->hour % 12; return $h ? $h : 12 }
+sub hour_12 { my $h = $_[0]->hour % 12; return $h ? $h : 12 }
 sub hour_12_0 { $_[0]->hour % 12 }
 
 sub minute {
