@@ -1,0 +1,17 @@
+resources:
+  repositories:
+    - repository: ci-perl-helpers
+      type: github
+      name: houseabsolute/ci-perl-helpers
+      ref: refs/tags/v0.0.1
+      endpoint: houseabsolute/ci-perl-helpers
+
+stages:
+  - template: templates/build.yml@ci-perl-helpers
+    parameters:
+      debug: 1
+  - template: templates/test.yml@ci-perl-helpers
+    parameters:
+      coverage: codecov
+      debug: 1
+      include_threaded_perls: 'true'
