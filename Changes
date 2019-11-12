@@ -77,7 +77,7 @@
   relying on a fallback to stringification, we now return true directly, which
   is a little faster in cases like "if ($might_be_dt) { ... }".
 
-- The datetime() method now accepts a single argument to use as the separate
+- The datetime() method now accepts a single argument to use as the separator
   between the date and time portion. This defaults to "T".
 
 
