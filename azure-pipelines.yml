@@ -3,7 +3,6 @@ resources:
     - repository: ci-perl-helpers
       type: github
       name: houseabsolute/ci-perl-helpers
-      ref: refs/tags/v0.0.1
       endpoint: houseabsolute/ci-perl-helpers
 
 stages:
