@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+- Bogus change to test Azure
+
 - Simplify the calculation of leap seconds in XS. This is a little more
   efficient for most use cases (anything with future or recent past
   datetimes). Contributed by Mark Overmeer. GH #91.
