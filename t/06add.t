@@ -34,8 +34,8 @@ use DateTime;
 {
     # Now, test the adding of durations
     my $dt = DateTime->new(
-        year      => 1986, month  => 1, day => 28,
-        hour      => 16,   minute => 38,
+        year => 1986, month  => 1, day => 28,
+        hour => 16,   minute => 38,
         time_zone => 'UTC'
     );
 
@@ -48,8 +48,8 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year      => 1986, month  => 1, day => 28,
-        hour      => 16,   minute => 38,
+        year => 1986, month  => 1, day => 28,
+        hour => 16,   minute => 38,
         time_zone => 'UTC'
     );
 
@@ -62,8 +62,8 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year      => 1986, month  => 1, day => 28,
-        hour      => 16,   minute => 38,
+        year => 1986, month  => 1, day => 28,
+        hour => 16,   minute => 38,
         time_zone => 'UTC'
     );
 
@@ -76,8 +76,8 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year      => 1986, month  => 1, day => 28,
-        hour      => 16,   minute => 38,
+        year => 1986, month  => 1, day => 28,
+        hour => 16,   minute => 38,
         time_zone => 'UTC'
     );
 
@@ -90,8 +90,8 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year      => 1986, month  => 1, day => 28,
-        hour      => 16,   minute => 38,
+        year => 1986, month  => 1, day => 28,
+        hour => 16,   minute => 38,
         time_zone => 'UTC'
     );
 
@@ -104,8 +104,8 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year      => 1986, month  => 1, day => 28,
-        hour      => 16,   minute => 38,
+        year => 1986, month  => 1, day => 28,
+        hour => 16,   minute => 38,
         time_zone => 'UTC'
     );
 
@@ -158,8 +158,8 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year      => 1986, month  => 1, day => 28,
-        hour      => 16,   minute => 38,
+        year => 1986, month  => 1, day => 28,
+        hour => 16,   minute => 38,
         time_zone => 'UTC'
     );
 
