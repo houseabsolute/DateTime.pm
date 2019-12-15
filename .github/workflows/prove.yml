@@ -12,5 +12,6 @@ jobs:
     - uses: actions/checkout@v1
     - name: Run a multi-line script
       run: |
+        export PERL_MM_USE_DEFAULT=1 
         cpan -I namespace::autoclean  
         prove -Ilib
