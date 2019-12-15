@@ -2003,6 +2003,22 @@ sub _compare {
     return 0;
 }
 
+sub between($$$) {                                                              # Check whether a L<DateTime> is strictly between two other L<DateTimes|DateTime>. Return the B<$first> L<DateTime> if it is greater than the lesser of the B<$second> L<DateTime> and the B<$third> L<DateTime>, and also, less than the greater of the $second and $third L<DateTimes|DateTime> else return B<undef>.
+    my ($first, $second, $third) = @_;                                          # DateTime to test, DateTime of one limit, DateTime of the other limit.
+
+    @_ == 3 or Carp::croak "Three DateTime parameters required";                # Parameter count
+    for my $i(0..$#_)                                                           # Parameter types
+     {next if ref($_[$i]) =~ m(DateTime);
+      Carp::croak "Parameter $i is not a DateTime\n";
+     }
+
+    my $t       = shift;                                                        # DateTime to test
+    my ($l, $u) = sort @_;                                                      # Lower, upper in order
+    return undef unless $t->compare($l) > 0 and $t->compare($u) < 0;            # Out of range
+
+    $first                                                                      # Show success
+}
+
 sub _string_equals_overload {
     my ( $class, $dt1, $dt2 ) = ref $_[0] ? ( undef, @_ ) : @_;
 
@@ -2080,7 +2096,7 @@ sub _normalize_nanoseconds {
         my %p    = $validator->(@_);
 
         if ( $p{locale} ) {
-            carp 'You passed a locale to the set() method.'
+            Carp::carp 'You passed a locale to the set() method.'
                 . ' You should use set_locale() instead, as using set() may alter the local time near a DST boundary.';
         }
 
@@ -3451,6 +3467,25 @@ is equivalent to this:
 
 DateTime objects can be compared to any other calendar class that
 implements the C<utc_rd_values()> method.
+
+=head2 between($$$)
+
+Check whether a L<DateTime> is strictly between two other L<DateTimes|DateTime>. Return the B<$first> L<DateTime> if it is greater than the lesser of the B<$second> L<DateTime> and the B<$third> L<DateTime>, and also, less than the greater of the $second and $third L<DateTimes|DateTime> else return B<undef>.
+
+     Parameter  Description
+  1  $first     DateTime to test
+  2  $second    DateTime of one limit
+  3  $third     DateTime of the other limit.
+
+B<Example:>
+
+  if (1) {
+    my $d   = DateTime->now;                                                    # Now
+    my $add = sub {my ($m) = @_; $d->clone->add(minutes=>$m)};                  # Add some minutes
+    ok $d  == $d->between(&$add(-1), &$add(+1));                                # In range
+    ok $d  == $d->between(&$add(+1), &$add(-1));                                # In reversed range
+    ok !      $d->between(&$add(+1), &$add(+2));                                # Out of range
+   }
 
 =head2 Testing Code That Uses DateTime
 
