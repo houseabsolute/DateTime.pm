@@ -219,4 +219,11 @@ ok( ( $infinity <=> $date1 ) == 1, 'Comparison overload $inf <=> $a' );
     ok( $dt > $dt_test2, 'comparison works across different classes' );
 }
 
+if (1) {                                                                        #T Between
+    my $d   = DateTime->now;                                                    # Now
+    my $add = sub {my ($m) = @_; $d->clone->add(minutes=>$m)};                  # Add some minutes
+    ok $d == $d->between(&$add(-1), &$add(+1));                                 # In range
+    ok !     $d->between(&$add(+1), &$add(+2));                                 # Out of range
+}
+
 done_testing();
