@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Added a $dt->is_between($dt1, $dt2) method. Based on GH #97 by philip r
+  brenan.
+
 - Simplify the calculation of leap seconds in XS. This is a little more
   efficient for most use cases (anything with future or recent past
   datetimes). Contributed by Mark Overmeer. GH #91.
