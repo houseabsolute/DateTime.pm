@@ -2003,6 +2003,14 @@ sub _compare {
     return 0;
 }
 
+sub is_between {
+    my $self  = shift;
+    my $lower = shift;
+    my $upper = shift;
+
+    return $self->compare($lower) > 0 && $self->compare($upper) < 0;
+}
+
 sub _string_equals_overload {
     my ( $class, $dt1, $dt2 ) = ref $_[0] ? ( undef, @_ ) : @_;
 
@@ -3408,6 +3416,13 @@ represent a fixed number of seconds.
 
 Note that because of leap seconds, this may not return the same result as
 doing this math based on the value returned by C<< $dt->epoch() >>.
+
+=head3 $dt->is_between( $lower, $upper )
+
+Checks whether C<$dt> is strictly between two other DateTime objects.
+
+"Strictly" means that C<$dt> must be greater than C<$lower> and less than
+C<$upper>. If it is I<equal> to either object then this method returns false.
 
 =head2 Class Methods
 

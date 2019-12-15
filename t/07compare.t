@@ -219,4 +219,32 @@ ok( ( $infinity <=> $date1 ) == 1, 'Comparison overload $inf <=> $a' );
     ok( $dt > $dt_test2, 'comparison works across different classes' );
 }
 
+{
+    my $dt = DateTime->now;
+    ok(
+        $dt->is_between( _add( $dt, -1 ), _add( $dt, 1 ) ),
+        'is_between 1 minute before and 1 minute after'
+    );
+    ok(
+        !$dt->is_between( _add( $dt, 1 ), _add( $dt, 2 ) ),
+        'not is_between 1 minute after and 2 minutes after'
+    );
+    ok(
+        !$dt->is_between( _add( $dt, 1 ), _add( $dt, -1 ) ),
+        'not is_between 1 minute after and 1 minute before (wrong order for lower and upper)'
+    );
+    ok(
+        !$dt->is_between( $dt, _add( $dt, 1 ) ),
+        'not is_between same datetime and 1 minute after'
+    );
+    ok(
+        !$dt->is_between( _add( $dt, -1 ), $dt ),
+        'not is_between 1 minute before and same datetime'
+    );
+}
+
+sub _add {
+    shift->clone->add( minutes => shift );
+}
+
 done_testing();
