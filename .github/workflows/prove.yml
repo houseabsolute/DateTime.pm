@@ -12,5 +12,5 @@ jobs:
     - uses: actions/checkout@v1
     - name: Run a multi-line script
       run: |
-        cpan -Inamespace::autoclean  
+        cpan -I namespace::autoclean  
         prove -Ilib
