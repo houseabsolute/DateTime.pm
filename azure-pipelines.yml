@@ -6,11 +6,25 @@ resources:
       endpoint: houseabsolute/ci-perl-helpers
 
 stages:
-  - template: templates/build.yml@ci-perl-helpers
+  - template: templates/helpers/build.yml@ci-perl-helpers
     parameters:
-      debug: 1
-  - template: templates/test.yml@ci-perl-helpers
+      debug: true
+
+  - template: templates/helpers/linux.yml@ci-perl-helpers
     parameters:
       coverage: codecov
-      debug: 1
-      include_threaded_perls: 'true'
+      debug: true
+      include_threads: true
+      use_default_perls: true
+
+  - template: templates/helpers/macos.yml@ci-perl-helpers
+    parameters:
+      debug: true
+      include_threads: true
+      use_default_perls: true
+
+  - template: templates/helpers/windows.yml@ci-perl-helpers
+    parameters:
+      debug: true
+      use_default_perls: true
+
