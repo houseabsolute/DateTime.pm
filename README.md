@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.51
+version 1.52
 
 # SYNOPSIS
 
@@ -100,7 +100,7 @@ The calendar represented does have a year 0, and in that way differs
 from how dates are often written using "BCE/CE" or "BC/AD".
 
 For infinite datetimes, please see the
-[DateTime::Infinite](https://metacpan.org/pod/DateTime::Infinite) module.
+[DateTime::Infinite](https://metacpan.org/pod/DateTime%3A%3AInfinite) module.
 
 # USAGE
 
@@ -237,7 +237,7 @@ with:
 
     no warnings 'DateTime';
 
-This warning may be removed in the future if [DateTime::TimeZone](https://metacpan.org/pod/DateTime::TimeZone) is made
+This warning may be removed in the future if [DateTime::TimeZone](https://metacpan.org/pod/DateTime%3A%3ATimeZone) is made
 much faster.
 
 ### DateTime->new( ... )
@@ -299,7 +299,7 @@ All of the parameters are optional except for "year". The "month" and
 "second", and "nanosecond" parameters all default to 0.
 
 The "locale" parameter should be a string containing a locale code, like
-"en-US" or "zh-Hant-TW", or an object returned by `DateTime::Locale->load`. See the [DateTime::Locale](https://metacpan.org/pod/DateTime::Locale) documentation for details.
+"en-US" or "zh-Hant-TW", or an object returned by `DateTime::Locale->load`. See the [DateTime::Locale](https://metacpan.org/pod/DateTime%3A%3ALocale) documentation for details.
 
 The "time\_zone" parameter can be either a string or a `DateTime::TimeZone`
 object. A string will simply be passed to the `DateTime::TimeZone->new`
@@ -783,10 +783,10 @@ text.
 
 ### $dt->epoch()
 
-Return the UTC epoch value for the datetime object. Datetimes before the start
-of the epoch will be returned as a negative number.
+Returns the UTC epoch value for the datetime object. DateTimes before the
+start of the epoch will be returned as a negative number.
 
-The return value from this method is always an integer.
+The return value from this method is always an integer number of seconds.
 
 Since the epoch does not account for leap seconds, the epoch time for
 1972-12-31T23:59:60 (UTC) is exactly the same as that for
@@ -813,7 +813,7 @@ to `1325376000` returns `1325376000`.
 
 These methods allow you to distinguish normal datetime objects from
 infinite ones. Infinite datetime objects are documented in
-[DateTime::Infinite](https://metacpan.org/pod/DateTime::Infinite).
+[DateTime::Infinite](https://metacpan.org/pod/DateTime%3A%3AInfinite).
 
 ### $dt->utc\_rd\_values()
 
@@ -970,7 +970,7 @@ This returns `DateTime::Duration`, but exists so that a subclass of
 ### $dt->add\_duration( $duration\_object )
 
 This method adds a `DateTime::Duration` to the current datetime. See
-the [DateTime::Duration](https://metacpan.org/pod/DateTime::Duration) docs for more details.
+the [DateTime::Duration](https://metacpan.org/pod/DateTime%3A%3ADuration) docs for more details.
 
 ### $dt->add( parameters for DateTime::Duration )
 
@@ -985,7 +985,7 @@ A synonym of `$dt->add_duration( $duration_object )`.
 ### $dt->subtract\_duration( $duration\_object )
 
 When given a `DateTime::Duration` object, this method simply calls
-`invert()` on that object and passes that new duration to the
+`inverse()` on that object and passes that new duration to the
 `add_duration` method.
 
 ### $dt->subtract( DateTime::Duration->new parameters )
@@ -1050,6 +1050,13 @@ represent a fixed number of seconds.
 
 Note that because of leap seconds, this may not return the same result as
 doing this math based on the value returned by `$dt->epoch()`.
+
+### $dt->is\_between( $lower, $upper )
+
+Checks whether `$dt` is strictly between two other DateTime objects.
+
+"Strictly" means that `$dt` must be greater than `$lower` and less than
+`$upper`. If it is _equal_ to either object then this method returns false.
 
 ## Class Methods
 
@@ -1206,7 +1213,7 @@ the nitty-gritty of datetime math, I have several recommendations:
     the floating zone and the other isn't, the results will be confusing and
     wrong.
 
-### Adding a Duration to a Datetime
+### Adding a Duration to a DateTime
 
 The parts of a duration can be broken down into five parts. These are
 months, days, minutes, seconds, and nanoseconds. Adding one month to
@@ -1274,7 +1281,7 @@ This returns a duration which only contains seconds and nanoseconds.
 If we were add the duration to a different datetime object we might
 get a different number of seconds.
 
-[DateTime::Duration](https://metacpan.org/pod/DateTime::Duration) supports three different end-of-month algorithms for
+[DateTime::Duration](https://metacpan.org/pod/DateTime%3A%3ADuration) supports three different end-of-month algorithms for
 adding months. This comes into play when an addition results in a day past the
 end of the month (for example, adding one month to January 30).
 
@@ -1288,7 +1295,7 @@ end of the month (for example, adding one month to January 30).
     $dt->add( months => 1, end_of_month => 'preserve' );
 
 By default, it uses "wrap" for positive durations and "preserve" for negative
-durations. See [DateTime::Duration](https://metacpan.org/pod/DateTime::Duration) for a detailed explanation of these
+durations. See [DateTime::Duration](https://metacpan.org/pod/DateTime%3A%3ADuration) for a detailed explanation of these
 algorithms.
 
 If you need to do lots of work with durations, take a look at Rick
@@ -1300,7 +1307,7 @@ different types of durations. These methods are
 `subtract_datetime()`, `subtract_datetime_absolute()`,
 `delta_md()`, `delta_days()`, and `delta_ms()`.
 
-### Datetime Subtraction
+### DateTime Subtraction
 
 Date subtraction is done solely based on the two object's local
 datetimes, with one exception to handle DST changes. Also, if the two
@@ -2139,15 +2146,15 @@ serialized DateTime object.
 This module is part of a larger ecosystem of modules in the DateTime
 family.
 
-## [DateTime::Set](https://metacpan.org/pod/DateTime::Set)
+## [DateTime::Set](https://metacpan.org/pod/DateTime%3A%3ASet)
 
-The [DateTime::Set](https://metacpan.org/pod/DateTime::Set) module represents sets (including recurrences) of
+The [DateTime::Set](https://metacpan.org/pod/DateTime%3A%3ASet) module represents sets (including recurrences) of
 datetimes. Many modules return sets or recurrences.
 
 ## Format Modules
 
 The various format modules exist to parse and format datetimes. For example,
-[DateTime::Format::HTTP](https://metacpan.org/pod/DateTime::Format::HTTP) parses dates according to the RFC 1123 format:
+[DateTime::Format::HTTP](https://metacpan.org/pod/DateTime%3A%3AFormat%3A%3AHTTP) parses dates according to the RFC 1123 format:
 
     my $datetime
         = DateTime::Format::HTTP->parse_datetime('Thu Feb  3 17:03:55 GMT 1994');
@@ -2254,6 +2261,7 @@ Dave Rolsky <autarch@urth.org>
 - Jason McIntosh <jmac@jmac.org>
 - Joshua Hoblitt <jhoblitt@cpan.org>
 - Karen Etheridge <ether@cpan.org>
+- Mark Overmeer <mark@overmeer.net>
 - Michael Conrad <mike@nrdvana.net>
 - Michael R. Davis <mrdvt92@users.noreply.github.com>
 - Mohammad S Anwar <mohammad.anwar@yahoo.com>
@@ -2263,6 +2271,7 @@ Dave Rolsky <autarch@urth.org>
 - Ovid &lt;curtis\_ovid\_poe@yahoo.com>
 - Paul Howarth <paul@city-fan.org>
 - Philippe Bruhat (BooK) <book@cpan.org>
+- philip r brenan <philiprbrenan@gmail.com>
 - Ricardo Signes <rjbs@cpan.org>
 - Richard Bowen <bowen@cpan.org>
 - Ron Hill <rkhill@cpan.org>
@@ -2271,7 +2280,7 @@ Dave Rolsky <autarch@urth.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2003 - 2019 by Dave Rolsky.
+This software is Copyright (c) 2003 - 2020 by Dave Rolsky.
 
 This is free software, licensed under:
 
