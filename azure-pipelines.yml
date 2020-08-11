@@ -3,7 +3,7 @@ resources:
     - repository: ci-perl-helpers
       type: github
       name: houseabsolute/ci-perl-helpers
-      endpoint: houseabsolute/ci-perl-helpers
+      endpoint: houseabsolute
 
 stages:
   - template: templates/helpers/build.yml@ci-perl-helpers
