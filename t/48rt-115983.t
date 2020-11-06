@@ -6,7 +6,7 @@ use Test::More;
 
 use DateTime;
 
-# The bug here is that if DateTime doesn't clean it's namespace, it ends up
+# The bug here is that if DateTime doesn't clean its namespace, it ends up
 # having a catch method that is getting called here and being passed a hashref
 # containing the return value of $dt->truncate. See
 # https://rt.cpan.org/Ticket/Display.html?id=115983
