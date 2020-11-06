@@ -271,8 +271,8 @@ use DateTime;
 
 {
     my $dt = DateTime->new(
-        year => 50, month  => 2,
-        hour => 3,  minute => 20, second => 5,
+        year      => 50, month  => 2,
+        hour      => 3,  minute => 20, second => 5,
         time_zone => 'UTC',
     );
 
