@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Added a $dt->rfc3339 method. Based on discussion in GH #109 by worthmine.
+
+
 1.52   2020-02-29
 
 - Added a $dt->is_between($dt1, $dt2) method. Based on GH #97 by philip r
