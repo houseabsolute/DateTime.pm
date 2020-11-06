@@ -100,9 +100,9 @@ use DateTime::Duration;
     ok( $calendar_dur->is_limit_mode, 'limit mode' );
 
     my $clock_dur = $dur->clock_duration;
-    is( $clock_dur->delta_months,  0,   'time  - delta_months is 0' );
-    is( $clock_dur->delta_minutes, 367, 'time  - delta_minutes is 367' );
-    is( $clock_dur->delta_seconds, 8,   'time  - delta_seconds is 8' );
+    is( $clock_dur->delta_months,      0,   'time  - delta_months is 0' );
+    is( $clock_dur->delta_minutes,     367, 'time  - delta_minutes is 367' );
+    is( $clock_dur->delta_seconds,     8,   'time  - delta_seconds is 8' );
     is( $clock_dur->delta_nanoseconds, 9, 'time  - delta_nanoseconds is 9' );
     ok( $clock_dur->is_limit_mode, 'limit mode' );
 }

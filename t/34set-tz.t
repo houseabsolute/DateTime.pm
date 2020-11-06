@@ -31,8 +31,8 @@ use DateTime;
     is( $dt->month, 8,    'local month should be 8 (1922-08-31 23:59:59)' );
     is( $dt->day,   31,   'local day should be 31 (1922-08-31 23:59:59)' );
     is( $dt->hour,  23,   'local hour should be 23 (1922-08-31 23:59:59)' );
-    is( $dt->minute, 59, 'local minute should be 59 (1922-08-31 23:59:59)' );
-    is( $dt->second, 59, 'local second should be 59 (1922-08-31 23:59:59)' );
+    is( $dt->minute, 59,  'local minute should be 59 (1922-08-31 23:59:59)' );
+    is( $dt->second, 59,  'local second should be 59 (1922-08-31 23:59:59)' );
 
     is( $dt->is_dst, 0, 'is_dst should be 0 (1922-08-31 23:59:59)' );
     is( $dt->offset, 0, 'offset should be 0 (1922-08-31 23:59:59)' );

@@ -1223,8 +1223,8 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         qr/(Y+)/ =>
             sub { $_[0]->_zero_padded_number( $1, $_[0]->week_year() ) },
 
-        qr/QQQQ/ => 'quarter_name',
-        qr/QQQ/  => 'quarter_abbr',
+        qr/QQQQ/  => 'quarter_name',
+        qr/QQQ/   => 'quarter_abbr',
         qr/(QQ?)/ =>
             sub { $_[0]->_zero_padded_number( $1, $_[0]->quarter() ) },
 
@@ -1325,7 +1325,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         # The LDML spec is not 100% clear on how to truncate this field, but
         # this way seems as good as anything.
         qr/(S+)/ => sub { $_[0]->_format_nanosecs( length($1) ) },
-        qr/A+/ =>
+        qr/A+/   =>
             sub { ( $_[0]->{local_rd_secs} * 1000 ) + $_[0]->millisecond() },
 
         qr/zzzz/   => sub { $_[0]->time_zone_long_name() },

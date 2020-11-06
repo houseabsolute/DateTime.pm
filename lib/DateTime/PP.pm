@@ -59,7 +59,7 @@ sub _rd2ymd {
 
     $c = ( $d * 4 - 1 )
         / 146097;    # calc # of centuries $d is after 29 Feb of yr 0
-    $d -= $c * 146097 / 4;    # (4 centuries = 146097 days)
+    $d -= $c * 146097 / 4;         # (4 centuries = 146097 days)
     $y = ( $d * 4 - 1 ) / 1461;    # calc number of years into the century,
     $d -= $y * 1461 / 4;           # again March-based (4 yrs =~ 146[01] days)
     $m = ( $d * 12 + 1093 )
