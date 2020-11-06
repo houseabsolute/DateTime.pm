@@ -14,7 +14,7 @@ use Carp;
 use DateTime::Duration;
 use DateTime::Helpers;
 use DateTime::Locale 1.06;
-use DateTime::TimeZone 2.02;
+use DateTime::TimeZone 2.44;
 use DateTime::Types;
 use POSIX qw( floor fmod );
 use Params::ValidationCompiler 0.26 qw( validation_for );
@@ -955,6 +955,21 @@ sub hms {
 
 sub iso8601 { $_[0]->datetime('T') }
 
+sub rfc3339 {
+    my $self = shift;
+
+    return $self->datetime('T')
+        if $self->{tz}->is_floating;
+
+    my $secs = $self->offset;
+    my $offset
+        = $secs
+        ? DateTime::TimeZone->offset_as_string( $secs, q{:} )
+        : 'Z';
+
+    return $self->datetime('T') . $offset;
+}
+
 sub datetime {
     my ( $self, $sep ) = @_;
     $sep = 'T' unless defined $sep;
@@ -1331,12 +1346,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         qr/zzzz/   => sub { $_[0]->time_zone_long_name() },
         qr/z{1,3}/ => sub { $_[0]->time_zone_short_name() },
         qr/ZZZZZ/  => sub {
-            substr(
-                my $z
-                    = DateTime::TimeZone->offset_as_string( $_[0]->offset() ),
-                -2, 0, ':'
-            );
-            $z;
+            DateTime::TimeZone->offset_as_string( $_[0]->offset(), q{:} );
         },
         qr/ZZZZ/ => sub {
             $_[0]->time_zone_short_name()
@@ -3003,6 +3013,17 @@ This method is also available as C<< $dt->iso8601() >>, but it's not really a
 very good ISO8601 format, as it lacks a time zone.  If called as
 C<< $dt->iso8601() >> you cannot change the separator, as ISO8601 specifies
 that "T" must be used to separate them.
+
+=head3 $dt->rfc3339
+
+This formats a datetime in RFC3339 format. This is the same as C<<
+$dt->datetime >> with an added offset at the end of the string except if the
+time zone is the floating time zone.
+
+If the offset is '+00:00' then this is represented as 'Z'. Otherwise the
+offset is formatted with a leading sign (+/-) and a colon separate numeric
+offset with hours and minutes. If the offset has a non-zero seconds component,
+that is also included.
 
 =head3 $dt->stringify()
 
