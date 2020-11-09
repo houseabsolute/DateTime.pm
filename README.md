@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.52
+version 1.53
 
 # SYNOPSIS
 
@@ -647,6 +647,16 @@ This method is also available as `$dt->iso8601()`, but it's not really a
 very good ISO8601 format, as it lacks a time zone.  If called as
 `$dt->iso8601()` you cannot change the separator, as ISO8601 specifies
 that "T" must be used to separate them.
+
+### $dt->rfc3339
+
+This formats a datetime in RFC3339 format. This is the same as `$dt->datetime` with an added offset at the end of the string except if the
+time zone is the floating time zone.
+
+If the offset is '+00:00' then this is represented as 'Z'. Otherwise the
+offset is formatted with a leading sign (+/-) and a colon separate numeric
+offset with hours and minutes. If the offset has a non-zero seconds component,
+that is also included.
 
 ### $dt->stringify()
 
@@ -2237,7 +2247,7 @@ software much more, unless I get so many donations that I can consider working
 on free software full time (let's all have a chuckle at that together).
 
 To donate, log into PayPal and send money to autarch@urth.org, or use the
-button at [http://www.urth.org/~autarch/fs-donation.html](http://www.urth.org/~autarch/fs-donation.html).
+button at [https://www.urth.org/fs-donation.html](https://www.urth.org/fs-donation.html).
 
 # AUTHOR
 
