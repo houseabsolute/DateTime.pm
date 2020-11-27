@@ -364,7 +364,8 @@ __END__
       hours       => 6,
       minutes     => 15,
       seconds     => 45,
-      nanoseconds => 12000
+      nanoseconds => 12000,
+      end_of_month => 'limit'  # Like PostgreSQL do math with dates
   );
 
   my ( $days, $hours, $seconds ) = $dur->in_units('days', 'hours', 'seconds');
