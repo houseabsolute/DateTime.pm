@@ -276,7 +276,7 @@ sub _set_locale {
         $self->{locale}
             = $locale
             ? DateTime::Locale->load($locale)
-            : $self->DefaultLocale();
+            : $self->DefaultLocale;
     }
 
     return;
@@ -294,8 +294,8 @@ sub _new_from_self {
         nanosecond
         locale time_zone
     );
-    $old{formatter} = $self->formatter()
-        if defined $self->formatter();
+    $old{formatter} = $self->formatter
+        if defined $self->formatter;
 
     my $method = delete $p{_skip_validation} ? '_new' : 'new';
 
@@ -519,7 +519,7 @@ sub _calc_local_components {
 
         my $self = $class->_new( %p, %args, time_zone => 'UTC' );
 
-        $self->_maybe_future_dst_warning( $self->year(), $p{time_zone} );
+        $self->_maybe_future_dst_warning( $self->year, $p{time_zone} );
 
         $self->set_time_zone( $p{time_zone} ) if exists $p{time_zone};
 
@@ -529,7 +529,7 @@ sub _calc_local_components {
 
 sub now {
     my $class = shift;
-    return $class->from_epoch( epoch => $class->_core_time(), @_ );
+    return $class->from_epoch( epoch => $class->_core_time, @_ );
 }
 
 sub _maybe_future_dst_warning {
@@ -539,7 +539,7 @@ sub _maybe_future_dst_warning {
 
     return unless $year >= 5000 && $tz;
 
-    my $tz_name = ref $tz ? $tz->name() : $tz;
+    my $tz_name = ref $tz ? $tz->name : $tz;
     return if $tz_name eq 'floating' || $tz_name eq 'UTC';
 
     warnings::warnif(
@@ -762,9 +762,9 @@ sub ce_year {
         : $_[0]->{local_c}{year};
 }
 
-sub era_name { $_[0]->{locale}->era_wide->[ $_[0]->_era_index() ] }
+sub era_name { $_[0]->{locale}->era_wide->[ $_[0]->_era_index ] }
 
-sub era_abbr { $_[0]->{locale}->era_abbreviated->[ $_[0]->_era_index() ] }
+sub era_abbr { $_[0]->{locale}->era_abbreviated->[ $_[0]->_era_index ] }
 
 # deprecated
 *era = \&era_abbr;
@@ -787,10 +787,10 @@ sub month {
 sub month_0 { $_[0]->{local_c}{month} - 1 }
 *mon_0 = \&month_0;
 
-sub month_name { $_[0]->{locale}->month_format_wide->[ $_[0]->month_0() ] }
+sub month_name { $_[0]->{locale}->month_format_wide->[ $_[0]->month_0 ] }
 
 sub month_abbr {
-    $_[0]->{locale}->month_format_abbreviated->[ $_[0]->month_0() ];
+    $_[0]->{locale}->month_format_abbreviated->[ $_[0]->month_0 ];
 }
 
 sub day_of_month {
@@ -805,11 +805,11 @@ sub weekday_of_month { use integer; ( ( $_[0]->day - 1 ) / 7 ) + 1 }
 sub quarter { $_[0]->{local_c}{quarter} }
 
 sub quarter_name {
-    $_[0]->{locale}->quarter_format_wide->[ $_[0]->quarter_0() ];
+    $_[0]->{locale}->quarter_format_wide->[ $_[0]->quarter_0 ];
 }
 
 sub quarter_abbr {
-    $_[0]->{locale}->quarter_format_abbreviated->[ $_[0]->quarter_0() ];
+    $_[0]->{locale}->quarter_format_abbreviated->[ $_[0]->quarter_0 ];
 }
 
 sub quarter_0 { $_[0]->{local_c}{quarter} - 1 }
@@ -832,10 +832,10 @@ sub local_day_of_week {
         + ( $self->day_of_week - $self->{locale}->first_day_of_week ) % 7;
 }
 
-sub day_name { $_[0]->{locale}->day_format_wide->[ $_[0]->day_of_week_0() ] }
+sub day_name { $_[0]->{locale}->day_format_wide->[ $_[0]->day_of_week_0 ] }
 
 sub day_abbr {
-    $_[0]->{locale}->day_format_abbreviated->[ $_[0]->day_of_week_0() ];
+    $_[0]->{locale}->day_format_abbreviated->[ $_[0]->day_of_week_0 ];
 }
 
 sub day_of_quarter { $_[0]->{local_c}{day_of_quarter} }
@@ -851,7 +851,7 @@ sub day_of_year_0 { $_[0]->{local_c}{day_of_year} - 1 }
 *doy_0 = \&day_of_year_0;
 
 sub am_or_pm {
-    $_[0]->{locale}->am_pm_abbreviated->[ $_[0]->hour() < 12 ? 0 : 1 ];
+    $_[0]->{locale}->am_pm_abbreviated->[ $_[0]->hour < 12 ? 0 : 1 ];
 }
 
 sub ymd {
@@ -1120,7 +1120,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         'b' => sub { $_[0]->month_abbr },
         'B' => sub { $_[0]->month_name },
         'c' => sub {
-            $_[0]->format_cldr( $_[0]->{locale}->datetime_format_default() );
+            $_[0]->format_cldr( $_[0]->{locale}->datetime_format_default );
         },
         'C' => sub { int( $_[0]->year / 100 ) },
         'd' => sub { sprintf( '%02d', $_[0]->day_of_month ) },
@@ -1138,8 +1138,8 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         'M' => sub { sprintf( '%02d', $_[0]->minute ) },
         'n' => sub {"\n"},                     # should this be OS-sensitive?
         'N' => \&_format_nanosecs,
-        'p' => sub { $_[0]->am_or_pm() },
-        'P' => sub { lc $_[0]->am_or_pm() },
+        'p' => sub { $_[0]->am_or_pm },
+        'P' => sub { lc $_[0]->am_or_pm },
         'r' => sub { $_[0]->strftime('%I:%M:%S %p') },
         'R' => sub { $_[0]->strftime('%H:%M') },
         's' => sub { $_[0]->epoch },
@@ -1161,10 +1161,10 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
             return sprintf( '%02d', int( ( $mon + 6 ) / 7 ) );
         },
         'x' => sub {
-            $_[0]->format_cldr( $_[0]->{locale}->date_format_default() );
+            $_[0]->format_cldr( $_[0]->{locale}->date_format_default );
         },
         'X' => sub {
-            $_[0]->format_cldr( $_[0]->{locale}->time_format_default() );
+            $_[0]->format_cldr( $_[0]->{locale}->time_format_default );
         },
         'y' => sub { sprintf( '%02d', substr( $_[0]->year, -2 ) ) },
         'Y' => sub { return $_[0]->year },
@@ -1219,145 +1219,145 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
     # http://www.unicode.org/reports/tr35/tr35-9.html#Date_Format_Patterns.
     my @patterns = (
         qr/GGGGG/ =>
-            sub { $_[0]->{locale}->era_narrow->[ $_[0]->_era_index() ] },
+            sub { $_[0]->{locale}->era_narrow->[ $_[0]->_era_index ] },
         qr/GGGG/   => 'era_name',
         qr/G{1,3}/ => 'era_abbr',
 
         qr/(y{3,5})/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->year() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->year ) },
 
         # yy is a weird special case, where it must be exactly 2 digits
         qr/yy/ => sub {
-            my $year = $_[0]->year();
+            my $year = $_[0]->year;
             my $y2   = length $year > 2 ? substr( $year, -2, 2 ) : $year;
             $y2 *= -1 if $year < 0;
             $_[0]->_zero_padded_number( 'yy', $y2 );
         },
-        qr/y/    => sub { $_[0]->year() },
-        qr/(u+)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->year() ) },
+        qr/y/    => sub { $_[0]->year },
+        qr/(u+)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->year ) },
         qr/(Y+)/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->week_year() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->week_year ) },
 
         qr/QQQQ/  => 'quarter_name',
         qr/QQQ/   => 'quarter_abbr',
         qr/(QQ?)/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->quarter() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->quarter ) },
 
         qr/qqqq/ => sub {
-            $_[0]->{locale}->quarter_stand_alone_wide()
-                ->[ $_[0]->quarter_0() ];
+            $_[0]->{locale}->quarter_stand_alone_wide
+                ->[ $_[0]->quarter_0 ];
         },
         qr/qqq/ => sub {
-            $_[0]->{locale}->quarter_stand_alone_abbreviated()
-                ->[ $_[0]->quarter_0() ];
+            $_[0]->{locale}->quarter_stand_alone_abbreviated
+                ->[ $_[0]->quarter_0 ];
         },
         qr/(qq?)/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->quarter() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->quarter ) },
 
         qr/MMMMM/ =>
-            sub { $_[0]->{locale}->month_format_narrow->[ $_[0]->month_0() ] }
+            sub { $_[0]->{locale}->month_format_narrow->[ $_[0]->month_0 ] }
         ,
         qr/MMMM/  => 'month_name',
         qr/MMM/   => 'month_abbr',
-        qr/(MM?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->month() ) },
+        qr/(MM?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->month ) },
 
         qr/LLLLL/ => sub {
-            $_[0]->{locale}->month_stand_alone_narrow->[ $_[0]->month_0() ];
+            $_[0]->{locale}->month_stand_alone_narrow->[ $_[0]->month_0 ];
         },
         qr/LLLL/ => sub {
-            $_[0]->{locale}->month_stand_alone_wide->[ $_[0]->month_0() ];
+            $_[0]->{locale}->month_stand_alone_wide->[ $_[0]->month_0 ];
         },
         qr/LLL/ => sub {
             $_[0]->{locale}
-                ->month_stand_alone_abbreviated->[ $_[0]->month_0() ];
+                ->month_stand_alone_abbreviated->[ $_[0]->month_0 ];
         },
-        qr/(LL?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->month() ) },
+        qr/(LL?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->month ) },
 
         qr/(ww?)/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->week_number() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->week_number ) },
         qr/W/ => 'week_of_month',
 
         qr/(dd?)/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->day_of_month() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->day_of_month ) },
         qr/(D{1,3})/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->day_of_year() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->day_of_year ) },
 
         qr/F/    => 'weekday_of_month',
-        qr/(g+)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->mjd() ) },
+        qr/(g+)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->mjd ) },
 
         qr/EEEEE/ => sub {
-            $_[0]->{locale}->day_format_narrow->[ $_[0]->day_of_week_0() ];
+            $_[0]->{locale}->day_format_narrow->[ $_[0]->day_of_week_0 ];
         },
         qr/EEEE/   => 'day_name',
         qr/E{1,3}/ => 'day_abbr',
 
         qr/eeeee/ => sub {
-            $_[0]->{locale}->day_format_narrow->[ $_[0]->day_of_week_0() ];
+            $_[0]->{locale}->day_format_narrow->[ $_[0]->day_of_week_0 ];
         },
         qr/eeee/  => 'day_name',
         qr/eee/   => 'day_abbr',
         qr/(ee?)/ => sub {
-            $_[0]->_zero_padded_number( $1, $_[0]->local_day_of_week() );
+            $_[0]->_zero_padded_number( $1, $_[0]->local_day_of_week );
         },
 
         qr/ccccc/ => sub {
             $_[0]->{locale}
-                ->day_stand_alone_narrow->[ $_[0]->day_of_week_0() ];
+                ->day_stand_alone_narrow->[ $_[0]->day_of_week_0 ];
         },
         qr/cccc/ => sub {
-            $_[0]->{locale}->day_stand_alone_wide->[ $_[0]->day_of_week_0() ];
+            $_[0]->{locale}->day_stand_alone_wide->[ $_[0]->day_of_week_0 ];
         },
         qr/ccc/ => sub {
             $_[0]->{locale}
-                ->day_stand_alone_abbreviated->[ $_[0]->day_of_week_0() ];
+                ->day_stand_alone_abbreviated->[ $_[0]->day_of_week_0 ];
         },
         qr/(cc?)/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->day_of_week() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->day_of_week ) },
 
         qr/a/ => 'am_or_pm',
 
         qr/(hh?)/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->hour_12() ) },
-        qr/(HH?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->hour() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->hour_12 ) },
+        qr/(HH?)/ => sub { $_[0]->_zero_padded_number( $1, $_[0]->hour ) },
         qr/(KK?)/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->hour_12_0() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->hour_12_0 ) },
         qr/(kk?)/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->hour_1() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->hour_1 ) },
         qr/(jj?)/ => sub {
             my $h
-                = $_[0]->{locale}->prefers_24_hour_time()
-                ? $_[0]->hour()
-                : $_[0]->hour_12();
+                = $_[0]->{locale}->prefers_24_hour_time
+                ? $_[0]->hour
+                : $_[0]->hour_12;
             $_[0]->_zero_padded_number( $1, $h );
         },
 
         qr/(mm?)/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->minute() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->minute ) },
 
         qr/(ss?)/ =>
-            sub { $_[0]->_zero_padded_number( $1, $_[0]->second() ) },
+            sub { $_[0]->_zero_padded_number( $1, $_[0]->second ) },
 
         # The LDML spec is not 100% clear on how to truncate this field, but
         # this way seems as good as anything.
         qr/(S+)/ => sub { $_[0]->_format_nanosecs( length($1) ) },
         qr/A+/   =>
-            sub { ( $_[0]->{local_rd_secs} * 1000 ) + $_[0]->millisecond() },
+            sub { ( $_[0]->{local_rd_secs} * 1000 ) + $_[0]->millisecond },
 
-        qr/zzzz/   => sub { $_[0]->time_zone_long_name() },
-        qr/z{1,3}/ => sub { $_[0]->time_zone_short_name() },
+        qr/zzzz/   => sub { $_[0]->time_zone_long_name },
+        qr/z{1,3}/ => sub { $_[0]->time_zone_short_name },
         qr/ZZZZZ/  => sub {
-            DateTime::TimeZone->offset_as_string( $_[0]->offset(), q{:} );
+            DateTime::TimeZone->offset_as_string( $_[0]->offset, q{:} );
         },
         qr/ZZZZ/ => sub {
-            $_[0]->time_zone_short_name()
-                . DateTime::TimeZone->offset_as_string( $_[0]->offset() );
+            $_[0]->time_zone_short_name
+                . DateTime::TimeZone->offset_as_string( $_[0]->offset );
         },
         qr/Z{1,3}/ =>
-            sub { DateTime::TimeZone->offset_as_string( $_[0]->offset() ) },
-        qr/vvvv/   => sub { $_[0]->time_zone_long_name() },
-        qr/v{1,3}/ => sub { $_[0]->time_zone_short_name() },
-        qr/VVVV/   => sub { $_[0]->time_zone_long_name() },
-        qr/V{1,3}/ => sub { $_[0]->time_zone_short_name() },
+            sub { DateTime::TimeZone->offset_as_string( $_[0]->offset ) },
+        qr/vvvv/   => sub { $_[0]->time_zone_long_name },
+        qr/v{1,3}/ => sub { $_[0]->time_zone_short_name },
+        qr/VVVV/   => sub { $_[0]->time_zone_long_name },
+        qr/V{1,3}/ => sub { $_[0]->time_zone_short_name },
     );
 
     sub _zero_padded_number {
@@ -2251,7 +2251,7 @@ sub set_time_zone {
         return $self if $self->{tz} eq $tz;
     }
     else {
-        return $self if $self->{tz}->name() eq $tz;
+        return $self if $self->{tz}->name eq $tz;
     }
 
     my $was_floating = $self->{tz}->is_floating;
