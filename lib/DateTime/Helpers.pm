@@ -7,6 +7,7 @@ our $VERSION = '1.54';
 
 use Scalar::Util ();
 
+## no critic (Subroutines::ProhibitBuiltinHomonyms)
 sub can {
     my $object = shift;
     my $method = shift;
