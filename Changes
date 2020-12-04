@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- This release contains a lot of small documentation revisions, both to
+  formatting and content.
+
+
 1.53   2020-11-08
 
 - Added a $dt->rfc3339 method. Based on discussion in GH #109 by worthmine.

@@ -124,38 +124,41 @@ __PACKAGE__->_initialize();
 
 __END__
 
+=pod
+
+=encoding UTF-8
+
 =head1 SYNOPSIS
 
-  use DateTime;
-  use DateTime::LeapSecond;
+    use DateTime;
+    use DateTime::LeapSecond;
 
-  print "Leap seconds between years 1990 and 2000 are ";
-  print DateTime::Leapsecond::leap_seconds( $utc_rd_2000 ) -
-        DateTime::Leapsecond::leap_seconds( $utc_rd_1990 );
+    print "Leap seconds between years 1990 and 2000 are ";
+    print DateTime::Leapsecond::leap_seconds($utc_rd_2000)
+        - DateTime::Leapsecond::leap_seconds($utc_rd_1990);
 
 =head1 DESCRIPTION
 
-This module is used to calculate leap seconds for a given Rata Die
-day. It is used when DateTime.pm cannot compile the XS version of
-this code.
+This module is used to calculate leap seconds for a given Rata Die day. It is
+used when L<DateTime> cannot compile the XS version of this code.
 
-This library is known to be accurate for dates until Jun 2017.
+This library is known to be accurate for dates until Jun 2020.
 
 There are no leap seconds before 1972, because that's the year this
 system was implemented.
 
 =over 4
 
-=item * leap_seconds( $rd )
+=item * leap_seconds($rd)
 
 Returns the number of accumulated leap seconds for a given day.
 
-=item * extra_seconds( $rd )
+=item * extra_seconds($rd)
 
 Returns the number of leap seconds for a given day,
 in the range -2 .. 2.
 
-=item * day_length( $rd )
+=item * day_length($rd)
 
 Returns the number of seconds for a given day,
 in the range 86398 .. 86402.

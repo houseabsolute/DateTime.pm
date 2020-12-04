@@ -15,6 +15,7 @@ DATETIME
 datetime's
 datetimes
 DateTimes
+DateTimeX
 decrement
 dian
 Domini
@@ -24,6 +25,7 @@ eeee
 EEEE
 eeeee
 EEEEE
+env
 fallback
 Flávio
 formatter
@@ -44,6 +46,7 @@ LLLL
 LLLLL
 Measham
 Measham's
+MetaCPAN
 MMM
 MMMM
 MMMMM
@@ -55,6 +58,7 @@ nitty
 other's
 PayPal
 POSIX
+Postgres
 proleptic
 qqq
 QQQ

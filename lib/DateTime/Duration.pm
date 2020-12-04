@@ -352,6 +352,10 @@ sub _compare_overload {
 
 __END__
 
+=pod
+
+=encoding UTF-8
+
 =head1 SYNOPSIS
 
     use DateTime::Duration;
@@ -405,82 +409,119 @@ __END__
 
 =head1 DESCRIPTION
 
-This is a simple class for representing duration objects. These
-objects are used whenever you do date math with DateTime.pm.
+This is a simple class for representing duration objects. These objects are
+used whenever you do date math with L<DateTime>.
 
 See the L<How DateTime Math Works|DateTime/"How DateTime Math Works"> section
-of the DateTime.pm documentation for more details. The short course: One
+of the L<DateTime> documentation for more details. The short course: One
 cannot in general convert between seconds, minutes, days, and months, so this
 class will never do so. Instead, create the duration with the desired units to
 begin with, for example by calling the appropriate subtraction/delta method on
-a C<DateTime.pm> object.
+a L<DateTime> object.
 
 =head1 METHODS
 
-Like C<DateTime> itself, C<DateTime::Duration> returns the object from
+Like L<DateTime> itself, C<DateTime::Duration> returns the object from
 mutator methods in order to make method chaining possible.
 
 C<DateTime::Duration> has the following methods:
 
 =head2 DateTime::Duration->new( ... )
 
-This method takes the parameters "years", "months", "weeks", "days",
-"hours", "minutes", "seconds", "nanoseconds", and "end_of_month". All
-of these except "end_of_month" are numbers. If any of the numbers are
-negative, the entire duration is negative.
+This class method accepts the following parameters:
+
+=over 4
+
+=item * year
+
+An integer containing the number of years in the duration. This is optional.
+
+=item * month
+
+An integer containing the number of months in the duration. This is optional.
+
+=item * weeks
+
+An integer containing the number of weeks in the duration. This is optional.
+
+=item * days
+
+An integer containing the number of days in the duration. This is optional.
+
+=item * hours
+
+An integer containing the number of hours in the duration. This is optional.
+
+=item * minutes
+
+An integer containing the number of minutes in the duration. This is optional.
+
+=item * seconds
+
+An integer containing the number of seconds in the duration. This is optional.
+
+=item * nanoseconds
+
+An integer containing the number of nanoseconds in the duration. This is
+optional.
+
+=item * end_of_month
+
+This must be either C<"wrap">, C<"limit">, or C<"preserve">. This parameter
+specifies how date math that crosses the end of a month is handled.
+
+In C<"wrap"> mode, adding months or years that result in days beyond the end of
+the new month will roll over into the following month. For instance, adding
+one year to Feb 29 will result in Mar 1.
+
+If you specify C<"limit">, the end of the month is never crossed. Thus, adding
+one year to Feb 29, 2000 will result in Feb 28, 2001. If you were to then add
+three more years this will result in Feb 28, 2004.
+
+If you specify C<"preserve">, the same calculation is done as for C<"limit">
+except that if the original date is at the end of the month the new date will
+also be. For instance, adding one month to Feb 29, 2000 will result in Mar 31,
+2000.
+
+For positive durations, this parameter defaults to C<"wrap">. For negative
+durations, the default is C<"preserve">. This should match how most people
+"intuitively" expect datetime math to work.
+
+=back
+
+All of the duration units can be positive or negative. However, if any of the
+numbers are negative, the entire duration is negative.
 
 All of the numbers B<must be integers>.
 
-Internally, years as just treated as 12 months. Similarly, weeks are
-treated as 7 days, and hours are converted to minutes. Seconds and
-nanoseconds are both treated separately.
+Internally, years as just treated as 12 months. Similarly, weeks are treated
+as 7 days, and hours are converted to minutes. Seconds and nanoseconds are
+both treated separately.
 
-The "end_of_month" parameter must be either "wrap", "limit", or
-"preserve". This parameter specifies how date math that crosses the
-end of a month is handled.
-
-In "wrap" mode, adding months or years that result in days beyond the
-end of the new month will roll over into the following month. For
-instance, adding one year to Feb 29 will result in Mar 1.
-
-If you specify "end_of_month" mode as "limit", the end of the month is
-never crossed. Thus, adding one year to Feb 29, 2000 will result in
-Feb 28, 2001. If you were to then add three more years this will
-result in Feb 28, 2004.
-
-If you specify "end_of_month" mode as "preserve", the same calculation
-is done as for "limit" except that if the original date is at the end
-of the month the new date will also be. For instance, adding one
-month to Feb 29, 2000 will result in Mar 31, 2000.
-
-For positive durations, the "end_of_month" parameter defaults to wrap.
-For negative durations, the default is "preserve". This should match
-how most people "intuitively" expect datetime math to work.
-
-=head2 $dur->clone()
+=head2 $dur->clone
 
 Returns a new object with the same properties as the object on which
 this method was called.
 
 =head2 $dur->in_units( ... )
 
-Returns the length of the duration in the units (any of those that can
-be passed to C<new>) given as arguments. All lengths are integral,
-but may be negative. Smaller units are computed from what remains
+Returns the length of the duration in the units (any of those that can be
+passed to C<< DateTime::Duration->new >>) given as arguments. All lengths are
+integral, but may be negative. Smaller units are computed from what remains
 after taking away the larger units given, so for example:
 
-  my $dur = DateTime::Duration->new( years => 1, months => 15 );
+    my $dur = DateTime::Duration->new( years => 1, months => 15 );
 
-  $dur->in_units( 'years' );            # 2
-  $dur->in_units( 'months' );           # 27
-  $dur->in_units( 'years', 'months' );  # (2, 3)
-  $dur->in_units( 'weeks', 'days' );    # (0, 0) !
+    $dur->in_units('years');                # 2
+    $dur->in_units('months');               # 27
+    $dur->in_units( 'years', 'months' );    # (2, 3)
+    $dur->in_units( 'weeks', 'days' );      # (0, 0) !
 
-The last example demonstrates that there will not be any conversion
-between units which don't have a fixed conversion rate. The only
-conversions possible are:
+The last example demonstrates that there will not be any conversion between
+units which don't have a fixed conversion rate. The only conversions possible
+are:
 
-=over 8
+=over 4
 
 =item * years <=> months
 
@@ -493,40 +534,40 @@ conversions possible are:
 =back
 
 For the explanation of why this is the case, please see the L<How DateTime
-Math Works|DateTime/"How DateTime Math Works"> section of the DateTime.pm
+Math Works|DateTime/"How DateTime Math Works"> section of the DateTime
 documentation
 
 Note that the numbers returned by this method may not match the values
 given to the constructor.
 
-In list context, in_units returns the lengths in the order of the units
-given. In scalar context, it returns the length in the first unit (but
+In list context, C<< $dur->in_units >> returns the lengths in the order of the
+units given. In scalar context, it returns the length in the first unit (but
 still computes in terms of all given units).
 
-If you need more flexibility in presenting information about
-durations, please take a look a C<DateTime::Format::Duration>.
+If you need more flexibility in presenting information about durations, please
+take a look a L<DateTime::Format::Duration>.
 
-=head2 $dur->is_positive(), $dur->is_zero(), $dur->is_negative()
+=head2 $dur->is_positive, $dur->is_zero, $dur->is_negative
 
 Indicates whether or not the duration is positive, zero, or negative.
 
 If the duration contains both positive and negative units, then it
 will return false for B<all> of these methods.
 
-=head2 $dur->is_wrap_mode(), $dur->is_limit_mode(), $dur->is_preserve_mode()
+=head2 $dur->is_wrap_mode, $dur->is_limit_mode, $dur->is_preserve_mode
 
 Indicates what mode is used for end of month wrapping.
 
-=head2 $dur->end_of_month_mode()
+=head2 $dur->end_of_month_mode
 
-Returns one of "wrap", "limit", or "preserve".
+Returns one of C<"wrap">, C<"limit">, or C<"preserve">.
 
-=head2 $dur->calendar_duration()
+=head2 $dur->calendar_duration
 
 Returns a new object with the same I<calendar> delta (months and days
 only) and end of month mode as the current object.
 
-=head2 $dur->clock_duration()
+=head2 $dur->clock_duration
 
 Returns a new object with the same I<clock> deltas (minutes, seconds,
 and nanoseconds) and end of month mode as the current object.
@@ -534,14 +575,14 @@ and nanoseconds) and end of month mode as the current object.
 =head2 $dur->inverse( ... )
 
 Returns a new object with the same deltas as the current object, but
-multiple by -1. The end of month mode for the new object will be the
-default end of month mode, which depends on whether the new duration
-is positive or negative.
+multiplied by -1. The end of month mode for the new object will be the default
+end of month mode, which depends on whether the new duration is positive or
+negative.
 
 You can set the end of month mode in the inverted duration explicitly by
-passing "end_of_month => ..." to the C<inverse()> method.
+passing an C<end_of_month> parameter to the C<< $dur->inverse >> method.
 
-=head2 $dur->add_duration( $duration_object ), $dur->subtract_duration( $duration_object )
+=head2 $dur->add_duration($duration_object), $dur->subtract_duration($duration_object)
 
 Adds or subtracts one duration from another.
 
@@ -550,15 +591,16 @@ Adds or subtracts one duration from another.
 These accept either constructor parameters for a new C<DateTime::Duration>
 object or an already-constructed duration object.
 
-=head2 $dur->multiply( $number )
+=head2 $dur->multiply($number)
 
-Multiplies each unit in the C<DateTime::Duration> object by the specified integer number.
+Multiplies each unit in the C<DateTime::Duration> object by the specified
+integer number.
 
 =head2 DateTime::Duration->compare( $duration1, $duration2, $base_datetime )
 
 This is a class method that can be used to compare or sort durations.
 Comparison is done by adding each duration to the specified
-C<DateTime.pm> object and comparing the resulting datetimes. This is
+L<DateTime> object and comparing the resulting datetimes. This is
 necessary because without a base, many durations are not comparable.
 For example, 1 month may or may not be longer than 29 days, depending
 on what datetime it is added to.
@@ -574,19 +616,19 @@ unit (months I<or> days I<or> hours, etc.), and each duration contains
 the same type of unit, then the results of the comparison will be
 repeatable.
 
-=head2 $dur->delta_months(), $dur->delta_days(), $dur->delta_minutes(), $dur->delta_seconds(), $dur->delta_nanoseconds()
+=head2 $dur->delta_months, $dur->delta_days, $dur->delta_minutes, $dur->delta_seconds, $dur->delta_nanoseconds
 
-These methods provide the information C<DateTime.pm> needs for doing date
+These methods provide the information L<DateTime> needs for doing date
 math. The numbers returned may be positive or negative. This is mostly useful
 for doing date math in L<DateTime>.
 
-=head2 $dur->deltas()
+=head2 $dur->deltas
 
 Returns a hash with the keys "months", "days", "minutes", "seconds", and
 "nanoseconds", containing all the delta information for the object. This is
 mostly useful for doing date math in L<DateTime>.
 
-=head2 $dur->years(), $dur->months(), $dur->weeks(), $dur->days(), $dur->hours(), $dur->minutes(), $dur->seconds(), $dur->nanoseconds()
+=head2 $dur->years, $dur->months, $dur->weeks, $dur->days, $dur->hours, $dur->minutes, $dur->seconds, $dur->nanoseconds
 
 These methods return numbers indicating how many of the given unit the
 object represents, after having done a conversion to any larger units.
@@ -595,17 +637,17 @@ is returned. These numbers are always positive.
 
 Here's what each method returns:
 
- $dur->years()       == abs( $dur->in_units('years') )
- $dur->months()      == abs( ( $dur->in_units( 'months', 'years' ) )[0] )
- $dur->weeks()       == abs( $dur->in_units( 'weeks' ) )
- $dur->days()        == abs( ( $dur->in_units( 'days', 'weeks' ) )[0] )
- $dur->hours()       == abs( $dur->in_units( 'hours' ) )
- $dur->minutes       == abs( ( $dur->in_units( 'minutes', 'hours' ) )[0] )
- $dur->seconds       == abs( $dur->in_units( 'seconds' ) )
- $dur->nanoseconds() == abs( ( $dur->in_units( 'nanoseconds', 'seconds' ) )[0] )
+    $dur->years       == abs( $dur->in_units('years') )
+    $dur->months      == abs( ( $dur->in_units( 'months', 'years' ) )[0] )
+    $dur->weeks       == abs( $dur->in_units( 'weeks' ) )
+    $dur->days        == abs( ( $dur->in_units( 'days', 'weeks' ) )[0] )
+    $dur->hours       == abs( $dur->in_units( 'hours' ) )
+    $dur->minutes     == abs( ( $dur->in_units( 'minutes', 'hours' ) )[0] )
+    $dur->seconds     == abs( $dur->in_units( 'seconds' ) )
+    $dur->nanoseconds == abs( ( $dur->in_units( 'nanoseconds', 'seconds' ) )[0] )
 
-If this seems confusing, remember that you can always use the
-C<in_units()> method to specify exactly what you want.
+If this seems confusing, remember that you can always use the C<<
+$dur->in_units >> method to specify exactly what you want.
 
 Better yet, if you are trying to generate output suitable for humans,
 use the C<DateTime::Format::Duration> module.
@@ -616,7 +658,7 @@ This class overloads addition, subtraction, and mutiplication.
 
 Comparison is B<not> overloaded. If you attempt to compare durations
 using C<< <=> >> or C<cmp>, then an exception will be thrown!  Use the
-C<compare()> class method instead.
+C<compare> class method instead.
 
 =head1 SUPPORT
 
