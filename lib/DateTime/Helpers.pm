@@ -3,7 +3,7 @@ package DateTime::Helpers;
 use strict;
 use warnings;
 
-our $VERSION = '1.54';
+our $VERSION = '1.55';
 
 use Scalar::Util ();
 
