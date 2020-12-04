@@ -354,52 +354,54 @@ __END__
 
 =head1 SYNOPSIS
 
-  use DateTime::Duration;
+    use DateTime::Duration;
 
-  $dur = DateTime::Duration->new(
-      years       => 3,
-      months      => 5,
-      weeks       => 1,
-      days        => 1,
-      hours       => 6,
-      minutes     => 15,
-      seconds     => 45,
-      nanoseconds => 12000
-  );
+    $dur = DateTime::Duration->new(
+        years        => 3,
+        months       => 5,
+        weeks        => 1,
+        days         => 1,
+        hours        => 6,
+        minutes      => 15,
+        seconds      => 45,
+        nanoseconds  => 12000,
+        end_of_month => 'limit',
+    );
 
-  my ( $days, $hours, $seconds ) = $dur->in_units('days', 'hours', 'seconds');
+    my ( $days, $hours, $seconds )
+        = $dur->in_units( 'days', 'hours', 'seconds' );
 
-  # Human-readable accessors, always positive, but consider using
-  # DateTime::Format::Duration instead
-  $dur->years;
-  $dur->months;
-  $dur->weeks;
-  $dur->days;
-  $dur->hours;
-  $dur->minutes;
-  $dur->seconds;
-  $dur->nanoseconds;
+    # Human-readable accessors, always positive, but consider using
+    # DateTime::Format::Duration instead
+    $dur->years;
+    $dur->months;
+    $dur->weeks;
+    $dur->days;
+    $dur->hours;
+    $dur->minutes;
+    $dur->seconds;
+    $dur->nanoseconds;
 
-  $dur->is_wrap_mode
-  $dur->is_limit_mode
-  $dur->is_preserve_mode
+    $dur->is_wrap_mode;
+    $dur->is_limit_mode;
+    $dur->is_preserve_mode;
 
-  print $dur->end_of_month_mode;
+    print $dur->end_of_month_mode;
 
-  # Multiply all values by -1
-  my $opposite = $dur->inverse;
+    # Multiply all values by -1
+    my $opposite = $dur->inverse;
 
-  my $bigger  = $dur1 + $dur2;
-  my $smaller = $dur1 - $dur2; # the result could be negative
-  my $bigger  = $dur1 * 3;
+    my $bigger  = $dur1 + $dur2;
+    my $smaller = $dur1 - $dur2;    # the result could be negative
+    my $bigger  = $dur1 * 3;
 
-  my $base_dt = DateTime->new( year => 2000 );
-  my @sorted =
-      sort { DateTime::Duration->compare( $a, $b, $base_dt ) } @durations;
+    my $base_dt = DateTime->new( year => 2000 );
+    my @sorted
+        = sort { DateTime::Duration->compare( $a, $b, $base_dt ) } @durations;
 
-  if ( $dur->is_positive ) { ... }
-  if ( $dur->is_zero )     { ... }
-  if ( $dur->is_negative ) { ... }
+    if ( $dur->is_positive ) {...}
+    if ( $dur->is_zero )     {...}
+    if ( $dur->is_negative ) {...}
 
 =head1 DESCRIPTION
 
