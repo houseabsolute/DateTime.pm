@@ -1,9 +1,12 @@
+/*\.bs
+/*\.c
+/*\.o
+/.tidyall.d
 *~
 .\#*
 .build
-/.tidyall.d
-Build.PL
 Build
+Build.PL
 DateTime-*
 Debian_CPANTS.txt
 MANIFEST
@@ -17,10 +20,7 @@ README
 \#*\#
 _build
 blib*
-c/leap_seconds.h
 cover_db*
-/*\.bs
-/*\.c
-/*\.o
 pm_to_blib*
+c/leap_seconds.h
 t/author-pp-*

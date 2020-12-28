@@ -1,0 +1,45 @@
+exclude = [
+    ".build/**/*",
+    "DateTime-*/**/*",
+    "blib/**/*",
+    "lib/DateTime/Conflicts.pm",
+    "t/00-*",
+    "t/author-*",
+    "t/release-*",
+    "t/zzz-*",
+    "xt/**/*",
+]
+
+[commands.omegasort-gitignore]
+type = "both"
+include = ".gitignore"
+cmd = [ "omegasort", "--sort=path", "--case-insensitive" ]
+lint_flags = "--check"
+tidy_flags = "--in-place"
+ok_exit_codes = 0
+lint_failure_exit_codes = 1
+
+[commands.omegasort-stopwords]
+type = "both"
+include = ".stopwords"
+cmd = [ "omegasort", "--sort=text", "--case-insensitive" ]
+lint_flags = "--check"
+tidy_flags = "--in-place"
+ok_exit_codes = 0
+lint_failure_exit_codes = 1
+
+[commands.perlcritic]
+type = "lint"
+include = [ "**/*.{pl,pm,t,psgi}" ]
+cmd = [ "perlcritic", "--profile=$PRECIOUS_ROOT/perlcriticrc" ]
+ok_exit_codes = 0
+lint_failure_exit_codes = 2
+
+[commands.perltidy]
+type = "both"
+include = [ "**/*.{pl,pm,t,psgi}" ]
+cmd = [ "perltidy", "--profile=$PRECIOUS_ROOT/perltidyrc" ]
+lint_flags = [ "--assert-tidy", "--standard-output" ]
+tidy_flags = [ "--backup-and-modify-in-place", "--backup-file-extension=/" ]
+ok_exit_codes = 0
+lint_failure_exit_codes = 1
