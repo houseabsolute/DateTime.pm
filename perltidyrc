@@ -20,4 +20,3 @@
 --no-outdent-long-comments
 --iterations=2
 -wbb="% + - * / x != == >= <= =~ !~ < > | & >= < = **= += *= &= <<= &&= -= /= |= >>= ||= .= %= ^= x="
---character-encoding=none
