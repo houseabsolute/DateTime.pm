@@ -3412,9 +3412,7 @@ as well as due to the presence of leap seconds.
 The returned duration may have deltas for months, days, minutes,
 seconds, and nanoseconds.
 
-=head3 $dt->delta_md($datetime)
-
-=head3 $dt->delta_days($datetime)
+=head3 $dt->delta_md($datetime), $dt->delta_days($datetime)
 
 Each of these methods returns a new L<DateTime::Duration> object representing
 some portion of the difference between two datetimes.  The C<< $dt->delta_md
