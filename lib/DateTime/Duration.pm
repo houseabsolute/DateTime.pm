@@ -413,16 +413,16 @@ This is a simple class for representing duration objects. These objects are
 used whenever you do date math with L<DateTime>.
 
 See the L<How DateTime Math Works|DateTime/"How DateTime Math Works"> section
-of the L<DateTime> documentation for more details. The short course: One
-cannot in general convert between seconds, minutes, days, and months, so this
-class will never do so. Instead, create the duration with the desired units to
-begin with, for example by calling the appropriate subtraction/delta method on
-a L<DateTime> object.
+of the L<DateTime> documentation for more details. The short course: One cannot
+in general convert between seconds, minutes, days, and months, so this class
+will never do so. Instead, create the duration with the desired units to begin
+with, for example by calling the appropriate subtraction/delta method on a
+L<DateTime> object.
 
 =head1 METHODS
 
-Like L<DateTime> itself, C<DateTime::Duration> returns the object from
-mutator methods in order to make method chaining possible.
+Like L<DateTime> itself, C<DateTime::Duration> returns the object from mutator
+methods in order to make method chaining possible.
 
 C<DateTime::Duration> has the following methods:
 
@@ -471,8 +471,8 @@ This must be either C<"wrap">, C<"limit">, or C<"preserve">. This parameter
 specifies how date math that crosses the end of a month is handled.
 
 In C<"wrap"> mode, adding months or years that result in days beyond the end of
-the new month will roll over into the following month. For instance, adding
-one year to Feb 29 will result in Mar 1.
+the new month will roll over into the following month. For instance, adding one
+year to Feb 29 will result in Mar 1.
 
 If you specify C<"limit">, the end of the month is never crossed. Thus, adding
 one year to Feb 29, 2000 will result in Feb 28, 2001. If you were to then add
@@ -494,14 +494,14 @@ numbers are negative, the entire duration is negative.
 
 All of the numbers B<must be integers>.
 
-Internally, years as just treated as 12 months. Similarly, weeks are treated
-as 7 days, and hours are converted to minutes. Seconds and nanoseconds are
-both treated separately.
+Internally, years as just treated as 12 months. Similarly, weeks are treated as
+7 days, and hours are converted to minutes. Seconds and nanoseconds are both
+treated separately.
 
 =head2 $dur->clone
 
-Returns a new object with the same properties as the object on which
-this method was called.
+Returns a new object with the same properties as the object on which this
+method was called.
 
 =head2 $dur->in_units( ... )
 
@@ -533,12 +533,11 @@ are:
 
 =back
 
-For the explanation of why this is the case, please see the L<How DateTime
-Math Works|DateTime/"How DateTime Math Works"> section of the DateTime
-documentation
+For the explanation of why this is the case, please see the L<How DateTime Math
+Works|DateTime/"How DateTime Math Works"> section of the DateTime documentation
 
-Note that the numbers returned by this method may not match the values
-given to the constructor.
+Note that the numbers returned by this method may not match the values given to
+the constructor.
 
 In list context, C<< $dur->in_units >> returns the lengths in the order of the
 units given. In scalar context, it returns the length in the first unit (but
@@ -551,8 +550,8 @@ take a look a L<DateTime::Format::Duration>.
 
 Indicates whether or not the duration is positive, zero, or negative.
 
-If the duration contains both positive and negative units, then it
-will return false for B<all> of these methods.
+If the duration contains both positive and negative units, then it will return
+false for B<all> of these methods.
 
 =head2 $dur->is_wrap_mode, $dur->is_limit_mode, $dur->is_preserve_mode
 
@@ -564,20 +563,19 @@ Returns one of C<"wrap">, C<"limit">, or C<"preserve">.
 
 =head2 $dur->calendar_duration
 
-Returns a new object with the same I<calendar> delta (months and days
-only) and end of month mode as the current object.
+Returns a new object with the same I<calendar> delta (months and days only) and
+end of month mode as the current object.
 
 =head2 $dur->clock_duration
 
-Returns a new object with the same I<clock> deltas (minutes, seconds,
-and nanoseconds) and end of month mode as the current object.
+Returns a new object with the same I<clock> deltas (minutes, seconds, and
+nanoseconds) and end of month mode as the current object.
 
 =head2 $dur->inverse( ... )
 
-Returns a new object with the same deltas as the current object, but
-multiplied by -1. The end of month mode for the new object will be the default
-end of month mode, which depends on whether the new duration is positive or
-negative.
+Returns a new object with the same deltas as the current object, but multiplied
+by -1. The end of month mode for the new object will be the default end of
+month mode, which depends on whether the new duration is positive or negative.
 
 You can set the end of month mode in the inverted duration explicitly by
 passing an C<end_of_month> parameter to the C<< $dur->inverse >> method.
@@ -599,28 +597,26 @@ integer number.
 =head2 DateTime::Duration->compare( $duration1, $duration2, $base_datetime )
 
 This is a class method that can be used to compare or sort durations.
-Comparison is done by adding each duration to the specified
-L<DateTime> object and comparing the resulting datetimes. This is
-necessary because without a base, many durations are not comparable.
-For example, 1 month may or may not be longer than 29 days, depending
-on what datetime it is added to.
+Comparison is done by adding each duration to the specified L<DateTime> object
+and comparing the resulting datetimes. This is necessary because without a
+base, many durations are not comparable. For example, 1 month may or may not be
+longer than 29 days, depending on what datetime it is added to.
 
-If no base datetime is given, then the result of C<< DateTime->now >>
-is used instead. Using this default will give non-repeatable results
-if used to compare two duration objects containing different units.
-It will also give non-repeatable results if the durations contain
-multiple types of units, such as months and days.
+If no base datetime is given, then the result of C<< DateTime->now >> is used
+instead. Using this default will give non-repeatable results if used to compare
+two duration objects containing different units. It will also give
+non-repeatable results if the durations contain multiple types of units, such
+as months and days.
 
-However, if you know that both objects only consist of one type of
-unit (months I<or> days I<or> hours, etc.), and each duration contains
-the same type of unit, then the results of the comparison will be
-repeatable.
+However, if you know that both objects only consist of one type of unit (months
+I<or> days I<or> hours, etc.), and each duration contains the same type of
+unit, then the results of the comparison will be repeatable.
 
 =head2 $dur->delta_months, $dur->delta_days, $dur->delta_minutes, $dur->delta_seconds, $dur->delta_nanoseconds
 
-These methods provide the information L<DateTime> needs for doing date
-math. The numbers returned may be positive or negative. This is mostly useful
-for doing date math in L<DateTime>.
+These methods provide the information L<DateTime> needs for doing date math.
+The numbers returned may be positive or negative. This is mostly useful for
+doing date math in L<DateTime>.
 
 =head2 $dur->deltas
 
@@ -630,10 +626,10 @@ mostly useful for doing date math in L<DateTime>.
 
 =head2 $dur->years, $dur->months, $dur->weeks, $dur->days, $dur->hours, $dur->minutes, $dur->seconds, $dur->nanoseconds
 
-These methods return numbers indicating how many of the given unit the
-object represents, after having done a conversion to any larger units.
-For example, days are first converted to weeks, and then the remainder
-is returned. These numbers are always positive.
+These methods return numbers indicating how many of the given unit the object
+represents, after having done a conversion to any larger units. For example,
+days are first converted to weeks, and then the remainder is returned. These
+numbers are always positive.
 
 Here's what each method returns:
 
@@ -649,21 +645,21 @@ Here's what each method returns:
 If this seems confusing, remember that you can always use the C<<
 $dur->in_units >> method to specify exactly what you want.
 
-Better yet, if you are trying to generate output suitable for humans,
-use the C<DateTime::Format::Duration> module.
+Better yet, if you are trying to generate output suitable for humans, use the
+C<DateTime::Format::Duration> module.
 
 =head2 Overloading
 
 This class overloads addition, subtraction, and mutiplication.
 
-Comparison is B<not> overloaded. If you attempt to compare durations
-using C<< <=> >> or C<cmp>, then an exception will be thrown!  Use the
-C<compare> class method instead.
+Comparison is B<not> overloaded. If you attempt to compare durations using C<<
+<=> >> or C<cmp>, then an exception will be thrown!  Use the C<compare> class
+method instead.
 
 =head1 SUPPORT
 
-Support for this module is provided via the datetime@perl.org email
-list. See http://lists.perl.org/ for more details.
+Support for this module is provided via the datetime@perl.org email list. See
+http://lists.perl.org/ for more details.
 
 =head1 SEE ALSO
 

@@ -12,8 +12,8 @@ exclude = [
 
 [commands.omegasort-gitignore]
 type = "both"
-include = ".gitignore"
-cmd = [ "omegasort", "--sort=path", "--case-insensitive" ]
+include = "**/.gitignore"
+cmd = [ "omegasort", "--sort=path" ]
 lint_flags = "--check"
 tidy_flags = "--in-place"
 ok_exit_codes = 0
@@ -41,5 +41,20 @@ include = [ "**/*.{pl,pm,t,psgi}" ]
 cmd = [ "perltidy", "--profile=$PRECIOUS_ROOT/perltidyrc" ]
 lint_flags = [ "--assert-tidy", "--standard-output" ]
 tidy_flags = [ "--backup-and-modify-in-place", "--backup-file-extension=/" ]
+ok_exit_codes = 0
+lint_failure_exit_codes = 1
+
+[commands.podchecker]
+type = "lint"
+include = [ "**/*.{pl,pm,pod}" ]
+cmd = [ "podchecker", "--warnings", "--warnings" ]
+ok_exit_codes = [ 0, 2 ]
+lint_failure_exit_codes = 1
+expect_stderr = true
+
+[commands.podtidy]
+type = "tidy"
+include = [ "**/*.{pl,pm,pod}" ]
+cmd = [ "podtidy", "--columns", "80", "--inplace", "--nobackup" ]
 ok_exit_codes = 0
 lint_failure_exit_codes = 1
