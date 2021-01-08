@@ -144,8 +144,8 @@ used when L<DateTime> cannot compile the XS version of this code.
 
 This library is known to be accurate for dates until Jun 2020.
 
-There are no leap seconds before 1972, because that's the year this
-system was implemented.
+There are no leap seconds before 1972, because that's the year this system was
+implemented.
 
 =over 4
 
@@ -155,13 +155,11 @@ Returns the number of accumulated leap seconds for a given day.
 
 =item * extra_seconds($rd)
 
-Returns the number of leap seconds for a given day,
-in the range -2 .. 2.
+Returns the number of leap seconds for a given day, in the range -2 .. 2.
 
 =item * day_length($rd)
 
-Returns the number of seconds for a given day,
-in the range 86398 .. 86402.
+Returns the number of seconds for a given day, in the range 86398 .. 86402.
 
 =back
 
