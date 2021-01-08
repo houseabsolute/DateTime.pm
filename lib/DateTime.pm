@@ -4554,6 +4554,22 @@ Any method name may be specified using the format C<%{method}> name where
 C<DateTime> implements L<Storable> hooks in order to reduce the size of a
 serialized C<DateTime> object.
 
+=head1 DEVELOPMENT TOOLS
+
+If you're working on the C<DateTIme> code base, there are a few extra non-Perl
+tools that you may find useful, notably
+L<precious|https://github.com/houseabsolute/precious>, a
+meta-linter/tidier. You can install all the necessary tools in C<$HOME/bin> by
+running F<./dev-bin/install-dev-tools.sh>.
+
+Try running C<precious tidy -a> to tidy all the tidyable files in the repo,
+and C<precious lint -a> to run all the lint checks.
+
+You can enable a git pre-commit hook for linting by running F<./git/setup.pl>.
+
+Note that linting will be checked in CI, and it's okay to submit a PR which
+fails the linting check, but it's extra nice to fix these yourself.
+
 =head1 THE DATETIME PROJECT ECOSYSTEM
 
 This module is part of a larger ecosystem of modules in the DateTime
