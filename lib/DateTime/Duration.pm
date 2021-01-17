@@ -45,7 +45,7 @@ my @all_units = qw( months days minutes seconds nanoseconds );
         minutes
         seconds
         nanoseconds
-    );
+        );
 
     my $check = validation_for(
         name             => '_check_new_params',

@@ -12,7 +12,7 @@ use DateTime;
 # dates are specified as [rd,year,month,day]
 for (    # min and max supported days (for 32-bit system)
     [ -( 2**28 ), -734951, 9, 7 ],
-    [ 2**28, 734952, 4, 25 ],
+    [ 2**28,      734952,  4, 25 ],
 
     # some miscellaneous dates (these are actually epoch dates for
     # various calendars from Calendrical Calculations (1st ed) Table

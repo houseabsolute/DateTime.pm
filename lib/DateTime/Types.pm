@@ -82,7 +82,7 @@ my $time_zone_object = object_can_type(
             name
             offset_for_datetime
             short_name_for_datetime
-            )
+        )
     ],
 );
 
@@ -145,7 +145,7 @@ enum(
             nanosecond
             week
             local_week
-            )
+        )
     ],
 );
 

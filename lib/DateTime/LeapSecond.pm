@@ -112,7 +112,7 @@ sub _initialize {
             2012  Jul. 1  +1
             2015  Jul. 1  +1
             2017  Jan. 1  +1
-            )
+        )
     );
 }
 
