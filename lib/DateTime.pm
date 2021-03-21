@@ -2435,10 +2435,7 @@ __END__
 =head1 DESCRIPTION
 
 DateTime is a class for the representation of date/time combinations, and is
-part of the Perl DateTime project. For details on this project please see
-L<http://datetime.perl.org/>. The DateTime site has a FAQ which may help answer
-many "how do I do X?" questions. The FAQ is at
-L<http://datetime.perl.org/wiki/datetime/page/FAQ>.
+part of the Perl DateTime project.
 
 It represents the Gregorian calendar, extended backwards in time before its
 creation (in 1582). This is sometimes known as the "proleptic Gregorian
@@ -4587,7 +4584,5 @@ Perl|http://www.houseabsolute.com/presentations/a-date-with-perl/> - a talk
 I've given at a few YAPCs.
 
 L<datetime@perl.org mailing list|http://lists.perl.org/list/datetime.html>
-
-L<http://datetime.perl.org/>
 
 =cut
