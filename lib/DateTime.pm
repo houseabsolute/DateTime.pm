@@ -1182,7 +1182,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         my @patterns = @_;
 
         my @r;
-        foreach my $p (@patterns) {
+        for my $p (@patterns) {
             $p =~ s/
                     (?:
                       %\{(\w+)\}       # method name like %{day_name}
@@ -1365,7 +1365,7 @@ sub jd { $_[0]->mjd + 2_400_000.5 }
         my @p = @_;
 
         my @r;
-        foreach my $p (@p) {
+        for my $p (@p) {
             $p =~ s/\G
                     (?:
                       '((?:[^']|'')*)' # quote escaped bit of text
@@ -1805,7 +1805,7 @@ sub subtract_duration { return $_[0]->add_duration( $_[1]->inverse ) }
 
         # This bit isn't quite right since DateTime::Infinite::Future -
         # infinite duration should NaN
-        foreach my $val ( values %deltas ) {
+        for my $val ( values %deltas ) {
             my $inf;
             if ( $val == INFINITY ) {
                 $inf = DateTime::Infinite::Future->new;
@@ -1995,7 +1995,7 @@ sub _compare {
     my @dt1_components = $dt1->utc_rd_values;
     my @dt2_components = $dt2->utc_rd_values;
 
-    foreach my $i ( 0 .. 2 ) {
+    for my $i ( 0 .. 2 ) {
         return $dt1_components[$i] <=> $dt2_components[$i]
             if $dt1_components[$i] != $dt2_components[$i];
     }
@@ -2214,8 +2214,7 @@ sub set_nanosecond { $_[0]->set( nanosecond => $_[1] ) }
         }
         else {
             my $truncate;
-            foreach my $f (qw( year month day hour minute second nanosecond ))
-            {
+            for my $f (qw( year month day hour minute second nanosecond )) {
                 $new{$f} = $truncate ? $TruncateDefault{$f} : $self->$f();
 
                 $truncate = 1 if $p{to} eq $f;
@@ -2279,7 +2278,7 @@ sub STORABLE_freeze {
     my $self = shift;
 
     my $serialized = q{};
-    foreach my $key (
+    for my $key (
         qw( utc_rd_days
         utc_rd_secs
         rd_nanosecs )
@@ -3930,7 +3929,7 @@ things:
 
     my $duration_obj = $dt - $new_dt;
 
-    foreach my $dt ( sort @dts ) {...}
+    for my $dt ( sort @dts ) {...}
 
 Additionally, the fallback parameter is set to true, so other derivable
 operators (+=, -=, etc.) will work properly. Do not expect increment (++) or
