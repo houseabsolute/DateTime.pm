@@ -4074,7 +4074,7 @@ The abbreviated stand-alone form for the quarter.
 
 The wide stand-alone form for the quarter.
 
-=item * M{1,2]
+=item * M{1,2}
 
 The numerical month.
 
@@ -4090,7 +4090,7 @@ The wide format form for the month.
 
 The narrow format form for the month.
 
-=item * L{1,2]
+=item * L{1,2}
 
 The numerical month.
 
