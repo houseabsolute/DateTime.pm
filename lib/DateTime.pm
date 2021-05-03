@@ -3771,7 +3771,7 @@ are accounting for a 25 hour day.
 
 Date math operations are not always reversible. This is because of the way that
 addition operations are ordered. As was discussed earlier, adding 1 day and 3
-minutes in one call to C<< $dt->add >>> is not the same as first adding 3
+minutes in one call to C<< $dt->add >> is not the same as first adding 3
 minutes and 1 day in two separate calls.
 
 If we take a duration returned from C<< $dt->subtract_datetime >> and then try
