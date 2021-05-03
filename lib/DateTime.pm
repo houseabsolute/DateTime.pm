@@ -3545,7 +3545,7 @@ L<Leap Seconds and Date Math>
 =item * date vs datetime math
 
 If you only care about the date (calendar) portion of a datetime, you should
-use either C<< $dt->delta_md >>> or C<< $dt->delta_days >>, not C<<
+use either C<< $dt->delta_md >> or C<< $dt->delta_days >>, not C<<
 $dt->subtract_datetime >>. This will give predictable, unsurprising results,
 free from DST-related complications.
 
