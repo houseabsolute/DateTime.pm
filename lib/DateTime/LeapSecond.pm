@@ -167,6 +167,4 @@ Returns the number of seconds for a given day, in the range 86398 .. 86402.
 
 L<http://hpiers.obspm.fr/eop-pc/earthor/utc/leapsecond.html>
 
-http://datetime.perl.org
-
 =cut
