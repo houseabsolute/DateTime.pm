@@ -59,7 +59,10 @@ sub datetime {
 }
 
 sub stringify {
-    return $_[0]->_infinity_string;
+    my $self = shift;
+
+    return $self->_infinity_string unless $self->{formatter};
+    return $self->{formatter}->format_datetime($self);
 }
 
 sub _infinity_string {
