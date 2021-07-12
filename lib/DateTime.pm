@@ -19,6 +19,7 @@ use DateTime::Types;
 use POSIX qw( floor fmod );
 use Params::ValidationCompiler 0.26 qw( validation_for );
 use Scalar::Util qw( blessed );
+use Specio::Subs qw( Specio::Library::Builtins );
 use Try::Tiny;
 
 ## no critic (Variables::ProhibitPackageVars)
@@ -456,8 +457,8 @@ sub _calc_local_components {
 }
 
 {
-    my $validator = validation_for(
-        name             => '_check_from_epoch_params',
+    my $named_validator = validation_for(
+        name             => '_check_named_from_epoch_params',
         name_is_optional => 1,
         params           => {
             epoch     => { type => t('Num') },
@@ -476,9 +477,20 @@ sub _calc_local_components {
         },
     );
 
+    my $one_param_validator = validation_for(
+        name   => '_check_one_from_epoch_param',
+        params => [ { type => t('Num') } ],
+    );
+
     sub from_epoch {
         my $class = shift;
-        my %p     = $validator->(@_);
+        my %p;
+        if ( @_ == 1 && !is_HashRef( $_[0] ) ) {
+            ( $p{epoch} ) = $one_param_validator->(@_);
+        }
+        else {
+            %p = $named_validator->(@_);
+        }
 
         my %args;
 
@@ -2722,6 +2734,9 @@ Attempting to create an invalid time currently causes a fatal error.
 This class method can be used to construct a new DateTime object from an epoch
 time instead of components. Just as with the C<new> method, it accepts
 C<time_zone>, C<locale>, and C<formatter> parameters.
+
+You can also call it with a single unnamed argument, which will be treated as
+the epoch value.
 
 If the epoch value is a non-integral value, it will be rounded to nearest
 microsecond.
