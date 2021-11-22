@@ -2728,6 +2728,18 @@ microsecond.
 
 By default, the returned object will be in the UTC time zone.
 
+If you pass a C<time_zone>, then this time zone will be applied I<after> the
+object is constructed. In other words, the epoch value is always interpreted
+as being in the UTC time zone. Here's an example:
+
+    my $dt = DateTime->from_epoch(
+        epoch     => 0,
+        time_zone => 'Asia/Tokyo'
+    );
+    say $dt; # Prints 1970-01-01T09:00:00 as Asia/Tokyo is +09:00 from UTC.
+    $dt->set_time_zone('UTC');
+    say $dt; # Prints 1970-01-01T00:00:00
+
 =head3 DateTime->now( ... )
 
 This class method is equivalent to calling C<from_epoch> with the value
