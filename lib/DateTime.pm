@@ -4591,7 +4591,7 @@ will be fixed (perhaps) in future versions.
 =head1 SEE ALSO
 
 L<A Date with
-Perl|http://www.houseabsolute.com/presentations/a-date-with-perl/> - a talk
+Perl|http://presentations.houseabsolute.com/a-date-with-perl/> - a talk
 I've given at a few YAPCs.
 
 L<datetime@perl.org mailing list|http://lists.perl.org/list/datetime.html>
