@@ -432,11 +432,11 @@ This class method accepts the following parameters:
 
 =over 4
 
-=item * year
+=item * years
 
 An integer containing the number of years in the duration. This is optional.
 
-=item * month
+=item * months
 
 An integer containing the number of months in the duration. This is optional.
 
