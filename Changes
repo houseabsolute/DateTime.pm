@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Another documentation fix release. This fixes some mistakes, fixes some
+  broken links, and removes all references to the long-dead datetime.perl.org
+  site.
+
+
 1.54   2020-12-04
 
 - This release contains a lot of small documentation revisions, both to
