@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '1.55';
+our $VERSION = '1.56';
 
 use parent 'Specio::Exporter';
 
