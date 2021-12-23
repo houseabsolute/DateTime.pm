@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.54
+version 1.55
 
 # SYNOPSIS
 
@@ -83,24 +83,20 @@ version 1.54
 
 # DESCRIPTION
 
-DateTime is a class for the representation of date/time combinations,
-and is part of the Perl DateTime project. For details on this project
-please see [http://datetime.perl.org/](http://datetime.perl.org/). The DateTime site has a FAQ
-which may help answer many "how do I do X?" questions. The FAQ is at
-[http://datetime.perl.org/wiki/datetime/page/FAQ](http://datetime.perl.org/wiki/datetime/page/FAQ).
+DateTime is a class for the representation of date/time combinations, and is
+part of the Perl DateTime project.
 
-It represents the Gregorian calendar, extended backwards in time
-before its creation (in 1582). This is sometimes known as the
-"proleptic Gregorian calendar". In this calendar, the first day of
-the calendar (the epoch), is the first day of year 1, which
-corresponds to the date which was (incorrectly) believed to be the
-birth of Jesus Christ.
+It represents the Gregorian calendar, extended backwards in time before its
+creation (in 1582). This is sometimes known as the "proleptic Gregorian
+calendar". In this calendar, the first day of the calendar (the epoch), is the
+first day of year 1, which corresponds to the date which was (incorrectly)
+believed to be the birth of Jesus Christ.
 
-The calendar represented does have a year 0, and in that way differs
-from how dates are often written using "BCE/CE" or "BC/AD".
+The calendar represented does have a year 0, and in that way differs from how
+dates are often written using "BCE/CE" or "BC/AD".
 
-For infinite datetimes, please see the
-[DateTime::Infinite](https://metacpan.org/pod/DateTime%3A%3AInfinite) module.
+For infinite datetimes, please see the [DateTime::Infinite](https://metacpan.org/pod/DateTime%3A%3AInfinite)
+module.
 
 # USAGE
 
@@ -109,54 +105,47 @@ For infinite datetimes, please see the
 The `DateTime` module follows a simple logic for determining whether or not a
 given number is 0-based or 1-based.
 
-Month, day of month, day of week, and day of year are 1-based. Any
-method that is 1-based also has an equivalent 0-based method ending in
-`_0`. So for example, this class provides both `day_of_week` and
-`day_of_week_0` methods.
+Month, day of month, day of week, and day of year are 1-based. Any method that
+is 1-based also has an equivalent 0-based method ending in `_0`. So for
+example, this class provides both `day_of_week` and `day_of_week_0` methods.
 
-The `day_of_week_0` method still treats Monday as the first day of
-the week.
+The `day_of_week_0` method still treats Monday as the first day of the week.
 
-All _time_-related numbers such as hour, minute, and second are
-0-based.
+All _time_-related numbers such as hour, minute, and second are 0-based.
 
-Years are neither, as they can be both positive or negative, unlike
-any other datetime component. There _is_ a year 0.
+Years are neither, as they can be both positive or negative, unlike any other
+datetime component. There _is_ a year 0.
 
 There is no `quarter_0` method.
 
 ## Error Handling
 
-Some errors may cause this module to die with an error string. This
-can only happen when calling constructor methods, methods that change
-the object, such as `set`, or methods that take parameters.
-Methods that retrieve information about the object, such as `year`
-or `epoch`, will never die.
+Some errors may cause this module to die with an error string. This can only
+happen when calling constructor methods, methods that change the object, such
+as `set`, or methods that take parameters. Methods that retrieve information
+about the object, such as `year` or `epoch`, will never die.
 
 ## Locales
 
-All the object methods which return names or abbreviations return data based
-on a locale. This is done by setting the locale when constructing a DateTime
+All the object methods which return names or abbreviations return data based on
+a locale. This is done by setting the locale when constructing a DateTime
 object. If this is not set, then `"en-US"` is used.
 
 ## Floating DateTimes
 
-The default time zone for new DateTime objects, except where stated
-otherwise, is the "floating" time zone. This concept comes from the
-iCal standard. A floating datetime is one which is not anchored to
-any particular time zone. In addition, floating datetimes do not
-include leap seconds, since we cannot apply them without knowing the
-datetime's time zone.
+The default time zone for new DateTime objects, except where stated otherwise,
+is the "floating" time zone. This concept comes from the iCal standard. A
+floating datetime is one which is not anchored to any particular time zone. In
+addition, floating datetimes do not include leap seconds, since we cannot apply
+them without knowing the datetime's time zone.
 
-The results of date math and comparison between a floating datetime
-and one with a real time zone are not really valid, because one
-includes leap seconds and the other does not. Similarly, the results
-of datetime math between two floating datetimes and two datetimes with
-time zones are not really comparable.
+The results of date math and comparison between a floating datetime and one
+with a real time zone are not really valid, because one includes leap seconds
+and the other does not. Similarly, the results of datetime math between two
+floating datetimes and two datetimes with time zones are not really comparable.
 
-If you are planning to use any objects with a real time zone, it is
-strongly recommended that you **do not** mix these with floating
-datetimes.
+If you are planning to use any objects with a real time zone, it is strongly
+recommended that you **do not** mix these with floating datetimes.
 
 ## Math
 
@@ -166,10 +155,9 @@ Math Works"](#how-datetime-math-works).
 ## Determining the Local Time Zone Can Be Slow
 
 If `$ENV{TZ}` is not set, it may involve reading a number of files in `/etc`
-or elsewhere. If you know that the local time zone won't change while your
-code is running, and you need to make many objects for the local time zone, it
-is strongly recommended that you retrieve the local time zone once and cache
-it:
+or elsewhere. If you know that the local time zone won't change while your code
+is running, and you need to make many objects for the local time zone, it is
+strongly recommended that you retrieve the local time zone once and cache it:
 
     our $App::LocalTZ = DateTime::TimeZone->new( name => 'local' );
 
@@ -183,11 +171,11 @@ the work to look it up.
 
 ## Far Future DST
 
-Do not try to use named time zones (like "America/Chicago") with dates
-very far in the future (thousands of years). The current
-implementation of `DateTime::TimeZone` will use a huge amount of
-memory calculating all the DST changes from now until the future
-date. Use UTC or the floating time zone and you will be safe.
+Do not try to use named time zones (like "America/Chicago") with dates very far
+in the future (thousands of years). The current implementation of
+`DateTime::TimeZone` will use a huge amount of memory calculating all the DST
+changes from now until the future date. Use UTC or the floating time zone and
+you will be safe.
 
 ## Globally Setting a Default Time Zone
 
@@ -201,11 +189,11 @@ You can force `DateTime` to use a different time zone by setting the
 
 As noted above, this is very dangerous, as it affects all code that creates a
 `DateTime` object, including modules from CPAN. If those modules expect the
-normal default, then setting this can cause confusing breakage or subtly
-broken data. Before setting this variable, you are strongly encouraged to
-audit your CPAN dependencies to see how they use `DateTime`. Try running the
-test suite for each dependency with this environment variable set before using
-this in production.
+normal default, then setting this can cause confusing breakage or subtly broken
+data. Before setting this variable, you are strongly encouraged to audit your
+CPAN dependencies to see how they use `DateTime`. Try running the test suite
+for each dependency with this environment variable set before using this in
+production.
 
 ## Upper and Lower Bounds
 
@@ -230,17 +218,17 @@ All constructors can die when invalid parameters are given.
 
 Currently, constructors will warn if you try to create a far future DateTime
 (year >= 5000) with any time zone besides floating or UTC. This can be very
-slow if the time zone has future DST transitions that need to be
-calculated. If the date is sufficiently far in the future this can be
-_really_ slow (minutes).
+slow if the time zone has future DST transitions that need to be calculated. If
+the date is sufficiently far in the future this can be _really_ slow
+(minutes).
 
 All warnings from DateTime use the `DateTime` category and can be suppressed
 with:
 
     no warnings 'DateTime';
 
-This warning may be removed in the future if [DateTime::TimeZone](https://metacpan.org/pod/DateTime%3A%3ATimeZone) is made
-much faster.
+This warning may be removed in the future if [DateTime::TimeZone](https://metacpan.org/pod/DateTime%3A%3ATimeZone) is made much
+faster.
 
 ### DateTime->new( ... )
 
@@ -260,8 +248,7 @@ This class method accepts the following parameters:
 - year
 
     An integer year for the DateTime. This can be any integer number within the
-    valid range for your system (See ["Upper and Lower Bounds"](#upper-and-lower-bounds)). This is
-    required.
+    valid range for your system (See ["Upper and Lower Bounds"](#upper-and-lower-bounds)). This is required.
 
 - month
 
@@ -288,24 +275,23 @@ This class method accepts the following parameters:
 
 - nanosecond
 
-    An integer that is greater than or equal to 0. If this number is greater than
-    1 billion, it will be normalized into the second value for the DateTime
-    object. Defaults to 0
+    An integer that is greater than or equal to 0. If this number is greater than 1
+    billion, it will be normalized into the second value for the DateTime object.
+    Defaults to 0
 
 - locale
 
     A string containing a locale code, like `"en-US"` or `"zh-Hant-TW"`, or an
     object returned by `DateTime::Locale->load`. See the [DateTime::Locale](https://metacpan.org/pod/DateTime%3A%3ALocale)
-    documentation for details. Defaults to the value of `DateTime->DefaultLocale`, or `"en-US"` if the class default has not been
-    set.
+    documentation for details. Defaults to the value of `DateTime->DefaultLocale`, or `"en-US"` if the class default has not been set.
 
 - time\_zone
 
     A string containing a time zone name like "America/Chicago" or a
     [DateTime::TimeZone](https://metacpan.org/pod/DateTime%3A%3ATimeZone) object. Defaults to the value of
-    `$ENV{PERL_DATETIME_DEFAULT_TZ}` or "floating" if that env var is not
-    set. See ["Globally Setting a Default Time Zone"](#globally-setting-a-default-time-zone) for more details on that env
-    var (and why you should not use it).
+    `$ENV{PERL_DATETIME_DEFAULT_TZ}` or "floating" if that env var is not set. See
+    ["Globally Setting a Default Time Zone"](#globally-setting-a-default-time-zone) for more details on that env var (and
+    why you should not use it).
 
     A string will simply be passed to the `DateTime::TimeZone->new` method as
     its `name` parameter. This string may be an Olson DB time zone name
@@ -318,13 +304,13 @@ This class method accepts the following parameters:
     stringify the DateTime object. This is optional. If it is not specified, then
     stringification calls `$self->iso8601`.
 
-Invalid parameter types (like an array reference) will cause the constructor
-to die.
+Invalid parameter types (like an array reference) will cause the constructor to
+die.
 
 #### Parsing Dates
 
-**This module does not parse dates!** That means there is no
-constructor to which you can pass things like "March 3, 1970 12:34".
+**This module does not parse dates!** That means there is no constructor to
+which you can pass things like "March 3, 1970 12:34".
 
 Instead, take a look at the various
 [DateTime::Format::\*](https://metacpan.org/search?q=datetime%3A%3Aformat)
@@ -333,18 +319,16 @@ bound to find something that can handle your particular needs.
 
 #### Ambiguous Local Times
 
-Because of Daylight Saving Time, it is possible to specify a local
-time that is ambiguous. For example, in the US in 2003, the
-transition from to saving to standard time occurred on October 26, at
-02:00:00 local time. The local clock changed from 01:59:59 (saving
-time) to 01:00:00 (standard time). This means that the hour from
-01:00:00 through 01:59:59 actually occurs twice, though the UTC time
-continues to move forward.
+Because of Daylight Saving Time, it is possible to specify a local time that is
+ambiguous. For example, in the US in 2003, the transition from to saving to
+standard time occurred on October 26, at 02:00:00 local time. The local clock
+changed from 01:59:59 (saving time) to 01:00:00 (standard time). This means
+that the hour from 01:00:00 through 01:59:59 actually occurs twice, though the
+UTC time continues to move forward.
 
-If you specify an ambiguous time, then the latest UTC time is always
-used, in effect always choosing standard time. In this case, you can
-simply subtract an hour from the object in order to move to saving time,
-for example:
+If you specify an ambiguous time, then the latest UTC time is always used, in
+effect always choosing standard time. In this case, you can simply subtract an
+hour from the object in order to move to saving time, for example:
 
     # This object represent 01:30:00 standard time
     my $dt = DateTime->new(
@@ -364,37 +348,48 @@ for example:
 
     print $dt->hms;    # still prints 01:30:00
 
-Alternately, you could create the object with the UTC time zone and
-then call the `set_time_zone` method to change the time zone. This
-is a good way to ensure that the time is not ambiguous.
+Alternately, you could create the object with the UTC time zone and then call
+the `set_time_zone` method to change the time zone. This is a good way to
+ensure that the time is not ambiguous.
 
 #### Invalid Local Times
 
-Another problem introduced by Daylight Saving Time is that certain
-local times just do not exist. For example, in the US in 2003, the
-transition from standard to saving time occurred on April 6, at the
-change to 2:00:00 local time. The local clock changed from 01:59:59
-(standard time) to 03:00:00 (saving time). This means that there is
-no 02:00:00 through 02:59:59 on April 6!
+Another problem introduced by Daylight Saving Time is that certain local times
+just do not exist. For example, in the US in 2003, the transition from standard
+to saving time occurred on April 6, at the change to 2:00:00 local time. The
+local clock changed from 01:59:59 (standard time) to 03:00:00 (saving time).
+This means that there is no 02:00:00 through 02:59:59 on April 6!
 
 Attempting to create an invalid time currently causes a fatal error.
 
 ### DateTime->from\_epoch( epoch => $epoch, ... )
 
-This class method can be used to construct a new DateTime object from
-an epoch time instead of components. Just as with the `new`
-method, it accepts `time_zone`, `locale`, and `formatter` parameters.
+This class method can be used to construct a new DateTime object from an epoch
+time instead of components. Just as with the `new` method, it accepts
+`time_zone`, `locale`, and `formatter` parameters.
 
 If the epoch value is a non-integral value, it will be rounded to nearest
 microsecond.
 
 By default, the returned object will be in the UTC time zone.
 
+If you pass a `time_zone`, then this time zone will be applied _after_ the
+object is constructed. In other words, the epoch value is always interpreted
+as being in the UTC time zone. Here's an example:
+
+    my $dt = DateTime->from_epoch(
+        epoch     => 0,
+        time_zone => 'Asia/Tokyo'
+    );
+    say $dt; # Prints 1970-01-01T09:00:00 as Asia/Tokyo is +09:00 from UTC.
+    $dt->set_time_zone('UTC');
+    say $dt; # Prints 1970-01-01T00:00:00
+
 ### DateTime->now( ... )
 
-This class method is equivalent to calling `from_epoch` with the
-value returned from Perl's `time` function. Just as with the
-`new` method, it accepts `time_zone` and `locale` parameters.
+This class method is equivalent to calling `from_epoch` with the value
+returned from Perl's `time` function. Just as with the `new` method, it
+accepts `time_zone` and `locale` parameters.
 
 By default, the returned object will be in the UTC time zone.
 
@@ -408,25 +403,22 @@ This class method is equivalent to:
 
 ### DateTime->last\_day\_of\_month( ... )
 
-This constructor takes the same arguments as can be given to the
-`new` method, except for `day`. Additionally, both `year` and
-`month` are required.
+This constructor takes the same arguments as can be given to the `new` method,
+except for `day`. Additionally, both `year` and `month` are required.
 
 ### DateTime->from\_day\_of\_year( ... )
 
-This constructor takes the same arguments as can be given to the
-`new` method, except that it does not accept a `month` or `day`
-argument. Instead, it requires both `year` and `day_of_year`. The
-day of year must be between 1 and 366, and 366 is only allowed for
-leap years.
+This constructor takes the same arguments as can be given to the `new` method,
+except that it does not accept a `month` or `day` argument. Instead, it
+requires both `year` and `day_of_year`. The day of year must be between 1 and
+366, and 366 is only allowed for leap years.
 
 ### DateTime->from\_object( object => $object, ... )
 
-This class method can be used to construct a new DateTime object from
-any object that implements the `utc_rd_values` method. All
-`DateTime::Calendar` modules must implement this method in order to
-provide cross-calendar compatibility. This method accepts a
-`locale` and `formatter` parameter
+This class method can be used to construct a new DateTime object from any
+object that implements the `utc_rd_values` method. All `DateTime::Calendar`
+modules must implement this method in order to provide cross-calendar
+compatibility. This method accepts a `locale` and `formatter` parameter
 
 If the object passed to this method has a `time_zone` method, that is used to
 set the time zone of the newly created `DateTime` object.
@@ -435,13 +427,12 @@ Otherwise, the returned object will be in the floating time zone.
 
 ### $dt->clone
 
-This object method returns a new object that is replica of the object
-upon which the method is called.
+This object method returns a new object that is replica of the object upon
+which the method is called.
 
 ## "Get" Methods
 
-This class has many methods for retrieving information about an
-object.
+This class has many methods for retrieving information about an object.
 
 ### $dt->year
 
@@ -449,18 +440,18 @@ Returns the year.
 
 ### $dt->ce\_year
 
-Returns the year according to the BCE/CE numbering system. The year
-before year 1 in this system is year -1, aka "1 BCE".
+Returns the year according to the BCE/CE numbering system. The year before year
+1 in this system is year -1, aka "1 BCE".
 
 ### $dt->era\_name
 
-Returns the long name of the current era, something like "Before
-Christ". See the ["Locales"](#locales) section for more details.
+Returns the long name of the current era, something like "Before Christ". See
+the ["Locales"](#locales) section for more details.
 
 ### $dt->era\_abbr
 
-Returns the abbreviated name of the current era, something like "BC".
-See the ["Locales"](#locales) section for more details.
+Returns the abbreviated name of the current era, something like "BC". See the
+["Locales"](#locales) section for more details.
 
 ### $dt->christian\_era
 
@@ -484,8 +475,7 @@ name.
 
 ### $dt->year\_with\_secular\_era
 
-Like `year_with_era`, but uses the `secular_era` method to get the
-era name.
+Like `year_with_era`, but uses the `secular_era` method to get the era name.
 
 ### $dt->month
 
@@ -511,8 +501,8 @@ Also available as `$dt->mday` and `$dt->day_of_month`.
 
 ### $dt->day\_of\_week
 
-Returns the day of the week as a number, from 1..7, with 1 being
-Monday and 7 being Sunday.
+Returns the day of the week as a number, from 1..7, with 1 being Monday and 7
+being Sunday.
 
 Also available as `$dt->wday` and `$dt->dow`.
 
@@ -559,18 +549,18 @@ Also available as `$dt->doq`.
 
 ### $dt->weekday\_of\_month
 
-Returns a number from 1..5 indicating which week day of the month this
-is. For example, June 9, 2003 is the second Monday of the month, and
-so this method returns 2 for that date.
+Returns a number from 1..5 indicating which week day of the month this is. For
+example, June 9, 2003 is the second Monday of the month, and so this method
+returns 2 for that date.
 
 ### $dt->ymd($optional\_separator), $dt->mdy(...), $dt->dmy(...)
 
-Each method returns the year, month, and day, in the order indicated
-by the method name. Years are zero-padded to four digits. Months and
-days are 0-padded to two digits.
+Each method returns the year, month, and day, in the order indicated by the
+method name. Years are zero-padded to four digits. Months and days are 0-padded
+to two digits.
 
-By default, the values are separated by a dash (-), but this can be
-overridden by passing a value to the method.
+By default, the values are separated by a dash (-), but this can be overridden
+by passing a value to the method.
 
 The `$dt->ymd` method is also available as `$dt->date`.
 
@@ -592,8 +582,7 @@ Returns the hour of the day, from 0..11.
 
 ### $dt->am\_or\_pm
 
-Returns the appropriate localized abbreviation, depending on the
-current hour.
+Returns the appropriate localized abbreviation, depending on the current hour.
 
 ### $dt->minute
 
@@ -603,8 +592,7 @@ Also available as `$dt->min`.
 
 ### $dt->second
 
-Returns the second, from 0..61. The values 60 and 61 are used for
-leap seconds.
+Returns the second, from 0..61. The values 60 and 61 are used for leap seconds.
 
 Also available as `$dt->sec`.
 
@@ -624,8 +612,7 @@ This value will always be rounded down to the nearest integer.
 
 ### $dt->microsecond
 
-Returns the fractional part of the second as microseconds (1E-6
-seconds).
+Returns the fractional part of the second as microseconds (1E-6 seconds).
 
 Half a second is 500,000 microseconds.
 
@@ -639,8 +626,8 @@ Returns the fractional part of the second as nanoseconds (1E-9 seconds).
 
 ### $dt->hms($optional\_separator)
 
-Returns the hour, minute, and second, all zero-padded to two digits.
-If no separator is specified, a colon (:) is used by default.
+Returns the hour, minute, and second, all zero-padded to two digits. If no
+separator is specified, a colon (:) is used by default.
 
 Also available as `$dt->time`.
 
@@ -662,18 +649,18 @@ must be used to separate them.
 This formats a datetime in RFC3339 format. This is the same as `$dt->datetime` with an added offset at the end of the string except if the
 time zone is the floating time zone.
 
-If the offset is '+00:00' then this is represented as 'Z'. Otherwise the
-offset is formatted with a leading sign (+/-) and a colon separated numeric
-offset with hours and minutes. If the offset has a non-zero seconds component,
-that is also included.
+If the offset is '+00:00' then this is represented as 'Z'. Otherwise the offset
+is formatted with a leading sign (+/-) and a colon separated numeric offset
+with hours and minutes. If the offset has a non-zero seconds component, that is
+also included.
 
 ### $dt->stringify
 
 This method returns a stringified version of the object. It is also how
-stringification overloading is implemented. If the object has a formatter,
-then its `format_datetime` method is used to produce a string. Otherwise,
-this method calls `$dt->iso8601` to produce a string. See ["Formatters
-And Stringification"](#formatters-and-stringification) for details.
+stringification overloading is implemented. If the object has a formatter, then
+its `format_datetime` method is used to produce a string. Otherwise, this
+method calls `$dt->iso8601` to produce a string. See ["Formatters And
+Stringification"](#formatters-and-stringification) for details.
 
 ### $dt->is\_leap\_year
 
@@ -715,14 +702,14 @@ Returns information about the calendar week for the date. The values returned
 by this method are also available separately through the `$dt->week_year`
 and `$dt->week_number` methods.
 
-The first week of the year is defined by ISO as the one which contains
-the fourth day of January, which is equivalent to saying that it's the
-first week to overlap the new year by at least four days.
+The first week of the year is defined by ISO as the one which contains the
+fourth day of January, which is equivalent to saying that it's the first week
+to overlap the new year by at least four days.
 
-Typically the week year will be the same as the year that the object
-is in, but dates at the very beginning of a calendar year often end up
-in the last week of the prior year, and similarly, the final few days
-of the year may be placed in the first week of the next year.
+Typically the week year will be the same as the year that the object is in, but
+dates at the very beginning of a calendar year often end up in the last week of
+the prior year, and similarly, the final few days of the year may be placed in
+the first week of the next year.
 
 ### $dt->week\_year
 
@@ -734,26 +721,24 @@ Returns the week of the year, from 1..53. See `$dt->week` for details.
 
 ### $dt->week\_of\_month
 
-The week of the month, from 0..5. The first week of the month is the
-first week that contains a Thursday. This is based on the ICU
-definition of week of month, and correlates to the ISO8601 week of
-year definition. A day in the week _before_ the week with the first
-Thursday will be week 0.
+The week of the month, from 0..5. The first week of the month is the first week
+that contains a Thursday. This is based on the ICU definition of week of month,
+and correlates to the ISO8601 week of year definition. A day in the week
+_before_ the week with the first Thursday will be week 0.
 
 ### $dt->jd, $dt->mjd
 
-These return the Julian Day and Modified Julian Day, respectively.
-The value returned is a floating point number. The fractional portion
-of the number represents the time portion of the datetime.
+These return the Julian Day and Modified Julian Day, respectively. The value
+returned is a floating point number. The fractional portion of the number
+represents the time portion of the datetime.
 
 The Julian Day is a count of days since the beginning of the Julian Period,
 which starts with day 0 at noon on January 1, -4712.
 
-The Modified Julian Day is a count of days since midnight on November 17,
-1858.
+The Modified Julian Day is a count of days since midnight on November 17, 1858.
 
-These methods always refer to the local time, so the Julian Day is the same
-for a given datetime regardless of its time zone. Or in other words,
+These methods always refer to the local time, so the Julian Day is the same for
+a given datetime regardless of its time zone. Or in other words,
 2020-12-04T13:01:57 in "America/Chicago" has the same Julian Day as
 2020-12-04T13:01:57 in "Asia/Taipei".
 
@@ -773,61 +758,55 @@ currently in Daylight Saving Time or not.
 
 ### $dt->time\_zone\_long\_name
 
-This is a shortcut for `$dt->time_zone->name`. It's provided so
-that one can use "%{time\_zone\_long\_name}" as a strftime format
-specifier.
+This is a shortcut for `$dt->time_zone->name`. It's provided so that one
+can use "%{time\_zone\_long\_name}" as a strftime format specifier.
 
 ### $dt->time\_zone\_short\_name
 
 This method returns the time zone abbreviation for the current time zone, such
-as "PST" or "GMT". These names are **not** definitive, and should not be used
-in any application intended for general use by users around the world. That's
+as "PST" or "GMT". These names are **not** definitive, and should not be used in
+any application intended for general use by users around the world. That's
 because it's possible for multiple time zones to have the same abbreviation.
 
 ### $dt->strftime( $format, ... )
 
-This method implements functionality similar to the `strftime`
-method in C. However, if given multiple format strings, then it will
-return multiple scalars, one for each format string.
+This method implements functionality similar to the `strftime` method in C.
+However, if given multiple format strings, then it will return multiple
+scalars, one for each format string.
 
-See the ["strftime Patterns"](#strftime-patterns) section for a list of all possible
-strftime patterns.
+See the ["strftime Patterns"](#strftime-patterns) section for a list of all possible strftime
+patterns.
 
-If you give a pattern that doesn't exist, then it is simply treated as
-text.
+If you give a pattern that doesn't exist, then it is simply treated as text.
 
 Note that any deviation from the POSIX standard is probably a bug. DateTime
 should match the output of `POSIX::strftime` for any given pattern.
 
 ### $dt->format\_cldr( $format, ... )
 
-This method implements formatting based on the CLDR date patterns. If
-given multiple format strings, then it will return multiple scalars,
-one for each format string.
+This method implements formatting based on the CLDR date patterns. If given
+multiple format strings, then it will return multiple scalars, one for each
+format string.
 
-See the ["CLDR Patterns"](#cldr-patterns) section for a list of all possible CLDR
-patterns.
+See the ["CLDR Patterns"](#cldr-patterns) section for a list of all possible CLDR patterns.
 
-If you give a pattern that doesn't exist, then it is simply treated as
-text.
+If you give a pattern that doesn't exist, then it is simply treated as text.
 
 ### $dt->epoch
 
-Returns the UTC epoch value for the datetime object. Datetimes before the
-start of the epoch will be returned as a negative number.
+Returns the UTC epoch value for the datetime object. Datetimes before the start
+of the epoch will be returned as a negative number.
 
 The return value from this method is always an integer number of seconds.
 
 Since the epoch does not account for leap seconds, the epoch time for
-1972-12-31T23:59:60 (UTC) is exactly the same as that for
-1973-01-01T00:00:00.
+1972-12-31T23:59:60 (UTC) is exactly the same as that for 1973-01-01T00:00:00.
 
 ### $dt->hires\_epoch
 
-Returns the epoch as a floating point number. The floating point
-portion of the value represents the nanosecond value of the object.
-This method is provided for compatibility with the `Time::HiRes`
-module.
+Returns the epoch as a floating point number. The floating point portion of the
+value represents the nanosecond value of the object. This method is provided
+for compatibility with the `Time::HiRes` module.
 
 Note that this method suffers from the imprecision of floating point numbers,
 and the result may end up rounded to an arbitrary degree depending on your
@@ -836,8 +815,8 @@ platform.
     my $dt = DateTime->new( year => 2012, nanosecond => 4 );
     say $dt->hires_epoch;
 
-On my system, this simply prints `1325376000` because adding `0.000000004`
-to `1325376000` returns `1325376000`.
+On my system, this simply prints `1325376000` because adding `0.000000004` to
+`1325376000` returns `1325376000`.
 
 ### $dt->is\_finite, $dt->is\_infinite
 
@@ -846,28 +825,26 @@ ones. Infinite datetime objects are documented in [DateTime::Infinite](https://m
 
 ### $dt->utc\_rd\_values
 
-Returns the current UTC Rata Die days, seconds, and nanoseconds as a
-three element list. This exists primarily to allow other calendar
-modules to create objects based on the values provided by this object.
+Returns the current UTC Rata Die days, seconds, and nanoseconds as a three
+element list. This exists primarily to allow other calendar modules to create
+objects based on the values provided by this object.
 
 ### $dt->local\_rd\_values
 
-Returns the current local Rata Die days, seconds, and nanoseconds as a
-three element list. This exists for the benefit of other modules
-which might want to use this information for date math, such as
-[DateTime::Event::Recurrence](https://metacpan.org/pod/DateTime%3A%3AEvent%3A%3ARecurrence).
+Returns the current local Rata Die days, seconds, and nanoseconds as a three
+element list. This exists for the benefit of other modules which might want to
+use this information for date math, such as [DateTime::Event::Recurrence](https://metacpan.org/pod/DateTime%3A%3AEvent%3A%3ARecurrence).
 
 ### $dt->leap\_seconds
 
-Returns the number of leap seconds that have happened up to the
-datetime represented by the object. For floating datetimes, this
-always returns 0.
+Returns the number of leap seconds that have happened up to the datetime
+represented by the object. For floating datetimes, this always returns 0.
 
 ### $dt->utc\_rd\_as\_seconds
 
-Returns the current UTC Rata Die days and seconds purely as seconds.
-This number ignores any fractional seconds stored in the object,
-as well as leap seconds.
+Returns the current UTC Rata Die days and seconds purely as seconds. This
+number ignores any fractional seconds stored in the object, as well as leap
+seconds.
 
 ### $dt->locale
 
@@ -894,9 +871,8 @@ example:
 ### $dt->set( .. )
 
 This method can be used to change the local components of a date time. This
-method accepts any parameter allowed by the `new` method except for
-`locale` or `time_zone`. Use `set_locale` and `set_time_zone` for those
-instead.
+method accepts any parameter allowed by the `new` method except for `locale`
+or `time_zone`. Use `set_locale` and `set_time_zone` for those instead.
 
 This method performs parameter validation just like the `new` method.
 
@@ -916,15 +892,15 @@ constructor:
 - $dt->set\_second
 - $dt->set\_nanosecond
 
-These are shortcuts to calling `set` with a single key. They all
-take a single parameter.
+These are shortcuts to calling `set` with a single key. They all take a single
+parameter.
 
 ### $dt->truncate( to => ... )
 
-This method allows you to reset some of the local time components in the
-object to their "zero" values. The `to` parameter is used to specify which
-values to truncate, and it may be one of `"year"`, `"quarter"`, `"month"`,
-`"week"`, `"local_week"`, `"day"`, `"hour"`, `"minute"`, or `"second"`.
+This method allows you to reset some of the local time components in the object
+to their "zero" values. The `to` parameter is used to specify which values to
+truncate, and it may be one of `"year"`, `"quarter"`, `"month"`, `"week"`,
+`"local_week"`, `"day"`, `"hour"`, `"minute"`, or `"second"`.
 
 For example, if `"month"` is specified, then the local day becomes 1, and the
 hour, minute, and second all become 0.
@@ -941,10 +917,10 @@ or an object returned by `DateTime::Locale->load`.
 
 ### $dt->set\_time\_zone($tz)
 
-This method accepts either a time zone object or a string that can be passed
-as the `name` parameter to `DateTime::TimeZone->new`. If the new time
-zone's offset is different from the old time zone, then the _local_ time is
-adjusted accordingly.
+This method accepts either a time zone object or a string that can be passed as
+the `name` parameter to `DateTime::TimeZone->new`. If the new time zone's
+offset is different from the old time zone, then the _local_ time is adjusted
+accordingly.
 
 For example:
 
@@ -963,13 +939,12 @@ For example:
 
     print $dt->hour;    # prints 17
 
-If the old time zone was a floating time zone, then no adjustments to
-the local time are made, except to account for leap seconds. If the
-new time zone is floating, then the _UTC_ time is adjusted in order
-to leave the local time untouched.
+If the old time zone was a floating time zone, then no adjustments to the local
+time are made, except to account for leap seconds. If the new time zone is
+floating, then the _UTC_ time is adjusted in order to leave the local time
+untouched.
 
-Fans of Tsai Ming-Liang's films will be happy to know that this does
-work:
+Fans of Tsai Ming-Liang's films will be happy to know that this does work:
 
     my $dt = DateTime->now( time_zone => 'Asia/Taipei' );
     $dt->set_time_zone('Europe/Paris');
@@ -985,8 +960,8 @@ You can set this to `undef` to revert to the default formatter.
 
 ## Math Methods
 
-Like the set methods, math related methods always return the object
-itself, to allow for chaining:
+Like the set methods, math related methods always return the object itself, to
+allow for chaining:
 
     $dt->add( days => 1 )->subtract( seconds => 1 );
 
@@ -1024,30 +999,29 @@ A synonym of `$dt->subtract_duration($duration_object)`.
 
 ### $dt->subtract\_datetime($datetime)
 
-This method returns a new [DateTime::Duration](https://metacpan.org/pod/DateTime%3A%3ADuration) object representing
-the difference between the two dates. The duration is **relative** to
-the object from which `$datetime` is subtracted. For example:
+This method returns a new [DateTime::Duration](https://metacpan.org/pod/DateTime%3A%3ADuration) object representing the
+difference between the two dates. The duration is **relative** to the object
+from which `$datetime` is subtracted. For example:
 
        2003-03-15 00:00:00.00000000
     -  2003-02-15 00:00:00.00000000
     -------------------------------
     = 1 month
 
-Note that this duration is not an absolute measure of the amount of
-time between the two datetimes, because the length of a month varies,
-as well as due to the presence of leap seconds.
+Note that this duration is not an absolute measure of the amount of time
+between the two datetimes, because the length of a month varies, as well as due
+to the presence of leap seconds.
 
-The returned duration may have deltas for months, days, minutes,
-seconds, and nanoseconds.
+The returned duration may have deltas for months, days, minutes, seconds, and
+nanoseconds.
 
-### $dt->delta\_md($datetime)
-
-### $dt->delta\_days($datetime)
+### $dt->delta\_md($datetime), $dt->delta\_days($datetime)
 
 Each of these methods returns a new [DateTime::Duration](https://metacpan.org/pod/DateTime%3A%3ADuration) object representing
-some portion of the difference between two datetimes.  The `$dt->delta_md` method returns a duration which contains only the month and day portions of
-the duration is represented. The `$dt->delta_days` method returns a
-duration which contains only days.
+some portion of the difference between two datetimes.  The `$dt->delta_md`
+method returns a duration which contains only the month and day portions of the
+duration is represented. The `$dt->delta_days` method returns a duration
+which contains only days.
 
 The `$dt->delta_md` and `$dt->delta_days` methods truncate the
 duration so that any fractional portion of a day is ignored. Both of these
@@ -1070,8 +1044,8 @@ difference between the two dates in seconds and nanoseconds. This is the only
 way to accurately measure the absolute amount of time between two datetimes,
 since units larger than a second do not represent a fixed number of seconds.
 
-Note that because of leap seconds, this may not return the same result as
-doing this math based on the value returned by `$dt->epoch`.
+Note that because of leap seconds, this may not return the same result as doing
+this math based on the value returned by `$dt->epoch`.
 
 ### $dt->is\_between( $lower, $upper )
 
@@ -1099,22 +1073,22 @@ application, even those created by third party libraries which also use
     $cmp = DateTime->compare_ignore_floating( $dt1, $dt2 );
 
 This method compare two DateTime objects. The semantics are compatible with
-Perl's `sort` function; it returns `-1` if `$dt1 < $dt2`, `0` if
-`$dt1 == $dt2`, `1` if `$dt1 > $dt2`.
+Perl's `sort` function; it returns `-1` if `$dt1 < $dt2`, `0` if `$dt1
+&#x3d;= $dt2`, `1` if `$dt1 > $dt2`.
 
-If one of the two DateTime objects has a floating time zone, it will
-first be converted to the time zone of the other object. This is what
-you want most of the time, but it can lead to inconsistent results
-when you compare a number of DateTime objects, some of which are
-floating, and some of which are in other time zones.
+If one of the two DateTime objects has a floating time zone, it will first be
+converted to the time zone of the other object. This is what you want most of
+the time, but it can lead to inconsistent results when you compare a number of
+DateTime objects, some of which are floating, and some of which are in other
+time zones.
 
 If you want to have consistent results (because you want to sort an array of
 objects, for example), you can use the `compare_ignore_floating` method:
 
     @dates = sort { DateTime->compare_ignore_floating( $a, $b ) } @dates;
 
-In this case, objects with a floating time zone will be sorted as if
-they were UTC times.
+In this case, objects with a floating time zone will be sorted as if they were
+UTC times.
 
 Since DateTime objects overload comparison operators, this:
 
@@ -1151,23 +1125,23 @@ in order to effectively use this module and [DateTime::Duration](https://metacpa
 
 ### Making Things Simple
 
-If you want to simplify your life and not have to think too hard about
-the nitty-gritty of datetime math, I have several recommendations:
+If you want to simplify your life and not have to think too hard about the
+nitty-gritty of datetime math, I have several recommendations:
 
 - use the floating time zone
 
-    If you do not care about time zones or leap seconds, use the
-    "floating" timezone:
+    If you do not care about time zones or leap seconds, use the "floating"
+    timezone:
 
         my $dt = DateTime->now( time_zone => 'floating' );
 
-    Math done on two objects in the floating time zone produces very
-    predictable results.
+    Math done on two objects in the floating time zone produces very predictable
+    results.
 
     Note that in most cases you will want to start by creating an object in a
     specific zone and _then_ convert it to the floating time zone. When an object
-    goes from a real zone to the floating zone, the time for the object remains
-    the same.
+    goes from a real zone to the floating zone, the time for the object remains the
+    same.
 
     This means that passing the floating zone to a constructor may not do what you
     want.
@@ -1184,10 +1158,9 @@ the nitty-gritty of datetime math, I have several recommendations:
 
 - use UTC for all calculations
 
-    If you do care about time zones (particularly DST) or leap seconds,
-    try to use non-UTC time zones for presentation and user input only.
-    Convert to UTC immediately and convert back to the local time zone for
-    presentation:
+    If you do care about time zones (particularly DST) or leap seconds, try to use
+    non-UTC time zones for presentation and user input only. Convert to UTC
+    immediately and convert back to the local time zone for presentation:
 
         my $dt = DateTime->new( %user_input, time_zone => $user_tz );
         $dt->set_time_zone('UTC');
@@ -1199,11 +1172,11 @@ the nitty-gritty of datetime math, I have several recommendations:
 
 - math on non-UTC time zones
 
-    If you need to do date math on objects with non-UTC time zones, please read
-    the caveats below carefully. The results `DateTime` produces are predictable,
-    correct, and mostly intuitive, but datetime math gets very ugly when time
-    zones are involved, and there are a few strange corner cases involving
-    subtraction of two datetimes across a DST change.
+    If you need to do date math on objects with non-UTC time zones, please read the
+    caveats below carefully. The results `DateTime` produces are predictable,
+    correct, and mostly intuitive, but datetime math gets very ugly when time zones
+    are involved, and there are a few strange corner cases involving subtraction of
+    two datetimes across a DST change.
 
     If you can always use the floating or UTC time zones, you can skip ahead to
     ["Leap Seconds and Date Math"](#leap-seconds-and-date-math)
@@ -1211,37 +1184,35 @@ the nitty-gritty of datetime math, I have several recommendations:
 - date vs datetime math
 
     If you only care about the date (calendar) portion of a datetime, you should
-    use either `$dt->delta_md`> or `$dt->delta_days`, not `$dt->subtract_datetime`. This will give predictable, unsurprising results,
+    use either `$dt->delta_md` or `$dt->delta_days`, not `$dt->subtract_datetime`. This will give predictable, unsurprising results,
     free from DST-related complications.
 
 - $dt->subtract\_datetime and $dt->add\_duration
 
-    You must convert your datetime objects to the UTC time zone before
-    doing date math if you want to make sure that the following formulas
-    are always true:
+    You must convert your datetime objects to the UTC time zone before doing date
+    math if you want to make sure that the following formulas are always true:
 
         $dt2 - $dt1 = $dur
         $dt1 + $dur = $dt2
         $dt2 - $dur = $dt1
 
     Note that using `$dt->delta_days` ensures that this formula always works,
-    regardless of the time zones of the objects involved, as does using `$dt->subtract_datetime_absolute`. Other methods of subtraction are not
-    always reversible.
+    regardless of the time zones of the objects involved, as does using `$dt->subtract_datetime_absolute`. Other methods of subtraction are not always
+    reversible.
 
 - never do math on two objects where only one is in the floating time zone
 
-    The date math code accounts for leap seconds whenever the `DateTime` object
-    is not in the floating time zone. If you try to do math where one object is in
-    the floating zone and the other isn't, the results will be confusing and
-    wrong.
+    The date math code accounts for leap seconds whenever the `DateTime` object is
+    not in the floating time zone. If you try to do math where one object is in the
+    floating zone and the other isn't, the results will be confusing and wrong.
 
 ### Adding a Duration to a DateTime
 
 The parts of a duration can be broken down into five parts. These are months,
 days, minutes, seconds, and nanoseconds. Adding one month to a date is
-different than adding 4 weeks or 28, 29, 30, or 31 days.  Similarly, due to
-DST and leap seconds, adding a day can be different than adding 86,400
-seconds, and adding a minute is not exactly the same as 60 seconds.
+different than adding 4 weeks or 28, 29, 30, or 31 days.  Similarly, due to DST
+and leap seconds, adding a day can be different than adding 86,400 seconds, and
+adding a minute is not exactly the same as 60 seconds.
 
 We cannot convert between these units, except for seconds and nanoseconds,
 because there is no fixed conversion between most pairs of units. That is
@@ -1249,12 +1220,12 @@ because of things like leap seconds, DST changes, etc.
 
 `DateTime` always adds (or subtracts) days, then months, minutes, and then
 seconds and nanoseconds. If there are any boundary overflows, these are
-normalized at each step. For the days and months the local (not UTC) values
-are used. For minutes and seconds, the local values are used. This generally
-just works.
+normalized at each step. For the days and months the local (not UTC) values are
+used. For minutes and seconds, the local values are used. This generally just
+works.
 
-This means that adding one month and one day to February 28, 2003 will
-produce the date April 1, 2003, not March 29, 2003.
+This means that adding one month and one day to February 28, 2003 will produce
+the date April 1, 2003, not March 29, 2003.
 
     my $dt = DateTime->new( year => 2003, month => 2, day => 28 );
 
@@ -1262,8 +1233,8 @@ produce the date April 1, 2003, not March 29, 2003.
 
     # 2003-04-01 - the result
 
-On the other hand, if we add months first, and then separately add
-days, we end up with March 29, 2003:
+On the other hand, if we add months first, and then separately add days, we end
+up with March 29, 2003:
 
     $dt->add( months => 1 )->add( days => 1 );
 
@@ -1286,11 +1257,11 @@ We see similar strangeness when math crosses a DST boundary:
     $dt->add( minutes => 3 )->add( days => 1 );
     # 2003-04-06 03:01:00
 
-Note that if you converted the datetime object to UTC first you would
-get predictable results.
+Note that if you converted the datetime object to UTC first you would get
+predictable results.
 
-If you want to know how many seconds a [DateTime::Duration](https://metacpan.org/pod/DateTime%3A%3ADuration) object
-represents, you have to add it to a datetime to find out, so you could do:
+If you want to know how many seconds a [DateTime::Duration](https://metacpan.org/pod/DateTime%3A%3ADuration) object represents,
+you have to add it to a datetime to find out, so you could do:
 
     my $now   = DateTime->now( time_zone => 'UTC' );
     my $later = $now->clone->add_duration($duration);
@@ -1329,10 +1300,10 @@ types of durations. These methods are `$dt->subtract_datetime`, `$dt->subtract_d
 
 ### DateTime Subtraction
 
-Date subtraction is done based solely on the two object's local datetimes,
-with one exception to handle DST changes. Also, if the two datetime objects
-are in different time zones, one of them is converted to the other's time zone
-first before subtraction. This is best explained through examples:
+Date subtraction is done based solely on the two object's local datetimes, with
+one exception to handle DST changes. Also, if the two datetime objects are in
+different time zones, one of them is converted to the other's time zone first
+before subtraction. This is best explained through examples:
 
 The first of these probably makes the most sense:
 
@@ -1382,8 +1353,7 @@ This one is a little trickier, but still fairly logical:
     # 2 days and 3 minutes
     my $dur = $dt2->subtract_datetime($dt1);
 
-Which contradicts the result this one gives, even though they both
-make sense:
+Which contradicts the result this one gives, even though they both make sense:
 
     # is DST
     my $dt1 = DateTime->new(
@@ -1432,10 +1402,10 @@ are accounting for a 25 hour day.
 
 ### Reversibility
 
-Date math operations are not always reversible. This is because of the way
-that addition operations are ordered. As was discussed earlier, adding 1 day
-and 3 minutes in one call to `$dt->add`> is not the same as first adding
-3 minutes and 1 day in two separate calls.
+Date math operations are not always reversible. This is because of the way that
+addition operations are ordered. As was discussed earlier, adding 1 day and 3
+minutes in one call to `$dt->add` is not the same as first adding 3
+minutes and 1 day in two separate calls.
 
 If we take a duration returned from `$dt->subtract_datetime` and then try
 to add or subtract that duration from one of the datetimes we just used, we
@@ -1469,19 +1439,19 @@ sometimes get interesting results:
     $dt2->subtract_duration($dur);
 
 The `$dt->subtract_duration` operation gives us a (perhaps) unexpected
-answer because it first subtracts one day to get 2003-04-05T03:01:00
-and then subtracts 3 minutes to get the final result.
+answer because it first subtracts one day to get 2003-04-05T03:01:00 and then
+subtracts 3 minutes to get the final result.
 
-If we explicitly reverse the order we can get the original value of
-`$dt1`. This can be facilitated by the [DateTime::Duration](https://metacpan.org/pod/DateTime%3A%3ADuration) class's `$dur->calendar_duration` and `$dur->clock_duration` methods:
+If we explicitly reverse the order we can get the original value of `$dt1`.
+This can be facilitated by the [DateTime::Duration](https://metacpan.org/pod/DateTime%3A%3ADuration) class's `$dur->calendar_duration` and `$dur->clock_duration` methods:
 
     $dt2->subtract_duration( $dur->clock_duration )
         ->subtract_duration( $dur->calendar_duration );
 
 ### Leap Seconds and Date Math
 
-The presence of leap seconds can cause even more anomalies in date
-math. For example, the following is a legal datetime:
+The presence of leap seconds can cause even more anomalies in date math. For
+example, the following is a legal datetime:
 
     my $dt = DateTime->new(
         year      => 1972,
@@ -1500,8 +1470,8 @@ If we add one month ...
 ... the datetime is now "1973-02-01 00:00:00", because there is no 23:59:60 on
 1973-01-31.
 
-Leap seconds also force us to distinguish between minutes and seconds
-during date math. Given the following datetime ...
+Leap seconds also force us to distinguish between minutes and seconds during
+date math. Given the following datetime ...
 
     my $dt = DateTime->new(
         year      => 1972,
@@ -1513,9 +1483,9 @@ during date math. Given the following datetime ...
         time_zone => 'UTC'
     );
 
-... we will get different results when adding 1 minute than we get if we add
-60 seconds. This is because in this case, the last minute of the day,
-beginning at 23:59:00, actually contains 61 seconds.
+... we will get different results when adding 1 minute than we get if we add 60
+seconds. This is because in this case, the last minute of the day, beginning at
+23:59:00, actually contains 61 seconds.
 
 Here are the results we get:
 
@@ -1541,8 +1511,8 @@ Here are the results we get:
 
 ### Local vs. UTC and 24 hours vs. 1 day
 
-When math crosses a daylight saving boundary, a single day may have
-more or less than 24 hours.
+When math crosses a daylight saving boundary, a single day may have more or
+less than 24 hours.
 
 For example, if you do this ...
 
@@ -1591,22 +1561,23 @@ things:
 
     my $duration_obj = $dt - $new_dt;
 
-    foreach my $dt ( sort @dts ) {...}
+    for my $dt ( sort @dts ) {...}
 
-Additionally, the fallback parameter is set to true, so other
-derivable operators (+=, -=, etc.) will work properly. Do not expect
-increment (++) or decrement (--) to do anything useful.
+Additionally, the fallback parameter is set to true, so other derivable
+operators (+=, -=, etc.) will work properly. Do not expect increment (++) or
+decrement (--) to do anything useful.
 
-The string comparison operators, `eq` or `ne`, will use the string
-value to compare with non-DateTime objects.
+The string comparison operators, `eq` or `ne`, will use the string value to
+compare with non-DateTime objects.
 
-DateTime objects do not have a numeric value, using `==` or `<=>` to compare a DateTime object with a non-DateTime object will result
-in an exception. To safely sort mixed DateTime and non-DateTime
-objects, use `sort { $a cmp $b } @dates`.
+DateTime objects do not have a numeric value, using `==` or `<=>` to
+compare a DateTime object with a non-DateTime object will result in an
+exception. To safely sort mixed DateTime and non-DateTime objects, use `sort {
+$a cmp $b } @dates`.
 
-The module also overloads stringification using the object's
-formatter, defaulting to `iso8601` method. See ["Formatters And
-Stringification"](#formatters-and-stringification) for details.
+The module also overloads stringification using the object's formatter,
+defaulting to `iso8601` method. See ["Formatters And Stringification"](#formatters-and-stringification) for
+details.
 
 ## Formatters And Stringification
 
@@ -1624,28 +1595,27 @@ Or, you can set it afterwards:
     $dt->set_formatter($formatter);
     $formatter = $dt->formatter;
 
-Once you set the formatter, the overloaded stringification method will
-use the formatter. If unspecified, the `iso8601` method is used.
+Once you set the formatter, the overloaded stringification method will use the
+formatter. If unspecified, the `iso8601` method is used.
 
-A formatter can be handy when you know that in your application you
-want to stringify your DateTime objects into a special format all the
-time, for example in Postgres format.
+A formatter can be handy when you know that in your application you want to
+stringify your DateTime objects into a special format all the time, for example
+in Postgres format.
 
 If you provide a formatter class name or object, it must implement a
-`format_datetime` method. This method will be called with just the
-`DateTime` object as its argument.
+`format_datetime` method. This method will be called with just the `DateTime`
+object as its argument.
 
 ## CLDR Patterns
 
-The CLDR pattern language is both more powerful and more complex than
-strftime. Unlike strftime patterns, you often have to explicitly
-escape text that you do not want formatted, as the patterns are simply
-letters without any prefix.
+The CLDR pattern language is both more powerful and more complex than strftime.
+Unlike strftime patterns, you often have to explicitly escape text that you do
+not want formatted, as the patterns are simply letters without any prefix.
 
 For example, `"yyyy-MM-dd"` is a valid CLDR pattern. If you want to include
 any lower or upper case ASCII characters as-is, you can surround them with
-single quotes ('). If you want to include a single quote, you must escape it
-as two single quotes ('').
+single quotes ('). If you want to include a single quote, you must escape it as
+two single quotes ('').
 
     my $pattern1 = q{'Today is ' EEEE};
     my $pattern2 = q{'It is now' h 'o''clock' a};
@@ -1657,9 +1627,8 @@ zeroes depending on the length of the format specifier. For example, `"h"`
 represents the current hour from 1-12. If you specify `"hh"` then hours 1-9
 will have a leading zero prepended.
 
-However, CLDR often uses five of a letter to represent the narrow form
-of a pattern. This inconsistency is necessary for backwards
-compatibility.
+However, CLDR often uses five of a letter to represent the narrow form of a
+pattern. This inconsistency is necessary for backwards compatibility.
 
 There are many cases where CLDR patterns distinguish between the "format" and
 "stand-alone" forms of a pattern. The format pattern is used when the thing in
@@ -1670,9 +1639,9 @@ There are also many cases where CLDR provides three sizes for each item, wide
 (the full name), abbreviated, and narrow. The narrow form is often just a
 single character, for example "T" for "Tuesday", and may not be unique.
 
-CLDR provides a fairly complex system for localizing time zones that
-we ignore entirely. The time zone patterns just use the information
-provided by `DateTime::TimeZone`, and _do not follow the CLDR spec_.
+CLDR provides a fairly complex system for localizing time zones that we ignore
+entirely. The time zone patterns just use the information provided by
+`DateTime::TimeZone`, and _do not follow the CLDR spec_.
 
 The output of a CLDR pattern is always localized, when applicable.
 
@@ -1692,8 +1661,8 @@ CLDR provides the following patterns:
 
 - y and y{3,}
 
-    The year, zero-prefixed as needed. Negative years will start with a "-",
-    and this will be included in the length calculation.
+    The year, zero-prefixed as needed. Negative years will start with a "-", and
+    this will be included in the length calculation.
 
     In other, words the "yyyyy" pattern will format year -1234 as "-1234", not
     "-01234".
@@ -1735,7 +1704,7 @@ CLDR provides the following patterns:
 
     The wide stand-alone form for the quarter.
 
-- M{1,2\]
+- M{1,2}
 
     The numerical month.
 
@@ -1751,7 +1720,7 @@ CLDR provides the following patterns:
 
     The narrow format form for the month.
 
-- L{1,2\]
+- L{1,2}
 
     The numerical month.
 
@@ -1805,15 +1774,15 @@ CLDR provides the following patterns:
 
 - e{1,2}
 
-    The _local_ numeric day of the week, from 1 to 7. This number depends
-    on what day is considered the first day of the week, which varies by
-    locale. For example, in the US, Sunday is the first day of the week,
-    so this returns 2 for Monday.
+    The _local_ numeric day of the week, from 1 to 7. This number depends on what
+    day is considered the first day of the week, which varies by locale. For
+    example, in the US, Sunday is the first day of the week, so this returns 2 for
+    Monday.
 
 - c
 
-    The numeric day of the week from 1 to 7, treating Monday as the first
-    of the week, regardless of locale.
+    The numeric day of the week from 1 to 7, treating Monday as the first of the
+    week, regardless of locale.
 
 - ccc
 
@@ -1849,9 +1818,8 @@ CLDR provides the following patterns:
 
 - j{1,2}
 
-    The hour, in 12 or 24 hour form, based on the preferred form for the
-    locale. In other words, this is equivalent to either "h{1,2}" or
-    "H{1,2}".
+    The hour, in 12 or 24 hour form, based on the preferred form for the locale. In
+    other words, this is equivalent to either "h{1,2}" or "H{1,2}".
 
 - m{1,2}
 
@@ -1863,14 +1831,14 @@ CLDR provides the following patterns:
 
 - S{1,}
 
-    The fractional portion of the seconds, rounded based on the length of
-    the specifier. This returned _without_ a leading decimal point, but
-    may have leading or trailing zeroes.
+    The fractional portion of the seconds, rounded based on the length of the
+    specifier. This returned _without_ a leading decimal point, but may have
+    leading or trailing zeroes.
 
 - A{1,}
 
-    The millisecond of the day, based on the current time. In other words,
-    if it is 12:00:00.00, this returns 43200000.
+    The millisecond of the day, based on the current time. In other words, if it is
+    12:00:00.00, this returns 43200000.
 
 - z{1,3}
 
@@ -1886,13 +1854,13 @@ CLDR provides the following patterns:
 
 - ZZZZ
 
-    The time zone short name and the offset as one string, so something
-    like "CDT-0500".
+    The time zone short name and the offset as one string, so something like
+    "CDT-0500".
 
 - ZZZZZ
 
-    The time zone offset as a sexagesimal number, so something like "-05:00".
-    (This is useful for W3C format.)
+    The time zone offset as a sexagesimal number, so something like "-05:00". (This
+    is useful for W3C format.)
 
 - v{1,3}
 
@@ -1916,8 +1884,8 @@ The CLDR data includes pre-defined formats for various patterns such as "month
 and day" or "time of day". Using these formats lets you render information
 about a datetime in the most natural way for users from a given locale.
 
-These formats are indexed by a key that is itself a CLDR pattern. When you
-look these up, you get back a different CLDR pattern suitable for the locale.
+These formats are indexed by a key that is itself a CLDR pattern. When you look
+these up, you get back a different CLDR pattern suitable for the locale.
 
 Let's look at some example We'll use `2008-02-05T18:30:30` as our example
 datetime value, and see how this is rendered for the `"en-US"` and `"fr-FR"`
@@ -1925,9 +1893,9 @@ locales.
 
 - `MMMd`
 
-    The abbreviated month and day as number. For `en-US`, we get the pattern
-    `MMM d`, which renders as `Feb 5`. For `fr-FR`, we get the pattern
-    `d MMM`, which renders as `5 févr.`.
+    The abbreviated month and day as number. For `en-US`, we get the pattern `MMM
+    d`, which renders as `Feb 5`. For `fr-FR`, we get the pattern `d MMM`, which
+    renders as `5 févr.`.
 
 - `yQQQ`
 
@@ -1942,15 +1910,14 @@ locales.
     pattern and rendering.
 
 The available formats for each locale are documented in the POD for that
-locale. To get back the format, you use the `$locale->format_for`
-method. For example:
+locale. To get back the format, you use the `$locale->format_for` method.
+For example:
 
     say $dt->format_cldr( $dt->locale->format_for('MMMd') );
 
 ## strftime Patterns
 
-The following patterns are allowed in the format string given to the
-`$dt->strftime` method:
+The following patterns are allowed in the format string given to the `$dt->strftime` method:
 
 - %a
 
@@ -1982,14 +1949,13 @@ The following patterns are allowed in the format string given to the
 
 - %D
 
-    Equivalent to %m/%d/%y. This is not a good standard format if you
-    want folks from both the United States and the rest of the world to
-    understand the date!
+    Equivalent to %m/%d/%y. This is not a good standard format if you want folks
+    from both the United States and the rest of the world to understand the date!
 
 - %e
 
-    Like %d, the day of the month as a decimal number, but a leading zero
-    is replaced by a space.
+    Like %d, the day of the month as a decimal number, but a leading zero is
+    replaced by a space.
 
 - %F
 
@@ -1998,9 +1964,9 @@ The following patterns are allowed in the format string given to the
 - %G
 
     The ISO 8601 year with century as a decimal number. The 4-digit year
-    corresponding to the ISO week number (see %V). This has the same
-    format and value as %Y, except that if the ISO week number belongs to
-    the previous or next year, that year is used instead. (TZ)
+    corresponding to the ISO week number (see %V). This has the same format and
+    value as %Y, except that if the ISO week number belongs to the previous or next
+    year, that year is used instead. (TZ)
 
 - %g
 
@@ -2024,13 +1990,13 @@ The following patterns are allowed in the format string given to the
 
 - %k
 
-    The hour (24-hour clock) as a decimal number (range 0 to 23); single
-    digits are preceded by a blank. (See also %H.)
+    The hour (24-hour clock) as a decimal number (range 0 to 23); single digits are
+    preceded by a blank. (See also %H.)
 
 - %l
 
-    The hour (12-hour clock) as a decimal number (range 1 to 12); single
-    digits are preceded by a blank. (See also %I.)
+    The hour (12-hour clock) as a decimal number (range 1 to 12); single digits are
+    preceded by a blank. (See also %I.)
 
 - %m
 
@@ -2056,24 +2022,23 @@ The following patterns are allowed in the format string given to the
 
 - %p
 
-    Either \`AM' or \`PM' according to the given time value, or the
-    corresponding strings for the current locale. Noon is treated as \`pm'
-    and midnight as \`am'.
+    Either \`AM' or \`PM' according to the given time value, or the corresponding
+    strings for the current locale. Noon is treated as \`pm' and midnight as \`am'.
 
 - %P
 
-    Like %p but in lowercase: \`am' or \`pm' or a corresponding string for
-    the current locale.
+    Like %p but in lowercase: \`am' or \`pm' or a corresponding string for the
+    current locale.
 
 - %r
 
-    The time in a.m. or p.m. notation. In the POSIX locale this is
-    equivalent to \`%I:%M:%S %p'.
+    The time in a.m. or p.m. notation. In the POSIX locale this is equivalent to
+    \`%I:%M:%S %p'.
 
 - %R
 
-    The time in 24-hour notation (%H:%M). (SU) For a version including the
-    seconds, see %T below.
+    The time in 24-hour notation (%H:%M). (SU) For a version including the seconds,
+    see %T below.
 
 - %s
 
@@ -2093,31 +2058,27 @@ The following patterns are allowed in the format string given to the
 
 - %u
 
-    The day of the week as a decimal, range 1 to 7, Monday being 1. See
-    also %w.
+    The day of the week as a decimal, range 1 to 7, Monday being 1. See also %w.
 
 - %U
 
-    The week number of the current year as a decimal number, range 00 to
-    53, starting with the first Sunday as the first day of week 01. See
-    also %V and %W.
+    The week number of the current year as a decimal number, range 00 to 53,
+    starting with the first Sunday as the first day of week 01. See also %V and %W.
 
 - %V
 
-    The ISO 8601:1988 week number of the current year as a decimal number,
-    range 01 to 53, where week 1 is the first week that has at least 4
-    days in the current year, and with Monday as the first day of the
-    week. See also %U and %W.
+    The ISO 8601:1988 week number of the current year as a decimal number, range 01
+    to 53, where week 1 is the first week that has at least 4 days in the current
+    year, and with Monday as the first day of the week. See also %U and %W.
 
 - %w
 
-    The day of the week as a decimal, range 0 to 6, Sunday being 0. See
-    also %u.
+    The day of the week as a decimal, range 0 to 6, Sunday being 0. See also %u.
 
 - %W
 
-    The week number of the current year as a decimal number, range 00 to
-    53, starting with the first Monday as the first day of week 01.
+    The week number of the current year as a decimal number, range 00 to 53,
+    starting with the first Monday as the first day of week 01.
 
 - %x
 
@@ -2137,8 +2098,8 @@ The following patterns are allowed in the format string given to the
 
 - %z
 
-    The time-zone as hour offset from UTC. Required to emit
-    RFC822-conformant dates (using "%a, %d %b %Y %H:%M:%S %z").
+    The time-zone as hour offset from UTC. Required to emit RFC822-conformant dates
+    (using "%a, %d %b %Y %H:%M:%S %z").
 
 - %Z
 
@@ -2159,10 +2120,25 @@ The following patterns are allowed in the format string given to the
 `DateTime` implements [Storable](https://metacpan.org/pod/Storable) hooks in order to reduce the size of a
 serialized `DateTime` object.
 
+# DEVELOPMENT TOOLS
+
+If you're working on the `DateTIme` code base, there are a few extra non-Perl
+tools that you may find useful, notably
+[precious](https://github.com/houseabsolute/precious), a meta-linter/tidier.
+You can install all the necessary tools in `$HOME/bin` by running
+`./dev-bin/install-dev-tools.sh`.
+
+Try running `precious tidy -a` to tidy all the tidyable files in the repo, and
+`precious lint -a` to run all the lint checks.
+
+You can enable a git pre-commit hook for linting by running `./git/setup.pl`.
+
+Note that linting will be checked in CI, and it's okay to submit a PR which
+fails the linting check, but it's extra nice to fix these yourself.
+
 # THE DATETIME PROJECT ECOSYSTEM
 
-This module is part of a larger ecosystem of modules in the DateTime
-family.
+This module is part of a larger ecosystem of modules in the DateTime family.
 
 ## [DateTime::Set](https://metacpan.org/pod/DateTime%3A%3ASet)
 
@@ -2212,13 +2188,12 @@ See [MetaCPAN](https://metacpan.org/search?q=datetime) for more modules.
 
 # KNOWN BUGS
 
-The tests in `20infinite.t` seem to fail on some machines,
-particularly on Win32. This appears to be related to Perl's internal
-handling of IEEE infinity and NaN, and seems to be highly
-platform/compiler/phase of moon dependent.
+The tests in `20infinite.t` seem to fail on some machines, particularly on
+Win32. This appears to be related to Perl's internal handling of IEEE infinity
+and NaN, and seems to be highly platform/compiler/phase of moon dependent.
 
-If you don't plan to use infinite datetimes you can probably ignore
-this. This will be fixed (perhaps) in future versions.
+If you don't plan to use infinite datetimes you can probably ignore this. This
+will be fixed (perhaps) in future versions.
 
 # SEE ALSO
 
@@ -2228,16 +2203,12 @@ I've given at a few YAPCs.
 
 [datetime@perl.org mailing list](http://lists.perl.org/list/datetime.html)
 
-[http://datetime.perl.org/](http://datetime.perl.org/)
-
 # SUPPORT
 
 Bugs may be submitted at [https://github.com/houseabsolute/DateTime.pm/issues](https://github.com/houseabsolute/DateTime.pm/issues).
 
 There is a mailing list available for users of this distribution,
 [mailto:datetime@perl.org](mailto:datetime@perl.org).
-
-I am also usually active on IRC as 'autarch' on `irc://irc.perl.org`.
 
 # SOURCE
 
@@ -2271,6 +2242,7 @@ Dave Rolsky <autarch@urth.org>
 - Daisuke Maki <dmaki@cpan.org>
 - Dan Book <grinnz@gmail.com>
 - Dan Stewart <danielandrewstewart@gmail.com>
+- David Dyck <david.dyck@checksum.com>
 - David E. Wheeler <david@justatheory.com>
 - David Precious <davidp@preshweb.co.uk>
 - Doug Bell <madcityzen@gmail.com>
@@ -2301,7 +2273,7 @@ Dave Rolsky <autarch@urth.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2003 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2003 - 2021 by Dave Rolsky.
 
 This is free software, licensed under:
 
