@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.56   2022-03-02
+
 - The DateTime->from_epoch constructor now accepts a single, non-hashref
   argument, and validates it as an epoch value. Requested by Neil Bowers. GH
   #119.

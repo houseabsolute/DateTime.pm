@@ -14,6 +14,7 @@ requires "Specio::Exporter" => "0";
 requires "Specio::Library::Builtins" => "0";
 requires "Specio::Library::Numeric" => "0";
 requires "Specio::Library::String" => "0";
+requires "Specio::Subs" => "0";
 requires "Try::Tiny" => "0";
 requires "XSLoader" => "0";
 requires "base" => "0";

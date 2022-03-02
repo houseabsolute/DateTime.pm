@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.55
+version 1.56
 
 # SYNOPSIS
 
@@ -367,6 +367,9 @@ Attempting to create an invalid time currently causes a fatal error.
 This class method can be used to construct a new DateTime object from an epoch
 time instead of components. Just as with the `new` method, it accepts
 `time_zone`, `locale`, and `formatter` parameters.
+
+You can also call it with a single unnamed argument, which will be treated as
+the epoch value.
 
 If the epoch value is a non-integral value, it will be rounded to nearest
 microsecond.
@@ -2273,7 +2276,7 @@ Dave Rolsky <autarch@urth.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2003 - 2021 by Dave Rolsky.
+This software is Copyright (c) 2003 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 
