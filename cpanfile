@@ -36,6 +36,7 @@ on 'test' => sub {
   requires "Test::Fatal" => "0";
   requires "Test::More" => "0.96";
   requires "Test::Warnings" => "0.005";
+  requires "Test::Without::Module" => "0";
   requires "utf8" => "0";
 };
 
@@ -81,6 +82,7 @@ on 'develop' => sub {
   requires "Test::Spelling" => "0.12";
   requires "Test::Version" => "2.05";
   requires "Test::Warnings" => "0.005";
+  requires "Test::Without::Module" => "0";
   requires "autodie" => "0";
   requires "utf8" => "0";
 };

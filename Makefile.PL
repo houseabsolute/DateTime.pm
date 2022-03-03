@@ -56,6 +56,7 @@ my %WriteMakefileArgs = (
     "Test::Fatal" => 0,
     "Test::More" => "0.96",
     "Test::Warnings" => "0.005",
+    "Test::Without::Module" => 0,
     "utf8" => 0
   },
   "VERSION" => "1.57",
@@ -90,6 +91,7 @@ my %FallbackPrereqs = (
   "Test::Fatal" => 0,
   "Test::More" => "0.96",
   "Test::Warnings" => "0.005",
+  "Test::Without::Module" => 0,
   "Try::Tiny" => 0,
   "XSLoader" => 0,
   "base" => 0,
