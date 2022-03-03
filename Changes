@@ -1,5 +1,13 @@
 {{$NEXT}}
 
+- The last release would die if Sub::Util was not available, but this should
+  just be an optional requirement. Fixed by Paul Howarth. GH #131.
+
+- This is the second time I've introduced this bug, so now there's a test to
+  make sure that DateTime can be loaded if Sub::Util is not
+  installed. Hopefully this will prevent a third occurrence of this bug.
+
+
 1.56   2022-03-02
 
 - The DateTime->from_epoch constructor now accepts a single, non-hashref
