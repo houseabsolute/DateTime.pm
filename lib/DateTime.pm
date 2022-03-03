@@ -478,8 +478,9 @@ sub _calc_local_components {
     );
 
     my $one_param_validator = validation_for(
-        name   => '_check_one_from_epoch_param',
-        params => [ { type => t('Num') } ],
+        name             => '_check_one_from_epoch_param',
+        name_is_optional => 1,
+        params           => [ { type => t('Num') } ],
     );
 
     sub from_epoch {
