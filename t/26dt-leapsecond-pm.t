@@ -7,6 +7,8 @@ use Test::More;
 
 use DateTime::LeapSecond;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 is( DateTime::LeapSecond::leap_seconds(100), 0, 'before 1970' );
 
 # at the start of the table:

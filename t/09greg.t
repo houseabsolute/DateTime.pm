@@ -5,6 +5,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 ## no critic (Subroutines::ProtectPrivateSubs)
 
 # test _ymd2rd and _rd2ymd for various dates

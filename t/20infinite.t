@@ -6,6 +6,8 @@ use Test::More;
 use DateTime;
 use DateTime::Locale;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 my $pos        = DateTime::Infinite::Future->new;
 my $neg        = DateTime::Infinite::Past->new;
 my $posinf     = DateTime::INFINITY;

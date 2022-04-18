@@ -5,6 +5,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 # exercises a bug found in Perl version of _normalize_tai_seconds -
 # fixed in 0.15
 {

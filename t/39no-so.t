@@ -10,6 +10,8 @@ use Test::More;
 ## no critic (TestingAndDebugging::ProhibitNoWarnings)
 no warnings 'once', 'redefine';
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 require XSLoader;
 
 my $orig = \&XSLoader::load;

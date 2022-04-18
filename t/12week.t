@@ -5,6 +5,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 my @tests = (
     [ [ 1964, 12, 31 ], [ 1964, 53 ] ],
     [ [ 1965, 1,  1 ],  [ 1964, 53 ] ],

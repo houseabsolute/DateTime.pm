@@ -6,6 +6,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 for my $o (
     Test::Builder->new->output,
     Test::Builder->new->failure_output,

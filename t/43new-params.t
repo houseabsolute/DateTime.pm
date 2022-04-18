@@ -6,6 +6,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 like(
     exception { DateTime->new( year => 10.5 ) },
     qr/Validation failed for type named Year/,

@@ -5,6 +5,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 #
 # This test exercises a bug that occurred when date math did not
 # always make sure to update the utc_year attribute of the given

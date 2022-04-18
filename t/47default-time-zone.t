@@ -5,6 +5,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 {
     my $dt = DateTime->new( year => 2000, month => 2, day => 21 );
     is(

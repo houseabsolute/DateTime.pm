@@ -7,6 +7,8 @@ use Test::More;
 use DateTime;
 use overload;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 my $dt = DateTime->now;
 
 like(

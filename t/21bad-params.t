@@ -6,6 +6,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 foreach my $p (
     { year => 2000, month => 13 },
     { year => 2000, month => 0 },

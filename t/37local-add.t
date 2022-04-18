@@ -6,6 +6,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 # These tests should be the final word on dt addition involving a
 # DST-changing time zone
 

@@ -6,6 +6,8 @@ use Test::More;
 use DateTime;
 use DateTime::Duration;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 {
     my $dt = DateTime->new( year => 2008, month => 2, day => 28 );
     my $du = DateTime::Duration->new( years => 1 );

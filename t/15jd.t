@@ -5,6 +5,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 # Borrowed from Matt Sergeant's Time::Piece
 
 # A table of MJD and components

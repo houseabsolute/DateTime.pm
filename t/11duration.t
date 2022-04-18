@@ -7,6 +7,8 @@ use Test::More;
 use DateTime;
 use DateTime::Duration;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 {
     my %pairs = (
         years       => 1,

@@ -5,6 +5,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 {
     my $dt = DateTime->new(
         year       => 1870, month  => 10, day    => 21,

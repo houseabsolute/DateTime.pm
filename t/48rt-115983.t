@@ -6,6 +6,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 # The bug here is that if DateTime doesn't clean its namespace, it ends up
 # having a catch method that is getting called here and being passed a hashref
 # containing the return value of $dt->truncate. See

@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Fixed tests so that they ignore the value set in the
+  `PERL_DATETIME_DEFAULT_TZ` env var, if one exists. Reported by Ian Gibbs. GH
+  #128.
+
+
 1.57   2022-03-03
 
 - The last release would die if Sub::Util was not available, but this should

@@ -5,6 +5,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 no warnings 'redefine';
 ## no critic (Variables::ProtectPrivateVars)
 local *DateTime::_core_time = sub {0};

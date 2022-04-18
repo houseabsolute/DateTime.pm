@@ -6,6 +6,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 my $dt1 = DateTime->new( year => 1970, hour => 1, nanosecond => 100 );
 
 my $dt2 = DateTime->from_object( object => $dt1 );

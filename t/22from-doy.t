@@ -6,6 +6,8 @@ use Test::More;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 my @last_day      = ( 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
 my @leap_last_day = @last_day;
 $leap_last_day[1]++;

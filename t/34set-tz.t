@@ -6,6 +6,8 @@ use Test::More 0.88;
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 # These tests are for a bug related to a bad interaction between the
 # horrid ->_handle_offset_modifier method and calling ->set_time_zone
 # on a real Olson time zone.  When _handle_offset_modifier was called

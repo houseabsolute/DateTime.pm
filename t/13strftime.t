@@ -8,6 +8,8 @@ use Test::More 0.96;
 use DateTime;
 use DateTime::Locale;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 for my $o (
     Test::Builder->new->output,
     Test::Builder->new->failure_output,

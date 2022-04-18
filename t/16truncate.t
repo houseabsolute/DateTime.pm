@@ -8,6 +8,8 @@ use Test::More 0.88;
 use DateTime;
 use Try::Tiny;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 my %vals = (
     year       => 50,
     month      => 3,

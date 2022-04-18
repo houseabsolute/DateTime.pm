@@ -7,6 +7,8 @@ use Test::Warnings 0.005 ':all';
 
 use DateTime;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 {
     my $dt = DateTime->new( year => 1900, month => 12, day => 1 );
 

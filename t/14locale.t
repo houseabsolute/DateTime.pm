@@ -7,6 +7,8 @@ use Test::More;
 use DateTime;
 use DateTime::Locale;
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 is(
     exception { DateTime->new( year => 100, locale => 'en_US' ) },
     undef,

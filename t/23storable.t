@@ -9,6 +9,8 @@ unless ( eval { require Storable; 1 } ) {
     plan skip_all => 'Cannot load Storable';
 }
 
+undef $ENV{PERL_DATETIME_DEFAULT_TZ};
+
 {
     my @dt = (
         DateTime->new(
