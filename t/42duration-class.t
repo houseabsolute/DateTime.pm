@@ -9,12 +9,12 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
 
 {
     package DateTime::MySubclass;
-    use base 'DateTime';
+    use parent 'DateTime';
 
     sub duration_class {'DateTime::Duration::MySubclass'}
 
     package DateTime::Duration::MySubclass;
-    use base 'DateTime::Duration';
+    use parent 'DateTime::Duration';
 
     sub is_my_subclass {1}
 }

@@ -10,7 +10,7 @@ our $VERSION = '1.59';
 use DateTime;
 use DateTime::TimeZone;
 
-use base qw(DateTime);
+use parent qw(DateTime);
 
 foreach my $m (qw( set set_time_zone truncate )) {
     ## no critic (TestingAndDebugging::ProhibitNoStrict)
@@ -78,7 +78,7 @@ package DateTime::Infinite::Future;
 use strict;
 use warnings;
 
-use base qw(DateTime::Infinite);
+use parent qw(DateTime::Infinite);
 
 {
     my $Pos = bless {
@@ -103,7 +103,7 @@ package DateTime::Infinite::Past;
 use strict;
 use warnings;
 
-use base qw(DateTime::Infinite);
+use parent qw(DateTime::Infinite);
 
 {
     my $Neg = bless {
