@@ -16,10 +16,10 @@ use DateTime::Helpers;
 use DateTime::Locale 1.06;
 use DateTime::TimeZone 2.44;
 use DateTime::Types;
-use POSIX qw( floor fmod );
+use POSIX                           qw( floor fmod );
 use Params::ValidationCompiler 0.26 qw( validation_for );
-use Scalar::Util qw( blessed );
-use Specio::Subs qw( Specio::Library::Builtins );
+use Scalar::Util                    qw( blessed );
+use Specio::Subs                    qw( Specio::Library::Builtins );
 use Try::Tiny;
 
 ## no critic (Variables::ProhibitPackageVars)
@@ -2745,8 +2745,8 @@ microsecond.
 By default, the returned object will be in the UTC time zone.
 
 If you pass a C<time_zone>, then this time zone will be applied I<after> the
-object is constructed. In other words, the epoch value is always interpreted
-as being in the UTC time zone. Here's an example:
+object is constructed. In other words, the epoch value is always interpreted as
+being in the UTC time zone. Here's an example:
 
     my $dt = DateTime->from_epoch(
         epoch     => 0,
@@ -4606,9 +4606,8 @@ will be fixed (perhaps) in future versions.
 
 =head1 SEE ALSO
 
-L<A Date with
-Perl|http://presentations.houseabsolute.com/a-date-with-perl/> - a talk
-I've given at a few YAPCs.
+L<A Date with Perl|http://presentations.houseabsolute.com/a-date-with-perl/> -
+a talk I've given at a few YAPCs.
 
 L<datetime@perl.org mailing list|http://lists.perl.org/list/datetime.html>
 
