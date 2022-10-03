@@ -1,14 +1,14 @@
 exclude = [
-    ".build",
+    ".build/**",
     "DateTime-*",
-    "blib",
+    "blib/**",
     "lib/DateTime/Conflicts.pm",
     "t/00-*",
     "t/author-*",
     "t/release-*",
     "t/zzz-*",
-    "xt/author",
-    "xt/release",
+    "xt/author/**",
+    "xt/release/**",
 ]
 
 [commands.omegasort-gitignore]
