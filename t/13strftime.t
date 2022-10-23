@@ -324,9 +324,10 @@ sub en_tests {
     my $c_format = $en_locale->datetime_format;
     $c_format
         =~ s/\{1\}/$en_locale->month_format_abbreviated->[8] . ' 7, 1999'/e;
-    $c_format =~ s/\{0\}/'1:02:42 ' . $en_locale->am_pm_abbreviated->[1]/e;
+    my $pm = $en_locale->am_pm_abbreviated->[1];
+    $c_format =~ s/\{0\}/'1:02:42 ' . $pm/e;
 
-    return {
+    my %tests = (
         '%%'        => '%',
         '%10N'      => '1234567890',
         '%3N'       => '123',
@@ -354,9 +355,9 @@ sub en_tests {
         '%M'        => '02',
         '%n'        => "\n",
         '%N'        => '123456789',
-        '%p'        => $en_locale->am_pm_abbreviated->[1],
-        '%P'        => lc $en_locale->am_pm_abbreviated->[1],
-        '%r'        => '01:02:42 ' . $en_locale->am_pm_abbreviated->[1],
+        '%p'        => $pm,
+        '%P'        => lc $pm,
+        '%r'        => '01:02:42 ' . $pm,
         '%R'        => '13:02',
         '%s'        => '936709362',
         '%S'        => '42',
@@ -368,7 +369,7 @@ sub en_tests {
         '%w'        => '2',
         '%W'        => '36',
         '%x'        => $en_locale->month_format_abbreviated->[8] . ' 7, 1999',
-        '%X'        => '1:02:42 ' . $en_locale->am_pm_abbreviated->[1],
+        '%X'        => '1:02:42 ' . $pm,
         '%y'        => '99',
         '%Y'        => '1999',
         '%z'        => '+0000',
@@ -376,7 +377,14 @@ sub en_tests {
         '%{foobar}' => '%{foobar}',
         '%{month}'  => '9',
         '%{year}'   => '1999',
-    };
+    );
+    if ( DateTime::Locale->VERSION >= 1.37 ) {
+        for my $key ( '%c', '%X' ) {
+            $tests{$key} =~ s/ (\Q$pm\E)/\N{U+202F}$1/;
+        }
+    }
+
+    return \%tests;
 }
 
 sub de_tests {

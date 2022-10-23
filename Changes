@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Fixed tests to pass with DateTime::Locale 1.37+. Reported by Slaven
+  Rezić. GH #34.
+
+
 1.58   2022-04-18
 
 - Fixed tests so that they ignore the value set in the
