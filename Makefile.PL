@@ -58,7 +58,7 @@ my %WriteMakefileArgs = (
     "Test::Without::Module" => 0,
     "utf8" => 0
   },
-  "VERSION" => "1.59",
+  "VERSION" => "1.60",
   "test" => {
     "TESTS" => "t/*.t"
   }
