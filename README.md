@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.58
+version 1.59
 
 # SYNOPSIS
 
@@ -377,8 +377,8 @@ microsecond.
 By default, the returned object will be in the UTC time zone.
 
 If you pass a `time_zone`, then this time zone will be applied _after_ the
-object is constructed. In other words, the epoch value is always interpreted
-as being in the UTC time zone. Here's an example:
+object is constructed. In other words, the epoch value is always interpreted as
+being in the UTC time zone. Here's an example:
 
     my $dt = DateTime->from_epoch(
         epoch     => 0,
@@ -2200,9 +2200,8 @@ will be fixed (perhaps) in future versions.
 
 # SEE ALSO
 
-[A Date with
-Perl](http://presentations.houseabsolute.com/a-date-with-perl/) - a talk
-I've given at a few YAPCs.
+[A Date with Perl](http://presentations.houseabsolute.com/a-date-with-perl/) -
+a talk I've given at a few YAPCs.
 
 [datetime@perl.org mailing list](http://lists.perl.org/list/datetime.html)
 
@@ -2232,7 +2231,7 @@ software much more, unless I get so many donations that I can consider working
 on free software full time (let's all have a chuckle at that together).
 
 To donate, log into PayPal and send money to autarch@urth.org, or use the
-button at [https://www.urth.org/fs-donation.html](https://www.urth.org/fs-donation.html).
+button at [https://houseabsolute.com/foss-donations/](https://houseabsolute.com/foss-donations/).
 
 # AUTHOR
 
@@ -2254,6 +2253,7 @@ Dave Rolsky <autarch@urth.org>
 - Gregory Oschwald <oschwald@gmail.com>
 - Hauke D <haukex@zero-g.net>
 - Iain Truskett &lt;deceased>
+- James Raspass <jraspass@gmail.com>
 - Jason McIntosh <jmac@jmac.org>
 - Joshua Hoblitt <jhoblitt@cpan.org>
 - Karen Etheridge <ether@cpan.org>

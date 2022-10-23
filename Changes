@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.59   2022-10-23
+
 - Fixed tests to pass with DateTime::Locale 1.37+. Reported by Slaven
   Rezić. GH #34.
 
