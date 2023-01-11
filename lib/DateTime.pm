@@ -2522,11 +2522,11 @@ or elsewhere. If you know that the local time zone won't change while your code
 is running, and you need to make many objects for the local time zone, it is
 strongly recommended that you retrieve the local time zone once and cache it:
 
-    our $App::LocalTZ = DateTime::TimeZone->new( name => 'local' );
+    my $local_time_zone = DateTime::TimeZone->new( name => 'local' );
 
     # then everywhere else
 
-    my $dt = DateTime->new( ..., time_zone => $App::LocalTZ );
+    my $dt = DateTime->new( ..., time_zone => $local_time_zone );
 
 DateTime itself does not do this internally because local time zones can
 change, and there's no good way to determine if it's changed without doing all
