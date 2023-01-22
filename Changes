@@ -340,7 +340,7 @@
 
 - The 30future-tz.t could fail if run at certain very specific times. This
   should now be much less likely, unless a time zone being tested implements a
-  DST change at noon (which would even more insane than DST already is by a
+  DST change at noon (which would be even more insane than DST already is by a
   huge factor). Reported by Karen Etheridge and diagnosed by Slaven Rezić. RT
   #102925.
 
