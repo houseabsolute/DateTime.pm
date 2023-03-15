@@ -3,6 +3,7 @@ resources:
     - repository: ci-perl-helpers
       type: github
       name: houseabsolute/ci-perl-helpers
+      ref: refs/heads/ghcr.io
       endpoint: houseabsolute
 
 stages:
