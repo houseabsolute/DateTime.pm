@@ -14,7 +14,7 @@ exclude = [
 [commands.omegasort-gitignore]
 type = "both"
 include = "**/.gitignore"
-cmd = [ "omegasort", "--sort=path" ]
+cmd = [ "omegasort", "--sort=path", "--unique" ]
 lint_flags = "--check"
 tidy_flags = "--in-place"
 ok_exit_codes = 0
@@ -23,7 +23,7 @@ lint_failure_exit_codes = 1
 [commands.omegasort-stopwords]
 type = "both"
 include = ".stopwords"
-cmd = [ "omegasort", "--sort=text", "--case-insensitive" ]
+cmd = [ "omegasort", "--sort=text", "--case-insensitive", "--unique" ]
 lint_flags = "--check"
 tidy_flags = "--in-place"
 ok_exit_codes = 0
