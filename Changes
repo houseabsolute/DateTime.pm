@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Switched to using the `Perl_isfinite` function instead of trying to
+  implement this ourselves in XS code. This should fix quadmath builds on
+  Windows. Reported by @sisyphus. GH #139.
+
+
 1.59   2022-10-23
 
 - Fixed tests to pass with DateTime::Locale 1.37+. Reported by Slaven
