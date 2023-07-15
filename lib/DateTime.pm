@@ -1588,8 +1588,8 @@ sub subtract_datetime {
     );
 }
 
-sub _adjust_for_positive_difference
-{    ## no critic (Subroutines::ProhibitManyArgs)
+## no critic (Subroutines::ProhibitManyArgs)
+sub _adjust_for_positive_difference {
     my (
         $self,
         $month1, $month2,
