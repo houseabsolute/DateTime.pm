@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.61   2023-09-02 (TRIAL RELEASE)
+
 - Fix use of the `Perl_isfinite` function on platforms where this is
   broken. On Windows with Perl <= 5.20, it seems like `Perl_isfinite` exists
   but it calls `Perl_isinf` and `Perl_isnan`, which don't exist.
