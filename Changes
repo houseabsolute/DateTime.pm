@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.62   2023-09-04 (TRIAL RELEASE)
+
 - This is take 3 of trying to use `Perl_isfinite` where it's available. Now we
   simply don't use it on Windows unless the Perl version is 5.22.0 or later.
 

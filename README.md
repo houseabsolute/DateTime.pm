@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.61
+version 1.62
 
 # SYNOPSIS
 
