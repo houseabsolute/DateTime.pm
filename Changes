@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.63   2023-10-22
+
 - This release is the same as 1.62. This releases fixes quadmath builds on
   Windows. Reported by @sisyphus. GH #139.
 
