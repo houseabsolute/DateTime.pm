@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- This release is the same as 1.62. This releases fixes quadmath builds on
+  Windows. Reported by @sisyphus. GH #139.
+
+
 1.62   2023-09-04 (TRIAL RELEASE)
 
 - This is take 3 of trying to use `Perl_isfinite` where it's available. Now we
