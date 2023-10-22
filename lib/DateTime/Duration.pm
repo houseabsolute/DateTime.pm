@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '1.63';
+our $VERSION = '1.64';
 
 use Carp ();
 use DateTime;

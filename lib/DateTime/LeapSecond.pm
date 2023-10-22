@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '1.63';
+our $VERSION = '1.64';
 
 our ( @RD, @LEAP_SECONDS, %RD_LENGTH );
 
