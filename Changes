@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Fix builds on macOS with Perls before 5.22.0. This seems to have the same
+  issue as Windows on older Perls. Reported by Simon Sawert. GH #141.
+
+
 1.63   2023-10-22
 
 - This release is the same as 1.62. This releases fixes quadmath builds on
