@@ -3,7 +3,7 @@ package DateTime::PPExtra;
 use strict;
 use warnings;
 
-our $VERSION = '1.65';
+our $VERSION = '1.66';
 
 use DateTime::LeapSecond;
 
