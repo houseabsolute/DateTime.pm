@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.65   2023-11-05
+
 - This release is the same as 1.64. This release fixes builds on macOS with
   Perls before 5.22.0. Reported by Simon Sawert. GH #141.
 
