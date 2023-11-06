@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- This release is the same as 1.64. This release fixes builds on macOS with
+  Perls before 5.22.0. Reported by Simon Sawert. GH #141.
+
+
 1.64   2023-10-29 (TRIAL RELEASE)
 
 - Fix builds on macOS with Perls before 5.22.0. This seems to have the same
