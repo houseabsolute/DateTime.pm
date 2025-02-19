@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.65
+version 1.66
 
 # SYNOPSIS
 
@@ -2276,7 +2276,7 @@ Dave Rolsky <autarch@urth.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2003 - 2023 by Dave Rolsky.
+This software is Copyright (c) 2003 - 2025 by Dave Rolsky.
 
 This is free software, licensed under:
 

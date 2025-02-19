@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.66   2025-02-18
+
 - Require Specio 0.50. That release has a bug fix for validation of integer values. Without the fix,
   DateTime could accept non-integer values for things like nanoseconds. Reported by @HGuillemet. GH
   #145.
