@@ -31,7 +31,7 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
     ok( $dt ne $after_string,      'ne overloading true' );
     ok( !( $dt ne $same_string ),  'ne overloading false' );
 
-    is( $dt cmp $same_string,  0,  'cmp overloading' );
+    is( $dt cmp $same_string,   0, 'cmp overloading' );
     is( $dt cmp $after_string, -1, '  less than' );
     ok( $dt lt $after_string,     'lt overloading' );
     ok( !( $dt lt $same_string ), '  not' );
@@ -58,7 +58,7 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
     ok( $dt ne $after_od,      '  ne true' );
     ok( !( $dt ne $same_od ),  '  ne false' );
 
-    is( $dt cmp $same_od,  0,  'cmp overloading' );
+    is( $dt cmp $same_od,   0, 'cmp overloading' );
     is( $dt cmp $after_od, -1, '  lt overloading' );
     ok( $dt lt $after_od,     'lt overloading' );
     ok( !( $dt lt $same_od ), '  not' );

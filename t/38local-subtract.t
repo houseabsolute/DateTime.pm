@@ -41,10 +41,10 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
     my $dur2    = $dt1->subtract_datetime($dt2);
     my %deltas2 = $dur2->deltas;
     is( $deltas2{months},      -6, 'delta_months is -6' );
-    is( $deltas2{days},        0,  'delta_days is 0' );
-    is( $deltas2{minutes},     0,  'delta_minutes is 0' );
-    is( $deltas2{seconds},     0,  'delta_seconds is 0' );
-    is( $deltas2{nanoseconds}, 0,  'delta_nanoseconds is 0' );
+    is( $deltas2{days},         0, 'delta_days is 0' );
+    is( $deltas2{minutes},      0, 'delta_minutes is 0' );
+    is( $deltas2{seconds},      0, 'delta_seconds is 0' );
+    is( $deltas2{nanoseconds},  0, 'delta_nanoseconds is 0' );
 
     my $dur3    = $dt2->delta_md($dt1);
     my %deltas3 = $dur3->deltas;
@@ -197,11 +197,11 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
     my $dur2 = $dt1->subtract_datetime_absolute($dt2);
 
     my %deltas2 = $dur2->deltas;
-    is( $deltas2{months},      0,         'delta_months is 0' );
-    is( $deltas2{days},        0,         'delta_days is 0' );
-    is( $deltas2{minutes},     0,         'delta_minutes is 0' );
+    is( $deltas2{months},       0,        'delta_months is 0' );
+    is( $deltas2{days},         0,        'delta_days is 0' );
+    is( $deltas2{minutes},      0,        'delta_minutes is 0' );
     is( $deltas2{seconds},     -15901200, 'delta_seconds is -15901200' );
-    is( $deltas2{nanoseconds}, 0,         'delta_nanoseconds is 0' );
+    is( $deltas2{nanoseconds},  0,        'delta_nanoseconds is 0' );
 
     is(
         DateTime->compare( $dt2->clone->add_duration($dur2), $dt1 ), 0,
@@ -293,11 +293,11 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
 
     my $dur2    = $dt1->subtract_datetime($dt2);
     my %deltas2 = $dur2->deltas;
-    is( $deltas2{months},      0,  'delta_months is 0' );
+    is( $deltas2{months},       0, 'delta_months is 0' );
     is( $deltas2{days},        -1, 'delta_days is 1' );
     is( $deltas2{minutes},     -3, 'delta_minutes is 3' );
-    is( $deltas2{seconds},     0,  'delta_seconds is 0' );
-    is( $deltas2{nanoseconds}, 0,  'delta_nanoseconds is 0' );
+    is( $deltas2{seconds},      0, 'delta_seconds is 0' );
+    is( $deltas2{nanoseconds},  0, 'delta_nanoseconds is 0' );
     is(
         $dt2->clone->add_duration($dur2)->datetime, '2003-04-05T02:58:00',
         'dt2 + dur2 != dt1'
@@ -345,11 +345,11 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
     my $dur2 = $dt1->subtract_datetime($dt2);
 
     my %deltas2 = $dur2->deltas;
-    is( $deltas2{months},      0,  'delta_months is 0' );
+    is( $deltas2{months},       0, 'delta_months is 0' );
     is( $deltas2{days},        -1, 'delta_days is -1' );
     is( $deltas2{minutes},     -1, 'delta_minutes is -1' );
-    is( $deltas2{seconds},     0,  'delta_seconds is 0' );
-    is( $deltas2{nanoseconds}, 0,  'delta_nanoseconds is 0' );
+    is( $deltas2{seconds},      0, 'delta_seconds is 0' );
+    is( $deltas2{nanoseconds},  0, 'delta_nanoseconds is 0' );
 
 }
 

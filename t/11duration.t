@@ -295,7 +295,7 @@ my $leap_day = DateTime->new(
 
 {
     my $dur = DateTime::Duration->new( nanoseconds => -10 );
-    is( $dur->nanoseconds,       10,  'nanoseconds is 10' );
+    is( $dur->nanoseconds,        10, 'nanoseconds is 10' );
     is( $dur->delta_nanoseconds, -10, 'delta_nanoseconds is -10' );
     ok( $dur->is_negative, 'duration is negative' );
 }
@@ -323,7 +323,8 @@ my $leap_day = DateTime->new(
 {
     is(
         exception {
-            DateTime::Duration->new( months => 3 )->add( hours => -3 )
+            DateTime::Duration->new( months => 3 )
+                ->add( hours   => -3 )
                 ->add( minutes => 1 );
         },
         undef,
@@ -345,11 +346,11 @@ my $leap_day = DateTime->new(
 
     my $min_neg_59 = $min_1 - $hour_1;
 
-    is( $min_neg_59->delta_months,      0,   'delta_months is 0' );
-    is( $min_neg_59->delta_days,        0,   'delta_days is 0' );
+    is( $min_neg_59->delta_months,       0,  'delta_months is 0' );
+    is( $min_neg_59->delta_days,         0,  'delta_days is 0' );
     is( $min_neg_59->delta_minutes,     -59, 'delta_minutes is -59' );
-    is( $min_neg_59->delta_seconds,     0,   'delta_seconds is 0' );
-    is( $min_neg_59->delta_nanoseconds, 0,   'delta_nanoseconds is 0' );
+    is( $min_neg_59->delta_seconds,      0,  'delta_seconds is 0' );
+    is( $min_neg_59->delta_nanoseconds,  0,  'delta_nanoseconds is 0' );
 }
 
 {

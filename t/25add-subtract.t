@@ -12,7 +12,8 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
 {
     my $dt = DateTime->new( year => 2000, month => 12 );
 
-    $dt->add( months => 1 )->truncate( to => 'month' )
+    $dt->add( months => 1 )
+        ->truncate( to => 'month' )
         ->subtract( seconds => 1 );
 
     is( $dt->year,   2000, 'year is 2001' );

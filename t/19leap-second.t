@@ -451,7 +451,7 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
 
     my $neg_dur = $dt1 - $dt2;
 
-    is( $neg_dur->delta_minutes, 0,   'delta_minutes is 0' );
+    is( $neg_dur->delta_minutes,  0,  'delta_minutes is 0' );
     is( $neg_dur->delta_seconds, -36, 'delta_seconds is -36' );
 }
 

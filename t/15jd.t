@@ -78,11 +78,11 @@ my @mjd = (
     # beginning of JD
     '-2400000.500' => {
         year   => -4713,
-        month  => 11,
-        day    => 24,
-        hour   => 12,
-        minute => 0,
-        second => 0,
+        month  =>  11,
+        day    =>  24,
+        hour   =>  12,
+        minute =>  0,
+        second =>  0,
     },
 );
 

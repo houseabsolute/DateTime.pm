@@ -14,7 +14,7 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
 # dates are specified as [rd,year,month,day]
 for (    # min and max supported days (for 32-bit system)
     [ -( 2**28 ), -734951, 9, 7 ],
-    [ 2**28,      734952,  4, 25 ],
+    [ 2**28,       734952, 4, 25 ],
 
     # some miscellaneous dates (these are actually epoch dates for
     # various calendars from Calendrical Calculations (1st ed) Table
@@ -24,13 +24,13 @@ for (    # min and max supported days (for 32-bit system)
     [ -1137142, -3113, 8,  11 ],
     [ -1132959, -3101, 1,  23 ],
     [ -963099,  -2636, 2,  15 ],
-    [ -1,       0,     12, 30 ], [ 1, 1, 1, 1 ],
-    [ 2796,     8,     8,  27 ],
-    [ 103605,   284,   8,  29 ],
-    [ 226896,   622,   3,  22 ],
-    [ 227015,   622,   7,  19 ],
-    [ 654415,   1792,  9,  22 ],
-    [ 673222,   1844,  3,  21 ]
+    [ -1,        0,    12, 30 ], [ 1, 1, 1, 1 ],
+    [  2796,     8,    8,  27 ],
+    [  103605,   284,  8,  29 ],
+    [  226896,   622,  3,  22 ],
+    [  227015,   622,  7,  19 ],
+    [  654415,   1792, 9,  22 ],
+    [  673222,   1844, 3,  21 ]
 ) {
     is(
         join( '/', DateTime->_rd2ymd( $_->[0] ) ),
@@ -47,9 +47,9 @@ for (    # min and max supported days (for 32-bit system)
 # normalization tests
 for (
     [ -1753469, -4797, -33, 1 ],
-    [ -1753469, -4803, 39,  1 ],
+    [ -1753469, -4803,  39, 1 ],
     [ -1753105, -4796, -34, 28 ],
-    [ -1753105, -4802, 38,  28 ]
+    [ -1753105, -4802,  38, 28 ]
 ) {
     is(
         DateTime->_ymd2rd( @{$_}[ 1 .. 3 ] ), $_->[0],

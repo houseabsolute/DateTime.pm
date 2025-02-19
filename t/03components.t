@@ -243,7 +243,7 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
 
     $dt0->subtract( years => 1 );
 
-    is( $dt0->year,          0,     'year 1 minus 1 is year 0' );
+    is( $dt0->year,           0,    'year 1 minus 1 is year 0' );
     is( $dt0->ce_year,       -1,    'ce_year 1 minus 1 is year -1' );
     is( $dt0->era_abbr,      'BC',  'era is BC' );
     is( $dt0->year_with_era, '1BC', 'year_with_era is 1BC' );

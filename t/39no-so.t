@@ -29,7 +29,7 @@ my $sub = sub {
 
 is(
     exception { require DateTime },
-    undef,, 'No error loading DateTime without DateTime.so file'
+    undef, 'No error loading DateTime without DateTime.so file'
 );
 ## no critic (Variables::ProhibitPackageVars)
 ok( $DateTime::IsPurePerl, '$DateTime::IsPurePerl is true' );

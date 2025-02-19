@@ -91,7 +91,7 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
     );
 
     is( $dt->offset, -3600, 'offset should be -3600' );
-    is( $dt->epoch,  0,     'epoch is 0' );
+    is( $dt->epoch,   0,    'epoch is 0' );
 }
 
 # Adding/subtracting should affect epoch

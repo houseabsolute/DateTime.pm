@@ -58,7 +58,7 @@ is(
         );
     },
     undef,
-    ,
+
     'make sure constructor accepts locale parameter'
 );
 

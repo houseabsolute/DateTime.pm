@@ -29,9 +29,9 @@ undef $ENV{PERL_DATETIME_DEFAULT_TZ};
     my $dt = DateTime->new( year => -1 );
 
     is( $dt->year,        -1, 'year is -1' );
-    is( $dt->month,       1,  'month is 1' );
-    is( $dt->day,         1,  'day is 1' );
-    is( $dt->day_of_week, 5,  'day of week is 5' );
+    is( $dt->month,        1, 'month is 1' );
+    is( $dt->day,          1, 'day is 1' );
+    is( $dt->day_of_week,  5, 'day of week is 5' );
 }
 
 {
