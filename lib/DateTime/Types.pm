@@ -8,7 +8,7 @@ our $VERSION = '1.66';
 
 use parent 'Specio::Exporter';
 
-use Specio 0.18;
+use Specio 0.50;
 use Specio::Declare;
 use Specio::Library::Builtins -reexport;
 use Specio::Library::Numeric -reexport;
