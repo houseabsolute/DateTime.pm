@@ -3028,6 +3028,9 @@ is formatted with a leading sign (+/-) and a colon separated numeric offset
 with hours and minutes. If the offset has a non-zero seconds component, that is
 also included.
 
+The output of this method does not include the optional nanosecond portion of
+the RFC3339 format.
+
 =head3 $dt->stringify
 
 This method returns a stringified version of the object. It is also how
