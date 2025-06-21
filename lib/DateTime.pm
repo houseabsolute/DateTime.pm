@@ -3156,8 +3156,15 @@ patterns.
 
 If you give a pattern that doesn't exist, then it is simply treated as text.
 
-Note that any deviation from the POSIX standard is probably a bug. DateTime
-should match the output of C<POSIX::strftime> for any given pattern.
+While DateTime uses the same I<patterns> as the POSIX standard, the data used
+to fill in those patterns comes from the Unicode CLDR project. That means that
+the output from this method may not match the return value of
+C<POSIX::strftime> for all patterns. In particular, this means that the return
+value may include UTF-8 for any locale.
+
+Also note that DateTime does not look at env vars like C<LANG> or C<LC_*> in
+order to determine what locale or character set to use. The locale is set when
+constructing the DateTime object and the character set is always UTF-8.
 
 =head3 $dt->format_cldr( $format, ... )
 
@@ -3168,6 +3175,9 @@ format string.
 See the L<CLDR Patterns> section for a list of all possible CLDR patterns.
 
 If you give a pattern that doesn't exist, then it is simply treated as text.
+
+As with the C<strftime> method, the return value of this method is always
+UTF-8.
 
 =head3 $dt->epoch
 
