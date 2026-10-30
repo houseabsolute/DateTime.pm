@@ -332,4 +332,29 @@ for my $o (
     );
 }
 
+{
+    my $dt = DateTime->new(
+        year   => 2026,
+        month  => 10,
+        day    => 3,
+        locale => 'en-US',
+    );
+
+    is( $dt->format_cldr('ddd'), '3rd', 'ddd is the ordinal day for en-US' );
+    is(
+        $dt->clone->set( day => 22 )->format_cldr('MMMM ddd'),
+        'October 22nd',
+        'ddd works next to other patterns'
+    );
+
+    my %data = DateTime::Locale->load('en-US')->locale_data;
+    delete $data{day_of_month_format_abbreviated};
+    $data{code} = 'en-US-x-noordinal';
+    $dt->set_locale( DateTime::Locale->register_from_data(%data) );
+    is(
+        $dt->format_cldr('ddd'), '3',
+        'ddd is the day number for a locale with no ordinal day data'
+    );
+}
+
 done_testing();

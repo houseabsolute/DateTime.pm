@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Added support for the `ddd` CLDR pattern, which formats the day of the month as an ordinal, like
+  "3rd". Before this, `ddd` was formatted as a zero-padded day, like "03". DateTime now requires
+  DateTime::Locale 1.47 or newer, which provides the data for this.
+
+
 1.67   2026-08-30
 
 - Documented that the `truncate` method can throw a fatal error if the truncation produces a
