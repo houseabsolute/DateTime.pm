@@ -6,6 +6,7 @@ use Test::More;
 use Cwd            qw( abs_path );
 use File::Basename qw( dirname );
 use File::Spec;
+use TAP::Harness;
 
 my $test_file = File::Spec->catfile(
     dirname( abs_path($0) ),
@@ -14,8 +15,14 @@ my $test_file = File::Spec->catfile(
 );
 
 local $ENV{PERL_DATETIME_DEFAULT_TZ} = 'America/Chicago';
-is(
-    system( qw( prove --quiet ), $test_file ), 0,
+
+# We use TAP::Harness instead of shelling out to prove so the test runs with $^X. The prove in the
+# PATH may belong to a different perl, or it may be a shim from a tool like mise that can fail in
+# the build directory.
+my $harness    = TAP::Harness->new( { verbosity => -1 } );
+my $aggregator = $harness->runtests($test_file);
+ok(
+    $aggregator->all_passed,
     'no error running test with PERL_DATETIME_DEFAULT_TZ env var set',
 );
 
