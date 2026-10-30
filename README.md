@@ -4,7 +4,7 @@ DateTime - A date and time object for Perl
 
 # VERSION
 
-version 1.67
+version 1.68
 
 # SYNOPSIS
 
@@ -1772,6 +1772,17 @@ CLDR provides the following patterns:
 - d{1,2}
 
     The numeric day of the month.
+
+- ddd
+
+    The ordinal day of the month, like "1st", "2nd", or "3rd" in English. This
+    comes from `$locale->day_of_month_format_abbreviated`. Many locales have
+    no ordinal forms, so for them this is just the numeric day of the month. This
+    is also used if the locale object does not provide this data at all. Longer
+    runs, like "dddd", are treated the same as "ddd".
+
+    CLDR considers this pattern a technical preview, so its output for a given
+    locale may change in future releases of DateTime::Locale.
 
 - D{1,3}
 

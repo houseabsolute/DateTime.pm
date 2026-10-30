@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.68   2026-10-29
+
 - Added support for the `ddd` CLDR pattern, which formats the day of the month as an ordinal, like
   "3rd". Before this, `ddd` was formatted as a zero-padded day, like "03". DateTime now requires
   DateTime::Locale 1.47 or newer, which provides the data for this.
